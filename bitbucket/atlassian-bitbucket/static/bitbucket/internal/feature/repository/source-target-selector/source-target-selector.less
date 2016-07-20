@@ -1,0 +1,92 @@
+@import "/static/global.less";
+
+.horizontal-layout {
+    .feature-box {
+        h2 {
+            border-bottom: none;
+            font-size: @font-size-xlarge;
+            margin: @baseSpacing 0;
+        }
+
+        > div {
+            .border-radius(3px);
+            border: 1px solid @dividerColor;
+            padding: @doubleSpacing;
+        }
+
+        p {
+            font-size: @font-size-large;
+            margin-bottom: @baseSpacing;
+        }
+    }
+}
+
+.vertical-layout {
+    @form-left-offset: 145px; // taken from AUI
+    @arrow-width: 35px;
+    @arrow-left-offset: @form-left-offset - (@doubleSpacing + @arrow-width);
+    @arrow-right-offset: @doubleSpacing;
+    @arrow-bottom-offset: -60px;
+    @swap-button-top-offset: @tripleSpacing;
+    @swap-button-left-offset: @form-left-offset - @baseSpacing - @arrow-left-offset - @baseSpacing;
+    @ref-selector-width: 350px;
+    @repository-selector-width: @max-button-width;
+
+    position: relative;
+
+    .feature-box {
+        position: relative;
+        background-repeat: no-repeat;
+        background-size: @arrow-width auto;
+        padding-left: @form-left-offset;
+        padding-bottom: @doubleSpacing;
+
+        &.source-selector {
+            background-position: @arrow-left-offset @baseSpacing;
+            background-image: url(branch-compare-top.svg);
+        }
+
+        &.target-selector {
+            background-image: url(branch-compare-bottom.svg);
+            background-position: @arrow-left-offset @arrow-bottom-offset;
+        }
+
+        .swap-button {
+            position: absolute;
+            left: @swap-button-left-offset;
+            bottom: 10%;
+
+            &:before {
+                content: '';
+                .square(@icon-size-xxsmall);
+                display: block;
+                background: url(branch-swap.svg) 0 -@icon-size-xxsmall;
+                background-size: @icon-size-xxsmall;
+            }
+
+            &:hover:before {
+                background-position: 0 0;
+            }
+        }
+    }
+
+    .base-repository-selector-trigger {
+        .width-max-width(@repository-selector-width);
+    }
+
+    .revision-reference-selector-trigger {
+        .width-max-width(@ref-selector-width);
+
+        .name {
+            // override the max-width set by searchable-selector.less, as our selector is wider than the @max-button-width
+            // - left side: icon for the branch or tag + left/right padding around the icon
+            // - right side: dropdown arrow + left/right padding around the icon
+            max-width: @ref-selector-width - (@baseSpacing + @auiIconSmall + @halfSpacing) - (@halfSpacing + @dropdown-arrow-width + @baseSpacing);
+        }
+    }
+
+    .base-repository-selector-trigger, .revision-reference-selector-trigger {
+        text-align: left;
+    }
+}
+

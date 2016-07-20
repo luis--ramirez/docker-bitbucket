@@ -1,0 +1,136 @@
+{namespace bitbucket.internal.feature.tasks.taskView}
+
+/**
+ * Renders a single task, in either view or edit mode
+ *
+ * @param task
+ * @param mode either 'edit' or 'view'
+ * @param showLink
+ * @param? error
+ */
+{template .task}
+    <div class="task
+        task-status-{lower_case($task.state)}
+        {if $error} task-error{/if}
+        {if $task.pendingSync} task-pending-sync{/if}
+        {if $task.text == '' and not $task.id} task-blank{/if}"
+        data-task-state="{$task.state}"
+        data-task-id="{firstNonNull($task.id, '')}"
+        data-comment-id="{$task.anchor.id}">
+
+        <div class="task-action task-checkbox-container">
+            <input type="checkbox" class="task-checkbox checkbox"{if $task.state == 'RESOLVED'} checked="checked"{/if}
+                {if $mode == 'edit' or not $task.permittedOperations.transitionable} disabled='disabled'{/if} />
+        </div>
+        {if $mode == 'edit'}
+            {call .editTaskForm}
+                {param task: $task /}
+                {param error: $error /}
+            {/call}
+        {else}
+            {call .viewTask}
+                {param task: $task /}
+            {/call}
+        {/if}
+        {if $showLink}
+            {call aui.buttons.button}
+                {param text: '' /}
+                {param type: 'link' /}
+                {param extraClasses: 'task-action task-link-button' /}
+                {param iconType: 'aui' /}
+                {param iconClass: 'aui-icon-small aui-iconfont-link' /}
+            {/call}
+        {/if}
+        <div class="task-footer">
+            {let $diffAnchorPath : $task.properties and $task.properties.diffAnchorPath /}
+            {if $showLink and $diffAnchorPath}
+                <aside class="comment-diff-anchor">
+                    {call aui.icons.icon}
+                        {param useIconFont: true /}
+                        {param icon: 'file' /}
+                        {param iconFontSet: 'devtools' /}
+                    {/call}
+                    {call aui.buttons.button}
+                        {param text: path_name($diffAnchorPath) /}
+                        {param type: 'link' /}
+                        {param extraAttributes: ['data-path': $diffAnchorPath ] /}
+                    {/call}
+                </aside>
+            {/if}
+            {if $mode == 'edit' or ($task.permittedOperations.editable or $task.permittedOperations.deletable) or $task.id == null}
+                <ul class="actions">
+                    {if $mode == 'edit'}
+                        {call .editTaskActions /}
+                    {else}
+                        {call .viewTaskActions}
+                            {param task: $task /}
+                        {/call}
+                    {/if}
+                </ul>
+            {/if}
+            {if $mode == 'edit'}
+                <div class="task-tip">{getText('bitbucket.web.tasks.tip.prefill')}</div>
+            {/if}
+        </div>
+    </div>
+{/template}
+
+/**
+ * Renders task body in view mode
+ *
+ * @param task
+ */
+{template .viewTask private="true"}
+    <div class="task-content message {$task.html ? 'markup' : 'plaintext'}">
+        {if $task.html}
+            {$task.html|noAutoescape}
+        {else}
+            {$task.text}
+        {/if}
+    </div>
+{/template}
+
+/**
+ * Renders task actions for view mode
+ *
+ * @param task
+ */
+{template .viewTaskActions private="true"}
+    {if $task.permittedOperations.editable or $task.id == null}
+        <li><a href="#" class="task-edit">{getText('bitbucket.web.tasks.edit')}</a></li>
+    {/if}
+    {if $task.permittedOperations.deletable or $task.id == null}
+        <li><a href="#" class="task-delete">{getText('bitbucket.web.tasks.delete')}</a></li>
+    {/if}
+{/template}
+
+/**
+ * Renders the task editing form
+ *
+ * @param task
+ * @param? error
+ */
+{template .editTaskForm private="true"}
+    {call widget.aui.form.expandingTextarea}
+        {param name: 'task-text' /}
+        {param initialValue: $task.text /}
+        {param placeholderText}
+            {if $error}
+                 {$error}
+            {elseif $task.text}
+                 {getText('bitbucket.web.tasks.textarea.placeholder.edit')}
+            {else}
+                {getText('bitbucket.web.tasks.textarea.placeholder.new')}
+            {/if}
+        {/param}
+        {param extraClasses}task-text{if $error} task-error{/if}{/param}
+    {/call}
+{/template}
+
+/**
+ * Renders task actions for edit mode
+ */
+{template .editTaskActions private="true"}
+    <li><a href="#" class="task-save">{getText('bitbucket.web.tasks.save')}</a></li>
+    <li><a href="#" class="task-cancel">{getText('bitbucket.web.tasks.cancel')}</a></li>
+{/template}

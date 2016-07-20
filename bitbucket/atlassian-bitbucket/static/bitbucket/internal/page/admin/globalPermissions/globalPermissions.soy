@@ -1,0 +1,41 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param permissionDataList a list of com.atlassian.stash.web.widgets.permissions.PermissionData
+* @param grantablePermissionDataList a list of com.atlassian.stash.web.widgets.permissions.PermissionData
+* @param currentUserHighestPerm the current user's highest permission
+*/
+{template .globalPermissions}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.globalPermissions')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-general-permissions' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.admin.global.permissions.title')}</h2>
+                </div>
+            </div>
+        </header>
+
+        {call bitbucket.internal.feature.permission.userPermissionTable}
+            {param permissionDataList: $permissionDataList /}
+            {param grantablePermissionDataList: $grantablePermissionDataList /}
+            {param noResultsText: getText('bitbucket.web.permission.user.noresults', productName()) /}
+        {/call}
+        {call bitbucket.internal.feature.permission.groupPermissionTable}
+            {param permissionDataList: $permissionDataList /}
+            {param grantablePermissionDataList: $grantablePermissionDataList /}
+            {param noResultsText: getText('bitbucket.web.permission.group.noresults', productName()) /}
+        {/call}
+
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/admin/globalPermissions').onReady([
+            {foreach $permissionData in $permissionDataList}
+                {lb}name : "{$permissionData.permission|escapeJs}", i18nName: "{$permissionData.i18nName|escapeJs}"{rb}{if not isLast($permissionData)},{/if}
+            {/foreach}
+        ], "{$currentUserHighestPerm|escapeJs}");</script>
+    {/param}
+{/call}
+{/template}

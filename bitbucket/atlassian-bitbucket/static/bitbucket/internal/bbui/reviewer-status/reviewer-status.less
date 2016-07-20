@@ -1,0 +1,71 @@
+@import "../../../../global.less";
+
+.reviewer-status-selector {
+    vertical-align: bottom;
+
+    > button {
+        &:focus { outline: none; }
+
+        > span { text-indent: -999em; display:block; overflow:hidden; width:12px; }
+    }
+
+    &[data-status="NEEDS_WORK"] {
+        > button.approve > span {
+            background:url(images/icons/icon-grey-approve.svg) transparent no-repeat 50% 50%;
+        }
+
+        > button.needs-work {
+            background-color: @adg-color-orange;
+            border-color: #C57428;
+            box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+
+            &:hover, &:focus {
+                background-color: #DA912C;
+                border-color: #9C5A1C;
+            }
+
+            &:active {
+                background-color: #F5A151;
+                border-color: #C57428;
+            }
+
+            > span {
+                background:url(images/icons/icon-white-needs-work.svg) transparent no-repeat 50% 50%;
+            }
+        }
+    }
+
+    &[data-status="APPROVED"] {
+        > button.needs-work > span {
+            background:url(images/icons/icon-grey-needs-work.svg) transparent no-repeat 50% 50%;
+        }
+
+        > button.approve {
+            background-color: @confirmationTextColor;
+            border-color: #0F6821;
+            box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+
+            &:hover, &:focus {
+                background-color: #117926;
+                border-color: #0C5C1C;
+            }
+
+            &:active {
+                background-color: #289E40;
+                border-color: #0F6821;
+            }
+
+            > span {
+                background:url(images/icons/icon-white-approve.svg) transparent no-repeat 50% 50%;
+            }
+        }
+    }
+
+    > button.approve > span {
+        background:url(images/icons/icon-green-approve.svg) transparent no-repeat 50% 50%;
+    }
+
+    > button.needs-work > span {
+        background:url(images/icons/icon-orange-needs-work.svg) transparent no-repeat 50% 50%;
+    }
+}

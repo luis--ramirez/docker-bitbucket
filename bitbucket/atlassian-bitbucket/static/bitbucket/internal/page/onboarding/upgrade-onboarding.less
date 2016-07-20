@@ -1,0 +1,69 @@
+@import "/static/global.less";
+
+@marketingPanelHeaderHeadingColor: #2a5181;
+@marketingHeading1: 48px;
+@magicMargin: 1 / 12 * 100%; //design magic 1/12th from @sbloom
+@announcementWidth: 500px;
+
+.upgrade-onboarding-page {
+    #page {
+        .flex-container();
+        .flex-direction(column);
+        .justify-content(flex-start);
+        height: 100vh;
+
+        #header {
+            .flex(none);
+        }
+
+        #content {
+            .flex-container();
+            .flex(auto);
+
+            .content-body {
+                .flex-container();
+                .flex(auto);
+                background-color: @contentBackgroundColor;
+
+                .left-pane {
+                    background-color: @adg-color-pale-blue;
+                    background-image: url(images/bitbucket-upgrade-illustration.svg);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: 75%;
+                    width: 40%;
+                }
+
+                .right-pane {
+                    .flex-container();
+                    .align-items(center);
+                    width: 60%;
+
+                    .upgrade-announcement {
+                        margin-left: @magicMargin;
+                        width: @announcementWidth;
+
+                        h1 {
+                            color: @marketingPanelHeaderHeadingColor;
+                            font-size: @marketingHeading1;
+                            font-weight: bold;
+                            margin-bottom: @tripleSpacing;
+                        }
+
+                        p {
+                            margin-top: 0;
+
+                            &:last-of-type {
+                                margin-bottom: @tripleSpacing;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #footer {
+            display:none;
+        }
+    }
+}

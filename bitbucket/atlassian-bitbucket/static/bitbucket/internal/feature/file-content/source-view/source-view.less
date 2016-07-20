@@ -1,0 +1,55 @@
+@import "webstatic:/static/global.less";
+@import "webstatic:/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.source-view.text-view {
+    .line {
+
+        .line-number {
+            .box-sizing();
+            .transition(~"border-color 0.2s, background-color 0.2s");
+            background-color: @contentBackgroundColor;
+            border: solid @lightDividerColor;
+            border-width: 0 @codeLineBorderWidth 0 0;
+            display: inline-block;
+            font-family: monospace;
+            line-height : @codeLineHeight;
+            padding: 0 @halfSpacing;
+            text-align: right;
+            text-decoration: none;
+
+            /* Target lines and hovers are only in source view and do not affect diff view */
+            &:hover {
+                background-color: #EEE;
+                border-right-color: #326CA6;
+            }
+
+            &.target {
+                background: @primaryHighlightColor;
+                color: #FFF;
+                font-weight: bold;
+                text-decoration: none;
+            }
+        }
+    }
+    .line-number {
+        width: @sourceLineNumberColumnWidth + @codeLineBorderWidth;
+    }
+
+    &.capacity-reached .CodeMirror-sizer {
+        // ensures there is no white creeping out from underneath the grey background of the .capacity-reached-message.
+        padding-bottom: 0;
+
+    }
+
+    .capacity-reached-message {
+        line-height: inherit;
+        background-color: @textContentBackgroundColor;
+        // matches the padding on .CodeMirror-sizer that we've removed above.
+        // Complements the margin on .aui-message - using margin-bottom there doesn't
+        // extend the gray background on the capacity-message.
+        padding-bottom: (@codeLineHeight + @codeLineBorderWidth) * 2;
+        > .aui-message {
+            margin: @baseSpacing @baseSpacing 0;
+        }
+    }
+}

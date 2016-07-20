@@ -1,0 +1,50 @@
+@import "/static/global.less";
+
+a[href].aui-lozenge,
+button.aui-lozenge {
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: none;
+    }
+
+    // TODO need to look at non-subtle styling
+    // TODO make use of better variables for border colors
+    &.aui-lozenge-subtle {
+        &:hover {
+            border-color: @lozengeGenericTextColor;
+        }
+
+        &.aui-lozenge-success:hover {
+            border-color: @lozengeAddedColor;
+        }
+
+        &.aui-lozenge-error:hover {
+            border-color: @lozengeRemovedColor;
+        }
+
+        &.aui-lozenge-current:hover {
+            border-color: @lozengeInProgressTextColor;
+        }
+
+        &.aui-lozenge-complete:hover {
+            border-color: @lozengeModifiedColor;
+        }
+
+        &.aui-lozenge-moved:hover {
+            border-color: @lozengeMovedColor;
+        }
+    }
+}
+
+button.aui-lozenge {
+    font-family: Arial, sans-serif;
+
+    // This fixes Firefox's (buggy) behaviour of additional padding on buttons
+    &::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+}

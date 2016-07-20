@@ -1,0 +1,56 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? step
+ * @param content
+ *
+ * data passed through to bitbucket.internal.layout.base
+ * @param? activeHeaderNav
+ * @param? dataAttributes
+ * @param? extraAttributes
+ * @param? headContent
+ * @param? pageBottomContent
+ * @param? theme
+ * @param? useAdminContext
+ */
+{template .setup}
+{webResourceManager_requireResourcesForContext('bitbucket.layout.setup')}
+{call bitbucket.internal.layout.base}
+    {param activeHeaderNav: $activeHeaderNav /}
+    {param bodyClass: 'setup-layout' /}
+    {param dataAttributes: $dataAttributes /}
+    {param extraAttributes: $extraAttributes /}
+    {param focusedPageSize: 'large' /}
+    {param headContent: $headContent /}
+    {param hideProfile: true /}
+    {param pageBottomContent: $pageBottomContent /}
+    {param pageType: 'focused' /}
+    {param theme: $theme /}
+    {param useAdminContext: $useAdminContext /}
+    {param windowTitle: getText('bitbucket.web.setup.window.title') /}
+    {param content}
+        {call widget.aui.pageHeader}
+            {param extraClasses: 'setup-header' /}
+            {param content}<h1>{getText('bitbucket.web.setup.title', $ij.instanceName)}</h1>{/param}
+        {/call}
+        {call widget.aui.panel}
+            {param extraClasses: 'step' /}
+            {param content}
+                {call aui.page.pagePanelContent}
+                    {param content}
+                        {if $step}
+                            {call widget.aui.pageHeader}
+                                {param extraClasses: 'setup-header' /}
+                                {param content}
+                                    <h2>{$step}</h2>
+                                {/param}
+                            {/call}
+                        {/if}
+                        {$content|noAutoescape}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

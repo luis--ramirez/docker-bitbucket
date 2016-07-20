@@ -1,0 +1,37 @@
+{namespace widget.aui.group}
+
+/**
+ * @param? id
+ * @param content
+ * @param? extraClasses
+ */
+{template .group}
+    <div {if $id}id="{$id}" {/if}class="aui-group{if $extraClasses} {$extraClasses}{/if}">
+        {$content ? $content : ''|noAutoescape}
+    </div>
+{/template}
+
+/**
+ * @param content
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? tagName
+ */
+{template .item}
+    <{$tagName ? $tagName : 'div' } class="aui-item{if $extraClasses} {$extraClasses}{/if}"
+        {call aui.renderExtraAttributes}
+            {param extraAttributes: $extraAttributes /}
+        {/call}>
+        {$content ? $content : ''|noAutoescape}
+    </{$tagName ? $tagName : 'div' }>
+{/template}
+
+/**
+ * @param content
+ * @param? extraClasses
+ */
+{template .split}
+    <div class="aui-group aui-group-split{if $extraClasses} {$extraClasses}{/if}">
+        {$content ? $content : ''|noAutoescape}
+    </div>
+{/template}

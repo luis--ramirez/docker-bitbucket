@@ -1,0 +1,59 @@
+@import "/static/global.less";
+
+@branch-diagram-image-width: 157px;
+@branch-diagram-image-height: 50px;
+@branch-diagram-automerge-image-height: 84px;
+@branch-diagram-ref-lozenge-max-width: @aui-dialog2-medium - (2 * @doubleSpacing) - (2 * @divider-border-width) - (@branch-diagram-image-width + @baseSpacing);
+
+.branch-diagram {
+    position: relative;
+    margin-top: @doubleSpacing;
+    margin-bottom: @doubleSpacing;
+    min-height: @branch-diagram-image-height + @baseSpacing;
+
+    .diagram-image {
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: 0 @halfSpacing;
+        background-size: @branch-diagram-image-width @branch-diagram-image-height;
+        height: @branch-diagram-image-height + @halfSpacing;
+        width: @branch-diagram-image-width;
+        position: absolute;
+        top: 0;
+    }
+
+    &.disabled .diagram-image {
+        opacity: 0.3;
+    }
+
+    &.branch-diagram-automerge {
+        min-height: @branch-diagram-automerge-image-height + @halfSpacing;
+
+        .diagram-image {
+            background-size: @branch-diagram-image-width @branch-diagram-automerge-image-height;
+            width: @branch-diagram-image-width;
+            height: @branch-diagram-automerge-image-height + @halfSpacing;
+        }
+    }
+
+    .ref-lozenge {
+        .box-sizing();
+        margin-left: @branch-diagram-image-width + @baseSpacing;
+        margin-bottom: @baseSpacing;
+        max-width: @branch-diagram-ref-lozenge-max-width;
+        float: left;
+        clear: left;
+    }
+}
+
+.branch-diagram-merge > .diagram-image {
+    background-image: url(branch-diagram-merge.svg);
+}
+
+.branch-diagram-create > .diagram-image {
+    background-image: url(branch-diagram-create.svg);
+}
+
+.branch-diagram-automerge > .diagram-image {
+    background-image: url(branch-diagram-automerge.svg);
+}

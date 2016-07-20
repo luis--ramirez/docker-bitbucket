@@ -1,0 +1,42 @@
+{namespace bitbucket.internal.onboarding}
+
+/**
+ * @param nextUrl
+ * @param wasRedirected
+ */
+{template .gettingstarted}
+{webResourceManager_requireResourcesForContext('bitbucket.page.gettingstarted')}
+    {call bitbucket.internal.layout.base}
+        {param bodyClass: 'getting-started-page' /}
+        {param pageType: 'hybrid' /}
+        {param windowTitle: getText('bitbucket.web.gettingstarted.page.header.welcome', productName()) /}
+        {param content}
+            <div class="content-body">
+                {foreach $webPanelContent in getWebPanels('bitbucket.web.gettingstarted.header', [
+                    'nextUrl': $nextUrl,
+                    'wasRedirected': $wasRedirected
+                ])}
+                    {$webPanelContent}
+                {/foreach}
+                {foreach $webPanelContent in getWebPanels('bitbucket.web.gettingstarted.content', [
+                    'nextUrl': $nextUrl,
+                ])}
+                    {$webPanelContent}
+                {/foreach}
+            </div>
+
+            {foreach $webPanelContent in getWebPanels('bitbucket.web.gettingstarted.footer', [
+                'nextUrl': $nextUrl,
+                'wasRedirected': $wasRedirected
+            ])}
+                {$webPanelContent}
+            {/foreach}
+
+        {/param}
+        {param pageBottomContent}
+            <script type="text/javascript">
+                require('bitbucket/internal/page/getting-started').onReady({$wasRedirected});
+            </script>
+        {/param}
+    {/call}
+{/template}

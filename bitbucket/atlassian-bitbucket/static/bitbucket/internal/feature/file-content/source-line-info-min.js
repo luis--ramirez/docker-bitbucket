@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/file-content/source-line-info",["exports"],function(b){function d(a,c,e){this.lineNumber=a;this.line=c;this.handles={SOURCE:null,all:[]};this.attributes=e}d.prototype._setHandle=function(a){this.handles.SOURCE=a;this.handles.all=[a]};b.convertToLineInfos=function(a){var c=a.start||0;return a.lines.map(function(a,b){return new d(b+1+c,a,{})})}});

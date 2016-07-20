@@ -1,0 +1,47 @@
+@import "/static/global.less";
+
+@avatar-border-width: 1px;
+@project-name-column-width: 30%;
+@project-key-column-width: 15%;
+
+#projects-table {
+    table-layout: fixed;
+
+    .aui-avatar {
+        margin-right: @baseSpacing;
+        vertical-align: top;
+    }
+
+    .project-name {
+        width: @project-name-column-width;
+    }
+
+    .project-key {
+        width: @project-key-column-width;
+    }
+
+    td {
+        line-height: @aui-avatar-size-small + (2 * @avatar-border-width);
+    }
+
+    td.project-key {
+        word-break:break-all;
+        word-wrap: break-word;
+    }
+
+    td.project-name a,
+    td.project-description span {
+        .text-overflow();
+        display: inline-block;
+        white-space: normal;
+        vertical-align: top;
+    }
+
+    td.project-name a {
+        width: 80%;
+    }
+
+    td.project-description span {
+        width: 100%;
+    }
+}

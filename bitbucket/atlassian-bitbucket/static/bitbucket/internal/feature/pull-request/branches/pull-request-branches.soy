@@ -1,0 +1,34 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param sourceRef
+ * @param targetRef
+ * @param? alwaysDisplayRepositories When true, the lozenges will always include repository information.
+                                     When false, the source lozenge will show repository information if
+                                     it doesn't match the target repository.
+ */
+{template .branchToBranch}
+    <div class="pull-request-branches">
+        {call bitbucket.internal.feature.repository.refLozenge}
+            {param repository: $alwaysDisplayRepositories or $sourceRef.repository.id != $targetRef.repository.id ?
+                $sourceRef.repository :
+                null /}
+            {param ref: $sourceRef /}
+            {param refAccessibilityText: getText('bitbucket.web.pullrequest.branches.source.arialabel', $sourceRef.displayId) /}
+            {param extraClasses: 'source-branch' /}
+        {/call}
+        {call aui.icons.icon}
+            {param useIconFont: true /}
+            {param iconFontSet: 'devtools' /}
+            {param icon: 'arrow-right' /}
+        {/call}
+        {call bitbucket.internal.feature.repository.refLozenge}
+            {param repository: $alwaysDisplayRepositories ?
+                $targetRef.repository :
+                null /}
+            {param ref: $targetRef /}
+            {param refAccessibilityText: getText('bitbucket.web.pullrequest.branches.target.arialabel', $targetRef.displayId) /}
+            {param extraClasses: 'target-branch' /}
+        {/call}
+    </div>
+{/template}

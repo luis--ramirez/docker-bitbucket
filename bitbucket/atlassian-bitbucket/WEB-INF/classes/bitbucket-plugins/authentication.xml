@@ -1,0 +1,58 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-authentication" name="Atlassian Bitbucket Authentication">
+
+    <plugin-info>
+        <description>Bitbucket's Built-in Authenticators</description>
+        <version>1.0</version>
+        <vendor name="Atlassian" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <!-- Note: when changing the weights on any of these handlers also update the documentation in
+         docs/src/site/markdown/reference/plugin-module-types/http-authentication-*.md -->
+
+    <!-- Built in authentication handler that authenticates the user against embedded Crowd -->
+    <http-auth-handler key="crowdHttpAuthHandler"
+                       class="com.atlassian.stash.internal.auth.EmbeddedCrowdHttpAuthenticationHandler"
+                       weight="100"/>
+
+    <http-auth-handler key="rememberMeAuthHandler"
+                       class="com.atlassian.stash.internal.auth.RememberMeAuthenticationHandler"
+                       weight="110"/>
+
+    <!-- Built in authentication failure handlers for SCM requests, BASIC auth and redirect to login -->
+    <http-auth-failure-handler key="rememberMeAuthenticationFailureHandler"
+                               class="com.atlassian.stash.internal.auth.RememberMeAuthenticationFailureHandler"
+                               weight="10"/>
+    <http-auth-failure-handler key="scmAuthenticationFailureHandler"
+                               class="com.atlassian.stash.internal.auth.ScmAuthenticationFailureHandler"
+                               weight="80"/>
+
+    <http-auth-failure-handler key="basicAuthChallengeFailureHandler"
+                               class="com.atlassian.stash.internal.auth.BasicAuthChallengeFailureHandler"
+                               weight="90"/>
+
+    <http-auth-failure-handler key="redirectingAuthFailureHandler"
+                               class="com.atlassian.stash.internal.auth.RedirectingAuthenticationFailureHandler"
+                               weight="100"/>
+
+
+    <!-- Always runs first to ensure recently access repositories are trimmed before custom handlers -->
+    <http-auth-success-handler key="recentlyAccessedRepositoriesAuthSuccessHandler"
+                               class="com.atlassian.stash.internal.user.RecentlyAccessedRepositoriesAuthenticationSuccessHandler"
+                               weight="0"/>
+
+    <!-- Remember-me handler that provides a remember-me token when requested -->
+    <http-auth-success-handler key="rememberMeAuthSuccessHandler"
+                               class="com.atlassian.stash.internal.auth.RememberMeAuthenticationSuccessHandler"
+                               weight="10"/>
+
+    <!--Form based authentication success handler that ensures a session is associated with the request -->
+    <http-auth-success-handler key="sessionCreatingAuthSuccessHandler"
+                               class="com.atlassian.stash.internal.auth.SessionCreatingAuthenticationSuccessHandler"
+                               weight="50"/>
+
+    <!-- Default authentication success handler that redirects the user to the original target or / -->
+    <http-auth-success-handler key="redirectingAuthSuccessHandler"
+                               class="com.atlassian.stash.internal.auth.RedirectingAuthenticationSuccessHandler"
+                               weight="100"/>
+
+</atlassian-plugin>

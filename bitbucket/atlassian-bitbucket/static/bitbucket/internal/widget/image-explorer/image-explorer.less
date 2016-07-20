@@ -1,0 +1,182 @@
+@import "/static/global.less";
+
+@container-width: 320px;
+@container-border-width: 2px;
+@slider-icon-width: 20px;
+@slider-width: @container-width - (2 * (@slider-icon-width + @halfSpacing)); // take off the width of the icon and the margins
+@mask-size: 256px;
+
+.image-explorer-container {
+    width: @container-width + (2 * @container-border-width);
+
+    &.empty {
+        .image-explorer-image-view {
+            border: @container-border-width dashed @dividerColor;
+            background: none;
+            margin: 0;
+
+            &[data-upload-prompt]:after{
+                .border-radius(3px);
+                .box-sizing();
+                content: attr(data-upload-prompt);
+                color: @placeholderTextColor;
+                text-align: center;
+                font-size: @font-size-xlarge;
+                width: 60%;
+                height: 100%;
+                margin-left: -30%;
+                padding: @icon-size-large @doubleSpacing 0;
+                position: absolute;
+                top: 35%;
+                left: 50%;
+                background: transparent url(icons/icon-downarrow.svg) no-repeat 50% 0%;
+                background-size: @icon-size-large;
+            }
+
+            .image-explorer-source {
+                display: none;
+            }
+
+            .image-explorer-mask {
+                display: none;
+            }
+
+            .image-explorer-drag-delegate {
+                cursor: default;
+            }
+        }
+        .image-explorer-scale-slider-wrapper {
+            display: none;
+        }
+    }
+
+    &.error {
+        .image-explorer-image-view {
+            &[data-upload-prompt]:after{
+                display: none;
+            }
+        }
+    }
+
+    .image-explorer-image-view {
+        .square(@container-width);
+        position: relative;
+        overflow: hidden;
+        background: url(bgCheckerboard.png);
+        border: 1px solid @dividerColor;
+        margin: 1px;
+
+        &.active-drop-target {
+            border-color: @confirmationTextColor;
+
+            &[data-upload-prompt]:after{
+                background-image: url(icons/icon-tick-inverted.svg);
+                background-size: @icon-size-large;
+                color: @confirmationTextColor;
+            }
+        }
+
+        .image-explorer-drag-delegate {
+            .square(100%);
+            position: absolute;
+            cursor: move;
+            background-color: rgba(0,0,0,0); //LOL WUT (IE)
+        }
+
+        .image-explorer-mask {
+            .box-shadow(0 0 0 1000px rgba(0,0,0,0.5));
+            .centered(@mask-size);
+
+            &.circle-mask {
+                .circle(@mask-size);
+            }
+
+            &.square-mask {
+                .square(@mask-size);
+            }
+
+            &.rounded-square-mask {
+                .square(@mask-size);
+                .border-radius(10px);
+            }
+        }
+
+        img {
+            .centered();
+        }
+
+        .aui-message {
+            @errorWidth: @container-width - 2 * @doubleSpacing;
+            .centered();
+            .box-sizing();
+            margin: 0;
+            width: @errorWidth;
+            max-height: @errorWidth;
+            margin-left: -(@errorWidth / 2);
+            z-index: 10;
+            word-wrap: break-word;
+
+            &.closeable {
+                //Prevent close icon overlapping the title
+                //Can be removed when https://bitbucket.org/atlassian/aui-archive/pull-request/224 is merged
+                padding-right: 36px;
+            }
+
+        }
+    }
+
+    .image-explorer-scale-slider-wrapper {
+        display: inline-block;
+        width: @slider-width;
+        margin: @doubleSpacing (@slider-icon-width + @halfSpacing) 0;
+        position: relative;
+        height: 20px;
+        line-height: 20px;
+
+        &:before,
+        &:after {
+            .square(@slider-icon-width);
+            content: '';
+            background-size: @slider-icon-width;
+            position: absolute;
+            top: 50%;
+            margin-top: -@slider-icon-width/2;
+            background: transparent no-repeat 50% 50%;
+        }
+
+        &:before {
+            left: -(@slider-icon-width + @halfSpacing);
+            background-image: url(icons/icon-image.svg);
+        }
+
+        &:after {
+            right: -(@slider-icon-width + @halfSpacing + 2); //2px buffer to account padding inside image for :before
+            background-image: url(icons/icon-image-large.svg);
+        }
+    }
+
+    .image-explorer-scale-slider,
+    .fd-slider {
+        padding: 0; //IE10 adds crazy padding to it's native slider element
+        margin: 0;
+        display: inline-block;
+        width: @slider-width;
+        vertical-align: middle;
+
+        &.fd-form-element-hidden {
+            display: none;
+        }
+    }
+
+    .fd-slider {
+        //Tweak the fd-slider styles so that the handle stops at the end of the bar, rather than stopping when the middle of the handle reaches the end of the bar
+        .fd-slider-bar {
+            left: 3px;
+            right: 3px;
+        }
+
+        .fd-slider-range {
+            left: 4px;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param options
+ */
+{template .dialogSelection}
+    <ol class="dialog-selection">
+        {foreach $option in $options}
+            <li class="option{if $option.styleClass} {$option.styleClass}{/if}{if isFirst($option)} selected{/if}"
+                data-option="{$option.key}">
+                <span class="option-icon"></span>
+                <div class="option-meta">
+                    <div class="option-name">{$option.linkText}</div>
+                    <div class="option-description">{$option.tooltip}</div>
+                </div>
+            </li>
+        {/foreach}
+    </ol>
+{/template}

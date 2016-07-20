@@ -1,0 +1,31 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * 'Welcome Mat' widget for screens that contain empty data
+ * @param title the heading for the box
+ * @param content
+ * @param? href URL for linking the title
+ * @param? tooltip tooltip for linked title
+ * @param? size 'large' or 'small', default is 'large'
+ * @param? extraClasses
+ * @param? backgroundClass you can use the default 'stash-logo' or set your own
+ * @param? webItemKey The key of the web item this was generated from, if applicable
+ */
+{template .welcomeMat}
+
+<div class="welcome-mat
+            {sp}welcome-mat-{$size ? $size : 'large'}
+            {sp}{$backgroundClass ? $backgroundClass : 'stash-logo'}
+            {call aui.renderExtraClasses data="all" /}">
+    <h3>
+        {if $href}
+        <a href="{$href}" {if $tooltip}title="{$tooltip}"{/if} {if $webItemKey}data-web-item-key="{$webItemKey}"{/if}>
+        {/if}
+        {$title}
+        {if $href}
+        </a>
+        {/if}
+    </h3>
+    {$content|noAutoescape}
+</div>
+{/template}

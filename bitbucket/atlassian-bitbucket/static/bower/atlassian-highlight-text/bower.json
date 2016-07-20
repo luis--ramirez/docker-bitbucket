@@ -1,0 +1,18 @@
+{
+  "name": "atlassian-highlight-text",
+  "version": "0.0.1",
+  "main": ["lib/internal/util/highlight-text.js"],
+  "dependencies": {
+    "atlassian-regexp": "^0.0.1"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "package.json",
+    "README.md",
+    "karma.conf.js",
+    ".gitignore"
+  ]
+}

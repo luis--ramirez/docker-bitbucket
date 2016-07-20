@@ -1,0 +1,34 @@
+{namespace bitbucket.internal.feature.project}
+
+/**
+ * @param? project
+ * @param? projectForm
+ * @param? extraClasses
+ */
+{template .avatarPicker}
+    {call widget.aui.form.field}
+        {param fieldGroupClass : 'avatar-picker-field' + ($extraClasses ? ' ' + $extraClasses : '') /}
+        {param id: 'avatar-picker' /}
+        {param labelContent}{getText('bitbucket.web.avatar.project.label')}{/param}
+        {param input}
+            <div class="aui-group project-avatar-group">
+                <div class="aui-item project-avatar-preview">
+                {call bitbucket.internal.feature.project.avatar}
+                    {param size: 'xlarge' /}
+                    {param project: $project /}
+                    {param imageUrl: $projectForm and $projectForm.avatar ? $projectForm.avatar : null/}
+                {/call}
+                </div>
+                <div class="aui-item project-avatar-upload">
+                    {call bitbucket.internal.buttons.button}
+                        {param id: 'avatar-picker-button' /}
+                        {param buttonText: getText('bitbucket.web.avatar.button.change') /}
+                        //http://dev.w3.org/html5/markup/button.html - A button element with no type attribute specified represents the same thing as a button element with its type attribute set to "submit".
+                        {param extraAttributes: ['type': 'button'] /}
+                    {/call}
+                    <input id="avatar" name="avatar" type="hidden" value="{if $projectForm and $projectForm.avatar}{$projectForm.avatar}{/if}"/>
+                </div>
+            </div>
+        {/param}
+    {/call}
+{/template}

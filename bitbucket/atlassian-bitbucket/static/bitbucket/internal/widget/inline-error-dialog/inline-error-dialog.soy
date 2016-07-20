@@ -1,0 +1,32 @@
+{namespace bitbucket.internal.widget.inlineErrorDialog}
+
+/**
+ * @param title
+ * @param? subtitle
+ * @param? errors
+ * @param persistent
+ */
+{template .contents}
+    <h4>
+        {call aui.icons.icon}
+            {param icon: 'error'/}
+            {param useIconFont: true/}
+        {/call}
+        {if $title}{$title}{/if}
+    </h4>
+    {if $subtitle}
+        <h6>{$subtitle}</h6>
+    {/if}
+    {foreach $error in $errors}
+        {if isFirst($error)}<ul>{/if}
+            <li>{$error}</li>
+        {if isLast($error)}</ul>{/if}
+    {/foreach}
+    {if $persistent}
+        {call bitbucket.internal.buttons.button}
+            {param extraClasses: 'dismiss-button' /}
+            {param type: 'button'/}
+            {param buttonText: getText('bitbucket.web.button.dismiss') /}
+        {/call}
+    {/if}
+{/template}

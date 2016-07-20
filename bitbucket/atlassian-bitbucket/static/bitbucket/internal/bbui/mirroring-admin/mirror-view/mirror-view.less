@@ -1,0 +1,53 @@
+@import "../../../../../global.less";
+
+@hexSpacing: @baseSpacing * 6;
+@dodecaSpacing: @hexSpacing * 2;
+
+#mirror-name {
+    padding-right: @quadSpacing;
+}
+
+#mirror-remove-button {
+    position: absolute;
+    right: @doubleSpacing;
+    top: @doubleSpacing;
+}
+
+#mirror-remove-button-spinner {
+    position: absolute;
+    right: @quadSpacing;
+    top: @tripleSpacing + (1.5 * @baseSpacing);
+}
+
+#mirror-details-panel {
+    .ap-stats {
+        background-color: @contentBackgroundColor;
+        padding: 10px 0;
+
+        .ap-loading, .ap-timeout {
+            padding-left: 0;
+        }
+    }
+}
+
+#mirror-error {
+    text-align: center;
+    padding-top: @dodecaSpacing;
+
+    @warningSize: 100px;
+    .warning-icon {
+        background: url(warning.svg) no-repeat center / auto @warningSize;
+        margin: @tripleSpacing 0;
+        height: @warningSize;
+    }
+
+    p {
+        color: @secondaryTextColor;
+    }
+}
+
+#mirror-loading {
+    text-align: center;
+    margin: @hexSpacing 0;
+    height: @icon-size-large;
+}

@@ -1,0 +1,44 @@
+@import "/static/global.less";
+
+.branch-selector-toolbar {
+
+    .aui-toolbar2-inner {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .aui-toolbar2-primary,
+    .aui-toolbar2-secondary {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .aui-toolbar2-secondary {
+        vertical-align: top;
+
+        .aui-buttons {
+            float: none;
+        }
+
+        > .aui-buttons,
+        > .aui-buttons + .aui-button {
+            margin: 0 0 0 @baseSpacing;
+        }
+    }
+
+    .breadcrumbs {
+        border-left: 1px solid #CCC;
+        padding-left: @baseSpacing;
+        white-space: normal;
+        font-size: @font-size-large;
+    }
+}
+
+.filebrowser-content > .spinner {
+    margin: 16px auto 0;
+    .square(48px);
+}
+
+.filebrowser-table h3.entity-empty:first-child {
+    margin: 125px 0;
+}

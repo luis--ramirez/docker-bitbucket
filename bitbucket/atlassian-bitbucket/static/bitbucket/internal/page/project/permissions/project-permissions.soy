@@ -1,0 +1,128 @@
+{namespace bitbucket.internal.project}
+
+/**
+* @param project
+* @param allRead
+* @param allWrite
+* @param permissionDataList
+*/
+{template .projectPermissions}
+{webResourceManager_requireResourcesForContext('bitbucket.page.project.permissions')}
+    {let $projectPublic: isFeatureEnabled('public.access') and $project.public /}
+    {let $grantedDefaultPermission}
+        {if $allWrite}
+            write
+        {elseif $allRead}
+            read
+        {else}
+            none
+        {/if}
+    {/let}
+    {call bitbucket.internal.layout.projectSettings}
+        {{param windowTitle: getText('bitbucket.web.project.permissions.window.title', $project.name) /}}
+        {param activeNav: 'projects-settings-permissions-tab' /}
+        {param project: $project /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{{getText('bitbucket.web.project.edit.permissions') }}</h2>
+                {/param}
+                {param actionListContent}
+                    <a href="{bitbucket_help_url('bitbucket.help.project.permissions.guide')}" target="_blank">{getText('bitbucket.web.project.permissions.learn.more')}</a>
+                {/param}
+            {/call}
+
+            {call widget.aui.group.group}
+                {param extraClasses: 'default-permissions' /}
+                {param content}
+                    {if isFeatureEnabled('public.access')}
+                        {call widget.aui.group.item}
+                            {param content}
+                                {call aui.form.form}
+                                    {param action: '' /}
+                                    {param extraClasses: 'project-permission-form' /}
+                                    {param content}
+                                        <h3>{getText('bitbucket.web.project.permission.public')}</h3>
+                                        {call aui.form.fieldDescription}
+                                            {param message: getText('bitbucket.web.project.permission.public.desc', productName())
+                                            /}
+                                        {/call}
+                                        {call aui.form.checkboxField}
+                                            {param id: 'public-access-permission' /}
+                                            {param legendContent: '' /}
+                                            {param fields: [
+                                                [
+                                                    'id': 'public-access-allowed',
+                                                    'labelText': getText('bitbucket.web.project.permission.public.allow'),
+                                                    'isChecked': $project.public,
+                                                ]
+                                            ] /}
+                                        {/call}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/if}
+                    {call widget.aui.group.item}
+                        {param content}
+                            {call aui.form.form}
+                                {param action: '' /}
+                                {param extraClasses: 'project-permission-form' /}
+                                {param content}
+                                    <h3>{getText('bitbucket.web.project.permission.licensedusers')}</h3>
+                                    {call aui.form.fieldDescription}
+                                        {param message: getText('bitbucket.web.project.permission.licensedusers.desc')
+                                        /}
+                                    {/call}
+                                    {call aui.form.radioField}
+                                        {param id: 'licensed-users-permissions' /}
+                                        {param legendContent: '' /}
+                                        {param extraAttributes: ['data-granted-permission': $grantedDefaultPermission] /}
+                                        {param fields: [
+                                            [
+                                                'id': 'licensed-users-permissions-readwrite',
+                                                'labelText': getText('bitbucket.web.project.permission.licensedusers.readwrite'),
+                                                'value': 'write',
+                                                'isChecked': $grantedDefaultPermission == 'write'
+                                            ],
+                                            [
+                                                'id': 'licensed-users-permissions-read',
+                                                'labelText': getText('bitbucket.web.project.permission.licensedusers.read'),
+                                                'value': 'read',
+                                                'isChecked': $grantedDefaultPermission == 'read' or ($projectPublic and not $allWrite)
+                                            ],
+                                            [
+                                                'id': 'licensed-users-permissions-none',
+                                                'labelText': getText('bitbucket.web.project.permission.licensedusers.noaccess'),
+                                                'value': 'none',
+                                                'isChecked': $grantedDefaultPermission == 'none' and not $projectPublic,
+                                                'isDisabled': $projectPublic,
+                                                'extraAttributes': ['data-disabled-title': getText('bitbucket.web.project.permission.licensedusers.noaccess.disabledreason')]
+                                            ]
+                                        ] /}
+                                    {/call}
+                                {/param}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+
+            {call bitbucket.internal.feature.permission.userPermissionTable}
+                {param permissionDataList: $permissionDataList /}
+                {param noResultsText: getText('bitbucket.web.project.permission.user.noresults') /}
+            {/call}
+            {call bitbucket.internal.feature.permission.groupPermissionTable}
+                {param permissionDataList: $permissionDataList /}
+                {param noResultsText: getText('bitbucket.web.project.permission.group.noresults') /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/page/project/permissions').onReady([
+            {foreach $permissionData in $permissionDataList}
+                {lb}name : "{$permissionData.permission|escapeJs}", i18nName: "{$permissionData.i18nName|escapeJs}"{rb}{if not isLast($permissionData)},{/if}
+            {/foreach}
+        ]);</script>
+        {/param}
+    {/call}
+{/template}

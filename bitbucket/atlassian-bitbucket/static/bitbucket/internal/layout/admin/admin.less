@@ -1,0 +1,340 @@
+@import "/static/global.less";
+/* admin section */
+
+.bitbucket-theme {
+    &.admin {
+        .content-body {
+            overflow: hidden; /* http://www.quirksmode.org/css/clearing.html */
+            width: 100%;      /* http://www.quirksmode.org/css/clearing.html */
+            .box-sizing();
+
+
+            > .aui-group-navgroup > .aui-item {
+                .aui-group {
+                    margin-top: 0;
+                }
+
+                .aui-item {
+                    padding-top: 0;
+                    padding-right: 0;
+                    padding-bottom: 0;
+                }
+            }
+
+            .breadcrumbs {
+                margin-bottom: @baseSpacing;
+                color: @primaryLinkColor;
+                vertical-align: baseline;
+            }
+
+            .breadcrumbs + .aui-group {
+                margin-top: 16px;
+            }
+
+            .breadcrumbs + header {
+                margin-top: 0;
+            }
+
+            > h3 + .aui-message {
+                margin-top: 12px;
+            }
+
+            .aui-page-header-main h2 {
+                display: inline-block;
+            }
+
+            .aui-page-header-main h2 + .aui-button {
+                margin-left: @baseSpacing;
+            }
+
+            .notifications > .aui-message {
+                margin: 16px 0;
+            }
+
+            .icon-breadcrumbs-back {
+                vertical-align: text-bottom;
+            }
+
+        } //.content-body
+
+        .admin-section {
+            margin: 0 16px 24px 0;
+
+            h3 {
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                font-weight: normal;
+                font-size: @font-size-xlarge;
+                border-bottom: 1px solid #DDD;
+            }
+
+
+            .overview-links {
+                list-style-type: none;
+                margin: 0;
+                padding-left: 0;
+
+                li {
+                    padding-bottom: @doubleSpacing;
+                }
+
+                li > a {
+                    color: @primaryLinkColor;
+                    display: inline-block;
+                    font-size: @font-size-large;
+                    line-height: 16px;
+                    padding: 0 0 0 @auiIconSmall + @baseSpacing;
+                    background-repeat: no-repeat;
+                    background-image: url('icons/icons-admin.png');
+                    .box-sizing();
+
+                    &.has-icon {
+                        background-image: none;
+                        padding-left: 0;
+                    }
+
+                    span.icon {
+                        vertical-align: middle;
+                        padding-right: 8px;
+                        display: inline-block;
+                        line-height: 16px;
+                    }
+
+                    + .description {
+                        margin-top: 5px;
+                    }
+                }
+
+                // @aui-override https://ecosystem.atlassian.net/browse/AUI-1372
+                .aui-icon {
+                  padding: 0 @baseSpacing 0 0;
+                  vertical-align: text-bottom;
+                  color: @secondaryTextColor;
+                }
+
+                li > .description {
+                    display: block;
+                    color: @secondaryTextColor;
+                    padding: 0 0 0 @auiIconSmall + @baseSpacing;
+                }
+
+                li > .admin-database-internal + .description,
+                li > .admin-mailserver-unconfigured + .description {
+                    color: @bitbucket-admin-warning-color;
+                }
+            }
+        } //.admin-section
+
+        .tabs-menu .aui-dropdown {
+            min-width: 100%;
+        }
+
+    } //&.admin
+
+    /* Admin overview icons */
+    .icon-admin-serversettings {
+        background-position: 0 0;
+    }
+
+    .icon-admin-authentication {
+        background-position: 0 -32px;
+    }
+
+    .icon-admin-applinks {
+        background-position: 0 -64px;
+    }
+
+    .icon-admin-groups {
+        background-position: 0 -96px;
+    }
+
+    .icon-admin-i18n {
+        background-position: 0 -128px;
+    }
+
+    .icon-admin-licensing {
+        background-position: 0 -160px;
+    }
+
+    .icon-admin-mailserver {
+        background-position: 0 -192px;
+    }
+
+    .icon-admin-permissions {
+        background-position: 0 -224px;
+    }
+
+    .icon-admin-plugins {
+        background-position: 0 -256px;
+    }
+
+    .icon-admin-systeminfo {
+        background-position: 0 -288px;
+    }
+
+    .icon-admin-userdirectory {
+        background-position: 0 -320px;
+    }
+
+    .icon-admin-users {
+        background-position: 0 -352px;
+    }
+
+    .icon-admin-database {
+        background-position: 0 -384px;
+    }
+
+    .admin-banners {
+        > .aui-item {
+            text-align: center;
+            padding: 0;
+            margin: 0 24px 24px 0;
+        }
+
+        a {
+            text-align: left;
+            display: inline-block;
+            width: 270px;
+            position: relative;
+            background: #F3F3F3;
+            border: 1px solid #DDD;
+            padding: 15px 15px 15px 95px;
+            margin: 0 auto;
+            .border-radius(5px);
+            .box-shadow(inset 1px 1px 1px #FCFCFC);
+        }
+
+        a:hover,
+        a:active,
+        a:focus {
+            background: #DDD;
+            border-color: #BBB;
+            text-decoration: none;
+            .box-shadow(inset 1px 1px 2px #C9C9C9);
+        }
+
+        a > .icon {
+            display: block;
+            position: absolute;
+            left: 15px;
+            width: 65px;
+            height: 65px;
+            background: transparent url('../com.atlassian.bitbucket.server.bitbucket-web:images-icons-banners/icons/icons-banners.png') no-repeat 0 0;
+        }
+
+        > .aui-item {
+            display: inline-block;
+        }
+
+        > .aui-item + .aui-item {
+            padding-left: 0;
+        }
+
+        > .aui-item:last-child {
+            margin-right: 0;
+        }
+
+        h3 {
+            font-size: @font-size-default;
+            color: #333;
+            margin: 0 0 0.5em 0;
+        }
+
+        p {
+            color: #555;
+            margin: 0;
+        }
+
+        .create-user-link {
+            .icon {
+                background-position: 0 -260px;
+            }
+            &:hover .icon {
+                background-position: -85px -260px;
+            }
+        }
+
+        .create-group-link {
+            .icon {
+                background-position: 0 -5px;
+            }
+            &:hover .icon {
+                background-position: -85px -5px;
+            }
+        }
+
+        .manage-permissions-link {
+            .icon {
+                background-position: 0 -345px;
+            }
+
+            &:hover .icon {
+                background-position: -85px -345px;
+            }
+        }
+
+    }//.admin-banners
+
+    .content-body {
+        .aui-group.user-picker {
+            margin-top: @doubleSpacing;
+        }
+
+        .user-picker .filter-container,
+        .group-picker .filter-container {
+            width: auto;
+        }
+
+
+        .user-picker .filter-container,
+        .group-picker .filter-container {
+            margin-top: @doubleSpacing;
+            padding: 7px 10px;
+            background-color: @feintGreyColor;
+            border: solid @dividerColor;
+            border-width: 1px 0;
+        }
+
+        .user-picker .filter-container,
+        .group-picker .filter-container {
+            border-bottom-width: 0;
+        }
+
+        .user-picker .filter-container label,
+        .group-picker .filter-container label {
+            display: inline-block;
+            margin-right: @baseSpacing;
+        }
+
+        .user-picker .filter-container input,
+        .group-picker .filter-container input {
+            display: inline-block;
+        }
+
+        .user-picker {
+            .user-avatar {
+                vertical-align: middle;
+            }
+
+            .display-name,
+            .name {
+                vertical-align: bottom;
+            }
+        }
+
+        .filter-container + .aui-toolbar {
+            padding-top: 10px;
+        }
+    } //.content-body
+
+    .notifications:not(:empty) + .filter-container {
+        border-top: 1px solid @dividerColor;
+    }
+}
+
+@media screen and (max-width: 1310px) {
+.bitbucket-theme .admin-banners a {
+        width: 180px;
+        min-height: 88px;
+    }
+}

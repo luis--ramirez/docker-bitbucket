@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- It is expected that SpringMVC startup includes stash-context.xml. If this context is separated from
+         that one, e.g. turned into a child instead, this context will not be processed correctly because it
+         doesn't have:
+         - Its own context:component-scan directive
+         - A PropertyPlaceholderConfigurer to do property replacement -->
+
+    <!-- The name of this bean is dictated by SpringMVC. This configures commons-multipart to be used for handling
+         multipart content. The maximum upload size set here is 10MB by default, with temporary files created in
+         STASH_HOME/tmp. -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="${attachment.upload.max.size}"/>
+        <property name="uploadTempDir"
+                  value="#{new org.springframework.core.io.FileSystemResource(applicationSettings.tempDir)}"/>
+    </bean>
+
+    <!-- JSR-303 (bean validations) support will be detected on classpath and enabled automatically -->
+    <mvc:annotation-driven validator="validator">
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+        </mvc:message-converters>
+        <mvc:path-matching suffix-pattern="false"/>
+    </mvc:annotation-driven>
+
+    <mvc:view-controller path="/home" view-name="redirect:/projects"/>
+
+    <mvc:interceptors>
+        <!--
+            If you add an interceptor, make sure it guards against response.isCommitted()
+            in postHandle before using a session - the captcha image handler commit the response
+            early
+        -->
+        <bean class="com.atlassian.stash.internal.web.util.xsrf.XsrfTokenInterceptor">
+            <constructor-arg ref="xsrfTokenGenerator"/>
+            <constructor-arg ref="navBuilder"/>
+        </bean>
+        <bean class="com.atlassian.stash.internal.web.util.setup.SetupRedirectInterceptor">
+            <constructor-arg ref="applicationPropertiesService"/>
+        </bean>
+        <bean class="com.atlassian.stash.internal.web.repos.RepositoryAccessInterceptor">
+            <constructor-arg ref="eventPublisher"/>
+            <constructor-arg ref="repositoryService"/>
+        </bean>
+        <bean class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheMappings">
+                <props>
+                    <!-- Disable caching for all pages -->
+                    <prop key="/**">0</prop>
+                </props>
+            </property>
+            <property name="useExpiresHeader" value="true" />
+            <property name="useCacheControlHeader" value="true" />
+            <property name="useCacheControlNoStore" value="true" />
+        </bean>
+    </mvc:interceptors>
+
+</beans>

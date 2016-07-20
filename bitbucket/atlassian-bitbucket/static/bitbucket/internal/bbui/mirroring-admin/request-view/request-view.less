@@ -1,0 +1,40 @@
+@import "../../../../../global.less";
+
+.mirror-request-details {
+
+    text-align: center;
+
+    .request-description {
+        margin-top: @doubleSpacing;
+
+        & ~ .request-description {
+            margin-top: 0;
+        }
+    }
+
+    .mirror-image {
+        background: url(agent-illustration.svg) no-repeat center;
+        margin: @tripleSpacing 0;
+        height: 60px;
+    }
+
+    .label {
+        color: @secondaryTextColor;
+    }
+
+    .server-id {
+        font-weight: bold;
+        margin-top: 0;
+    }
+
+    .action-buttons {
+        padding-top: @doubleSpacing;
+
+        .button-spinner {
+            display: inline-block;
+            position: absolute;
+            @spinnerTopPadding: 25px;
+            padding: @spinnerTopPadding 0 0 @quadSpacing;
+        }
+    }
+}

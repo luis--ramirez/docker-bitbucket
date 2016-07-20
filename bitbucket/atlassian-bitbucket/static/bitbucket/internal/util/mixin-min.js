@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/mixin",["lodash"],function(a){return function(){var b=[].slice.call(arguments);return{into:function(c){return a.extend.apply(a,[c].concat(b))}}}});

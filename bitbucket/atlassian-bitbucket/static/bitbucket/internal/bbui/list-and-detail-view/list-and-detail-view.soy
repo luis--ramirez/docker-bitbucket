@@ -1,0 +1,16 @@
+{namespace bitbucket.internal.component.listAndDetailView}
+
+/**
+ * @param listContent this should be a <ul> with <li> items
+ * @param detailContent initial item to load.
+ */
+{template .main}
+    <div class="list-and-detail-view">
+        <div class="list-view">
+            {$listContent|noAutoescape}
+        </div>
+        <div class="detail-view">
+            {$detailContent|noAutoescape}
+        </div>
+    </div>
+{/template}

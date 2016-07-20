@@ -1,0 +1,11 @@
+{namespace bitbucket.web.project.list.banner}
+
+/**
+ */
+{template .bitbucketWelcomeMatCreateProject}
+<a href="{nav_project_create()}" class="create-project-link">
+    <span class="icon"></span>
+    <h3>{getText('bitbucket.web.welcomemat.create.project.title')}</h3>
+    <p>{getText('bitbucket.web.welcomemat.create.project.description', productName())}</p>
+</a>
+{/template}

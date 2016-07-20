@@ -1,0 +1,105 @@
+{namespace bitbucket.internal.page.setup}
+
+/**
+ * @param currentDbType
+ * @param dbTypes
+ * @param dcName
+ * @param form
+ * @param isInternal
+ * @param languages
+ * @param? formErrors
+ * @param? fieldErrors
+ * @param? migrationException
+ * @param? testPassed
+ * @param? dataAttributes
+ */
+{template .database}
+{webResourceManager_requireResourcesForContext('bitbucket.page.setup.database')}
+{call bitbucket.internal.layout.setup}
+    {param step: getText('bitbucket.web.setup.title.welcome') /}
+    {param dataAttributes: $dataAttributes /}
+    {param content}
+        {if $testPassed}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.admin.db.setup.test.passed')}
+                {/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param isLongLabels: true /}
+            {param content}
+                {if $migrationException}
+                    {call bitbucket.internal.widget.exception}
+                        {param messageContent}
+                            {$migrationException.message}
+                            <p>{{getText('bitbucket.web.admin.db.setup.support',
+                            '<a href="https://support.atlassian.com">',
+                            '</a>')|noAutoescape}}
+                            </p>
+                        {/param}
+                        {param throwable: $migrationException /}
+                    {/call}
+                {/if}
+                {call bitbucket.internal.feature.locale.field}
+                    {param languages: $languages /}
+                    {param errors: $fieldErrors /}
+                    {param hideMore: true /}
+                {/call}
+                <input type='hidden' name='step' value='database'/>
+                <fieldset class="group">
+                    <legend><span>{getText('bitbucket.web.setup.database')}</span></legend>
+                    <div class="radio">
+                        <input class="radio" type="radio" name="internal"{if $isInternal} checked="checked"{/if} value="true" id="internal-true">
+                        <label for="internal-true">{getText('bitbucket.web.setup.database.internal')}</label>
+                        <div class="description">{getText('bitbucket.web.setup.database.internal.description')}</div>
+                    </div>
+                    <div class="radio">
+                        <input class="radio" type="radio" name="internal"{if not $isInternal} checked="checked"{/if} value="false" id="internal-false">
+                        <label for="internal-false">{getText('bitbucket.web.setup.database.external')}</label>
+                        <div class="description">{{getText('bitbucket.web.setup.database.external.description',
+                                                    '<a href="' + bitbucket_help_url('bitbucket.help.db.migration') + '">', '</a>')|noAutoescape}}</div>
+                    </div>
+                </fieldset>
+                <div class="config-fields{if $isInternal} hidden{/if}">
+                {call bitbucket.internal.feature.admin.db.editDbConfigFields}
+                    {param currentDbType: $currentDbType /}
+                    {param dbConfigForm: $form /}
+                    {param dbTypes: $dbTypes /}
+                    {param dcName: $dcName /}
+                    {param dcSupported: true /}
+                    {param fieldErrors: $fieldErrors /}
+                    {param isDataCenter: false /}
+                    {param isDisabled: not $currentDbType.driverAvailable /}
+                {/call}
+                </div>
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param disabled: not $isInternal and not $currentDbType.driverAvailable /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.setup.next') /}
+                        {/call}
+                        {call widget.aui.form.submit}
+                            {param id: 'test' /}
+                            {param extraClasses: 'hidden' /}
+                            {param disabled: $isInternal or not $currentDbType.driverAvailable /}
+                            {param label: getText('bitbucket.web.button.test') /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/widget/exception').onReady();
+            require('bitbucket/internal/page/setup/database').onReady();
+            require('bitbucket/internal/widget/setup-tracking').track('setup-database');
+        </script>
+    {/param}
+{/call}
+{/template}

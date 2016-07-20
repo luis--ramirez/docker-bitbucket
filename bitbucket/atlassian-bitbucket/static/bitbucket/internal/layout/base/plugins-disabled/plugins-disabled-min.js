@@ -1,0 +1,1 @@
+require(["aui","jquery","bitbucket/util/server"],function(b,a,c){a(document).ready(function(){a(".plugins-disabled-banner .close-banner").click(function(){var d=b.contextPath()+"/mvc/maintenance/upgrade-notification";c.rest({url:d,type:"DELETE"});a(this).closest(".plugins-disabled-banner").remove()})})});

@@ -1,0 +1,127 @@
+@import "../../../../global.less";
+@import "request-view/request-view";
+@import "mirror-view/mirror-view";
+
+@list-view-width: 240px;
+@status-height: 15px;
+
+.empty-state {
+    text-align: center;
+    margin-top: 10 * @doubleSpacing;
+
+    p + p {
+        margin: 0;
+    }
+
+    .illustration {
+        height: 190px;
+        width: 395px;
+        margin: 0 auto;
+        background-image: url(world_isolated.svg);
+        background-size: contain;
+    }
+
+    .unavailable-message {
+        padding-top: @baseSpacing;
+        font-weight: bold;
+    }
+
+    #get-started-mirror-button {
+        margin-top: @doubleSpacing;
+    }
+}
+
+.mirroring-admin {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    .list-view {
+        width: @list-view-width;
+        padding: @doubleSpacing @baseSpacing;
+
+        .mirroring-nav {
+            width: 100%;
+            display: inline-block;
+
+            #learn-more-mirroring {
+                margin-left: @baseSpacing;
+                .bounded-cell-contents(100%);
+            }
+
+            .list-refresh-spinner {
+                .square(1px);
+                padding-left: @doubleSpacing;
+                vertical-align: middle;
+                display: inline-block;
+            }
+
+            .mirror {
+                position: relative;
+                cursor: pointer;
+                padding: @baseSpacing;
+
+                &.selected-item .name {
+                    font-weight: bold;
+                    color: @adg-color-black;
+                }
+
+                &:hover {
+                    background-color: @feintGreyColor;
+                }
+
+                .name {
+                    color: @aui-link-color;
+                }
+
+                .created,
+                .status {
+                    color: @secondaryTextColor;
+                    font-size: @font-size-small;
+                }
+
+                .status-container {
+                    height: @status-height;
+                    overflow-y: hidden;
+
+                    .status {
+                        margin: 0;
+                        height: 100%;
+
+                        &.transitioning {
+                            transition: transform .5s;
+                            transform: translateY(-100%);
+                        }
+
+                        &::before {
+                            .circle(8px);
+                            content: ' ';
+                            display: inline-block;
+                            margin: 1px 5px 1px 0;
+                        }
+
+                        &.active::before {
+                            background-color: @lozengeAddedColor;
+                        }
+
+                        &.inactive::before {
+                            background-color: @lozengeRemovedColor;
+                        }
+
+                        &.pending::before {
+                            background-color: @lozengeGenericColor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .detail-view {
+        @double-navbar-width: 2 * @list-view-width;
+        display: inline-block;
+        width: ~'calc(100% - @{double-navbar-width})';
+        height: 100%;
+        position: absolute;
+    }
+}

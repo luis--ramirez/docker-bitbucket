@@ -1,0 +1,2 @@
+define("bitbucket/internal/page/users/account",["jquery","bitbucket/internal/widget/user-avatar-form","exports"],function(b,g,c){function e(){b(".user-avatar-error").remove()}function f(d){e();b(".aui-page-panel-content \x3e .aui-page-header").after(aui.message.error({content:d,extraClasses:"user-avatar-error"}))}c.onReady=function(d,c){var a={name:"atl_token",value:b(".account-settings input[name\x3datl_token]").val()},a=new g(b(c),d,a);a.on("avatarChanged",e);a.on("avatarUploadError",f);a.on("avatarDeleteError",
+f)}});

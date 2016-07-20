@@ -1,0 +1,72 @@
+{namespace bitbucket.internal.component.pagedTable}
+
+/**
+ * @param id
+ * @param theadContent
+ * @param? extraClasses
+ */
+{template .table}
+    {call aui.table}
+        {param id: $id /}
+        {param extraClasses}
+            paged-table
+            {if $extraClasses}{sp}{$extraClasses}{/if}
+        {/param}
+        {param theadContent: $theadContent /}
+    {/call}
+{/template}
+
+/**
+ * @param content
+ * @param? extraClasses
+ */
+{template .message}
+<div class="paged-table-message{if $extraClasses} {$extraClasses}{/if}">
+    {$content|noAutoescape}
+</div>
+{/template}
+
+/**
+ * @param? visible
+ */
+{template .spinner}
+    <div class='spinner {$visible ? '' : 'hidden'}'></div>
+{/template}
+
+/**
+ * @param forId
+ * @param? filter
+ * @param? filterPlaceholder
+ */
+{template .filter}
+    {call aui.group.group}
+        {param extraClasses: 'paged-table-filter' /}
+        {param content}
+            {call aui.group.item}
+                {param content}
+                    {call .filterField}
+                        {param forId: $forId /}
+                        {param filter: $filter /}
+                        {param filterPlaceholder: $filterPlaceholder /}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param forId
+ * @param? filter
+ * @param? filterPlaceholder
+ */
+{template .filterField}
+    <label class="assistive" for="paged-table-input-for-{$forId}">{$filterPlaceholder ? $filterPlaceholder : getText('bitbucket.component.pagedTable.search')}</label>
+    <input type="text"
+           id="paged-table-input-for-{$forId}"
+           class="paged-table-filter-input"
+           data-for="{$forId}"
+           autocomplete="off"
+           placeholder="{$filterPlaceholder ? $filterPlaceholder : getText('bitbucket.component.pagedTable.search')}"
+           value="{$filter ? $filter : ''}">
+{/template}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/impl/request",["bitbucket/util/server"],function(a){return{rest:a.rest}});

@@ -1,0 +1,13 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * Only support client web-panels now
+ * @param repository
+ * @param commit
+ * @param hasRepoWrite
+ */
+{template .commitRelatedEntityWebPanels}
+    {foreach $webPanel in getWebPanels('bitbucket.commit.related-entities', [ 'repository' : $repository, 'commit' : $commit, 'hasRepoWrite': $hasRepoWrite ])}
+        {$webPanel}
+    {/foreach}
+{/template}

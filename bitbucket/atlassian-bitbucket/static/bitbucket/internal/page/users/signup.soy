@@ -1,0 +1,71 @@
+{namespace bitbucket.internal.users}
+
+/**
+* @param form
+* @param instanceName
+* @param userLimitReached
+* @param? fieldErrors
+* @param? formErrors
+* @param showCaptcha
+*/
+{template .signup}
+{webResourceManager_requireResourcesForContext('bitbucket.page.signup')}
+{call bitbucket.internal.layout.focused}
+    {param windowTitle: getText('bitbucket.web.signup.title') /}
+    {param activeHeaderNav: '' /}
+    {param contentTitle: getText('bitbucket.web.signup.header') /}
+    {param focusedPageSize: 'medium'/}
+    {param content}
+        {if $userLimitReached}
+            {call aui.message.error}
+                {param content}
+                    {{getText('bitbucket.web.signup.limit.reached', $instanceName)}}
+                {/param}
+            {/call}
+        {else}
+            <p class="description">
+                {{getText('bitbucket.web.signup.info', $instanceName)}}
+            </p>
+        {/if}
+        {call bitbucket.internal.widget.form}
+            {param action}{nav_signup()}{/param}
+            {param errors: $formErrors /}
+            {param extraClasses: $userLimitReached ? 'disabled' : null /}
+            {param autocomplete: 'off' /}
+            {param content}
+                  {call bitbucket.internal.widget.userFormFields}
+                      {param form: $form /}
+                      {param fieldErrors: $fieldErrors /}
+                      {param disabled: $userLimitReached /}
+                  {/call}
+                {if $showCaptcha}
+                    {call bitbucket.internal.widget.captcha.field}
+                        {param required: true /}
+                        {param disabled: $userLimitReached /}
+                        {param fieldErrors: $fieldErrors /}
+                        {param labelContent}{getText('bitbucket.web.signup.captcha.html')}{/param}
+                        {param description: getText('bitbucket.web.signup.captcha') /}
+                    {/call}
+                    {call bitbucket.internal.widget.captcha.container /}
+                {/if}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.signup.submit') /}
+                            {param disabled: $userLimitReached/}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_login() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+<script type="text/javascript">
+    require('bitbucket/internal/widget/captcha').initialise('#captcha-image', '#captcha-reload');
+</script>
+{/template}

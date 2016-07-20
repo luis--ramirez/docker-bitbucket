@@ -1,0 +1,32 @@
+{namespace bitbucket.internal.feature.file}
+
+/**
+ * Originally file-content, abstracted out
+ *
+ * @param? extraClasses
+ * @param? fileIcon
+ * @param? breadcrumbs
+ * @param? primaryToolbarContent
+ * @param? secondaryToolbarContent
+ */
+{template .fileToolbar}
+    <div class="file-toolbar{if $extraClasses} {$extraClasses}{/if}">
+        <div class="secondary">{if $secondaryToolbarContent}{$secondaryToolbarContent|noAutoescape}{/if}</div>
+        <div class="primary">
+            {if $fileIcon}
+                {call aui.icons.icon}
+                    {param icon: 'file' /}
+                    {param size: 'small' /}
+                    {param useIconFont: true /}
+                    {param iconFontSet: 'devtools' /}
+                {/call}
+            {/if}
+            {if $breadcrumbs}
+                {call bitbucket.internal.widget.breadcrumbs.breadcrumbs}
+                    {param pathComponents: [] /}
+                {/call}
+            {/if}
+            {if $primaryToolbarContent}{$primaryToolbarContent|noAutoescape}{/if}
+        </div>
+    </div>
+{/template}

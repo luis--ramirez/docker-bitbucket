@@ -1,0 +1,60 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param untilRevision
+ * @param untilPath
+ * @param path
+ * @param atRevisionRef
+ * @param? pathComponents
+ * @param? showDiff
+ * @param? relevantContextLines
+ * @param? dataAttributes
+ * @param? followRenames
+ * @param? autoSincePath
+ * @param? sincePath
+ */
+{template .source}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.repository.fileContent')}
+    {webResourceManager_requireResourcesForContext('bitbucket.feature.files.fileHandlers')}
+    {call bitbucket.internal.layout.files}
+        {param atRevisionRef : $atRevisionRef /}
+        {param dataAttributes: $dataAttributes /}
+        {param toolbarExtraContent}
+            {call bitbucket.internal.feature.commit.commitBadge.oneline}
+                {param commit : $untilRevision /}
+                {param repository : $repository /}
+                {param withAvatar : true /}
+            {/call}
+        {/param}
+
+        {param windowTitle}
+            {foreach $pathComponent in $pathComponents}
+                {if isLast($pathComponent)}
+                    {{getText('bitbucket.web.file.sourceview.windowtitle', $pathComponent.text, $repository.name)}}
+                {/if}
+            {/foreach}
+        {/param}
+        {param repository: $repository /}
+        {param pathComponents: $pathComponents /}
+        {param isDirectory: false /}
+        {param content}
+        {/param}
+        {param pageBottomContent}
+            <script>
+            require('bitbucket/internal/page/source').onReady(
+                "{$path|escapeJs}",
+                {to_json($atRevisionRef)|noAutoescape},
+                {to_json($untilRevision, ['avatarSize' : avatarSize('small')])|noAutoescape},
+                "{$untilPath|escapeJs}",
+                {if $showDiff}"diff"{else}"source"{/if},
+                '#content .aui-page-panel-content',
+                'file-content',
+                {$relevantContextLines ? $relevantContextLines : 'null'},
+                {$followRenames},
+                {$autoSincePath},
+                {if $sincePath}"{$sincePath|escapeJs}"{else}null{/if});
+            </script>
+        {/param}
+    {/call}
+{/template}

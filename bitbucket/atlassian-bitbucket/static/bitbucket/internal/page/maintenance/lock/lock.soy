@@ -1,0 +1,28 @@
+{namespace bitbucket.internal.maintenance}
+
+/**
+ * @param status
+ */
+{template .lock}
+{webResourceManager_requireResourcesForContext('bitbucket.page.maintenance.lock')}
+{call bitbucket.internal.layout.maintenance}
+    {param status: $status /}
+    {param heading: getText('bitbucket.web.maintenance.lock.title') /}
+    {param description: getText('bitbucket.web.maintenance.lock.description') /}
+    {param hideCancel: true /}
+    {param hideProgress: true /}
+    {param cancelButtonText: getText('bitbucket.web.maintenance.button.unlock') /}
+    {param cancelExtraContent}
+        {call aui.message.warning}
+            {param content}
+                {getText('bitbucket.web.maintenance.lock.warning', productName())}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/maintenance/lock').onReady(false);
+        </script>
+    {/param}
+{/call}
+{/template}

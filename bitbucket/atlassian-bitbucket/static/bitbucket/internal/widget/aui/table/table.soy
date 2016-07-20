@@ -1,0 +1,34 @@
+{namespace widget.aui}
+
+/**
+ */
+{template .table}
+    {@param? extraClasses: string}
+    {@param? theadId: string}
+    {@param? tfootId: string}
+    {@param? tbodyId: string}
+    {@param? content: string}
+    {@param? theadContent: string}
+    {@param? tfootContent: string}
+    {@param? dataAttributes: any}
+    {@param? captionContent: string}
+    {@param? id: string}
+    
+    <table class="aui{if $extraClasses} {$extraClasses}{/if}" {if $id}id="{$id}"{/if}
+    {if $dataAttributes}{call bitbucket.internal.util.dataAttributes}
+        {param data: $dataAttributes/}
+    {/call}{/if}>
+        {if $captionContent}
+            <caption>{$captionContent|noAutoescape}</caption>
+        {/if}
+        {if $theadContent}
+            <thead {if $theadId}id="{$theadId}"{/if}>{$theadContent |noAutoescape}</thead>
+        {/if}
+        {if $tfootContent}
+            <tfoot {if $tfootId}id="{$tfootId}"{/if}>{$tfootContent |noAutoescape}</tfoot>
+        {/if}
+        <tbody {if $tbodyId}id="{$tbodyId}"{/if}>
+            {if $content}{$content |noAutoescape}{/if}
+        </tbody>
+    </table>
+{/template}

@@ -1,0 +1,37 @@
+{namespace bitbucket.internal.auth}
+
+/**
+ * @param? xsrfModel
+ */
+{template .xsrfNotification}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.xsrfNotification')}
+    {call bitbucket.internal.layout.focused}
+        {param windowTitle: getText('bitbucket.web.notification.xsrf.title') /}
+        {param activeHeaderNav: '' /}
+        {param contentTitle: getText('bitbucket.web.notification.xsrf.header') /}
+        {param focusedPageSize: 'large' /}
+        {param content}
+            {call aui.message.warning}
+                {param titleContent}
+                    {getText('bitbucket.web.notification.xsrf.message.title', productName())}
+                {/param}
+                {param content}
+                    {getText('bitbucket.web.notification.xsrf.message.contents')|noAutoescape}
+                    {call bitbucket.internal.widget.xsrfProtectedForm}
+                        {param action: $xsrfModel.action /}
+                        {param content}
+                            {foreach $entry in $xsrfModel.formValues}
+                                <input type="hidden" name="{$entry.name}" value="{$entry.value}"/>
+                            {/foreach}
+                            {call widget.aui.form.submit}
+                                {param id: 'submit' /}
+                                {param label: getText('bitbucket.web.button.retry-operation') /}
+                                {param tooltip: getText('bitbucket.web.button.retry-operation') /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}

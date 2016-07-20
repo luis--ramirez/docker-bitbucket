@@ -1,0 +1,36 @@
+@import "/static/global.less";
+
+form.aui {
+    textarea.textarea.monospace {
+        font-family: @monospaceFontStack;
+        font-size: 11px;
+        white-space: pre;
+    }
+
+    > .aui-message + * {
+        margin-top: @baseSpacing;
+    }
+}
+
+
+.bitbucket-theme {
+    form.aui {
+
+        .buttons-container {
+            .aui-button.aui-button-link.cancel {
+                padding: 5px 0;
+            }
+        }
+    }
+
+    &.aui-page-focused .aui-page-panel .field-group p:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    /* OAuth confirmation extra spacing @plugin-overrides */
+    #oauth-authorize form.aui + .aui-message {
+        margin-top: 16px;
+    }
+
+}

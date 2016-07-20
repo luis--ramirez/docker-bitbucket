@@ -1,0 +1,18 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param content
+ * @param? instructionBlock
+ * @param? extraClasses
+ */
+{template .codeBlock}
+    <div class="code-block
+        {if $instructionBlock} instruction-block{/if}
+        {if $extraClasses} {$extraClasses}{/if}">
+        <pre>
+            <code>
+                {$content|noAutoescape}
+            </code>
+        </pre>
+    </div>
+{/template}

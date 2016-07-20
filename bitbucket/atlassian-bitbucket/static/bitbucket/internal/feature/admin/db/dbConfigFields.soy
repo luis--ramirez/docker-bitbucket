@@ -1,0 +1,118 @@
+{namespace bitbucket.internal.feature.admin.db}
+
+/**
+ * @param currentDbType
+ * @param dbTypes
+ * @param dcName
+ * @param dcSupported
+ * @param isDataCenter
+ * @param isDisabled
+ * @param? dbConfigForm
+ * @param? fieldErrors
+ */
+{template .editDbConfigFields}
+    {call widget.aui.form.field}
+        {param id: 'type' /}
+        {param labelContent}{getText('bitbucket.web.admin.db.type.label')}{/param}
+        {param errors: $fieldErrors ? $fieldErrors.type : null /}
+        {param input}
+            <select id="type" class="select" name="type" autofocus>
+                {foreach $dbType in $dbTypes}
+                    <option value="{$dbType.key}"{if $currentDbType.key == $dbType.key} selected="selected"{/if}>{getText($dbType.displayNameKey)}</option>
+                {/foreach}
+            </select>
+            <div class="error driver-unavailable{if not $dcSupported or $currentDbType.driverAvailable} hidden{/if}">
+                 {{getText('bitbucket.web.admin.db.driver.unavailable',
+                            '<a href="' + bitbucket_help_url($currentDbType.helpKey) + '" class="help-url">', '</a>')|noAutoescape}}
+            </div>
+            <div class="error not-clusterable{if $dcSupported} hidden{/if}">
+                {{getText('bitbucket.web.admin.db.notclusterable', $dcName, getText($currentDbType.displayNameKey),
+                            '<span class="not-clusterable-database">', '</span>',
+                            '<a href="' + bitbucket_help_url($currentDbType.helpKey) + '" class="help-url">', '</a>')|noAutoescape}}
+            </div>
+        {/param}
+    {/call}
+    {call widget.aui.form.text}
+        {param id: 'hostname' /}
+        {param disabled: $isDisabled /}
+        {param initialValue: $dbConfigForm ? $dbConfigForm.hostname : $currentDbType.defaultHostName /}
+        {param labelContent}{getText('bitbucket.web.admin.db.hostname.label')}{/param}
+        {param errors: $fieldErrors ? $fieldErrors.hostname : null /}
+        {param description: getText('bitbucket.web.admin.db.hostname.description') /}
+        {param required: true /}
+    {/call}
+    {call widget.aui.form.text}
+        {param id: 'port' /}
+        {param disabled: $isDisabled /}
+        {param initialValue: $dbConfigForm ? $dbConfigForm.port : $currentDbType.defaultPort /}
+        {param labelContent}{getText('bitbucket.web.admin.db.port.label')}{/param}
+        {param errors: $fieldErrors ? $fieldErrors.port : null /}
+        {param description: getText('bitbucket.web.admin.db.port.description') /}
+        {param required: true /}
+        {param sizeClass: 'short' /}
+    {/call}
+    {call widget.aui.form.text}
+        {param id: 'database' /}
+        {param disabled: $isDisabled /}
+        {param initialValue: $dbConfigForm ? $dbConfigForm.database : $currentDbType.defaultDatabaseName /}
+        {param labelContent}
+            {if $currentDbType.usesSid}
+                {getText('bitbucket.web.admin.db.service.label')}
+            {else}
+                {getText('bitbucket.web.admin.db.database.label')}
+            {/if}
+        {/param}
+        {param errors: $fieldErrors ? $fieldErrors.database : null /}
+        {param descriptionContent}
+            {if $currentDbType.usesSid}
+                {getText('bitbucket.web.admin.db.service.description')}
+            {else}
+                // This must pass in a space so that the called template creates the span that the corresponding javascript
+                // will set the value on. If it's '', it doesn't get created.
+                {getText('bitbucket.web.admin.db.database.description')}
+            {/if}
+        {/param}
+        {param required: true /}
+    {/call}
+    {call widget.aui.form.text}
+        {param id: 'username' /}
+        {param disabled: $isDisabled /}
+        {param initialValue: $dbConfigForm ? $dbConfigForm.username : $currentDbType.defaultUserName /}
+        {param labelContent}{getText('bitbucket.web.admin.db.username.label')}{/param}
+        {param errors: $fieldErrors ? $fieldErrors.username : null /}
+        {param description: getText('bitbucket.web.admin.db.username.description') /}
+        {param autocomplete: 'off' /}
+        {param required: true /}
+    {/call}
+    {call widget.aui.form.password}
+        {param id: 'password' /}
+        {param disabled: $isDisabled /}
+        {param initialValue: $dbConfigForm ? $dbConfigForm.password : null /}
+        {param labelContent}{getText('bitbucket.web.admin.db.password.label')}{/param}
+        {param errors: $fieldErrors ? $fieldErrors.password : null /}
+        {param description: getText('bitbucket.web.admin.db.password.description') /}
+        {param autocomplete: 'off' /}
+    {/call}
+    <script>
+    require('bitbucket/internal/feature/admin/db/editDbConfig').onReady([
+    {foreach $dbType in $dbTypes}
+        {lb}
+            "key" : "{$dbType.key}"
+            , "dcSupported" : {$dbType.clusterable or not $isDataCenter}
+            , "displayName" : "{getText($dbType.displayNameKey)}"
+            , "driverAvailable" : {$dbType.driverAvailable}
+            , "protocol" : "{$dbType.protocol}"
+            , "defaults" : {lb}
+                "hostname" : "{$dbType.defaultHostName}"
+                , "port"     : "{$dbType.defaultPort}"
+                , "database" : "{$dbType.defaultDatabaseName}"
+                , "username" : "{$dbType.defaultUserName}"
+                , "password" : ""
+            {rb}
+            , "usesSid" : {$dbType.usesSid}
+            , "helpUrl" : "{bitbucket_help_url($dbType.helpKey)}"
+        {rb}{if not isLast($dbType)},{/if}
+    {/foreach}
+    ]);
+    </script>
+{/template}

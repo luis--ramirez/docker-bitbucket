@@ -1,0 +1,48 @@
+{namespace bitbucket.internal.component.imageDiffer}
+
+/**
+ *
+ */
+{template .imageContainer}
+    <div class="image-container" />
+{/template}
+
+/**
+ *
+ */
+{template .splitContainer}
+    <div class="split-container" />
+{/template}
+
+/**
+ *
+ */
+{template .pixelDiffContainer}
+    <div class="pixeldiff-container" />
+{/template}
+
+/**
+ * @param imageSrc
+ */
+{template .pixelDiffImage}
+    <div class="pixeldiff binary">
+        <img src="{$imageSrc}" />
+    </div>
+{/template}
+
+/**
+ * The opacity slider for the Blend mode
+ */
+{template .opacitySlider}
+    <div class="opacity-slider-container">
+        <input type="range" min="0" max="1" step="0.01" value="1" />
+    </div>
+{/template}
+
+
+/**
+ *
+ */
+{template .spinner}
+    <div class="spinner" />
+{/template}

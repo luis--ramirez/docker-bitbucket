@@ -1,0 +1,40 @@
+{namespace bitbucket.decorators.users}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param? dataAttributes
+ */
+{template .account}
+    {call bitbucket.internal.layout.users.account}
+        {param windowTitle: $title /}
+        {param user: $ij.principal /}
+        {param dataAttributes: $dataAttributes /}
+        {param headContent: $head /}
+        {param activeNav: $properties['meta.activeTab'] ? $properties['meta.activeTab'] : $properties['meta.tab'] /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param user profile page for user
+ * @param project personal project for $user
+ * @param? dataAttributes
+ */
+{template .profile}
+    {call bitbucket.internal.layout.users.profile}
+        {param windowTitle: $title /}
+        {param dataAttributes: $dataAttributes /}
+        {param headContent: $head /}
+        {param user: $user /}
+        {param project: $project /}
+        {param activeNav: $properties['meta.activeTab'] /}
+        {param content: $body /}
+    {/call}
+{/template}

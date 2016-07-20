@@ -1,0 +1,55 @@
+@import "/static/global.less";
+
+.markup-editor {
+    position: relative;
+
+    textarea {
+        .border-top-left-radius();
+        .border-top-right-radius();
+        .box-sizing();
+        border: 1px solid @dividerColor;
+        width: 100%;
+        display: block;
+        margin: 0;
+        padding: @halfSpacing;
+        /* match the textarea styles with AUI typography defaults */
+        font-family: sans-serif;
+        font-size: @font-size-default;
+        line-height: 1.42858;
+        color: @bodyTextColor;
+        white-space: pre-wrap;
+
+        &:focus {
+            outline: none;
+        }
+
+        &::-webkit-input-placeholder {
+            color: @placeholderTextColor;
+        }
+
+        &:-moz-placeholder {
+            color: @placeholderTextColor;
+        }
+
+        &:-ms-input-placeholder {
+            color: @placeholderTextColor;
+        }
+    }
+
+    .markup-toolbar {
+        .border-bottom-left-radius();
+        .border-bottom-right-radius();
+        background-color: @feintGreyColor;
+        border: 1px solid @dividerColor;
+        border-top: none;
+        padding: @halfSpacing;
+
+        .secondary {
+            float: right;
+        }
+
+        .aui-button-subtle {
+            margin-left: 0;
+        }
+    }
+}

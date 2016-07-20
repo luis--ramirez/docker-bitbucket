@@ -1,0 +1,6 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-markup-renderers" name="Custom Markup Renderers">
+
+    <markup-renderer-component key="attachmentMarkupRenderer" class="com.atlassian.stash.internal.web.markup.AttachmentMarkupRenderer" />
+    <markup-renderer-component key="commitMarkupRenderer" class="bean:commitMarkupRenderer" />
+
+</atlassian-plugin>

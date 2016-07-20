@@ -1,0 +1,8 @@
+{namespace bitbucket.web.userdetails.avatar.caption}
+
+/**
+ * Notice if the user's avatar is provided by the Gravatar service.
+ */
+{template .bitbucketAvatarFromGravatarPanel}
+<span class="gravatar-notice">{{getText('bitbucket.web.gravatar.enabled', '<a href="http://gravatar.com">Gravatar</a>')|noAutoescape}}</span>
+{/template}

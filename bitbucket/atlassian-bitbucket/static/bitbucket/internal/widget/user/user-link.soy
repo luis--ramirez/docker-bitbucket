@@ -1,0 +1,24 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param user
+ * @param? href the href for the link. If not specified it defaults to the user's profile
+ * @param? extraClasses use "secondary-link" to lower the visual priority
+ * @param? skipTitle to prevent title being shown in some cases, e.g. the pull request table where a tipsy is present
+ */
+{template .userLink}
+    {let $displayName: personDisplayName($user) /}
+    {if $href or ($user.type == 'NORMAL' and $user.slug and isAuthenticated())}
+        //User profiles only available to authenticated users
+        //Crowd user or normal Stash user
+        <a href="{$href ? $href : nav_user($user)}" {if $extraClasses}class="{$extraClasses}"{/if}
+            {if not $skipTitle}title="{$displayName}"{/if}>
+            {$displayName|truncate: 100|escapeHtml}
+        </a>
+    {else}
+        //Service user, commit author or some other type of user we don't expect to handle
+        <span{if $extraClasses}{sp}class="{$extraClasses}"{/if}{if not $skipTitle}{sp}title="{$displayName}"{/if}>
+            {$displayName|truncate: 100|escapeHtml}
+        </span>
+    {/if}
+{/template}

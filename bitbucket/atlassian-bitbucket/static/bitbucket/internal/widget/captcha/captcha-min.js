@@ -1,0 +1,1 @@
+define("bitbucket/internal/widget/captcha",["jquery","bitbucket/util/navbuilder","exports"],function(b,c,a){a.initialise=function(a,d){var e=b(a);b(d).click(function(a){e.attr("src",c.captcha().build());return!1})}});

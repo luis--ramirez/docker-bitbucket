@@ -1,0 +1,98 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param? dataAttributes
+ * @param? detailedErrors
+ * @param? fieldErrors
+ * @param? forkForm
+ * @param? formErrors
+ * @param? personalProject
+ * @param? pluginFieldsContent
+ * @param? repoNameMaxSize
+ * @param? toProject
+ */
+{template .forkRepo}
+{webResourceManager_requireResourcesForContext('bitbucket.page.repository.fork')}
+{call bitbucket.internal.layout.focused}
+    {{param windowTitle: getText('bitbucket.web.repository.fork.title', $repository.project.name, $repository.name) /}}
+    {{param contentTitle: getText('bitbucket.web.repository.fork.title', $repository.project.name, $repository.name) /}}
+    {param bodyClass: 'fork-repository'/}
+    {param activeHeaderNav: 'repositories-menu' /}
+    {param focusedPageSize: 'medium' /}
+    {param dataAttributes: $dataAttributes /}
+    {param content}
+        {if not (isFeatureEnabled('personal.repos'))}
+            {call aui.message.warning}
+                {param content}{getText('bitbucket.web.repository.fork.warning.personalrepositorydisabled')}{/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param detailedErrors: $detailedErrors /}
+            {param content}
+                {foreach $webPanel in getWebPanels('bitbucket.web.repository.fork.beforefields', [ 'repository' : $repository ])}
+                    {$webPanel}
+                {/foreach}
+                {call widget.aui.form.field}
+                    {param id: 'toProjectSelector' /}
+                    {param labelContent}{getText('bitbucket.web.repository.fork.project.label')}{/param}
+                    {param description: getText('bitbucket.web.repository.fork.project.description')/}
+                    {param required: true /}
+                    {param input}
+                        {call bitbucket.internal.feature.project.projectSelectorTriggerWithField}
+                            {param id: 'toProjectSelector' /}
+                            {param fieldName: 'toProjectId' /}
+                            {param project: $fieldErrors and $fieldErrors.toProjectId ? null :
+                                                ($toProject ? $toProject : $personalProject) /}
+                            {param autofocus: true /}
+                        {/call}
+                    {/param}
+                    {param errors: $fieldErrors ? $fieldErrors.toProjectId : null /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'name' /}
+                    {param labelContent}{getText('bitbucket.web.repository.fork.name.label')}{/param}
+                    {param initialValue: $forkForm ? $forkForm.name : $repository.name /}
+                    {param errors: $fieldErrors ? $fieldErrors.name : null /}
+                    {param required: true /}
+                    {param autocomplete: 'off' /}
+                    {param maxLength: $repoNameMaxSize /}
+                    {param descriptionContent}
+                        {getText('bitbucket.web.repository.fork.name.description')}
+                        {call bitbucket.internal.feature.repository.cloneUrlGen /}
+                    {/param}
+                {/call}
+                {foreach $webPanel in getWebPanels('bitbucket.web.repository.fork.afterfields', [ 'repository' : $repository ])}
+                    {$webPanel}
+                {/foreach}
+                {if $pluginFieldsContent}
+                    {$pluginFieldsContent |noAutoescape}
+                {/if}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'fork-repo-submit' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.button.fork.repository') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_repo_browse($repository.project.key, $repository.slug) /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/repository-fork').onReady(
+            {to_json($repository)|noAutoescape},
+            '#toProjectSelector'
+            {if $personalProject}
+                , {to_json($personalProject)|noAutoescape}
+            {/if});
+        </script>
+    {/param}
+{/call}
+{/template}

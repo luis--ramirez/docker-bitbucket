@@ -1,0 +1,52 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param serverId
+* @param form
+* @param? fieldErrors
+* @param? formErrors
+*/
+{template .licenseedit}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.license.edit')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-settings-licensing' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.license.edit.title')}</h2>
+                </div>
+            </div>
+        </header>
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: nav_admin_license() /}
+            {param extraClasses: 'license'/}
+            {param errors: $formErrors /}
+            {param content}
+                {call widget.form.licenseForm}
+                    {param license: $form.license/}
+                    {param serverId: $serverId/}
+                    {param required: false/}
+                    {param licenseFieldId: 'license' /}
+                    {param serverIdFieldId: 'serverid' /}
+                    {param labelContent}{getText('bitbucket.web.license.label')}{/param}
+                    {param tooltipContent}{getText('bitbucket.web.license.label.tooltip', productName())}{/param}
+                    {param fieldErrors: $fieldErrors/}
+                {/call}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.license.save') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin_license() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

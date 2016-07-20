@@ -1,0 +1,35 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param? id
+ * @param type either 'create', 'merge' or 'automerge'
+ * @param? sourceRef
+ * @param? targetRef
+ * @param? sourceRepo
+ * @param? targetRepo
+ * @param? extraClasses
+ * @param? content
+ */
+{template .branchDiagram}
+    <div class="branch-diagram branch-diagram-{$type}{if not $sourceRef or not $targetRef} disabled{/if}
+    {call aui.renderExtraClasses data="all" /}"{if $id} id="{$id}"{/if}>
+        <div class="diagram-image"></div>
+        {if $sourceRef}
+            {call bitbucket.internal.feature.repository.refLozenge}
+                {param ref: $sourceRef /}
+                {param extraClasses: 'source-ref' /}
+                {param repository: $sourceRepo /}
+            {/call}
+        {/if}
+        {if $targetRef}
+            {call bitbucket.internal.feature.repository.refLozenge}
+                {param ref: $targetRef /}
+                {param extraClasses: 'target-ref' /}
+                {param repository: $targetRepo /}
+            {/call}
+        {/if}
+        {if $content}
+            {$content|noAutoescape}
+        {/if}
+    </div>
+{/template}

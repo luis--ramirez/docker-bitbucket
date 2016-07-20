@@ -1,0 +1,167 @@
+@import "/static/global.less";
+
+@permissionTableHeaderLineHeight: 30px;
+
+table.permissions-table {
+    table-layout: fixed;
+
+    thead > tr > th,
+    tbody > tr > td {
+        text-align: center;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    tbody > tr > td:first-child {
+        .text-overflow();
+    }
+
+    thead > tr:first-child > th {
+        line-height: inherit;
+        border-top: none;
+    }
+
+    th.permission-column {
+        > span.permission-column-desc {
+            display: none;
+        }
+
+        > .aui-icon {
+            margin-left: @halfSpacing;
+            color: @secondaryTextColor;
+        }
+    }
+
+    tbody > tr > td {
+        vertical-align: middle;
+    }
+
+
+    // IE 10 isn't clearing out the background-color hover state on the TR on mouseleave, but handles it fine
+    // when the background-color is applied to the TD. Fixes STASHDEV-5685
+    tbody > tr:hover {
+        background: transparent;
+
+        > td {
+            background-color: @feintGreyColor;
+        }
+    }
+
+    thead > tr > th {
+        line-height: @permissionTableHeaderLineHeight;
+        border-top: 1px solid @dividerColor;
+
+        &:first-child {
+            overflow: visible;
+            width: 37%;
+        }
+
+        h3 {
+            display: inline-block;
+            font-size: @font-size-default;
+            width: 9.5em;
+
+            + .button {
+                height: 30px;
+                line-height: 30px;
+            }
+        }
+    }
+
+    tbody > tr.permission-error {
+        border-top: 2px solid @contentBackgroundColor; // @aui-override (2px = override the border-bottom border from AUI's tables.css)
+
+        > td {
+            color: @errorTextColor;
+            font-weight: bold;
+        }
+    }
+
+    .delete-button + .spinner {
+        margin-top: 10px;
+        margin-left: -2px;
+    }
+
+    .permissions-item {
+        display: inline;
+
+        .user-avatar,
+        .group-avatar {
+            vertical-align: middle;
+            margin-right: @baseSpacing;
+        }
+
+        .display-name {
+            .text-overflow();
+            display: inline;
+            width: 100%;
+            vertical-align: middle;
+        }
+    }
+
+    .permissions-spinner {
+        height: 18px;
+        width: 18px;
+        display: inline-block;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+
+    .added-column {
+        width: 48px;
+    }
+
+    .remove-permissions-column {
+        width: 20px;
+    }
+
+    .no-results-row td div {
+        display:none;
+    }
+
+    .load-more-row {
+        border: none;
+    }
+
+    .error-message {
+        color: @errorTextColor;
+    }
+
+} // table.permissions-table
+
+@permissionDescriptionColumnPaddingLeft: 40px;
+
+.aui-group > .aui-item.permission-description-column {
+    padding-left: @permissionDescriptionColumnPaddingLeft;
+    width: 240px;
+
+    h5 {
+        margin: 2ex 0 1ex;
+        font-size: 13px;
+    }
+}
+
+@errorLeftPadding: @aui-avatar-size-xsmall + @doubleSpacing; // @doubleSpacing = left/right padding for rows (from AUI's tables.css) + avatar spacing from its icon
+
+#user-permissions-table .permission-error {
+    padding: 0 0 7px @errorLeftPadding; // 7px = top/bottom padding for rows (AUI's tables.css)
+}
+
+#group-permissions-table .permission-error {
+    padding: 0 0 7px @baseSpacing;
+}
+
+#user-permissions-table, #group-permissions-table {
+    .bitbucket-theme &.aui > tbody > tr.permission-error:hover { // selectivity required to override the style from bitbucket-theme.css
+        background-color: inherit; // disable highlight of the current row on hover
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .aui-group > .aui-item.permission-description-column {
+        padding-left: @permissionDescriptionColumnPaddingLeft / 2;
+        width: 190px;
+    }
+}

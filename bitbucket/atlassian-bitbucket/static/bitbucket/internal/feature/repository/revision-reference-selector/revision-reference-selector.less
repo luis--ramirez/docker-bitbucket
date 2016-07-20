@@ -1,0 +1,21 @@
+@import "/static/global.less";
+
+.revision-reference-selector-trigger,
+.revision-reference-selector {
+    .aui-icon {
+        color: @aui-iconfont-color;
+    }
+}
+
+.revision-reference-selector-trigger {
+    .aui-icon {
+        margin-right: @halfSpacing;
+
+        + .name {
+            .box-sizing();
+            max-width: @max-button-width - (@dropdown-arrow-width + @baseSpacing + @halfSpacing) - @baseSpacing - (@auiIconSmall + @baseSpacing);
+            //Button width minus padding right for dropdown arrow, button padding left and icon width and padding.
+
+        }
+    }
+}

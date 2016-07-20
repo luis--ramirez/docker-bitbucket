@@ -1,0 +1,44 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param? title
+ * @param? description
+ * @param? toRef
+ * @param? errors
+ * @param? fieldErrors
+ */
+{template .edit}
+    {if $errors}
+        {foreach $error in $errors}
+            {call aui.message.error}
+                {param content}
+                    {if $error.messageContent}
+                        {$error.messageContent|noAutoescape}
+                    {else}
+                        {$error.message}
+                    {/if}
+                {/param}
+            {/call}
+        {/foreach}
+    {/if}
+    {call bitbucket.internal.widget.form}
+        {param action: '' /}
+        {param autocomplete: 'off' /}
+        {param content}
+            {call widget.aui.form.field}
+                {param id: 'toRef' /}
+                {param labelContent}{getText('bitbucket.web.pullrequest.edit.toref.title')}{/param}
+                {param description: getText('bitbucket.web.pullrequest.edit.toref.description') /}
+                {param errors: $fieldErrors ? $fieldErrors.toRef : null /}
+                {param input}
+                    {call bitbucket.internal.feature.repository.branchSelectorTriggerWithField}
+                        {param id: 'toRef' /}
+                        {param fieldName: 'toRef' /}
+                        {param ref: $toRef /}
+                    {/call}
+                {/param}
+            {/call}
+            {call .detailsForm data="all"/}
+        {/param}
+    {/call}
+{/template}

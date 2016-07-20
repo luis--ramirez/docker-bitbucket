@@ -1,0 +1,28 @@
+@import "/static/global.less";
+
+#content {
+    > .aui-page-header:first-child {
+
+        h1 {
+            .text-overflow();
+        }
+
+        + .aui-page-panel {
+            margin-top: 0;
+        }
+    }
+}
+
+.aui-page-focused .aui-page-panel-content {
+    > h2:first-of-type {
+        border-bottom: 1px solid @dividerColor;
+        margin-bottom: @doubleSpacing;
+        padding-bottom: @doubleSpacing;
+    }
+
+    > form.aui:last-of-type .buttons-container {
+        border-top: 1px solid @dividerColor;
+        margin-top: @doubleSpacing;
+        padding-top: @doubleSpacing;
+    }
+}

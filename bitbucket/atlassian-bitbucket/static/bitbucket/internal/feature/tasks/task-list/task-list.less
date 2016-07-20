@@ -1,0 +1,196 @@
+@import "/static/global.less";
+
+.keyframes-complex(task-highlight-animation, {
+    60% {
+        background-color: @newCommentColorFadeIn;
+    }
+    100% {
+        background-color: fadeout(@newCommentColorFadeIn, 100%);
+    }
+});
+
+.task-list {
+    padding-left: 0;
+}
+
+.task-list-dialog {
+    padding-top: 0;
+
+    > .task-list {
+        height: auto;
+    }
+
+    li.section-heading {
+        padding-top: @doubleSpacing;
+
+        h6 {
+            text-transform: uppercase;
+        }
+
+        &.task-list-row:hover {
+            background: none;
+        }
+    }
+
+    li.task-list-row {
+        .task {
+            margin-right: @auiIconLarge;
+        }
+
+        .actions {
+            margin: @halfSpacing 0 0 0;
+            padding: 0;
+            display: inline-block;
+            list-style-type: none;
+
+            li {
+                display: inline-block;
+            }
+
+            > li:before {
+                .action-separator();
+            }
+
+            > li:first-child:before {
+                content: none;
+            }
+        }
+
+        .actions a,
+        .actions span {
+            font-size: @font-size-small;
+            color: @secondaryTextColor;
+            display: inline-block;
+        }
+
+        .task-content {
+            cursor: pointer;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: @primaryActiveColor;
+        }
+
+        &.collapsed {
+            .task-content::after {
+                .linear-gradient-horizontal(fade(#fff, 0), #fff);
+                .square(@doubleSpacing);
+                content: ' ';
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            &:hover .task-content::after {
+                .linear-gradient-horizontal(fade(@primaryActiveColor, 0), @primaryActiveColor);
+            }
+        }
+
+        &.focused::before {
+            content: ' ';
+            width: 3px;
+            height: 100%;
+            background-color: @primaryLinkColor;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+}
+
+li.task-list-row {
+    .transition(height 0.33s ease-in);
+
+    border-bottom: 1px solid @dividerColor;
+    height: 20px;
+    list-style-type: none;
+    padding: @baseSpacing;
+    position: relative;
+
+    .comment & {
+        &:first-child {
+            margin-top: @baseSpacing;
+            border-top: 1px solid @dividerColor;
+        }
+
+        &.pending-delete {
+            display: none;
+
+            // we need to treat the first child differently if it's pending
+            // deletion to handle the borders correctly, unlike for other rows
+            // where we can just hide it
+            &:first-child {
+                display: block;
+                height: 0;
+                overflow: hidden;
+                padding-top: 0;
+                border-top: 0;
+                margin-top: 0;
+
+                > .task {
+                    display: none;
+                }
+            }
+        }
+
+        &:last-child {
+            border-bottom: none;
+            padding-right: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    &.collapsed {
+        overflow: hidden;
+
+        .task {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .task-footer {
+            display: none;
+        }
+    }
+
+    &.expanding,
+    &.collapsing {
+        .task {
+            overflow: hidden;
+        }
+    }
+
+    &.expanded {
+        height: auto;
+    }
+
+    &:hover,
+    &.expanded {
+        .task-link-button {
+            display: block;
+        }
+    }
+}
+
+.comment {
+    .task-list {
+        overflow: hidden;
+        height: 0;
+
+        // transition-height class is set in JS specifically to handle Safari transitioning the height of the task-list
+        // to 0 before setting it to 'auto', causing a visual 'jitter' - STASHDEV-7774
+        &.transition-height {
+            .transition(all 0.2s ease-in-out);
+        }
+    }
+
+    li.task-list-row {
+        .transition(opacity 0.2s ease-in-out);
+
+        &.task-highlight {
+            .animation(task-highlight-animation 5s 1);
+            background-color: @newCommentColorFadeIn; // for browsers that don't support animation
+        }
+    }
+}

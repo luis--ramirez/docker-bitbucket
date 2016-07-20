@@ -1,0 +1,112 @@
+@import "../../../../global.less";
+
+@reviewerAnimationTime: 0.2s;
+@reviewerAnimationDelay: 0.25s;
+@reviewerAnimationEasing: ease;
+@reviewerStatusWidth: 68px;
+
+.pull-request-actions.pullRequestIsOpen {
+    .reviewer-avatar-list.reviewing  {
+        left: 0;
+    }
+
+    .reviewer-avatar-list {
+        position: relative;
+        z-index: 10;
+        left: @reviewerStatusWidth + @baseSpacing;
+        transition: all @reviewerAnimationTime @reviewerAnimationEasing @reviewerAnimationDelay;
+        padding-bottom: 2px;
+    }
+}
+
+.reviewer-avatar-list {
+    .user-avatar {
+        margin: 0 0 0 @baseSpacing;
+        vertical-align: middle;
+
+        .badge {
+            top: -@halfSpacing;
+            right: -@halfSpacing;
+        }
+    }
+
+    .overflow-reviewers-trigger {
+        background: @feintGreyColor;
+        font-size: 11px;
+        height: @aui-avatar-size-small;
+        line-height: @aui-avatar-size-small;
+        margin-left: @baseSpacing;
+        padding: 0 @halfSpacing;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .extras-dropdown-trigger {
+        display: inline-block;
+    }
+}
+
+.overflow-reviewers {
+    @avatar-dropdown-width: 240px;
+    .aui-inline-dialog-contents {
+        padding: 0;
+    }
+
+    ul {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    li {
+        table-layout: fixed;
+
+        &:not(:first-child) {
+            .aui-avatar,
+            .name {
+                padding-top: @halfSpacing;
+            }
+        }
+    }
+
+    .avatar-dropdown {
+        width: @avatar-dropdown-width;
+    }
+
+    .aui-list-truncate {
+        padding: @baseSpacing;
+    }
+
+    .avatar-with-name {
+        @avatar-with-name-width: @avatar-dropdown-width - 2 * @baseSpacing;
+        @avatar-width: @aui-avatar-size-small + @baseSpacing;
+
+        display: table-row;
+
+        .aui-avatar {
+            display: table-cell;
+            vertical-align: top;
+            width: @avatar-width;
+
+            .badge {
+                // match badge location in the viewable avatar list section
+                right: @halfSpacing;
+                top: 3px;
+            }
+
+            img {
+                margin: 3px @baseSpacing 3px 0;
+            }
+        }
+
+        .name {
+            display: table-cell;
+
+            // use break-word where supported (Chrome,  Safari) and fall back to overflow/ellipsis where not (FF, IE)
+            word-break: break-word;
+            max-width: @avatar-with-name-width - @avatar-width;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+    }
+}

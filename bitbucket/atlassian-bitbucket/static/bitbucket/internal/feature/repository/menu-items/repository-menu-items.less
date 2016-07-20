@@ -1,0 +1,31 @@
+@import "/static/global.less";
+
+.repository-menu-item {
+    /** for the loading and the error messages displayed in the menu */
+    > span {
+        padding: 7px 8px 6px;
+        display: block;
+    }
+
+    > a > span {
+        margin-right: @halfSpacing;
+        display: inline-block;
+        vertical-align: middle;
+        .text-overflow();
+    }
+
+    /** -- Spacing and colouring -- */
+    .active {
+        .project-name,
+        .separator {
+            color: @invertedBodyTextColor;
+        }
+    }
+
+    mark {
+        background-color: inherit;
+        color: inherit;
+        font-weight: bold;
+    }
+}
+

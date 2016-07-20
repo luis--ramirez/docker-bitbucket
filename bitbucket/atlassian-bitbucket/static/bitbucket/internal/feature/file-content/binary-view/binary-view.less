@@ -1,0 +1,62 @@
+@import "/static/global.less";
+
+.binary-container {
+    .border-radius(@baseBorderRadius);
+    text-align: center;
+    white-space: normal;
+    padding: @doubleSpacing;
+    background: @contentBackgroundColor;
+}
+
+.binary {
+    display: inline-block;
+    max-width: 45%;
+    vertical-align: top;
+    text-align: center;
+
+    &:only-child {
+        max-width: 100%;
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        background: url(bgCheckerboard.png);
+
+        &[data-ext=svg] {
+            // ensure SVGs don't show up as 0x0px because they have no natural size.
+            min-width: 200px;
+        }
+    }
+
+    > h5 {
+        margin-bottom: @baseSpacing;
+        margin-top: 0;
+        font-weight: normal;
+    }
+
+    .unrenderable-file {
+        padding: 0 @baseSpacing;
+
+        .download-image {
+            .square(145px);
+            background: url('download.svg') center no-repeat;
+            margin: 0 auto;
+        }
+
+        h3 {
+            margin-top: @doubleSpacing;
+        }
+
+        .download-file-button {
+            display: inline-block;
+            margin-top: @tripleSpacing;
+        }
+    }
+}
+
+.image-differ-toolbar ~ .binary {
+    margin-top: @baseSpacing;
+}

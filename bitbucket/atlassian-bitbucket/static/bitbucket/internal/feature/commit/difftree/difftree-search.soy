@@ -1,0 +1,44 @@
+{namespace bitbucket.internal.feature.difftree}
+
+/**
+ * Returns the html for a difftree search node.
+ * This template is _very_ much assuming that the font is monospaced to ensure everything lines up just right.
+ *
+ * @param changeType
+ * @param lineNumber
+ * @param padding
+ * @param titleContent
+ */
+{template .searchTreeNode}
+     <span class="change-type change-type-{$changeType}">
+        {switch $changeType}
+            {case 'ADDED'}+
+            {case 'REMOVED'}-
+            {default}{sp}
+        {/switch}
+        {sp}
+        {textUtil('padLeft', $lineNumber, $padding, ' ')}
+     </span>
+     {sp}
+     {$titleContent|noAutoescape}
+{/template}
+
+/**
+ * HTML element for input field and buttons for search.
+ * @param includeCollapseButton
+ */
+{template .searchWrapper}
+<div class="diff-tree-search-wrapper">
+    {if $includeCollapseButton}
+        {call aui.buttons.button}
+            {param type: 'subtle' /}
+            {param extraClasses: 'search-button-when-collapsed' /}
+            {param text: '' /}
+            {param iconType: 'aui' /}
+            {param iconClass: 'aui-icon-small aui-iconfont-search' /}
+            {param iconText: getText('bitbucket.web.difftree.search.button.tooltip') /}
+            {param extraAttributes: ['title': getText('bitbucket.web.difftree.search.button.tooltip')] /}
+        {/call}
+    {/if}
+</div>
+{/template}

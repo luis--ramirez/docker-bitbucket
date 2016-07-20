@@ -1,0 +1,180 @@
+@import "../../../../global.less";
+@import "../../../../aui-less/variables.less";
+@import "../search-common/search-common.less";
+
+@quickSearchLength: 320px;
+
+.quick-search-trigger {
+    #quick-search {
+        width: @quickSearchLength;
+    }
+
+    #quick-search + .spinner {
+        display: none;
+        position: absolute;
+        right: @spinner-size-small;
+        top: 20px;
+        width: @spinner-size-small;
+        color: @invertedBodyTextColor;
+
+        .loading & {
+            display: block;
+        }
+    }
+}
+
+.aui-quicksearch.loading:after {
+    content: '';
+}
+
+#quick-search-dialog {
+    background-color: @aui-panel-bg-color;
+    border: @aui-border-width @aui-border-style @aui-dialog-border-color;
+    border-bottom-left-radius: @aui-border-radius-small;
+    border-bottom-right-radius: @aui-border-radius-small;
+    box-shadow: @aui-dropdown2-box-shadow;
+    position: absolute;
+    width: @quickSearchLength;
+
+    // Repo styles
+    .quick-search-results {
+        padding-bottom: @baseSpacing;
+
+        .section-title {
+            text-transform: uppercase;
+            font-size: @font-size-small;
+            color: @secondaryTextColor;
+            font-weight: bold;
+        }
+
+        .repository-heading {
+            padding: @baseSpacing;
+            position: relative;
+
+            aui-badge {
+                position: absolute;
+                top: @baseSpacing;
+                right: @baseSpacing;
+            }
+        }
+
+        .code {
+            .clearfix();
+            background-color: @feintGreyColor;
+            padding: @baseSpacing;
+            padding-left: @doubleSpacing + @halfSpacing;
+
+            a {
+                color: @bodyTextColor;
+                display: block;
+                cursor: pointer;
+            }
+
+            &.focus {
+                background-color: @primaryHighlightColor;
+                a {
+                    color: @invertedBodyTextColor;
+                }
+            }
+
+            .context {
+                padding-bottom: @baseSpacing;
+                position: relative;
+
+                .aui-avatar {
+                    margin-right: @baseSpacing;
+                    vertical-align: middle;
+                }
+
+                .aui-button {
+                    position: absolute;
+                    right: @baseSpacing;
+                    top: @baseSpacing + (@aui-avatar-size-small - @icon-size-xxsmall) / 2;
+                }
+            }
+
+            .aui-iconfont-search {
+                color: @descriptionTextColor;
+                margin-right: @halfSpacing;
+                width: @aui-avatar-size-small;
+            }
+
+            .code-search-hint {
+                display: flex;
+
+                > :not(.terms) {
+                    flex: 0 0 auto;
+                }
+
+                > .terms {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+
+            // If the top section is hidden we need to add more padding to the bottom section
+            .context.hidden + .code-search-hint {
+                padding-top: @baseSpacing;
+            }
+
+            .terms {
+                font-weight: bold;
+            }
+        }
+
+        .repository {
+            padding-left: @baseSpacing;
+
+            .project-name {
+                .repoResultProjectWidth(@quickSearchLength);
+            }
+        }
+    }
+
+    .quick-search-error {
+        display: none;
+
+        .content {
+            padding: @doubleSpacing;
+            min-height: @icon-size-large;
+
+            .warning-icon {
+                width: @icon-size-large;
+                height: @icon-size-large;
+                background: url(images/search-warning.svg) center no-repeat;
+                float: left;
+            }
+
+            .warning-icon:after {
+                clear: both;
+            }
+
+            .error-text {
+                margin-top: 4px;
+                padding-left: @baseSpacing;
+
+                .error-text-primary {
+                    font-weight: bold;
+                    color: @bodyTextColor;
+                }
+
+                .error-text-secondary {
+                    color: @secondaryTextColor;
+                }
+
+                .error-text-primary, .error-text-secondary {
+                    margin-left: @icon-size-large;
+                }
+            }
+        }
+
+        .footer {
+            display: none;  // TODO Display when documentation is available
+            background-color: @bodyBackgroundColor;
+            padding: @baseSpacing;
+            font-size: @aui-font-size-small;
+            color: @secondaryTextColor;
+        }
+    }
+}

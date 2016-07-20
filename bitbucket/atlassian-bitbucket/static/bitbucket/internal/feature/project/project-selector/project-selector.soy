@@ -1,0 +1,113 @@
+{namespace bitbucket.internal.feature.project}
+
+/**
+  * @param values
+  * @param isLastPage
+  * @param size
+  * @param? isPreload
+  * @param? noResultsText
+  * @param? noMoreResultsText
+ */
+{template .projectSelectorResults}
+    {foreach $project in $values}
+        <li class="result {if $isPreload}preload{/if}">
+            <a href="{nav_project($project.id)}" data-id="{$project.id}" tabindex="-1">
+                {call .projectSelectorProject}
+                    {param project: $project /}
+                {/call}
+            </a>
+        </li>
+    {/foreach}
+    {if $isLastPage}
+        {if $size > 0}
+            <li class="no-results">
+                {$noMoreResultsText ? $noMoreResultsText : getText('bitbucket.web.project.selector.no.more.results')}
+            </li>
+        {else}
+            <li class="no-results">
+                {$noResultsText ? $noResultsText : getText('bitbucket.web.project.selector.no.results')}
+            </li>
+        {/if}
+    {/if}
+{/template}
+
+/**
+ * @param project
+ */
+{template .projectSelectorProject}
+    {if $project != null}
+        <span class="project" title="{$project.name}" data-id="{$project.id}" data-project="{to_json($project)}">
+            {call bitbucket.internal.feature.project.avatar}
+                 {param size: 'xsmall' /}
+                 {param project: $project /}
+                 {param tagName: 'span' /}
+            {/call}
+            <span class="name">{$project.name}</span>
+        </span>
+    {/if}
+{/template}
+
+/**
+ * @param id
+ * @param? project either $project (object) or plain $text must be provided
+ * @param? text
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .projectSelectorTrigger}
+    {call bitbucket.internal.widget.searchableSelectorTriggerGeneric}
+        {param id: $id /}
+        {param content}
+            {call .projectSelectorTriggerContent}
+                {param project: $project /}
+                {param text: $text /}
+            {/call}
+        {/param}
+        {param autofocus: $autofocus /}
+        {param titleContent}{if $project}{$project.name}{/if}{/param}
+        {param extraClasses: 'project-selector-trigger' + ($extraClasses ? ' ' + $extraClasses : '') /}
+        {param extraAttributes: $extraAttributes /}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? project either $project (object) or plain $text must be provided
+ * @param? text
+ * @param? fieldId id for form field
+ * @param? fieldName name for form field
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .projectSelectorTriggerWithField}
+    {call .projectSelectorTrigger}
+        {param id: $id /}
+        {param project: $project /}
+        {param text: $text /}
+        {param autofocus: $autofocus /}
+        {param extraClasses: $extraClasses /}
+        {param extraAttributes: $extraAttributes /}
+    {/call}
+    {call widget.aui.form.input}
+        {param id: $fieldId ? $fieldId : $id + '-field' /}
+        {param name:  $fieldName ? $fieldName : $id + '-field' /}
+        {param initialValue: $project ? $project.id : null /}
+        {param type: 'hidden' /}
+    {/call}
+{/template}
+
+/**
+ * @param? project either $project (object) or plain $text must be provided
+ * @param? text
+ */
+{template .projectSelectorTriggerContent}
+    {if $project}
+        {call .projectSelectorProject}
+            {param project: $project /}
+        {/call}
+    {else}
+         <span class="placeholder">{$text ? $text : getText('bitbucket.web.project.selector.default')}</span>
+    {/if}
+{/template}

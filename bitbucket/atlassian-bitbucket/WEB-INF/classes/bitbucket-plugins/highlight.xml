@@ -1,0 +1,1236 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-highlight" name="CodeMirror Syntax Highlighting">
+
+    <!--
+        !!!!! THIS FILE HAS BEEN AUTOMATICALLY GENERATED DO NOT MODIFY !!!!!
+
+        If you need to make changes to this file please go look at highlight.js
+    -->
+
+    <plugin-info>
+        <description>Modes for CodeMirror</description>
+        <version>1.0</version>
+        <vendor name="Atlassian" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <!--
+        CodeMirror modes have a one to many relationship with Languages (specified by MIME-types).
+        For example the mode clike supports C, C++, Java and C#.
+    -->
+
+    <!-- CodeMirror Modes -->
+
+    <client-resource key="apl" name="apl">
+        <resource type="download" name="apl.js" location="/static/bower/CodeMirror/mode/apl/apl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/apl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="asciiarmor" name="asciiarmor">
+        <resource type="download" name="asciiarmor.js" location="/static/bower/CodeMirror/mode/asciiarmor/asciiarmor.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/asciiarmor" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="asn.1" name="asn.1">
+        <resource type="download" name="asn.1.js" location="/static/bower/CodeMirror/mode/asn.1/asn.1.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/asn.1" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="asterisk" name="asterisk">
+        <resource type="download" name="asterisk.js" location="/static/bower/CodeMirror/mode/asterisk/asterisk.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/asterisk" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="brainfuck" name="brainfuck">
+        <resource type="download" name="brainfuck.js" location="/static/bower/CodeMirror/mode/brainfuck/brainfuck.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/brainfuck" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="clike" name="clike">
+        <resource type="download" name="clike.js" location="/static/bower/CodeMirror/mode/clike/clike.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/clike" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="clojure" name="clojure">
+        <resource type="download" name="clojure.js" location="/static/bower/CodeMirror/mode/clojure/clojure.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/clojure" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="cmake" name="cmake">
+        <resource type="download" name="cmake.js" location="/static/bower/CodeMirror/mode/cmake/cmake.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/cmake" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="cobol" name="cobol">
+        <resource type="download" name="cobol.js" location="/static/bower/CodeMirror/mode/cobol/cobol.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/cobol" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="coffeescript" name="coffeescript">
+        <resource type="download" name="coffeescript.js" location="/static/bower/CodeMirror/mode/coffeescript/coffeescript.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/coffeescript" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="commonlisp" name="commonlisp">
+        <resource type="download" name="commonlisp.js" location="/static/bower/CodeMirror/mode/commonlisp/commonlisp.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/commonlisp" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="crystal" name="crystal">
+        <resource type="download" name="crystal.js" location="/static/bower/CodeMirror/mode/crystal/crystal.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/crystal" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="css" name="css">
+        <resource type="download" name="css.js" location="/static/bower/CodeMirror/mode/css/css.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/css" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="cypher" name="cypher">
+        <resource type="download" name="cypher.js" location="/static/bower/CodeMirror/mode/cypher/cypher.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/cypher" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="d" name="d">
+        <resource type="download" name="d.js" location="/static/bower/CodeMirror/mode/d/d.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/d" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="dart" name="dart">
+        <resource type="download" name="dart.js" location="/static/bower/CodeMirror/mode/dart/dart.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/dart" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:clike</dependency>
+    </client-resource>
+
+    <client-resource key="diff" name="diff">
+        <resource type="download" name="diff.js" location="/static/bower/CodeMirror/mode/diff/diff.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/diff" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="django" name="django">
+        <resource type="download" name="django.js" location="/static/bower/CodeMirror/mode/django/django.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/django" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-overlay</dependency>
+    </client-resource>
+
+    <client-resource key="dockerfile" name="dockerfile">
+        <resource type="download" name="dockerfile.js" location="/static/bower/CodeMirror/mode/dockerfile/dockerfile.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/dockerfile" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-simple</dependency>
+    </client-resource>
+
+    <client-resource key="dtd" name="dtd">
+        <resource type="download" name="dtd.js" location="/static/bower/CodeMirror/mode/dtd/dtd.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/dtd" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="dylan" name="dylan">
+        <resource type="download" name="dylan.js" location="/static/bower/CodeMirror/mode/dylan/dylan.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/dylan" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="ebnf" name="ebnf">
+        <resource type="download" name="ebnf.js" location="/static/bower/CodeMirror/mode/ebnf/ebnf.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/ebnf" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="ecl" name="ecl">
+        <resource type="download" name="ecl.js" location="/static/bower/CodeMirror/mode/ecl/ecl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/ecl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="eiffel" name="eiffel">
+        <resource type="download" name="eiffel.js" location="/static/bower/CodeMirror/mode/eiffel/eiffel.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/eiffel" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="elm" name="elm">
+        <resource type="download" name="elm.js" location="/static/bower/CodeMirror/mode/elm/elm.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/elm" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="erlang" name="erlang">
+        <resource type="download" name="erlang.js" location="/static/bower/CodeMirror/mode/erlang/erlang.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/erlang" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="factor" name="factor">
+        <resource type="download" name="factor.js" location="/static/bower/CodeMirror/mode/factor/factor.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/factor" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-simple</dependency>
+    </client-resource>
+
+    <client-resource key="fcl" name="fcl">
+        <resource type="download" name="fcl.js" location="/static/bower/CodeMirror/mode/fcl/fcl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/fcl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="forth" name="forth">
+        <resource type="download" name="forth.js" location="/static/bower/CodeMirror/mode/forth/forth.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/forth" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="fortran" name="fortran">
+        <resource type="download" name="fortran.js" location="/static/bower/CodeMirror/mode/fortran/fortran.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/fortran" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="gas" name="gas">
+        <resource type="download" name="gas.js" location="/static/bower/CodeMirror/mode/gas/gas.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/gas" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="gfm" name="gfm">
+        <resource type="download" name="gfm.js" location="/static/bower/CodeMirror/mode/gfm/gfm.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/gfm" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:markdown</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-overlay</dependency>
+    </client-resource>
+
+    <client-resource key="gherkin" name="gherkin">
+        <resource type="download" name="gherkin.js" location="/static/bower/CodeMirror/mode/gherkin/gherkin.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/gherkin" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="go" name="go">
+        <resource type="download" name="go.js" location="/static/bower/CodeMirror/mode/go/go.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/go" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="groovy" name="groovy">
+        <resource type="download" name="groovy.js" location="/static/bower/CodeMirror/mode/groovy/groovy.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/groovy" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="haml" name="haml">
+        <resource type="download" name="haml.js" location="/static/bower/CodeMirror/mode/haml/haml.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/haml" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:ruby</dependency>
+    </client-resource>
+
+    <client-resource key="haskell" name="haskell">
+        <resource type="download" name="haskell.js" location="/static/bower/CodeMirror/mode/haskell/haskell.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/haskell" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="haskell-literate" name="haskell-literate">
+        <resource type="download" name="haskell-literate.js" location="/static/bower/CodeMirror/mode/haskell-literate/haskell-literate.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/haskell-literate" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:haskell</dependency>
+    </client-resource>
+
+    <client-resource key="haxe" name="haxe">
+        <resource type="download" name="haxe.js" location="/static/bower/CodeMirror/mode/haxe/haxe.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/haxe" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="htmlembedded" name="htmlembedded">
+        <resource type="download" name="htmlembedded.js" location="/static/bower/CodeMirror/mode/htmlembedded/htmlembedded.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/htmlembedded" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-multiplex</dependency>
+    </client-resource>
+
+    <client-resource key="htmlmixed" name="htmlmixed">
+        <resource type="download" name="htmlmixed.js" location="/static/bower/CodeMirror/mode/htmlmixed/htmlmixed.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/htmlmixed" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:css</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:javascript</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:xml</dependency>
+    </client-resource>
+
+    <client-resource key="http" name="http">
+        <resource type="download" name="http.js" location="/static/bower/CodeMirror/mode/http/http.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/http" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="idl" name="idl">
+        <resource type="download" name="idl.js" location="/static/bower/CodeMirror/mode/idl/idl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/idl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="jade" name="jade">
+        <resource type="download" name="jade.js" location="/static/bower/CodeMirror/mode/jade/jade.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/jade" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:css</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:javascript</dependency>
+    </client-resource>
+
+    <client-resource key="javascript" name="javascript">
+        <resource type="download" name="javascript.js" location="/static/bower/CodeMirror/mode/javascript/javascript.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/javascript" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="jinja2" name="jinja2">
+        <resource type="download" name="jinja2.js" location="/static/bower/CodeMirror/mode/jinja2/jinja2.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/jinja2" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="jsx" name="jsx">
+        <resource type="download" name="jsx.js" location="/static/bower/CodeMirror/mode/jsx/jsx.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/jsx" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:javascript</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:xml</dependency>
+    </client-resource>
+
+    <client-resource key="julia" name="julia">
+        <resource type="download" name="julia.js" location="/static/bower/CodeMirror/mode/julia/julia.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/julia" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="livescript" name="livescript">
+        <resource type="download" name="livescript.js" location="/static/bower/CodeMirror/mode/livescript/livescript.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/livescript" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="lua" name="lua">
+        <resource type="download" name="lua.js" location="/static/bower/CodeMirror/mode/lua/lua.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/lua" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="markdown" name="markdown">
+        <resource type="download" name="markdown.js" location="/static/bower/CodeMirror/mode/markdown/markdown.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/markdown" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:xml</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-mode-meta</dependency>
+    </client-resource>
+
+    <client-resource key="mathematica" name="mathematica">
+        <resource type="download" name="mathematica.js" location="/static/bower/CodeMirror/mode/mathematica/mathematica.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/mathematica" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="mbox" name="mbox">
+        <resource type="download" name="mbox.js" location="/static/bower/CodeMirror/mode/mbox/mbox.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/mbox" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="mirc" name="mirc">
+        <resource type="download" name="mirc.js" location="/static/bower/CodeMirror/mode/mirc/mirc.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/mirc" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="mllike" name="mllike">
+        <resource type="download" name="mllike.js" location="/static/bower/CodeMirror/mode/mllike/mllike.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/mllike" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="modelica" name="modelica">
+        <resource type="download" name="modelica.js" location="/static/bower/CodeMirror/mode/modelica/modelica.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/modelica" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="mscgen" name="mscgen">
+        <resource type="download" name="mscgen.js" location="/static/bower/CodeMirror/mode/mscgen/mscgen.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/mscgen" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="mumps" name="mumps">
+        <resource type="download" name="mumps.js" location="/static/bower/CodeMirror/mode/mumps/mumps.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/mumps" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="nginx" name="nginx">
+        <resource type="download" name="nginx.js" location="/static/bower/CodeMirror/mode/nginx/nginx.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/nginx" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="nsis" name="nsis">
+        <resource type="download" name="nsis.js" location="/static/bower/CodeMirror/mode/nsis/nsis.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/nsis" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-simple</dependency>
+    </client-resource>
+
+    <client-resource key="ntriples" name="ntriples">
+        <resource type="download" name="ntriples.js" location="/static/bower/CodeMirror/mode/ntriples/ntriples.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/ntriples" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="octave" name="octave">
+        <resource type="download" name="octave.js" location="/static/bower/CodeMirror/mode/octave/octave.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/octave" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="oz" name="oz">
+        <resource type="download" name="oz.js" location="/static/bower/CodeMirror/mode/oz/oz.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/oz" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="pascal" name="pascal">
+        <resource type="download" name="pascal.js" location="/static/bower/CodeMirror/mode/pascal/pascal.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/pascal" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="pegjs" name="pegjs">
+        <resource type="download" name="pegjs.js" location="/static/bower/CodeMirror/mode/pegjs/pegjs.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/pegjs" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:javascript</dependency>
+    </client-resource>
+
+    <client-resource key="perl" name="perl">
+        <resource type="download" name="perl.js" location="/static/bower/CodeMirror/mode/perl/perl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/perl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="php" name="php">
+        <resource type="download" name="php.js" location="/static/bower/CodeMirror/mode/php/php.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/php" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:clike</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+    </client-resource>
+
+    <client-resource key="pig" name="pig">
+        <resource type="download" name="pig.js" location="/static/bower/CodeMirror/mode/pig/pig.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/pig" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="powershell" name="powershell">
+        <resource type="download" name="powershell.js" location="/static/bower/CodeMirror/mode/powershell/powershell.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/powershell" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="properties" name="properties">
+        <resource type="download" name="properties.js" location="/static/bower/CodeMirror/mode/properties/properties.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/properties" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="protobuf" name="protobuf">
+        <resource type="download" name="protobuf.js" location="/static/bower/CodeMirror/mode/protobuf/protobuf.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/protobuf" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="puppet" name="puppet">
+        <resource type="download" name="puppet.js" location="/static/bower/CodeMirror/mode/puppet/puppet.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/puppet" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="python" name="python">
+        <resource type="download" name="python.js" location="/static/bower/CodeMirror/mode/python/python.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/python" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="q" name="q">
+        <resource type="download" name="q.js" location="/static/bower/CodeMirror/mode/q/q.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/q" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="r" name="r">
+        <resource type="download" name="r.js" location="/static/bower/CodeMirror/mode/r/r.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/r" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="rpm" name="rpm">
+        <resource type="download" name="rpm.js" location="/static/bower/CodeMirror/mode/rpm/rpm.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/rpm" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="rst" name="rst">
+        <resource type="download" name="rst.js" location="/static/bower/CodeMirror/mode/rst/rst.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/rst" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:python</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:stex</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-overlay</dependency>
+    </client-resource>
+
+    <client-resource key="ruby" name="ruby">
+        <resource type="download" name="ruby.js" location="/static/bower/CodeMirror/mode/ruby/ruby.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/ruby" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="rust" name="rust">
+        <resource type="download" name="rust.js" location="/static/bower/CodeMirror/mode/rust/rust.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/rust" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-simple</dependency>
+    </client-resource>
+
+    <client-resource key="sas" name="sas">
+        <resource type="download" name="sas.js" location="/static/bower/CodeMirror/mode/sas/sas.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/sas" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="sass" name="sass">
+        <resource type="download" name="sass.js" location="/static/bower/CodeMirror/mode/sass/sass.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/sass" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="scheme" name="scheme">
+        <resource type="download" name="scheme.js" location="/static/bower/CodeMirror/mode/scheme/scheme.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/scheme" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="shell" name="shell">
+        <resource type="download" name="shell.js" location="/static/bower/CodeMirror/mode/shell/shell.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/shell" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="sieve" name="sieve">
+        <resource type="download" name="sieve.js" location="/static/bower/CodeMirror/mode/sieve/sieve.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/sieve" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="slim" name="slim">
+        <resource type="download" name="slim.js" location="/static/bower/CodeMirror/mode/slim/slim.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/slim" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:ruby</dependency>
+    </client-resource>
+
+    <client-resource key="smalltalk" name="smalltalk">
+        <resource type="download" name="smalltalk.js" location="/static/bower/CodeMirror/mode/smalltalk/smalltalk.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/smalltalk" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="smarty" name="smarty">
+        <resource type="download" name="smarty.js" location="/static/bower/CodeMirror/mode/smarty/smarty.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/smarty" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="solr" name="solr">
+        <resource type="download" name="solr.js" location="/static/bower/CodeMirror/mode/solr/solr.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/solr" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="soy" name="soy">
+        <resource type="download" name="soy.js" location="/static/bower/CodeMirror/mode/soy/soy.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/soy" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+    </client-resource>
+
+    <client-resource key="sparql" name="sparql">
+        <resource type="download" name="sparql.js" location="/static/bower/CodeMirror/mode/sparql/sparql.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/sparql" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="spreadsheet" name="spreadsheet">
+        <resource type="download" name="spreadsheet.js" location="/static/bower/CodeMirror/mode/spreadsheet/spreadsheet.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/spreadsheet" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="sql" name="sql">
+        <resource type="download" name="sql.js" location="/static/bower/CodeMirror/mode/sql/sql.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/sql" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="stex" name="stex">
+        <resource type="download" name="stex.js" location="/static/bower/CodeMirror/mode/stex/stex.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/stex" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="swift" name="swift">
+        <resource type="download" name="swift.js" location="/static/bower/CodeMirror/mode/swift/swift.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/swift" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="tcl" name="tcl">
+        <resource type="download" name="tcl.js" location="/static/bower/CodeMirror/mode/tcl/tcl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/tcl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="textile" name="textile">
+        <resource type="download" name="textile.js" location="/static/bower/CodeMirror/mode/textile/textile.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/textile" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="tiddlywiki" name="tiddlywiki">
+        <resource type="download" name="tiddlywiki.js" location="/static/bower/CodeMirror/mode/tiddlywiki/tiddlywiki.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/tiddlywiki" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="tiki" name="tiki">
+        <resource type="download" name="tiki.js" location="/static/bower/CodeMirror/mode/tiki/tiki.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/tiki" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="toml" name="toml">
+        <resource type="download" name="toml.js" location="/static/bower/CodeMirror/mode/toml/toml.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/toml" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="tornado" name="tornado">
+        <resource type="download" name="tornado.js" location="/static/bower/CodeMirror/mode/tornado/tornado.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/tornado" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-overlay</dependency>
+    </client-resource>
+
+    <client-resource key="troff" name="troff">
+        <resource type="download" name="troff.js" location="/static/bower/CodeMirror/mode/troff/troff.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/troff" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="ttcn" name="ttcn">
+        <resource type="download" name="ttcn.js" location="/static/bower/CodeMirror/mode/ttcn/ttcn.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/ttcn" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="ttcn-cfg" name="ttcn-cfg">
+        <resource type="download" name="ttcn-cfg.js" location="/static/bower/CodeMirror/mode/ttcn-cfg/ttcn-cfg.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/ttcn-cfg" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="turtle" name="turtle">
+        <resource type="download" name="turtle.js" location="/static/bower/CodeMirror/mode/turtle/turtle.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/turtle" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="twig" name="twig">
+        <resource type="download" name="twig.js" location="/static/bower/CodeMirror/mode/twig/twig.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/twig" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-addon-mode-multiplex</dependency>
+    </client-resource>
+
+    <client-resource key="vb" name="vb">
+        <resource type="download" name="vb.js" location="/static/bower/CodeMirror/mode/vb/vb.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/vb" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="vbscript" name="vbscript">
+        <resource type="download" name="vbscript.js" location="/static/bower/CodeMirror/mode/vbscript/vbscript.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/vbscript" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="velocity" name="velocity">
+        <resource type="download" name="velocity.js" location="/static/bower/CodeMirror/mode/velocity/velocity.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/velocity" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="verilog" name="verilog">
+        <resource type="download" name="verilog.js" location="/static/bower/CodeMirror/mode/verilog/verilog.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/verilog" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="vhdl" name="vhdl">
+        <resource type="download" name="vhdl.js" location="/static/bower/CodeMirror/mode/vhdl/vhdl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/vhdl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="webidl" name="webidl">
+        <resource type="download" name="webidl.js" location="/static/bower/CodeMirror/mode/webidl/webidl.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/webidl" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="xml" name="xml">
+        <resource type="download" name="xml.js" location="/static/bower/CodeMirror/mode/xml/xml.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/xml" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="xquery" name="xquery">
+        <resource type="download" name="xquery.js" location="/static/bower/CodeMirror/mode/xquery/xquery.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/xquery" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="yacas" name="yacas">
+        <resource type="download" name="yacas.js" location="/static/bower/CodeMirror/mode/yacas/yacas.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/yacas" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="yaml" name="yaml">
+        <resource type="download" name="yaml.js" location="/static/bower/CodeMirror/mode/yaml/yaml.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/yaml" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+    <client-resource key="z80" name="z80">
+        <resource type="download" name="z80.js" location="/static/bower/CodeMirror/mode/z80/z80.js">
+           <param name="source" value="webContextStatic"/>
+        </resource>
+        <directory location="/static/bower/CodeMirror/mode/z80" source="webContextStatic">
+           <include>/**/*.css</include>
+        </directory>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:codemirror-raw</dependency>
+    </client-resource>
+
+   <client-resource key="common-languages" name="common-languages">
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:clike</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:commonlisp</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:css</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:htmlmixed</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:javascript</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:markdown</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:perl</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:php</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:python</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:ruby</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:sass</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:shell</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:sql</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:vbscript</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:xml</dependency>
+       <dependency>com.atlassian.bitbucket.server.bitbucket-highlight:yaml</dependency>
+   </client-resource>
+</atlassian-plugin>

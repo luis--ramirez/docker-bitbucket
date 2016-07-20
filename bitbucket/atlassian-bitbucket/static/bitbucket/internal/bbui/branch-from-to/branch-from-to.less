@@ -1,0 +1,64 @@
+@import "../../../../global.less";
+
+.branch-from-to {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background: @adg-color-light-gray;
+    border: 1px solid @adg-color-light-gray;
+    border-radius: 3px;
+    color: @adg-color-medium-gray;
+    font-family: @monospaceFontStack;
+    font-size: 13px;
+    text-decoration: none;
+    max-width: 95%;
+    height: @doubleSpacing;
+    padding: 0 @baseSpacing;
+
+    .avatar-ref-project {
+        display: inline-block;
+        padding: 0 @halfSpacing 0 0;
+        vertical-align: middle;
+    }
+
+    .arrow {
+        flex: 0 0 auto;
+        display: inline-block;
+        margin: 0 @baseSpacing;
+    }
+
+    .repo-name-icon {
+        @icon-height: 7px;
+        @icon-width: 4px;
+
+        background: url(chevron.svg) no-repeat 0 0;
+        display: inline-block;
+        margin: 0 @halfSpacing;
+        height: @icon-height;
+        width: @icon-width;
+    }
+
+    @minRefNameSize: 10px;
+
+    .ref-name {
+        .text-overflow();
+        display: inline-block;
+        vertical-align: middle;
+        min-width: @minRefNameSize;
+
+        &.with-avatar {
+            min-width: @aui-avatar-size-small + @minRefNameSize;
+        }
+    }
+
+    .ref-name-from {
+        flex: 0 1000 auto;
+    }
+
+    .ref-name-to {
+        flex: 1000 1 auto;
+    }
+
+}

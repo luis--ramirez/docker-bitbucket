@@ -1,0 +1,2 @@
+define("bitbucket/internal/bbui/pull-request-table/components/pull-request-row",["module","exports","react","classnames"],function(d,c,a,b){Object.defineProperty(c,"__esModule",{value:!0});var e=babelHelpers.interopRequireDefault(a),f=babelHelpers.interopRequireDefault(b);b=function(a){return e.default.createElement("tr",{className:(0,f.default)("pull-request-row",{focused:a.focused,prNeedsWork:a.prNeedsWork})},a.children)};b.propTypes={children:a.PropTypes.node.isRequired,focused:a.PropTypes.bool,
+prNeedsWork:a.PropTypes.bool};c.default=b;d.exports=c["default"]});

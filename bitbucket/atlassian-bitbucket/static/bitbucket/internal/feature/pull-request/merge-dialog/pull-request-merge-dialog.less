@@ -1,0 +1,71 @@
+@import "/static/global.less";
+
+#pull-request-merge-dialog {
+
+    .aui-message {
+        .errors {
+            padding-left: 0;
+            list-style-position: inside;
+        }
+
+        + .commit-message-container {
+            margin-top: @doubleSpacing;
+        }
+    }
+
+    .commit-message-container {
+        border-bottom: 1px solid @dividerColor;
+        margin-bottom: @baseSpacing;
+        padding-bottom: @doubleSpacing;
+        position: relative;
+        width: 100%;
+
+        .committer-avatar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            vertical-align: top;
+
+            .aui-avatar {
+                vertical-align: top;
+                margin-right: @baseSpacing;
+            }
+        }
+
+        .default-commit-message {
+            background: inherit;
+            border: 0;
+            font-size: @font-size-default;
+            padding: 0 0 0 @aui-avatar-size-medium + @baseSpacing;
+            vertical-align: top;
+
+            pre {
+                white-space: normal;
+            }
+        }
+
+        .commit-message-form {
+            margin-left: @aui-avatar-size-medium + @baseSpacing;
+
+            &.collapsed {
+                textarea, .textareaClone {
+                    min-height: @aui-avatar-size-medium; // same height as the avatar even though it's not adjacent to it.
+                    height: @aui-avatar-size-medium;
+                }
+
+                .cancel-commit-message-link {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .branch-diagram {
+        margin-bottom: 0;
+    }
+
+    .view-merge-veto-details-button {
+        display: inline-block;
+        margin-left: @halfSpacing;
+    }
+}

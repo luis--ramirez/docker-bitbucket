@@ -1,0 +1,1 @@
+define("internal/util/regexp",["exports"],function(a){a.escape=function(a){return a.replace(/[\-\[\]{}()+?.,\\\^$|#\s]/g,"\\$\x26")}});

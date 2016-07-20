@@ -1,0 +1,13 @@
+<!-- This resource is to maintain compatibility with plugins that might use the jquery dependency provided by
+ Bitbucket -->
+<atlassian-plugin key="com.atlassian.plugins.jquery" name="jquery">
+    <plugin-info>
+        <description>Atlassian plugin wrapper containing only jQuery.</description>
+        <version>2.1.4</version>
+    </plugin-info>
+
+    <web-resource key="jquery" name="jQuery with jQuery Migrate">
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:jquery-migrate</dependency>
+    </web-resource>
+
+</atlassian-plugin>

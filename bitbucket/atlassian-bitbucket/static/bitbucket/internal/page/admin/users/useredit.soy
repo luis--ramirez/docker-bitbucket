@@ -1,0 +1,309 @@
+{namespace bitbucket.internal.admin.users}
+
+/**
+* @param username
+* @param user
+* @param captchaChallenged
+* @param editableAvatar
+* @param editableDetails
+* @param editableGroups
+* @param editablePassword
+* @param editablePermissions
+* @param editableDirectory
+* @param isDeletable
+* @param? highestGlobalPermission
+*/
+{template .edit}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.users.edit')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-general-users' /}
+    {param content}
+        {call .viewandedit data="all"}
+            {param secondarySection}
+                {call .userSecondarySection}
+                    {param user: $user /}
+                    {param editableGroups: $editableGroups /}
+                    {param webItems: getWebItems('bitbucket.web.userdetails.secondary.tabs', [ 'user' : $user ]) /}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/admin/userEdit').onReady({to_json($user)|noAutoescape}, {lb}
+                groupsTableSelector: '#user-groups-table',
+                passwordLinkSelector: '#update-password-user',
+                renameUserLinkSelector: '#rename-user',
+                clearCaptchaLinkSelector: '#clear-captcha',
+                avatarFormSelector: '.aui-page-panel-content', // TODO: the page is inconsistent with the rest of Stash and has to be refactored
+                deleteLinkSelector: '#delete-user'
+            {rb});
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+* @param username
+* @param user
+* @param captchaChallenged
+* @param editableAvatar
+* @param editableDetails
+* @param editablePassword
+* @param editablePermissions
+* @param editableDirectory
+* @param isDeletable
+* @param secondarySection
+* @param? highestGlobalPermission
+*/
+{template .viewandedit}
+
+    {if $user}
+        <ol class="aui-nav aui-nav-breadcrumbs">
+            {call bitbucket.internal.widget.breadcrumbs.back}
+                {param id: 'users-breadcrumb' /}
+                {param href: nav_admin_users() /}
+                {param text: getText('bitbucket.web.user.back.link') /}
+            {/call}
+        </ol>
+
+        {if $editableDetails or $editableAvatar or $captchaChallenged}
+            {call aui.toolbar2.toolbar2}
+                {param content}
+                    {call aui.toolbar2.item}
+                        {param item: 'primary' /}
+                        {param content}
+                            {call bitbucket.internal.buttons.buttons}
+                                {param content}
+                                    {if $editableDetails}
+                                        {call bitbucket.internal.buttons.button}
+                                            {param buttonText: getText('bitbucket.web.user.edit.button') /}
+                                            {{param title: getText('bitbucket.web.user.edit.title', $user.displayName) /}}
+                                            {param id: 'edit-details' /}
+                                        {/call}
+                                    {/if}
+                                    {if $editableAvatar}
+                                        {call bitbucket.internal.buttons.button}
+                                            {param buttonText: getText('bitbucket.web.user.changeavatar.button') /}
+                                            {{param title: getText('bitbucket.web.user.changeavatar.title', $user.displayName) /}}
+                                            {param extraClasses: 'avatar-picker-trigger' /}
+                                        {/call}
+                                    {/if}
+                                    {if $editablePassword and $editableDetails}
+                                        {call bitbucket.internal.buttons.button}
+                                            {param buttonText: getText('bitbucket.web.user.changepassword.button') /}
+                                            {{param title: getText('bitbucket.web.user.changepassword.title', $user.displayName) /}}
+                                            {param id: 'update-password-user' /}
+                                        {/call}
+                                    {/if}
+                                    {if $editableDetails}
+                                        {call bitbucket.internal.buttons.button}
+                                            {param buttonText: getText('bitbucket.web.user.renameuser.button') /}
+                                            {{param title: getText('bitbucket.web.user.renameuser.title', $user.displayName) /}}
+                                            {param id: 'rename-user' /}
+                                        {/call}
+                                    {/if}
+                                    {if $captchaChallenged}
+                                        {call bitbucket.internal.buttons.button}
+                                            {param buttonText: getText('bitbucket.web.user.clearcaptcha.button') /}
+                                            {param href: nav_admin_user_captcha($user.name) /}
+                                            {{param title: getText('bitbucket.web.user.clearcaptcha.title', $user.displayName) /}}
+                                            {param id: 'clear-captcha' /}
+                                        {/call}
+                                    {/if}
+                                {/param}
+                            {/call}
+                            {if $isDeletable}
+                                {call bitbucket.internal.buttons.buttons}
+                                    {param content}
+                                        {call bitbucket.internal.buttons.button}
+                                            {param buttonText: getText('bitbucket.web.user.delete.button') /}
+                                            {param href: nav_admin_user_delete($user.name) /}
+                                            {{param title: getText('bitbucket.web.user.delete.title', $user.displayName) /}}
+                                            {param id: 'delete-user' /}
+                                        {/call}
+                                    {/param}
+                                {/call}
+                            {/if}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/if}
+
+        <div class="notifications">
+            {if not $editableDirectory}
+                {call aui.message.info}
+                    {param content}
+                        {getText('bitbucket.web.user.edit.read.only.warning')}
+                    {/param}
+                {/call}
+            {/if}
+        </div>
+
+        {call widget.aui.group.group}
+            {param extraClasses: 'panel-details' /}
+            {param content}
+                {call widget.aui.group.item}
+                    {param content}
+                         {call bitbucket.internal.widget.userAvatarForm}
+                             {param user: $user /}
+                         {/call}
+                    {/param}
+                {/call}
+                {call widget.aui.group.item}
+                    {param content}
+                        <div class="details">
+                            {call .userDetailsForm data="all"/}
+                         </div>
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+        {$secondarySection|noAutoescape}
+    {else}
+        {call aui.message.error}
+            {param content}
+                {{getText('bitbucket.web.user.view.notfound', $username)}}
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param user
+ * @param editableDetails
+ * @param editablePermissions
+ * @param? highestGlobalPermission
+ */
+{template .userDetailsForm}
+    {call widget.form.xsrfProtectedForm}
+        {param action: nav_rest_admin_users() /}
+        {param extraClass}user-details-form{if $editableDetails} editable{/if}{/param}
+        {param content}
+        <div class="field-group">
+            <input type="text" readonly="readonly" id="fullname" name="fullname"
+                   value="{$user.displayName}" title="{$user.displayName}"
+                   data-rollback="{$user.displayName}">
+        </div>
+        <div class="field-group">
+            <label for="name">
+                {call aui.icons.icon}
+                    {param icon: 'user' /}
+                    {param useIconFont: true /}
+                    {param accessibilityText: getText('bitbucket.web.user.username.html') /}
+                {/call}
+            </label>
+            <input type="text" readonly="readonly" id="name" name="name"
+                   value="{$user.name}"
+                   data-rollback="{$user.name}">
+        </div>
+        <div class="field-group">
+            <label for="email">
+                {call aui.icons.icon}
+                    {param icon: 'email' /}
+                    {param useIconFont: true /}
+                    {param accessibilityText: getText('bitbucket.web.user.account.settings.email.html') /}
+                {/call}
+            </label>
+            <input type="text" readonly="readonly" id="email" name="email"
+               value="{$user.emailAddress ? $user.emailAddress : ''}"
+               data-rollback="{$user.emailAddress ? $user.emailAddress : ''}">
+        </div>
+        <div class="field-group user-permission">
+            {call bitbucket.internal.feature.permission.lozenge}
+                {param permission: $highestGlobalPermission /}
+            {/call}
+            {if $editablePermissions}
+                <a href="{nav_admin_global_perms()}" id="change-permissions">{getText('bitbucket.web.user.change.permissions')}</a>
+            {/if}
+        </div>
+        {if $editableDetails}
+            {call widget.aui.form.buttons}
+                {param content}
+                    {call bitbucket.internal.buttons.button}
+                        {param buttonText: getText('bitbucket.web.button.save') /}
+                        {param isPrimary: true /}
+                        {param extraClasses: 'save' /}
+                    {/call}
+                    {call widget.aui.form.cancelButton}
+                        {param href: '' /}
+                    {/call}
+                {/param}
+            {/call}
+        {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * Adds at least the group list to the profile and user admin page. As the ability to transform itself into
+ * a pluggable, dynamic AUI tab based on web items and web panels. Used by SSH currently
+ *
+ * @param user
+ * @param editableGroups
+ * @param webItems
+ **/
+{template .userSecondarySection}
+    <div class="{length($webItems) == 0 ? 'group-picker' : 'user-secondary-section'}">
+        {if length($webItems) > 0}
+            {call bitbucket.internal.widget.webItemTabs}
+                {param webItems: $webItems /}
+                {param tabItemsContent}
+                    {call widget.aui.tabMenuItem}
+                        {param text: getText('bitbucket.web.user.group.membership') /}
+                        {param url: '#groups-tab' /}
+                        {param isActive: true /}
+                    {/call}
+                {/param}
+                {param tabPanesContent}
+                    {call widget.aui.tabPane}
+                        {param isActive: true /}
+                        {param id: 'groups-tab' /}
+                        {param extraClasses: 'group-picker' /}
+                        {param content}
+                            {call .groupsPaneContents}
+                                {param user: $user /}
+                                {param editableGroups: $editableGroups /}
+                            {/call}
+                        {/param}
+                    {/call}
+                    {foreach $webItem in $webItems}
+                        {call widget.aui.tabPane}
+                            {param id: substring($webItem.url, 1) /} // Convert #blah urls to blah ids
+                            {param content}
+                                {foreach $webPanel in getWebPanels($webItem.moduleKey, [ 'user' : $user ])}
+                                    {$webPanel}
+                                {/foreach}
+                            {/param}
+                        {/call}
+                    {/foreach}
+                {/param}
+            {/call}
+        {else}
+            {call .groupsPaneContents}
+                {param user: $user /}
+                {param editableGroups: $editableGroups /}
+            {/call}
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param user
+ * @param editableGroups
+ **/
+{template .groupsPaneContents}
+<header class="aui-page-header">
+    <div class="aui-page-header-inner">
+        <div class="aui-page-header-main">
+            <h2>{{getText('bitbucket.web.user.group.membership')}}</h2>
+        </div>
+    </div>
+</header>
+
+{call bitbucket.internal.feature.user.userGroupsTable}
+    {param id: 'user-groups-table' /}
+    {param editable: $editableGroups /}
+    {param user: $user /}
+{/call}
+{/template}

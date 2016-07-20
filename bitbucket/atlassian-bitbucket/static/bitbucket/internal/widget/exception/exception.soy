@@ -1,0 +1,17 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param message
+ * @param? details
+ * @param? detailListExtraClasses
+ */
+{template .errorContent}
+    {$message}
+    {if $details and length($details)}
+        <ul{if $detailListExtraClasses}{sp}class="{call aui.renderExtraClasses data="all" /}"{/if}>
+        {foreach $detail in $details}
+            <li>{$detail}</li>
+        {/foreach}
+        </ul>
+    {/if}
+{/template}

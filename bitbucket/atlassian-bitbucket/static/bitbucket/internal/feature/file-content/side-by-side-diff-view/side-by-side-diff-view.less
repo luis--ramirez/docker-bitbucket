@@ -1,0 +1,159 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.side-by-side-diff {
+    > .diff-editor {
+        .box-sizing();
+        height: 100%;
+        width: ~"-moz-calc(50% - 18px)";    // 18 = 36/2
+        width: ~"calc(50% - 18px)";         // 36 = the width of the segment connector column
+        width: ~"-webkit-calc(50% - 18px)"; // webkit comes last because Safari can't cascade correctly.
+        display: inline-block;
+        vertical-align: top;
+        overflow: hidden;
+    }
+
+    .CodeMirror-measure pre {
+        // Force CodeMirror to believe line heights are consistently 18px
+        // CodeMirror uses a 'default' text height when lines are offscreen.
+        // This means our borders are unaccounted for in its calculations
+        // So we use 18px as our default, and add an extra blank pixel to
+        // lines without a border to turn their 17px into 18px consistently.
+        // The pre uses 50 lines to measure.
+        line-height : @codeLineHeight + @codeLineBorderWidth;
+    }
+
+    .line,
+    // The "CodeMirror-code > *" is required because of CodeMirror operations. The .line class
+    // isn't applied until after the first operation, which is too late for us to get accurate height measurements.
+    // Might be removed if https://github.com/codemirror/CodeMirror/issues/2826 is resolved
+    .CodeMirror-code > * {
+        border-top: @codeLineBorderWidth solid @contentBackgroundColor;
+    }
+
+    .line .CodeMirror-gutter-elt > * {
+        border-top: @codeLineBorderWidth solid @contentBackgroundColor;
+        margin-top: -1px;
+    }
+
+    > .side-by-side-diff-editor-from {
+        border-right: 1px solid @dividerColor;
+    }
+
+    > .side-by-side-diff-editor-to {
+        border-left: 1px solid @dividerColor;
+    }
+
+    > .segment-connector-column {
+        display: inline-block;
+        height: 100%;
+        background-color: @contentBackgroundColor;
+        width: 36px;
+    }
+
+    .modified.line + .context.line,
+    .context.line + .modified.line,
+    .context.line + .conflict-ours.line,
+    .conflict-ours.line + .context.line,
+    .commented.line + .context.line,
+    .context.line + .commented.line,
+    .paired-with-change {
+        border-top: 1px solid @dividerColor;
+
+        .bitbucket-gutter-marker {
+            border-top: 1px solid @dividerColor;
+        }
+    }
+
+    &.hide-comments {
+        .commented.line.context + .context.line:not(.paired-with-change),
+        .context.line + .commented.line.context:not(.paired-with-change) {
+            border-top-color: @contentBackgroundColor;
+
+            .bitbucket-gutter-marker {
+                border-top-color: @contentBackgroundColor;
+            }
+        }
+    }
+
+    .modified,
+    .commented,
+    .conflict-ours,
+    .conflict-theirs,
+    .conflict-marker {
+        &:last-child::after {
+            position: absolute;
+            height: 0;
+            content: '';
+            border-bottom: 1px solid @dividerColor;
+            width: 200%;
+            left: -100%;
+            bottom: -1px;
+        }
+    }
+
+    .commented.context.line + .commented.context.line {
+        border-top-color: @feintGreyColor;
+
+        .bitbucket-gutter-marker {
+            border-top-color: @feintGreyColor;
+        }
+    }
+
+    .segment-connector {
+        stroke: @dividerColor;
+        stroke-width: 1px;
+
+        //The `not`s are necessary otherwise the gradient fill gets clobbered.
+        &.removed:not(.added) {
+            fill: @deletedLineBackgroundColor;
+        }
+
+        &.added:not(.removed) {
+            fill: @addedLineBackgroundColor;
+        }
+
+        &.modified.conflict { // TODO: this is a hack. we should be combining conflicts into a single region
+            fill : @conflictLineBackgroundColor;
+        }
+    }
+
+    #added-and-removed-svg-gradient {
+        .removed {
+            stop-color: @deletedLineBackgroundColor;
+        }
+
+        .added {
+            stop-color: @addedLineBackgroundColor;
+        }
+    }
+
+    .conflict-marker.line + .conflict-ours.line {
+        border-top-color: @conflictMarkerColor;
+
+        .bitbucket-gutter-marker {
+            border-top-color: @conflictMarkerColor;
+        }
+    }
+
+    .conflict-ours.line {
+        + .conflict-marker.line {
+            border-top-color: @conflictMarkerColor;
+
+            .add-comment-trigger,
+            .dummy-comment-trigger,
+            .line-number,
+            .line-number-marker {
+                border-top-color: @conflictMarkerColor;
+            }
+        }
+
+        + .conflict-ours.line {
+            border-top-color: @conflictLineBackgroundColor;
+
+            .bitbucket-gutter-marker {
+                border-top-color: @conflictLineBackgroundColor;
+            }
+        }
+    }
+}

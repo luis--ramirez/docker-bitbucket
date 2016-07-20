@@ -1,0 +1,51 @@
+{namespace bitbucket.internal.layout.users}
+
+/**
+ * @param user
+ * @param activeNav
+ * @param? windowTitle Text for the TITLE element.
+ * @param? entityName
+ *
+ * data passed through to stash.layout.entity
+ * @param content Main page content inserted inside the #content section
+ * @param? dataAttributes Data attributes for main content section
+ * @param? headContent Content inserted inside HEAD after TITLE.
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ */
+{template .account}
+{webResourceManager_requireResourcesForContext('bitbucket.layout.user.account')}
+{call bitbucket.internal.layout.entity}
+    {{param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.user.account.title', $user.displayName) /}}
+    {param entityName: $entityName ? $entityName : getText('bitbucket.web.user.account.entity') /}
+    {param pageType: 'hybrid' /}
+    {param entityHeaderRightItemsContent}
+        {foreach $webPanel in getWebPanels('bitbucket.user.account.header', [ 'accountUser' : $user ])}
+            {$webPanel}
+        {/foreach}
+    {/param}
+    {param panelClass: 'user-account' /}
+    {param dataAttributes: $dataAttributes /}
+    {param headContent: $headContent /}
+    {param headerImageContent}
+        {call bitbucket.internal.widget.avatar}
+            {param size: 'medium'/}
+            {param person: $user/}
+        {/call}
+    {/param}
+    {param entityContext: [ 'accountUser' : $user ] /}
+    {param panelNavContent}
+        {call widget.aui.webItemNavigation}
+            {param webItems: getWebItems('bitbucket.user.account.nav', [ 'accountUser' : $user ]) /}
+            {param activeNavItem: $activeNav /}
+            {param isVertical: true /}
+            {param context: [ 'accountUser' : $user ] /}
+        {/call}
+    {/param}
+    {param content}
+        {$content|noAutoescape}
+    {/param}
+    {param pageBottomContent}
+        {if $pageBottomContent}{$pageBottomContent|noAutoescape}{/if}
+    {/param}
+{/call}
+{/template}

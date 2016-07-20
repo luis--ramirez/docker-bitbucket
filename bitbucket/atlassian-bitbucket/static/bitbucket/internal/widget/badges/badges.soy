@@ -1,0 +1,13 @@
+{namespace bitbucket.internal.widget.badges}
+
+/**
+ * @param count the pull request count to show
+ */
+{template .openPullRequestCount}
+    {if $count > 0}
+        {call aui.badges.badge}
+            {param text: $count /}
+            {{param extraAttributes: [ 'title' : getText('bitbucket.web.global.pullrequest.open.count', $count) ] /}}
+        {/call}
+    {/if}
+{/template}

@@ -1,0 +1,240 @@
+@import "../../../../global.less";
+
+@selection-max-width: 200px;
+@selected-background-color: @aui-button-default-bg-color;
+@active-background-color: @aui-button-default-hover-bg-color;
+@active-border-color: @aui-button-default-active-border-color;
+
+.filter-label {
+    color: @labelTextColor;
+    display: inline-block;
+    line-height: 30px;
+    margin-right: @aui-grid;
+    text-transform: uppercase;
+}
+
+.filter-bar {
+
+    > ul {
+        list-style: none;
+        display: inline;
+
+        > li {
+            display: inline;
+        }
+    }
+
+    .aui-button {
+        color: @aui-link-color;
+
+        &:hover,
+        &:focus {
+            outline: none;
+            color: @aui-link-color;
+            background-color: transparent; // when the button is focused, we differentiate between on and off with the background color.
+        }
+
+        &[aria-pressed="true"] {
+            background-color: @selected-background-color;
+            border-color: transparent;
+            color: @aui-button-default-active-text-color;
+
+            &:hover,
+            &:focus {
+                border-color: @active-border-color;
+                background-color: @active-background-color;
+            }
+        }
+    }
+
+    .aui-select2-container.select2-container {
+        vertical-align: top;
+
+        //NOTE: this class is only marked as !important because Select2 (and AUI overrides) marks the same
+        //selector as !important in its styles.
+        .select2-default {
+            color: @aui-link-color !important;
+        }
+
+        .select2-chosen {
+            max-width: @selection-max-width;
+        }
+
+        .select2-choice,
+        a.select2-choice,
+        a.select2-choice:visited {
+            background: transparent;
+            border-color: transparent;
+            color: @aui-link-color;
+        }
+
+        .select2-choice:focus,
+        .select2-choice:hover,
+        &.select2-container-active .select2-choice {
+            border-color: @active-border-color;
+            text-decoration: none;
+        }
+
+        &.select2-dropdown-open {
+            &,
+            &.filter-bar-async {
+                .select2-choice {
+                    &,
+                    &:hover,
+                    &:focus {
+                        background: @active-background-color;
+                        color: @aui-button-default-active-text-color !important; // to override the select2-default colour above. *sigh*
+                    }
+                }
+            }
+        }
+
+        &.filter-bar-async {
+            .select2-choice:focus,
+            .select2-choice:hover,
+            &.select2-container-active .select2-choice {
+                background: transparent; // we need to match toggles - when nothing is selected, the background is transparent.
+                color: @aui-link-color !important; // to override the non-async colour above (where something is always selected). *sigh*
+            }
+
+            &.select2-dropdown-open .select2-choice {
+                &,
+                &:hover,
+                &:focus {
+                    background: @active-background-color;
+                    color: @aui-button-default-active-text-color !important;
+                }
+            }
+
+            &.select2-container-active {
+                .select2-choice:not(.select2-default) {
+                    border-color: @active-border-color;
+                    background-color: @active-background-color;
+                    color: @aui-button-default-active-text-color !important; // to override the default colour above. *sigh*
+                }
+            }
+
+            // The .select2-allowclear class is only applied when
+            // a selection has been made.
+            &.select2-allowclear {
+                .select2-search-choice-close {
+                    display: block;
+                    right: @halfSpacing;
+                }
+
+                .select2-choice:after {
+                    display: none;
+                }
+            }
+
+            .select2-choice:not(.select2-default) {
+                @x-width: 12px;
+
+                // styling stolen from AUI from :hover state, with tweaks to fit the design at
+                // https://extranet.atlassian.com/display/BB/DESIGN+SPEC+-+Pull+request+list
+                background: @selected-background-color;
+                border-color: transparent;
+
+                &:hover {
+                    border-color: @active-border-color;
+                    background-color: @active-background-color;
+                }
+
+                > .select2-chosen {
+                    margin-right: @baseSpacing + @x-width;
+                }
+            }
+        }
+    }
+
+    .aui-select2-container.select2-container:not(first-child),
+    .aui-button:not(first-child) {
+        margin-left: @baseSpacing;
+    }
+
+    // TODO: delete once the change in this commit
+    // has been applied to the React version of the PR list
+    .query {
+        float: right;
+    }
+
+    .query-container {
+        display: inline-block;
+        margin-left: @baseSpacing;
+
+        input {
+            // This is the value used in JIRA for its version of the widget.
+            width: 48px;
+            padding: @halfSpacing (@icon-size-xxsmall + @baseSpacing) @halfSpacing @baseSpacing;
+            transition: width 100ms ease-in-out;
+        }
+
+        input.expanded {
+            width: 150px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            background: #fff;
+            color: #707070;
+            cursor: pointer;
+        }
+
+        .input-icon:hover {
+            color: @bodyTextColor;
+        }
+
+        .query-clear-icon {
+            display: none;
+        }
+    }
+}
+
+// The filter-bar doesn't encapsulate the dropdown (which is appended to the body), so cannot be part of the selector.
+.aui-select2-drop.select2-drop.filter-bar-async {
+
+    .select2-search {
+        background-color: @feintGreyColor;
+        border-bottom: 1px solid @dividerColor;
+        padding: @baseSpacing;
+        position: relative;
+
+        > input {
+            background: @contentBackgroundColor !important; // using the shorthand background property to override ALL of select2 input styles, including the search icon sprite and HiDPI media queries.
+            height: @auiTextFieldHeight !important;
+            padding: 4px 5px; // magic numbers here to match AUI Forms text inputs
+
+            &.select2-active {
+                padding-right: @tripleSpacing; // when it's active, we have extra padding for the spinner
+            }
+
+        }
+
+        .bb-spinner, > .spinner {
+            position: absolute;
+            right: @doubleSpacing;
+            top: @baseSpacing + @halfSpacing + 2px; // 2px = borders
+        }
+    }
+
+    .select2-result {
+        padding: 2px 0; // the results are currently 26 px tall, but Brett's designs have them at 30px with extra padding on either side.
+    }
+
+    .select2-more-results.select2-active {
+        background: none;
+    }
+
+    .bb-spinner, .spinner {
+        .square(@aui-icon-size-small);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .select2-no-results,
+    .select2-searching {
+        color: @placeholderTextColor;
+    }
+}

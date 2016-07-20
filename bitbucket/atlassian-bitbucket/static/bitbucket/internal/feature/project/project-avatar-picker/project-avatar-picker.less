@@ -1,0 +1,43 @@
+@import "/static/global.less";
+
+
+/* Project avatar picker styles common to both the 'Create Project' page and 'Project Settings' page */
+.project-avatar-group {
+    margin-top: 0;
+
+    > .project-avatar-upload {
+        vertical-align: middle;
+    }
+}
+
+.project-avatar-preview {
+    @largeAvatarBorderWidth: 3px;
+
+    // AUI avatar sizes are still in flux, will add a new avatar size to the global-variables.less file when things
+    //settle down and we have standardised avatar sizes for both users and projects
+    width: 64px + (2 * @largeAvatarBorderWidth);
+
+    .aui-avatar-project {
+
+        // Project Avatar borders are drawn using box-shadow with a blur of 0, so it extends outside of the element,
+        // so we add a bit of margin here so that the spacing between form fields and field groups are maintained
+        margin: @largeAvatarBorderWidth;
+
+        img[src=""]{
+            display: none;
+
+            + .project-avatar-default-preview {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background: url('default-project-avatar-128.png') 0 0 no-repeat;
+                background-size: 100%;
+                .border-radius(100%);
+            }
+        }
+
+        .avatar-default {
+            display: none;
+        }
+    }
+}

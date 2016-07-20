@@ -1,0 +1,78 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param sourceRepository
+ * @param? additionalPreloadRepositories
+ * @param maxChanges
+ * @param? sourceBranch
+ * @param? targetBranch
+ * @param? sourceCommit
+ * @param? targetCommit
+ * @param? title
+ * @param? description
+ * @param? reviewers
+ * @param? dataAttributes
+ * @param? fieldErrors
+ * @param? formErrors
+ * @param? detailedErrors
+ * @param? existingPullRequest
+ * @param? pluginFieldsContent
+ */
+{template .createPullRequest}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.compare')}
+    {webResourceManager_requireResourcesForContext('bitbucket.feature.files.fileHandlers')}
+    {call bitbucket.internal.layout.repository}
+        {{param windowTitle: getText('bitbucket.web.pullrequest.create.windowtitle', $sourceRepository.project.name, $sourceRepository.name) /}}
+        {param activeNav: 'bitbucket.repository.nav.branches' /}
+        {param repository: $sourceRepository /}
+        {param dataAttributes: $dataAttributes /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{getText('bitbucket.web.pullrequest.create.title')}</h2>
+                {/param}
+                {param actionListContent}
+                    {call bitbucket.internal.widget.webFragmentButtons}
+                        {param location: 'bitbucket.repository.compare.action' /}
+                        {param context: [ 'sourceRepository' : $sourceRepository, 'targetRepository' : $repository] /}
+                        {param isReverse: true /}
+                    {/call}
+                {/param}
+            {/call}
+            {call bitbucket.internal.feature.compare.panel}
+                {param prCreateMode: true /}
+                {param activeTab: 'compare-commits-tab'/}
+                {param sourceRepository: $sourceRepository/}
+                {param sourceBranch: $sourceBranch /}
+                {param sourceCommit: $sourceCommit /}
+                {param targetRepository: $repository /}
+                {param targetBranch: $targetBranch /}
+                {param targetCommit: $targetCommit /}
+                {param prTitle: $title /}
+                {param prDescription: $description /}
+                {param fieldErrors: $fieldErrors /}
+                {param formErrors: $formErrors /}
+                {param detailedErrors: $detailedErrors /}
+                {param existingPullRequest: $existingPullRequest /}
+                {param pluginFieldsContent: $pluginFieldsContent /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            {let $diffTreeHeaderItems: getDeprecatedServerFragments('bitbucket.repository.difftree.header', ['ITEM'], [:]) /}
+            {renderServerFragmentsForClient('bitbucket.internal.repository.difftree.header.deprecated', $diffTreeHeaderItems)}
+            <script>
+                require('bitbucket/internal/page/pull-request-create').onReady(
+                    {to_json($repository)|noAutoescape},
+                    {to_json($sourceRepository)|noAutoescape},
+                    {call bitbucket.internal.feature.compare.tabDetailsJS}
+                            {param maxChanges: $maxChanges /}
+                            {param sourceRepository: $sourceRepository /}
+                        {/call},
+                    {($reviewers ? to_json($reviewers): [])|noAutoescape},
+                    {($additionalPreloadRepositories ? to_json($additionalPreloadRepositories): [])|noAutoescape}
+                );
+            </script>
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,119 @@
+{namespace bitbucket.internal.feature.fileContent.diffViewOptionsPanel}
+
+/**
+ * @param? commentMode
+ * @param? displayType The type of view
+ * @param? fileChange
+ */
+{template .main private="true"}
+    {call bitbucket.internal.buttons.button}
+        {param id: 'diff-options-dropdown-trigger' /}
+        {param buttonText: '' /}
+        {param extraClasses: 'aui-dropdown2-trigger aui-button-subtle aui-dropdown2-trigger-arrowless' /}
+        {param extraAttributes: 'data-container=".diff-view-secondary-panel" aria-owns="diff-options-dropdown" aria-haspopup="true"' /}
+        {param iconType: 'aui' /}
+        {param iconText: getText('bitbucket.web.diffview.options') /}
+        {param iconClass: 'aui-icon-small aui-iconfont-more' /}
+    {/call}
+    <div id="diff-options-dropdown-container">
+        {call aui.dropdown2.contents}
+            {param id: 'diff-options-dropdown' /}
+            {param extraClasses: 'aui-style-default diff-options-dropdown' /}
+            {param content}
+                <div id="diff-options-core">
+                    {call aui.dropdown2.section}
+                        {param extraClasses: 'binary-options' /}
+                        {param extraAttributes: ['role': 'presentation'] /}
+                        {param content}
+                            <div role="group">
+                                // we re-create the aui.dropdown2.itemList template here because we have a menu item
+                                // that is conditional and can wan't use a `if` block inside the $items map that
+                                // .itemList expects
+                                <ul class="aui-list-truncate" role="presentation">
+                                    <li role="presentation">
+                                        {call aui.dropdown2.menuCheckbox}
+                                            {param text: getText('bitbucket.web.diffview.options.ignoreWhitespace') /}
+                                            {param extraAttributes: [
+                                                'data-key': 'ignoreWhitespace',
+                                                'title': getText('bitbucket.web.diffview.options.ignoreWhitespace.tooltip')
+                                            ] /}
+                                            {param extraClasses: 'diff-options-ignore-whitespace' /}
+                                        {/call}
+                                    </li>
+                                    {if isAuthenticated() and $commentMode != 'none'}
+                                        <li role="presentation">
+                                            {call aui.dropdown2.menuCheckbox}
+                                                {param text: getText('bitbucket.web.diffview.options.hideComments') /}
+                                                {param extraAttributes: [
+                                                    'data-key': 'hideComments',
+                                                    'title': getText('bitbucket.web.diffview.options.hideComments.tooltip')
+                                                ] /}
+                                                {param extraClasses: 'diff-options-hide-comments' /}
+                                            {/call}
+                                        </li>
+                                    {/if}
+                                    <li role="presentation">
+                                        {call aui.dropdown2.menuCheckbox}
+                                            {param text: getText('bitbucket.web.diffview.options.hideEdiff') /}
+                                            {param extraAttributes: [
+                                                'data-key': 'hideEdiff',
+                                                'title': getText('bitbucket.web.diffview.options.hideEdiff.tooltip')
+                                            ] /}
+                                            {param extraClasses: 'diff-options-hide-ediff' /}
+                                        {/call}
+                                    </li>
+                                </ul>
+                            </div>
+                        {/param}
+                    {/call}
+                    {call aui.dropdown2.itemGroup}
+                        {param extraClasses: 'diff-type-options' /}
+                        {param isTruncated: true /}
+                        {param items: [
+                            [
+                                'itemType': 'radio',
+                                'isChecked': true,
+                                'text': getText('bitbucket.web.diffview.options.unified-diff'),
+                                'extraAttributes': [
+                                    'data-key': 'diffType',
+                                    'data-value': 'unified',
+                                    'title': getText('bitbucket.web.diffview.options.unified-diff.tooltip')
+                                ]
+                            ],[
+                                'itemType': 'radio',
+                                'isDisabled': true,
+                                'text': getText('bitbucket.web.diffview.options.side-by-side-diff'),
+                                'extraAttributes': [
+                                    'data-key': 'diffType',
+                                    'data-value': 'side-by-side',
+                                    'data-file-type-compatibility': getText('bitbucket.web.diffview.options.side-by-side-diff.file-type-compatibility'),
+                                    'title': getText('bitbucket.web.diffview.options.side-by-side-diff.tooltip')
+                                ]
+                            ]
+                        ] /}
+                    {/call}
+                </div>
+
+                {call aui.dropdown2.section}
+                    {param id: 'diff-options-pluggable' /}
+                    {param content}
+                        {let $webItemsDiffViewOptions: getWebItems('bitbucket.file-content.diff-view.options', [
+                            'displayType': $displayType,
+                            'fileChange': $fileChange
+                        ])/}
+
+                        {if length($webItemsDiffViewOptions) > 0}
+                            <ul>
+                            {foreach $item in $webItemsDiffViewOptions}
+                                <li>
+                                    {call bitbucket.internal.widget.webItemDropdownItem data="$item"/}
+                                </li>
+                            {/foreach}
+                            </ul>
+                        {/if}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    </div>
+{/template}

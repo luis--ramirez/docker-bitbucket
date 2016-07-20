@@ -1,0 +1,180 @@
+{namespace bitbucket.internal.feature.filebrowser}
+
+/**
+ * @param files
+ * @param? isError
+ * @param? errorMessage
+ * @param? parentDirectoryUrl
+ */
+{template .fileTable}
+    {call widget.aui.table}
+        {param id: 'browse-table' /}
+        {param extraClasses: 'filebrowser-table' /}
+        {param content}
+            {if $isError}
+                {call .fileTableError}
+                    {param message: $errorMessage/}
+                {/call}
+            {else}
+                {if $parentDirectoryUrl}
+                    {call .fileTableRow}
+                        {param type: 'DIRECTORY' /}
+                        {param extraClasses: 'browse-up file-row' /}
+                        {param iconClasses: 'browse-up' /}
+                        {param iconAccessibilityText: getText('bitbucket.web.file.browser.icon.parent.directory.label') /}
+                        {param url: $parentDirectoryUrl /}
+                        {param name: '..'  /}
+                        {param contentId: ''  /}
+                    {/call}
+                {/if}
+                {if length($files) == 0}
+                    {call .tableRow}
+                        {param extraClasses: 'message-row' /}
+                        {param content}
+                            <h3 class="entity-empty">{getText('bitbucket.web.file.browser.emptydir')}</h3>
+                        {/param}
+                    {/call}
+                {else}
+                    {foreach $file in $files}
+                        {call .fileTableRow}
+                            {param type: $file.type /}
+                            {param url: $file.url /}
+                            {param name: $file.name  /}
+                            {param repositoryUrl: $file.repositoryUrl /}
+                            {param browseUrl: $file.browseUrl /}
+                            {param contentId: $file.contentId  /}
+                            {param fileExtension: '' /}
+                            {param iconClasses}
+                                {switch $file.type}
+                                    {case 'DIRECTORY'}
+                                        folder-closed
+                                    {case 'FILE'}
+                                        file
+                                    {case 'SUBMODULE'}
+                                        submodule
+                                {/switch}
+                            {/param}
+                            {param extraClasses: 'file-row' /}
+                            {param iconAccessibilityText}
+                                {switch $file.type}
+                                    {case 'DIRECTORY'}
+                                        {getText('bitbucket.web.file.browser.icon.directory.label')}{sp}
+                                    {case 'FILE'}
+                                        {getText('bitbucket.web.file.browser.icon.file.label')}{sp}
+                                    {case 'SUBMODULE'}
+                                        {getText('bitbucket.web.file.browser.icon.submodule.label')}{sp}
+                                {/switch}
+                            {/param}
+                        {/call}
+                    {/foreach}
+                {/if}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param type
+ * @param url
+ * @param? repositoryUrl
+ * @param? browseUrl
+ * @param name
+ * @param contentId
+ * @param? fileExtension
+ * @param iconClasses
+ * @param? extraClasses
+ * @param? iconAccessibilityText
+ */
+{template .fileTableRow private="true"}
+    {call .tableRow}
+        {param extraClasses}{if $type == 'DIRECTORY'}folder{elseif $type == 'FILE'}file{elseif $type == 'SUBMODULE'}submodule{/if}{if $extraClasses} {$extraClasses}{/if}{/param}
+        {param content}
+            {call aui.icons.icon}
+                {param useIconFont: true /}
+                {param iconFontSet: 'devtools' /}
+                {param icon: $iconClasses /}
+                {param accessibilityText: $iconAccessibilityText /}
+            {/call}
+            {if $type != 'SUBMODULE'}
+                /* tabindex set to -1 since file navigation is handled in filebrowser.js */
+                <a href="{$url}" {if $type != 'DIRECTORY'}{if $fileExtension} class="filetype-{$fileExtension}"{/if} data-contentId="{$contentId}"{/if}>{$name}</a>
+            {else}
+                {call .fileTableSubmodule data="all" /}
+            {/if}
+        {/param}
+        {param extraAttributes}
+            {if $type == 'DIRECTORY' and $iconClasses == 'browse-up'}title="{getText('bitbucket.web.file.browser.gotoparent')}"{/if}
+            data-item-name="{$name}"
+        {/param}
+        {param extraRowAttributes} colspan="3" {/param}
+     {/call}
+{/template}
+
+/**
+ * @param url
+ * @param? repositoryUrl
+ * @param? browseUrl
+ * @param name
+ * @param contentId
+ */
+{template .fileTableSubmodule private="true"}
+    {if $browseUrl}
+        <a class="submodule-name" href="{$repositoryUrl}" data-contentId="{$contentId}">{$name}</a>
+        <span class="submodule-sep"> @ </span>
+        <a title="{$url} @ {$contentId}" class="commitid" href="{$browseUrl}">{$contentId|truncate:11,false|escapeHtml}</a>
+    {else}
+        <span class="submodule-name" data-contentId="{$contentId}">{$name}</span>
+        <span class="submodule-sep"> @ </span>
+        <span title="{$url} @ {$contentId}" class="commitid">{$contentId|truncate:11,false|escapeHtml}</span>
+    {/if}
+{/template}
+
+/**
+ * @param message
+ * @param? extraClasses
+ */
+{template .fileTableError private="true"}
+    {call .tableRow}
+        {param extraClasses}message-row{if $extraClasses} {$extraClasses}{/if}{/param}
+        {param content}
+            {call aui.message.warning}
+                {param content}
+                    {$message}
+                {/param}
+            {/call}
+        {/param}
+     {/call}
+{/template}
+
+/**
+ * @param extraClasses
+ * @param content
+ * @param? extraAttributes
+ * @param? extraRowAttributes
+ */
+{template .tableRow private="true"}
+    <tr class="{$extraClasses}" {call aui.renderExtraAttributes data="all"/}>
+        <td class="item-name"{if $extraRowAttributes}
+                {call aui.renderExtraAttributes}{param extraAttributes: $extraRowAttributes /}{/call}
+            {/if} >
+            {$content|noAutoescape}
+        </td>
+    </tr>
+{/template}
+
+/**
+ * @param isTruncated
+ * @param message
+ * @param? extraClasses
+ */
+{template .warnings}
+    <div class="filebrowser-banner{if $extraClasses} {$extraClasses}{/if}">
+        {if $isTruncated}
+            {call aui.message.warning}
+                {param content}
+                    {$message}
+                {/param}
+            {/call}
+        {/if}
+    </div>
+{/template}

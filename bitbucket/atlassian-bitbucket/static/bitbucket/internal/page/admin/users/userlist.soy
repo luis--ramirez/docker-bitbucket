@@ -1,0 +1,37 @@
+{namespace bitbucket.internal.admin.users}
+
+/**
+* @param userPage
+* @param? filter
+*/
+{template .list}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.users.list')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-general-users' /}
+    {param content}
+        {call widget.aui.pageHeader}
+            {param content}
+                <h2>{getText('bitbucket.web.user.title')}</h2>
+            {/param}
+            {param actionListContent}
+                {foreach $webItem in getWebItems('bitbucket.user.list.actions')}
+                    {call bitbucket.internal.widget.webItemButton data="$webItem" /}
+                {/foreach}
+            {/param}
+        {/call}
+        <div class="notifications">
+        // Used for deleted user notifications
+        </div>
+        {call bitbucket.internal.feature.user.userTable}
+            {param id: 'list-users' /}
+            {param page: $userPage /}
+            {param filter: $filter /}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/admin/usersList').onReady('#list-users', 'a.delete-user');
+        </script>
+    {/param}
+{/call}
+{/template}

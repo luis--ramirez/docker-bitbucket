@@ -1,0 +1,63 @@
+{namespace bitbucket.internal.feature.tasks.taskList}
+
+/**
+ * The task list dialog template, this represents the contents of the Dialog2 dialog
+ * that contains the task list for a Pull Request
+ */
+{template .dialog}
+    {call aui.dialog.dialog2}
+        {param id: 'task-list-dialog' /}
+        {param size: 'medium' /}
+        {param titleText: getText('bitbucket.web.tasks.dialog.title') /}
+        {param extraClasses: 'task-list-dialog' /}
+        {param content}
+            {call .dialogContent /}
+        {/param}
+        {param footerHintText: getText('bitbucket.web.tasks.dialog.hint') /}
+        {param footerActionContent}
+            {call aui.buttons.button}
+                {param id: 'dialog-close-button' /}
+                {param text: getText('bitbucket.web.button.close') /}
+                {param extraClasses: 'aui-button-link' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * The content of the task list dialog, the rows will be populated dynamically
+ *
+ * @param? id
+ */
+{template .dialogContent}
+    <ul id="{firstNonNull($id, 'task-list-dialog-list')}" class="paged-table task-list">
+    </ul>
+{/template}
+
+/**
+ * The separator between resolved and unresolved tasks
+ *
+ * @param title
+ */
+{template .dialogContentSection}
+    <li class="task-list-row section-heading">
+        <h6>{$title}</h6>
+    </li>
+{/template}
+
+/**
+ * Template for a single row of a task list
+ *
+ * @param? isCollapsed whether to render the initial state of the row as expanded or collapsed
+ */
+{template .taskListRow}
+    <li class="task-list-row{$isCollapsed ? ' collapsed' : ' expanded'} task-container">
+    </li>
+{/template}
+
+/**
+ * Message that gets rendered by the TaskListTable when there are no tasks available
+ */
+{template .dialogEmptyMessage}
+    <p>{getText('bitbucket.web.tasks.dialog.empty')}</p>
+{/template}

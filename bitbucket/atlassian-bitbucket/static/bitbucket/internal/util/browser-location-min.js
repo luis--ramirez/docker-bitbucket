@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/browser-location",["exports"],function(a){a.location=window.location});

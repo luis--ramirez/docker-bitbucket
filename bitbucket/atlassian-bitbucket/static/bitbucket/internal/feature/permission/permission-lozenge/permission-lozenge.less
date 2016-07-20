@@ -1,0 +1,31 @@
+@import "/static/global.less";
+
+.permission-lozenge {
+    cursor: default;
+    color: @lozengeTextColor;
+
+    &.sys-admin {
+        border-color: #036;
+        background-color: #036;
+    }
+
+    &.admin {
+        border-color: #3f78b2;
+        background-color: #3f78b2;
+    }
+
+    &.project-create {
+        border-color: #777;
+        background-color: #777;
+    }
+
+    &.licensed-user {
+        border-color: #bbb;
+        background-color: #bbb;
+    }
+
+    &.unlicensed {
+        border-color: @lozengeRemovedColor;
+        background-color: @lozengeRemovedColor;
+    }
+}

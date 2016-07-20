@@ -1,0 +1,1 @@
+define("bitbucket/internal/layout/admin",["jquery","exports"],function(a,e){var f=function(){var b=a(".tabs-menu .menu-item");b.children(".aui-dd-trigger").mouseenter(function(){var c=b.filter(".active"),d=a(this);0<c.length&&c[0]!==d.parent()[0]&&d.click()})};e.onReady=function(){f()}});

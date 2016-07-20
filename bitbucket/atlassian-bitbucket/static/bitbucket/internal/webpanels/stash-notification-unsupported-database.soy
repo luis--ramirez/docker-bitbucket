@@ -1,0 +1,58 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ * @param database
+ * @param dcName
+ * @param isDataCenter
+ */
+{template .bitbucketNotificationUnsupportedDatabase}
+    {let $isDeprecated: $database.supportLevel == 'DEPRECATED' /}
+    <div class="aui-banner {if $isDeprecated}aui-banner-warning{else}aui-banner-error{/if}" role="banner">
+        {if $isDeprecated}
+            {call .deprecated}
+                {param database: $database /}
+            {/call}
+        {elseif $database.supportLevel == 'UNKNOWN'}
+            {call .unknown}
+                {param database: $database /}
+            {/call}
+        {else}
+            {call .unsupported data="all" /}
+        {/if}
+        {sp}
+        {call .migrate /}
+    </div>
+{/template}
+
+/**
+ * @param database
+ */
+{template .deprecated private="true"}
+    {{getText('bitbucket.web.database.unsupported.deprecated', $database.name, $database.version)}}
+{/template}
+
+/**
+ */
+{template .migrate private="true"}
+    {{getTextAsHtml('bitbucket.web.database.unsupported.migrate.html', nav_admin_db_migrate())}}
+{/template}
+
+/**
+ * @param database
+ */
+{template .unknown private="true"}
+    {{getText('bitbucket.web.database.unsupported.unknown', $database.name, $database.version)}}
+{/template}
+
+/**
+ * @param database
+ * @param dcName
+ * @param isDataCenter
+ */
+{template .unsupported private="true"}
+    {if $isDataCenter and not $database.clusterable}
+        {{getText('bitbucket.web.database.unsupported.datacenter', $dcName, $database.name, $database.version)}}
+    {else}
+        {{getText('bitbucket.web.database.unsupported.standalone', $database.name, $database.version)}}
+    {/if}
+{/template}

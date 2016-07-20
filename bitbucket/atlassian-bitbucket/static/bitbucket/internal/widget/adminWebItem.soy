@@ -1,0 +1,21 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param url
+ * @param linkText
+ * @param? styleClass
+ * @param? tooltip
+ * @param? params
+ */
+{template .adminWebItem}
+    {call bitbucket.internal.widget.webItem data="all"}
+        {param styleClass: $params['iconClass'] ? ('has-icon ' + $styleClass) : $styleClass /}
+        {param content}
+            {if $params['iconClass']}
+                <span class="aui-icon {$params['iconClass']}">{$linkText}</span>
+            {/if}
+            {$linkText}
+        {/param}
+    {/call}
+    {if $tooltip}<span class="description">{$tooltip}</span>{/if}
+{/template}

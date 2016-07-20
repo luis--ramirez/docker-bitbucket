@@ -1,0 +1,52 @@
+{namespace bitbucket.internal.project}
+
+/**
+* @param project
+* @param dataAttributes
+* @param repositoryPage
+*/
+{template .projectOverview}
+{webResourceManager_requireResourcesForContext('bitbucket.page.project.overview')}
+{let $isEmptyProject: $repositoryPage.size == 0 and $repositoryPage.start == 0 and $repositoryPage.isLastPage /}
+{call bitbucket.internal.layout.project}
+    {{param windowTitle: getText('bitbucket.web.project.overview.window.title', $project.name) /}}
+    {param activeNav: 'projects-repositories-tab' /}
+    {param project: $project /}
+    {param dataAttributes: $dataAttributes /}
+    {param pageType: 'sidebar' /}
+    {param panelContentHeader: not $isEmptyProject ? getText('bitbucket.web.project.tabs.repositories') : null /}
+    {param content}
+        {call widget.aui.group.group}
+            {param content}
+                {call widget.aui.group.item}
+                    {param content}
+                        {call widget.aui.group.group}
+                            {param extraClasses: 'project-banners' /}
+                            {param content}
+                                {foreach $webPanel in getWebPanels('bitbucket.web.project.overview.banner',
+                                [ 'repositoryPage' : $repositoryPage, 'project' : $project ])}
+                                    {call widget.aui.group.item}
+                                        {param content}
+                                            {$webPanel}
+                                        {/param}
+                                    {/call}
+                                {/foreach}
+                            {/param}
+                        {/call}
+                        {if not $isEmptyProject}
+                            {call bitbucket.internal.feature.repository.repositoryTable}
+                                {param id: 'repositories-table' /}
+                                {param repositoryPage: $repositoryPage /}
+                                {param showPublicStatus: true /}
+                            {/call}
+                        {/if}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/project/overview').onReady('#repositories-table');</script>
+    {/param}
+{/call}
+{/template}

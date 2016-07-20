@@ -1,0 +1,75 @@
+@import "/static/global.less";
+
+/* .aui-tabs is part of a selector battle against default typography. */
+.aui-tabs > .pull-request-content {
+
+    // Overwrite necessary when there is a merge conflict message
+    > .aui-group > .aui-item:first-child > h3 {
+        margin-top: 0;
+    }
+
+    > .aui-group:first-child {
+        margin-top: @baseSpacing;
+    }
+
+    .details {
+        margin-top: @baseSpacing;
+
+        > .aui-item + .aui-item {
+            padding-left: @baseSpacing;
+        }
+
+        > .author-avatar-item {
+            width: @aui-avatar-size-medium;
+        }
+
+        .author {
+            font-weight: bold;
+        }
+
+        .target-branch {
+        /* I'm using right margins so that after something wraps, it left aligns with the text above. */
+            margin-right: @baseSpacing;
+        }
+
+        .creation-date {
+            white-space: nowrap;
+            font-size: @font-size-small;
+            color: @secondaryTextColor;
+            margin-left: 1em;
+        }
+
+        .description {
+            display: block;
+            margin-top: @halfSpacing;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+
+            &.markup {
+                white-space: normal;
+            }
+
+            &.no-description {
+                color: @placeholderTextColor;
+
+                > a {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .merge-conflicted-message {
+        margin-top: 20px;
+        .transition(opacity 1s);
+        opacity: 1.0;
+    }
+
+    .merge-conflicted-message.transparent {
+        opacity: 0;
+    }
+
+    .summary-panel {
+        width: 300px;
+    }
+}

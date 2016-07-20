@@ -1,0 +1,87 @@
+{namespace bitbucket.internal.feature.fileContent.binaryView}
+
+/**
+ * A container in which to render binary file representations and `.cell`s
+ * @param? content
+ */
+{template .container}
+<div class="binary-container">
+    {if $content}{$content|noAutoescape}{/if}
+</div>
+{/template}
+
+/**
+ * A single binary file's "chrome".
+ *
+ * @param? extraClasses
+ * @param? titleText
+ * @param? content
+ */
+{template .cell}
+<div class="{$extraClasses ? $extraClasses + ' ' : ''}binary">
+    {if $titleText}
+        <h5>{$titleText}</h5>
+    {/if}
+    {if $content}{$content|noAutoescape}{/if}
+</div>
+{/template}
+
+/**
+ * @param content
+ */
+{template .old}
+    {call .cell}
+        {param extraClasses : 'since-revision'/}
+        {param titleText : getText('bitbucket.web.diff.since.revision')/}
+        {param content: $content/}
+    {/call}
+{/template}
+
+/**
+ * @param content
+ */
+{template .new}
+    {call .cell}
+        {param extraClasses : 'until-revision'/}
+        {param titleText : getText('bitbucket.web.diff.until.revision')/}
+        {param content: $content/}
+    {/call}
+{/template}
+
+
+/**
+ * @param src
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .image}
+    <img src="{$src}"
+        {if $extraClasses}class="{call aui.renderExtraClasses data="all" /}"{/if}
+        {if $extraAttributes} {call aui.renderExtraAttributes data="all" /}{/if}/>
+{/template}
+
+
+/**
+ * An unrenderable file message, to be displayed in a `.cell` within a `.container`
+ * @param? title
+ * @param? extraClasses
+ * @param? descriptionContent
+ * @param? downloadUrl
+ */
+{template .unrenderable}
+<div class="unrenderable-file{if $extraClasses} {call aui.renderExtraClasses data="all" /}{/if}">
+    <div class="download-image"></div>
+    <h3>{if $title}{$title}{else}{getText('bitbucket.web.diffview.binary.unrenderable.title')}{/if}</h3>
+    {if $descriptionContent}
+        <div class="description">{$descriptionContent|noAutoescape}</div>
+    {/if}
+    {if $downloadUrl}
+        {call bitbucket.internal.buttons.button}
+            {param isPrimary: true/}
+            {param extraClasses: 'download-file-button'/}
+            {param href: $downloadUrl/}
+            {param buttonText: getText('bitbucket.web.diffview.binary.unrenderable.link.download')/}
+        {/call}
+    {/if}
+</div>
+{/template}

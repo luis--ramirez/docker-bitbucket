@@ -1,0 +1,67 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-compare" name="Atlassian Bitbucket Compare Plugin">
+
+    <plugin-info>
+        <description>Bitbucket's Compare Plugin</description>
+        <version>1.0</version>
+        <vendor name="Atlassian" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <!-- Everything related to compare lives in this plugin -->
+
+    <client-resource key="compare-page-resources" name="Compare page">
+        <directory location="/static/bitbucket/internal/page/compare" source="webContextStatic">
+            <exclude>/**/*.soy</exclude>
+        </directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-compare:compare-resources</dependency>
+
+        <context>bitbucket.page.compare</context>
+    </client-resource>
+
+
+    <client-resource key="compare-resources" name="compare feature">
+        <directory location="/static/bitbucket/internal/feature/compare/" source="webContextStatic"/>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:pull-request-create-form</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:repository-source-target-selector</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:commits-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:tree-and-diff-view</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:history</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:commit-link</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bacon-util</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:baconjs</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:ref-lozenge</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-client-web-fragments:commit-diff-toolbar-primary-location</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-client-web-fragments:commit-diff-toolbar-secondary-location</dependency>
+        <context>bitbucket.page.compare</context>
+    </client-resource>
+
+    <web-item key="compare-diff-tab" name="Repository compare diff tab web item" weight="10" section="bitbucket.repositories.compare.nav">
+        <label key="bitbucket.web.repository.compare.diff.tab.title"/>
+        <link linkId="repository-compare-diff-tab-link">${navBuilder.project($sourceRepository.project).repo($sourceRepository).compare().diff().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.repository.compare.diff.tab.tooltip"/>
+    </web-item>
+
+    <web-item key="compare-commits-tab" name="Repository compare commits tab web item" weight="20" section="bitbucket.repositories.compare.nav">
+        <label key="bitbucket.web.repository.compare.commits.tab.title"/>
+        <link linkId="repository-compare-commits-tab-link">${navBuilder.project($sourceRepository.project).repo($sourceRepository).compare().commits().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.repository.compare.commits.tab.tooltip"/>
+    </web-item>
+
+    <client-web-item key="compare-branch-action" name="Compare branch action" section="bitbucket.branch.layout.actions.dropdown" weight="10">
+        <label key="bitbucket.web.repository.branch.actions.compare"/>
+        <styleClass>compare-branch-action</styleClass>
+        <link type="js">
+            function(ctx) {
+            return require('bitbucket/util/navbuilder').project(ctx.repository.project).repo(ctx.repository).compare()
+            .sourceBranch(ctx.atRevisionRef.id).build();
+            }
+        </link>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:navbuilder</dependency>
+        <client-condition>function(ctx) { return ctx.atRevisionRef.type.id === 'branch'}</client-condition>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+            <param name="feature">COMPARE</param>
+        </condition>
+    </client-web-item>
+
+</atlassian-plugin>

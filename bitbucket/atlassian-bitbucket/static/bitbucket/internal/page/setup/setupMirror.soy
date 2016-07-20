@@ -1,0 +1,95 @@
+{namespace bitbucket.internal.page.setup}
+
+/**
+ * @param form
+ * @param? formErrors
+ * @param? fieldErrors
+ * @param? dataAttributes
+ * @param pluginHtml
+ * @param sslError
+ */
+{template .mirror}
+{webResourceManager_requireResourcesForContext('bitbucket.page.setup.mirror')}
+{call bitbucket.internal.layout.setup}
+    {param step: getText('bitbucket.web.setup.title.mirror') /}
+    {param dataAttributes: $dataAttributes /}
+    {param content}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param id: 'mirror' /}
+            {param action: '' /}
+            {param isLongLabels: true /}
+            {param errors: $formErrors /}
+            {param content}
+                {if $sslError}
+                    {call aui.message.error}
+                        {param content}
+                            {{getTextAsHtml('bitbucket.web.setup.mirror.ssl.message.html', bitbucket_help_url('bitbucket.help.mirroring.setup.troubleshooting.guide'))}}
+                        {/param}
+                    {/call}
+                {/if}
+                {call .mirrorTextField}
+                    {param id: 'applicationTitle' /}
+                    {param label: getText('bitbucket.web.setup.mirror.name') /}
+                    {param initialValue: $form.applicationTitle /}
+                    {param description: getText('bitbucket.web.setup.mirror.name.description') /}
+                    {param errors: $fieldErrors ? $fieldErrors.applicationTitle : null /}
+                    {param placeholderText: getText('bitbucket.web.setup.mirror.name.placeholder') /}
+                {/call}
+                {call .mirrorTextField}
+                    {param id: 'baseUrl' /}
+                    {param label: getText('bitbucket.web.setup.mirror.baseUrl') /}
+                    {param initialValue: $form.baseUrl /}
+                    {param description: getText('bitbucket.web.setup.mirror.baseUrl.description') /}
+                    {param errors: $fieldErrors ? $fieldErrors.baseUrl : null  /}
+                {/call}
+                {if $pluginHtml}{$pluginHtml|noAutoescape}{/if}
+                <input type='hidden' name='step' value='mirror'/>
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.setup.mirror.submit') /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/setup/mirror').onReady();
+            require('bitbucket/internal/widget/setup-tracking').track('setup-mirror');
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * @param id
+ * @param? name
+ * @param? initialValue
+ * @param label
+ * @param? errors
+ * @param? autofocus
+ * @param? tooltip
+ * @param? description
+ * @param? placeholderText
+ */
+{template .mirrorTextField private="true"}
+    {call widget.aui.form.text}
+        {param id: $id /}
+        {param name: $name /}
+        {param initialValue: $initialValue /}
+        {param required: true /}
+        {param extraClasses: 'required' /}
+        {param labelContent: $label /}
+        {param autofocus: $autofocus /}
+        {param tooltip: $tooltip /}
+        {param description: $description /}
+        {param maxLength: 255 /}
+        {param errors: $errors /}
+        {param placeholderText: $placeholderText /}
+        {param inlineErrors: true /}
+    {/call}
+{/template}

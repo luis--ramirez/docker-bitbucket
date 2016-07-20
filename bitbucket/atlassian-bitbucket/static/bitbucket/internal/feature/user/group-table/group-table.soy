@@ -1,0 +1,76 @@
+{namespace bitbucket.internal.feature.user}
+
+/**
+ * @param id
+ * @param filterable
+ * @param? page
+ * @param? filter
+ * @param? extraDataAttributes
+ * @param? extraHeaderContent
+ */
+{template .groupTable}
+    {call bitbucket.internal.widget.pagedTable data="all"}
+        {param id: $id /}
+        {param page: $page /}
+        {param filterable: $filterable /}
+        {param extraClasses: 'group-table' /}
+        {param theadContent}
+            <tr>
+                <th id="group" scope="col">{getText('bitbucket.web.group.col.name')}</th>
+                <th id="actions" scope="col"></th>
+            </tr>
+            {if $extraHeaderContent}
+                {$extraHeaderContent|noAutoescape}
+            {/if}
+        {/param}
+        {param content}
+            {if $page and $page.size}
+                {call .groupRows}
+                    {param groups: $page.values /}
+                {/call}
+            {/if}
+        {/param}
+        {param noneMatchingMessageContent}
+            {getText('bitbucket.web.grouptable.nomatch')}
+        {/param}
+        {param noneFoundMessageContent}
+            {getText('bitbucket.web.grouptable.nogroups')}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param groups
+ */
+{template .groupRows}
+    {foreach $group in $groups}
+        {call .groupRow}
+            {param group: $group /}
+        {/call}
+    {/foreach}
+{/template}
+
+/**
+ * @param group
+ **/
+{template .groupRow}
+    <tr>
+        <td headers="group">
+            {call bitbucket.internal.widget.groupAvatar}
+                {param size: 'small'/}
+                {param name: $group.name /}
+            {/call}
+            <a href="{nav_admin_group($group.name)}" title="{$group.name}">{$group.name}</a>
+        </td>
+        <td headers="actions">
+            {if $group.deletable}
+                {call bitbucket.internal.buttons.deleteButton}
+                    {param href: nav_admin_group_delete($group.name) /}
+                    {param extraAttributes: [ 'data-for' : $group.name ] /}
+                    {param extraClasses: 'delete-group-link' /}
+                    {param title: getText('bitbucket.web.button.delete') /}
+                {/call}
+            {/if}
+        </td>
+    </tr>
+{/template}

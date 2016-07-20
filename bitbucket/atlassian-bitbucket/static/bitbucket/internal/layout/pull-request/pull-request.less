@@ -1,0 +1,177 @@
+@import "/static/global.less";
+
+.pull-request-metadata {
+    width: 100%;
+
+    .pull-request-metadata-group {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+    }
+
+    .pull-request-metadata-primary,
+    .pull-request-metadata-secondary {
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    @ref-lozenge-height: 24px;
+    @toolbar-height: 30px;
+    @primary-metadata-first-line-height: @ref-lozenge-height;
+    @secondary-metadata-first-line-height: @toolbar-height;
+
+    .pull-request-metadata-primary {
+        // ghetto vertical centering of the first line of primary and secondary
+        padding-top: (@secondary-metadata-first-line-height - @primary-metadata-first-line-height) / 2;
+
+        /* We put a margin bottom here because we want to ensure that the .details are adequately spaced from the tabs,
+         but if the particpant avatars drop lower than the .details, we don't want to add more spacing than we have to */
+        margin-bottom: @doubleSpacing;
+    }
+
+    .pull-request-metadata-secondary {
+        /* we stretch the width a bit here to ensure the basic buttons can fit on one line. The toolbar still looks
+         decent after wrapping, but no wrapping is better. */
+        width: 470px;
+        padding-left: @doubleSpacing;
+    }
+
+    .title {
+        margin-top: @baseSpacing;
+        word-wrap: break-word;
+        margin-right: @baseSpacing;
+    }
+
+    .pull-request-id-and-state {
+        display: inline-block;
+        border-right: 1px solid @dividerColor;
+        padding-right: @baseSpacing;
+        margin-bottom: @halfSpacing;
+        vertical-align: middle;
+
+        .pull-request-id {
+            color: @bodyTextColor;
+        }
+
+        .pull-request-state-lozenge {
+            margin-left: @baseSpacing;
+        }
+    }
+
+    .pull-request-branches {
+        padding-left: @baseSpacing;
+        margin-bottom: @halfSpacing;
+        display: inline-block;
+
+        .ref-lozenge {
+
+            // keep everything on one line (assuming no plugins have added content)
+            // Coincidence - Bitbucket also has max-width 190px.
+            max-width: 190px;
+            @media screen and (max-width: 1024px) {
+                max-width: 125px;
+            }
+            @media screen and (min-width: 1025px) {
+                max-width: 125px;
+            }
+            @media screen and (min-width: 1200px) {
+                max-width: 220px;
+            }
+            @media screen and (min-width: 1280px) {
+                max-width: 150px;
+            }
+            @media screen and (min-width: 1400px) {
+                max-width: 200px;
+            }
+            @media screen and (min-width: 1500px) {
+                max-width: 260px;
+            }
+            @media screen and (min-width: 1600px) {
+                max-width: 310px;
+            }
+            @media screen and (min-width: 1900px) {
+                max-width: 460px;
+            }
+        }
+    }
+
+    .pull-request-toolbar {
+        padding-top: 0; // override to match title group
+        margin-top: 0;
+
+        .spinner {
+            .square(@spinner-size-small);
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 @baseSpacing;
+        }
+
+        .aui-toolbar2-secondary {
+            text-align: right;
+
+
+            .aui-buttons {
+                margin-bottom: @baseSpacing;
+
+                // @aui-override temporary fix to https://ecosystem.atlassian.net/browse/AUI-1708
+                margin-right: 0;
+                margin-left: @baseSpacing;
+                // end @aui-override
+
+                // @aui-override https://ecosystem.atlassian.net/browse/AUI-1686
+                // re-align the buttons to the right when inside of aui-toolbar2-secondary
+                float: none;
+                // end @aui-override
+            }
+        }
+
+        .aui-button {
+            margin-top: 0;
+            vertical-align: middle;
+        }
+    }
+
+    .reviewers {
+        @headingWidth: 160px;
+        margin-top: @baseSpacing;
+        float: right;
+
+        .reviewers-label {
+            .text-overflow();
+            max-width: @headingWidth;
+            text-align: right;
+            display: inline-block;
+            line-height: @aui-avatar-size-small; // same as avatar
+            color: @secondaryTextColor;
+            vertical-align: middle;
+        }
+
+        .user-avatar {
+            margin: 0 0 0 @baseSpacing;
+            vertical-align: middle;
+        }
+
+        .overflow-reviewers-trigger {
+            margin-left: @baseSpacing;
+            margin-right: 20px;
+        }
+
+        .extras-dropdown-trigger {
+            display: inline-block;
+        }
+    }
+
+    .approve-icon {
+        background: transparent url(icons/icon-approved-grey.svg) no-repeat 0 0;
+        background-size: 12px;
+        display: inline-block;
+        height: 16px;
+        width: 14px;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    .approve[aria-pressed="true"] .approve-icon {
+        background-image:url(icons/icon-approved.svg);
+    }
+}

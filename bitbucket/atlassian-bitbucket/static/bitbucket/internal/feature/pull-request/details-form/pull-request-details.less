@@ -1,0 +1,18 @@
+@import "/static/global.less";
+
+.pull-request-details .pull-request-description {
+    .markup-editor {
+        width: @auiLongFieldWidth;
+
+        textarea { //@aui-override
+            .border-bottom-left-radius(0);
+            .border-bottom-right-radius(0);
+            max-width: 100%;
+
+            &.restored {
+                background-color: @restoredItemBackgroundColor;
+            }
+        }
+    }
+}
+

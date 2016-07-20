@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/login",["jquery","bitbucket/internal/widget/captcha","bitbucket/internal/widget/setup-tracking","exports"],function(c,d,e,f){f.onReady=function(){e.trackLoginPage();if(location.hash){var b=c(":input[name\x3dnext]"),a=b.val();a&&!/#/.test(a)&&b.val(a+location.hash)}d.initialise("#captcha-image","#captcha-reload")}});

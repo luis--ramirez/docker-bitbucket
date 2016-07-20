@@ -1,0 +1,12 @@
+{namespace bitbucket.web.project.overview.banner}
+
+/**
+ * @param project
+ */
+{template .bitbucketWelcomeMatCreateRepository}
+<a href="{nav_repo_create($project)}" class="create-repository-link">
+    <span class="icon"></span>
+    <h3>{getText('bitbucket.web.welcomemat.create.repository.heading')}</h3>
+    <p>{getText('bitbucket.web.welcomemat.create.repository.text')}</p>
+</a>
+{/template}

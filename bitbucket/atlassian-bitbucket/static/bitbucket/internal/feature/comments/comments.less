@@ -1,0 +1,368 @@
+@import "/static/global.less";
+
+@commentPadding: @aui-avatar-size-medium + @baseSpacing;
+@newCommentPaddingExtra: @baseSpacing;
+@newCommentPadding: @commentPadding + @newCommentPaddingExtra;
+
+.target-fade-animation() {
+    // comment-container.js removes the `.new` class from a comment after 5s. Make sure to update that time
+    // if you change the time here.
+    .animation(target-fade 5s 1);
+}
+
+@-webkit-keyframes target-fade {
+    60% {
+        background-color: @newCommentColorFadeIn;
+        margin-left: -@newCommentPaddingExtra;
+        padding-left: @newCommentPadding;
+        border-top-color:@dividerColor;
+        border-bottom-color:@dividerColor;
+    }
+    100% {
+        background-color: rgba(0,0,0,0);
+        margin-left: 0;
+        padding-left: @commentPadding;
+        border-top-color: transparent;
+        border-bottom-color:transparent;
+    }
+}
+
+@-moz-keyframes target-fade {
+    60% {
+        background-color: @newCommentColorFadeIn;
+        margin-left: -@newCommentPaddingExtra;
+        padding-left: @newCommentPadding;
+        border-top-color:@dividerColor;
+        border-bottom-color:@dividerColor;
+    }
+    100% {
+        background-color: rgba(0,0,0,0);
+        margin-left: 0;
+        padding-left: @commentPadding;
+        border-top-color: transparent;
+        border-bottom-color:transparent;
+    }
+}
+
+@-ms-keyframes target-fade {
+    60% {
+        background-color: @newCommentColorFadeIn;
+        margin-left: -@newCommentPaddingExtra;
+        padding-left: @newCommentPadding;
+        border-top-color:@dividerColor;
+        border-bottom-color:@dividerColor;
+    }
+    100% {
+        background-color: rgba(0,0,0,0);
+        margin-left: 0;
+        padding-left: @commentPadding;
+        border-top-color: transparent;
+        border-bottom-color:transparent;
+    }
+}
+
+.comment-box {
+    .box-sizing();
+    padding: 10px;
+    font-size: @font-size-default;
+    line-height: 20px;
+    color: @bodyTextColor;
+
+    .comment-list > :first-child {
+        margin-top: -10px;
+
+        &.new > .content {
+            .border-top-left-radius(3px);
+            .border-top-right-radius(3px);
+        }
+    }
+
+    .comment-list > .comment-form-container:first-child {
+        border-top: none;
+    }
+}
+
+.comment-container {
+
+    .comment {
+        border-top: 1px solid @dividerColor;
+        width: 100%;
+        margin-bottom: 0;
+        white-space: normal;
+        position: relative;
+
+        > .user-avatar {
+            margin-top: 10px;
+        }
+
+        .message {
+            word-wrap: break-word;
+            &.plaintext {
+                white-space: pre-wrap;
+            }
+        }
+
+        .actions,
+        .info {
+            margin: @halfSpacing 0 0 0;
+            padding: 0;
+            display: inline-block;
+            list-style-type: none;
+            font-size: @font-size-small;
+
+            li {
+                display: inline-block;
+                color: @secondaryTextColor;
+            }
+
+            > li:before {
+                .action-separator();
+            }
+
+            > li:first-child:before {
+                content: none;
+            }
+        }
+
+        .info:before {
+            .action-separator();
+        }
+
+        .actions a,
+        .actions span,
+        .actions button,
+        .info a,
+        .info span,
+        .info button,
+        .times,
+        time {
+            font-size: @font-size-small;
+            color: inherit;
+            display: inline-block;
+        }
+
+        time {
+            text-decoration: inherit;
+        }
+    }
+
+    .replies {
+        margin-top: 0;
+        margin-left: @commentPadding;
+
+        &.no-indent {
+            margin-left: 0;
+        }
+
+        > .comment.new {
+            > .content {
+                .border-top-left-radius(0);
+                .border-top-right-radius(0);
+                .target-fade-animation();
+                margin-top: -1px;
+                margin-bottom: -1px;
+                border-top: 1px solid transparent;
+                border-bottom: 1px solid transparent;
+
+                + ol {
+                    margin-top: -1px;
+                }
+            }
+        }
+
+
+        &:empty {
+            border-top: none;
+        }
+    }
+
+    li.comment, li.comment-form-container {
+        list-style: none;
+    }
+
+    .panel {
+        background-color: @contentBackgroundColor;
+        padding-top: @baseSpacing;
+        padding-left: @baseSpacing;
+        border: 1px solid @dividerColor;
+        .border-radius();
+    }
+
+    .content {
+        min-height: @aui-avatar-size-medium;
+        padding: 10px 10px 10px @commentPadding;
+    }
+}
+
+.comment .user-avatar,
+.new-comment-form .user-avatar {
+    margin-right: 10px;
+    float: left;
+}
+
+.comment-list {
+    // The first comment on a line should not have a top border
+    > .comment:first-child,
+    > .comment-form-container:first-child,
+    > .comment.new:first-child > .content {
+        border-top: 0;
+    }
+
+    > .comment.new:first-child > .content {
+        .border-top-left-radius(3px);
+        .border-top-right-radius(3px);
+    }
+}
+
+.comment.unread > .content {
+    background-color: @newCommentColorFadeIn;
+}
+
+.comment-container {
+    .comment.unread > .content,
+    .comment.focused > .content {
+        margin-left: -@newCommentPaddingExtra;
+        padding-left: @newCommentPadding;
+    }
+
+    .comment.focused > .content {
+        background-color: @primaryActiveColor;
+    }
+}
+
+
+.replies {
+    padding-left: 0;
+
+    .comment.unread > .content,
+    .comment.focused > .content {
+        margin-top: -1px;
+        border-top: 1px solid @dividerColor;
+    }
+}
+
+.comment-container > .general-comment-activity.comment.new > .content {
+    .target-fade-animation();
+}
+
+.new-comment-form textarea.restored {
+    background-color: @restoredItemBackgroundColor;
+}
+
+.new-comment-form.collapsed {
+    .textarea, .textareaClone {
+        .border-radius();
+        min-height: @aui-avatar-size-medium; // same height as the avatar
+        height: @aui-avatar-size-medium;
+    }
+
+    .tip, .markup-toolbar, .buttons {
+        display: none;
+    }
+}
+
+.comment-list {
+    padding-left: 0;
+
+    > .comment-form-container > form {
+        margin-top: 0;
+    }
+
+    > .comment.new {
+        > .content {
+            .target-fade-animation();
+            margin-top: -1px;
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
+
+            + ol {
+                margin-top: -1px;
+            }
+        }
+    }
+}
+
+.comment-form-container {
+    border-top: 1px solid @dividerColor;
+
+    .user-avatar {
+        margin-top: 10px;
+    }
+
+    .content {
+        padding-left: @commentPadding;
+    }
+
+    .comment-form-footer {
+        display: table;
+        width: 100%;
+        margin-top: @baseSpacing;
+        table-layout: fixed;
+
+        > .buttons {
+            position: relative;
+        }
+    }
+
+    .buttons,
+    .tip {
+        display: table-cell;
+    }
+
+    .comment-submit-spinner { // copied from markup-preview.less
+        .square(0);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+    }
+
+    .tip {
+        .text-overflow();
+        text-align: right;
+        color: @secondaryTextColor;
+        font-size: @font-size-small;
+        font-style: italic;
+    }
+
+    .error {
+        color: @errorTextColor;
+        margin-top: 5px;
+    }
+
+    + .comment {
+        margin-top: -1px;
+    }
+
+    .submitting .markup-editor {
+        opacity: 0.5;
+    }
+}
+// non-top-level forms (edits and replies)
+.replies .comment-form-container {
+
+    // non-top-level edits
+    &.comment .new-comment-form > .content {
+        padding-top: @baseSpacing;
+        padding-bottom: @baseSpacing;
+    }
+}
+
+.comment .user-name {
+    font-weight: bold;
+}
+
+.file-comments .comment-container > .panel {
+    .border-radius(0);
+    border: none;
+    padding-top: 0;
+
+    .comment.new .content,
+    .comment-form-container, {
+        margin-bottom: 0;
+        border-bottom: none;
+
+        + ol {
+            margin-top: 0;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param? commit
+ * @param? repository
+ */
+{template .diff}
+    {call bitbucket.internal.feature.treeAndDiffView}
+        {param commit : $commit /}
+        {param repository : $repository /}
+        {param extraClasses : 'tabbed' /}
+        {param showCommitSelector: true /}
+    {/call}
+{/template}
+
+/**
+ */
+{template .commitLevelReviewFeatureDiscoveryContent}
+    <div class="feature-discovery-commit-level-review">
+        <h2>{getText('bitbucket.web.pullrequest.commitselector.discovery.main.title')}</h2>
+        <p>{getText('bitbucket.web.pullrequest.commitselector.discovery.main.content')}</p>
+        <h4>
+            {call bitbucket.internal.images.icons.allCommits /}
+            {getText('bitbucket.web.pullrequest.commitselector.discovery.section1.title')}
+        </h4>
+        <p>{getText('bitbucket.web.pullrequest.commitselector.discovery.section1.content')}</p>
+        <h4>
+            {call bitbucket.internal.images.icons.commit /}
+            {getText('bitbucket.web.pullrequest.commitselector.discovery.section2.title')}
+        </h4>
+        <p>{getText('bitbucket.web.pullrequest.commitselector.discovery.section2.content')}</p>
+    </div>
+{/template}

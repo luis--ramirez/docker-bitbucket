@@ -1,0 +1,22 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? connectHostUrl The base URL for the Atlassian Connect host
+ * @param? windowTitle Text for the TITLE element.
+ * @param content Main page content inserted inside the #content section
+ */
+{template .connectPage}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.connect-page')}
+    {call .connectPanel}
+        {param connectHostUrl: $connectHostUrl/}
+        {param windowTitle: $windowTitle/}
+        {param sizeToParent: true/}
+        {param content}
+            <div class="aui-page-panel-inner">
+                <section class="aui-page-panel-conent">
+                    {$content|noAutoescape}
+                </section>
+            </div>
+        {/param}
+    {/call}
+{/template}

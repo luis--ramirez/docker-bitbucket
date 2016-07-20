@@ -1,0 +1,50 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? connectHostUrl The base URL for the Atlassian Connect host
+ * @param? windowTitle Text for the TITLE element.
+ * @param content Main page content inserted inside the #content section
+ * @param? sizeToParent Boolean. If true, the panel is resized to use the full page size
+ */
+{template .connectPanel}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.connect-panel')}
+    {let $connectBaseUrl : $connectHostUrl ? $connectHostUrl : $ij.connectHostUrl /}
+    {call aui.page.document}
+        {param windowTitle: $windowTitle ? $windowTitle + ' - ' + $ij.instanceName : $ij.instanceName /}
+        {param headContent}
+            {webResourceManager_includeResources()}
+            <meta name="application-name" content="Bitbucket">
+            <link rel="shortcut icon" type="image/x-icon" href="{plugin_resource('com.atlassian.bitbucket.server.bitbucket-web:favicon', 'favicon.ico')}" />
+            {if $connectBaseUrl}
+                <script src="{$connectBaseUrl}/atlassian-connect/all.js"{if $sizeToParent} data-options="sizeToParent:true;hideFooter:true"{/if}></script>
+            {/if}
+        {/param}
+        {param content}
+            <div id="page">
+                <section id="content" role="main" tabindex="-1" {if $ij.timezone or $ij.timezone == 0}data-timezone="{$ij.timezone}" {/if}>
+                    {$content|noAutoescape}
+                </section>
+            </div>
+            {includePageData()|noAutoescape}
+            <script>
+                require('bitbucket/internal/layout/base').onReady(
+                    {if $ij.principal}
+                        {lb}
+                            id : {$ij.principal.id|escapeJs},
+                            active: {$ij.principal.active|escapeJs},
+                            name : "{$ij.principal.name|escapeJs}",
+                            slug : "{$ij.principal.slug|escapeJs}",
+                            displayName : "{$ij.principal.displayName|escapeJs}",
+                            avatarUrl : "{avatarUrl($ij.principal, 'small')|escapeJs}",
+                            emailAddress : "{$ij.principal.emailAddress|escapeJs}",
+                            type : "{$ij.principal.type|escapeJs}"
+                        {rb}
+                    {else}
+                        null
+                    {/if},
+                    "{$ij.instanceName|escapeJs}"
+                );
+            </script>
+        {/param}
+    {/call}
+{/template}

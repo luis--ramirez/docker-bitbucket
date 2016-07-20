@@ -1,0 +1,61 @@
+{namespace bitbucket.internal.component.imageDiffer.toolbar}
+
+/**
+ */
+{template .main}
+    {call aui.toolbar2.toolbar2}
+        {param content}
+            {call aui.toolbar2.item}
+                {param item: 'primary' /}
+                {param extraClasses : 'image-differ-toggle' /}
+                {param content}
+                    {call .toggleButtons /}
+                {/param}
+            {/call}
+        {/param}
+        {param extraClasses: 'image-differ-toolbar' /}
+    {/call}
+{/template}
+
+/**
+ * Render the toggle buttons for the toolbar. Note that only two-up is enabled by default.
+ */
+{template .toggleButtons private="true"}
+    {call aui.buttons.buttons}
+        {param content}
+            {call aui.buttons.button}
+                {param extraClasses: 'image-differ-two-up' /}
+                {param isPressed: true /}
+                {param text: getText('imageDiffer.toolbar.button.two-up') /}
+                {param extraAttributes: ['title': getText('imageDiffer.toolbar.button.two-up.tooltip')] /}
+            {/call}
+            {call aui.buttons.button}
+                {param extraClasses: 'image-differ-blend' /}
+                {param isDisabled: true /}
+                {param text: getText('imageDiffer.toolbar.button.blend') /}
+                {param extraAttributes: [
+                    'title': getText('imageDiffer.toolbar.button.blend.disabled.tooltip'),
+                    'data-enabled-title': getText('imageDiffer.toolbar.button.blend.tooltip')
+                ] /}
+            {/call}
+            {call aui.buttons.button}
+                {param extraClasses: 'image-differ-split' /}
+                {param isDisabled: true /}
+                {param text: getText('imageDiffer.toolbar.button.split') /}
+                {param extraAttributes: [
+                    'title': getText('imageDiffer.toolbar.button.split.disabled.tooltip'),
+                    'data-enabled-title': getText('imageDiffer.toolbar.button.split.tooltip')
+                ] /}
+            {/call}
+            {call aui.buttons.button}
+                {param extraClasses: 'image-differ-pixeldiff' /}
+                {param isDisabled: true /}
+                {param text: getText('imageDiffer.toolbar.button.pixeldiff')/}
+                {param extraAttributes: [
+                    'title': getText('imageDiffer.toolbar.button.pixeldiff.disabled.tooltip'),
+                    'data-enabled-title': getText('imageDiffer.toolbar.button.pixeldiff.tooltip')
+                ] /}
+            {/call}
+        {/param}
+    {/call}
+{/template}

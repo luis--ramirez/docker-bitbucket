@@ -1,0 +1,23 @@
+.invisible {
+    visibility: hidden;
+}
+
+.hidden {
+    display: none !important; /*
+        !important to avoid specificity wars.
+        If you put .hidden on an element and don't want it hidden, you're doing it wrong.
+    */
+}
+
+.plugin-point {
+    color: red !important;
+}
+
+.plugin-point.web-panel {
+    border: 1px solid red !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

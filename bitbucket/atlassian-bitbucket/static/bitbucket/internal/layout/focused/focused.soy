@@ -1,0 +1,63 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * From the ADG: Focused task pages allow users to focus on specific tasks in a distraction-free environment,
+ * sometimes over several screens at a time. Examples include creating a project or installing a product
+ * ADG docs: https://developer.atlassian.com/design/focused-tasks.html
+ * AUI docs: https://developer.atlassian.com/display/AUI/Page#Page-SettingPagelayout
+ *
+ * This layout just creates a basic focused layout page where the main content panel is centered, and has a fixed width
+ * depending on the focusedPageSize param - small (400px), medium (600px), large (800px) and xlarge (980px, default).
+ *
+ * For specific uses of the focused page layout that involves markup changes, consider making a new template
+ * rather than adding conditional statements or switch cases to the .focused template.
+ *
+ * @param content Main page content inserted inside the #content section
+ * @param contentTitle Heading text for page content panel
+ *
+ * data passed through to stash.layout.base
+ * @param? activeHeaderNav
+ * @param? bodyClass String. Additional classes to be added to the BODY
+ * @param? dataAttributes Data attributes for main content section
+ * @param? extraAttributes String or Object. Additional Extra attributes to apply to BODY
+ * @param? focusedPageSize Default: xlarge. Options: small, medium, large, xlarge.
+ * @param? headContent Content inserted inside HEAD after TITLE.
+ * @param? hideLoginLink Boolean. Hides the "Login" link in global app header. Primarily used on the login page itself
+ * @param? hideProfile Boolean. Hides the user profile information, including login link in global app header.
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? theme String. Theme class name added to the BODY. Default is 'bitbucket-theme'
+ * @param? useAdminContext Boolean. Loads resources for Admin page context (atl.admin instead of atl.general). Default false.
+ * @param? windowTitle Text for the TITLE element.
+ */
+{template .focused}
+{webResourceManager_requireResourcesForContext('bitbucket.layout.focused')}
+{call bitbucket.internal.layout.base}
+    {param activeHeaderNav: $activeHeaderNav /}
+    {param bodyClass: $bodyClass /}
+    {param pageType: 'focused' /}
+    {param dataAttributes: $dataAttributes /}
+    {param extraAttributes: $extraAttributes /}
+    {param focusedPageSize: $focusedPageSize /}
+    {param headContent: $headContent /}
+    {param hideLoginLink: $hideLoginLink /}
+    {param hideProfile: $hideProfile /}
+    {param pageBottomContent: $pageBottomContent /}
+    {param theme: $theme /}
+    {param useAdminContext: $useAdminContext /}
+    {param windowTitle: $windowTitle /}
+    {param content}
+        {call widget.aui.panel}
+            {param content}
+                {call aui.page.pagePanelContent}
+                    {param content}
+                        {if $contentTitle}
+                            <h2>{$contentTitle}</h2>
+                        {/if}
+                        {$content |noAutoescape}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

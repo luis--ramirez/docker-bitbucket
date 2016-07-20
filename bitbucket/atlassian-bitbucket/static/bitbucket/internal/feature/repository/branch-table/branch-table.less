@@ -1,0 +1,93 @@
+@import "/static/global.less";
+
+.branch-table {
+
+    &.aui > tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .aui-icon {
+        color: @secondaryTextColor;
+
+        + a {
+            margin-left: @halfSpacing;
+        }
+    }
+
+    // Base and default branch styles
+
+    .base-branch {
+        background: @primaryHighlight;
+    }
+
+    .base-branch-lozenge,
+    .default-branch-lozenge {
+        margin-left: @halfSpacing;
+    }
+
+    .ahead-behind-column,
+    .last-updated-column,
+    .pull-requests-column,
+    .build-status-branch-list-col,
+    .branch-actions-column {
+        .shrinkwrap();
+    }
+
+    // Column widths + overflow logic
+    td[headers=branch-name-column] {
+        max-width: 325px;
+
+
+        // we have to wrap everything in an extra <div> because in IE a position:relative <td> loses its borders.
+        > div {
+            padding-top: 5px;
+            position: relative;
+
+            > .aui-icon {
+                left: 5px;
+                position: absolute;
+                top: 5px;
+            }
+
+            > .line {
+                box-sizing: border-box;
+                display: inline-block;
+                padding-left: 25px;
+                width: 100%;
+
+                .aui-lozenge {
+                    right: 0;
+                    position: absolute;
+                    top: 5px;
+                }
+
+                > a {
+                    .text-overflow();
+
+                    box-sizing: border-box;
+                    display: inline-block;
+                    vertical-align: top;
+                    width: 100%;
+                }
+
+                .aui-lozenge + a {
+                    padding-right: 120px;
+                }
+            }
+        }
+    }
+
+    th#pull-requests-column {
+        white-space: nowrap;
+    }
+
+    td.last-updated-column > time {
+        white-space: nowrap;
+    }
+
+    #branch-actions-column {
+        width: 70px;
+    }
+
+
+}

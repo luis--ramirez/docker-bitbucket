@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/admin/globalPermissions",["bitbucket/util/navbuilder","bitbucket/internal/feature/permission/permission-table","exports"],function(b,c,a){a.onReady=function(a,d){c.initialise(b.admin().permissions(),a,d)}});

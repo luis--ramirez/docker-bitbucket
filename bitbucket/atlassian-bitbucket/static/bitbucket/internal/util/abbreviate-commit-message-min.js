@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/abbreviate-commit-message",[],function(){return function(b,a){a=parseInt(a,10);if(b.length<=a)return b;var c=b.indexOf("\n");return 0<c&&c<=a?b.substring(0,c+3>a?a-3:c)+"...":b.substring(0,a-3)+"..."}});

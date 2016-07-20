@@ -1,0 +1,20 @@
+{namespace bitbucket.internal.inbox}
+
+/**
+ * @param isEmpty
+ **/
+{template .triggerIcon}
+    <span class='aui-icon aui-icon-small {if $isEmpty}aui-iconfont-workbox-empty{else}aui-iconfont-workbox{/if}'></span>
+{/template}
+
+/**
+ * @param title
+ * @param text text-only description
+ */
+{template .error}
+    <div class="focus-message communication-error">
+        <div class="focus-message-icon aui-icon icon-skull"></div>
+        <h2>{$title}</h2>
+        <p>{$text}</p>
+    </div>
+{/template}

@@ -1,0 +1,29 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param? projectForm
+ * @param? fieldErrors
+ * @param? formErrors
+ * @param? detailedErrors
+*/
+{template .createProject}
+{webResourceManager_requireResourcesForContext('bitbucket.page.project.create')}
+{call bitbucket.internal.layout.focused}
+    {param windowTitle: getText('bitbucket.web.project.create.title') /}
+    {param contentTitle: getText('bitbucket.web.project.create.project') /}
+    {param bodyClass: 'project-create'/}
+    {param activeHeaderNav: 'projects-menu' /}
+    {param focusedPageSize: 'medium'/}
+    {param content}
+        {call bitbucket.internal.feature.project.settingsForm}
+            {param projectForm: $projectForm /}
+            {param fieldErrors: $fieldErrors /}
+            {param formErrors: $formErrors /}
+            {param detailedErrors: $detailedErrors /}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/project-create').onReady();</script>
+    {/param}
+{/call}
+{/template}

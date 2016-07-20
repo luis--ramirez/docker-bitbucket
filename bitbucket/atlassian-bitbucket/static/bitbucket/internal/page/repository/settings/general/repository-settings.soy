@@ -1,0 +1,67 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ **/
+{template .moveRepositoryForm}
+    <p>{getText('bitbucket.web.repository.move.project.warning')}</p>
+    {call bitbucket.internal.widget.form}
+        {param action: '' /}
+        {param content}
+            {call widget.aui.form.field}
+                {param id: 'moveProject' /}
+                {param labelContent}{getText('bitbucket.web.repository.move.project.label')}{/param}
+                {param description: getText('bitbucket.web.repository.move.project.description')/}
+                {param required: true /}
+                {param input}
+                    {call bitbucket.internal.feature.project.projectSelectorTriggerWithField}
+                        {param id: 'moveProjectSelector' /}
+                        {param fieldName: 'moveProjectId' /}
+                        {param project: $repository.project /}
+                        {param autofocus: true /}
+                    {/call}
+                {/param}
+            {/call}
+            {call widget.aui.form.text}
+                {param id: 'moveName' /}
+                {param initialValue: $repository.name /}
+                {param labelContent}{getText('bitbucket.web.repository.name.update.html')}{/param}
+                {param tooltip: getText('bitbucket.web.repository.name.update') /}
+                {param maxLength: 128 /}
+                {param autocomplete: 'off' /}
+                {param descriptionContent}
+                    {getText('bitbucket.web.repository.name.update.description')}
+                    {call bitbucket.internal.feature.repository.cloneUrlGen /}
+                {/param}
+                {param required: true /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param repository
+ **/
+{template .deleteRepositoryDialog}
+    {let $escapedRepositoryName}{$repository.name}{/let}
+    <p>{getText('bitbucket.web.repository.delete.confirm', '<b>', $escapedRepositoryName, '</b>')|noAutoescape}</p>
+    <p>{getText('bitbucket.web.repository.delete.confirm.detail')}</p>
+{/template}
+
+/**
+ * @param message
+ */
+{template .repositoryInlineError}
+    <span class='inline-error error'>{$message}</span>
+{/template}
+
+/**
+ * @param repository
+ * @param attachments
+ */
+{template .repositorySizeDisplay}
+    {formatSizeInBytes($repository)}
+    {if $attachments > 0}
+        <br> <span>{getText('bitbucket.web.repository.attachments.display', formatSizeInBytes($attachments))}</span>
+    {/if}
+{/template}

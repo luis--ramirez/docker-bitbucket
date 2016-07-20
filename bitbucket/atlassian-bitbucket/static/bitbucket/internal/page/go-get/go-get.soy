@@ -1,0 +1,26 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * see https://golang.org/cmd/go/#hdr-Remote_import_paths
+ *
+ * @param? importPrefix
+ * @param? repoRoot
+ * @param? vcs
+ */
+{template .goget}
+{let $validRequest: $importPrefix and $repoRoot and $vcs /}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        {if $validRequest}
+            <meta name="go-import" content="{$importPrefix}{sp}{$vcs}{sp}{$repoRoot}">
+        {/if}
+    </head>
+    <body>
+        {if not $validRequest}
+            <p>{getTextAsHtml('bitbucket.web.go-get.error.invalidurl.html')}</p>
+        {/if}
+    </body>
+</html>
+{/template}

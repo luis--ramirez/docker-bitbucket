@@ -1,0 +1,143 @@
+{namespace bitbucket.internal.errors}
+
+/**
+ * @param fallbackHeading
+ * @param? error the error that occurred
+ * @param? iconClass
+ * @param? content
+ * @param? windowTitle
+ * @param? errorHeadingOverride
+ */
+{template .error private="true"}
+{webResourceManager_requireResourcesForContext('bitbucket.page.errors')}
+    {call bitbucket.internal.layout.base}
+        {param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.error') /}
+        {param bodyClass: 'bitbucket-errors' /}
+        {param pageType: 'focused' /}
+        {param focusedPageSize: 'large' /}
+        {param content}
+            {call widget.aui.panel}
+                {param content}
+                    <div class="error-image{if $iconClass} {$iconClass}{/if}"></div>
+                    <h2>{$errorHeadingOverride ? $errorHeadingOverride : ($error and $error.localizedMessage ? $error.localizedMessage : $fallbackHeading)}</h2>
+                    {if $content}{$content|noAutoescape}{/if}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param error the error that occurred
+ * @param? content custom HTML content
+ * @param? windowTitle
+ * @param? errorHeadingOverride
+ */
+{template .error401}
+    {call .error}
+        {param error: $error /}
+        {param errorHeadingOverride: $errorHeadingOverride /}
+        {param iconClass: '_401' /}
+        {param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.error.title.window.403') /}
+        {param fallbackHeading: getText('bitbucket.web.error.title.403')/}
+        {param content}
+            {if $content}
+                {$content|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param error the error that occurred
+ */
+{template .project401}
+    {call .error401}
+        {param error: $error /}
+        {param content}
+            <p><a href="{nav_list_projects()}">{getText('bitbucket.web.error.project.403')}</a></p>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param error the error that occurred
+ * @param? content custom HTML content
+ * @param? windowTitle
+ * @param? errorHeadingOverride
+ */
+{template .error404}
+    {call .error}
+        {param error: $error /}
+        {param errorHeadingOverride: $errorHeadingOverride /}
+        {param iconClass: '_404' /}
+        {param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.error.title.window.404') /}
+        {param fallbackHeading: getText('bitbucket.web.error.title.404') /}
+        {param content}
+            {if $content}
+                {$content|noAutoescape}
+            {else}
+                <p>{getText('bitbucket.web.error.text.404')}</p>
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param error the error that occurred
+ */
+{template .project404}
+    {call .error404}
+        {param error: $error /}
+        {param windowTitle: getText('bitbucket.web.error.title.window.project.404') /}
+        {param content}
+            <p><a href="{nav_list_projects()}">{getText('bitbucket.web.error.project.404')}</a></p>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param error the error that occurred
+ * @param? project the project where the repo doesn't exist
+ */
+{template .repo404}
+    {call .error404}
+        {param error: $error /}
+        {param windowTitle: getText('bitbucket.web.error.title.window.repo.404') /}
+        {param content}
+            {if $project}
+                <p><a href="{$project.owner ? nav_user($project.owner) : nav_project($project)}">{getText('bitbucket.web.error.repo.404')}</a></p>
+            {else}
+                <p><a href="{nav_list_projects()}">{getText('bitbucket.web.error.project.404')}</a></p>
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+
+
+/**
+ * @param error the error that occurred
+ */
+{template .error500}
+    {call .error}
+        {param error: $error /}
+        {param iconClass: '_500' /}
+        {param fallbackHeading: getText('bitbucket.web.error.title.500') /}
+        {param content}
+            <p>{getText('bitbucket.web.error.text.500')}</p>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ */
+{template .error503}
+    {call .error}
+        {param iconClass: '_503' /}
+        {param fallbackHeading: getText('bitbucket.web.error.title.503') /}
+        {param content}
+            <p>{getText('bitbucket.web.error.text.503')}</p>
+        {/param}
+    {/call}
+{/template}

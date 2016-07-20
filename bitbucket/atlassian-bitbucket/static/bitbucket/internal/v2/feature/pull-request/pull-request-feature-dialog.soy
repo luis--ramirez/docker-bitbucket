@@ -1,0 +1,21 @@
+{namespace bitbucket.internal.feature.pullRequest.feature.discovery}
+
+/**
+ */
+{template .reviewerStatus}
+    <div class="feature-img"></div>
+    <h2>{getText('bitbucket.web.pullrequest.reviewer.status.feature.discovery.title')}</h2>
+
+    <h3 class="header-approve">{getText('bitbucket.web.pullrequest.state.approved')}</h3>
+    <p>{getText('bitbucket.web.pullrequest.reviewer.status.feature.discovery.approved.text')}</p>
+
+    <h3 class="header-needs-work">{getText('bitbucket.web.pullrequest.state.needs.work')}</h3>
+    <p>{getText('bitbucket.web.pullrequest.reviewer.status.feature.discovery.needs.work.text')}</p>
+{/template}
+
+
+/**
+ */
+{template .reviewerStatusClick}
+    <p>{getText('bitbucket.web.pullrequest.reviewer.status.feature.discovery.needs.work.click.text')}</p>
+{/template}

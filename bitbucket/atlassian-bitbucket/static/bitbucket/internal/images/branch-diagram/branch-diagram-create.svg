@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="157px" height="50px" viewBox="-17 0 157 50" enable-background="new -17 0 157 50" xml:space="preserve">
+<g>
+	<g>
+		<rect x="-4.008" y="5" fill="#989898" width="106.383" height="6"/>
+	</g>
+</g>
+<g>
+	<g>
+		<circle fill="#989898" cx="-9" cy="8" r="8"/>
+	</g>
+</g>
+<path fill="#3872B0" d="M126.195,45.238c-11.632-0.699-22.525-7.568-27.108-17.095c-2.043-4.245-3.079-8.961-3.079-14.019h6
+	c0,4.149,0.836,7.99,2.485,11.417c3.612,7.507,12.685,13.144,22.062,13.708L126.195,45.238z"/>
+<g>
+	<g>
+		<circle fill="#989898" cx="99.008" cy="8" r="8"/>
+	</g>
+</g>
+<g>
+	<g>
+		<circle fill="none" stroke="#3872B0" stroke-width="4" stroke-miterlimit="10" cx="132.008" cy="42" r="6"/>
+	</g>
+</g>
+</svg>

@@ -1,0 +1,354 @@
+<!doctype html>
+<html>
+<head>
+<title>Expanding Textareas jQuery Plugin</title>
+<style>
+
+body {
+  background-color: #f4f4f4;
+  background-image: -webkit-linear-gradient(0, transparent 50%, rgba(255,255,255,.3) 50%);
+  background-image: -moz-linear-gradient(0, transparent 50%, rgba(255,255,255,.3) 50%);
+  background-image: linear-gradient(0, transparent 50%, rgba(255,255,255,.3) 50%);
+  background-size: 50px;
+  color: #333;
+  font-family: Lucida Sans, Droid Sans, Arial;
+  margin:20px;
+}
+
+h1, h2, h3 {
+    font-family: Georgia, serif;
+}
+
+.container {
+    width: 80%;
+    margin: 5px auto;
+}
+
+.example {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    margin-left: 15px;
+    border-bottom: dotted 1px;
+}
+.example p {
+    padding:0;
+    margin: 5px 0;
+}
+.group {
+    background: rgba(128, 128, 128, .1);
+    padding:0 4px;
+    border: solid 2px #fff;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 2px #001;
+}
+
+/* Note: None of these rules are necessary to have this plugin work! */
+
+
+textarea {
+  padding: .5em;
+  background: #fff;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 1em;
+  line-height: 1.5em;
+  margin: .5em 0;
+}
+
+textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.exampleStaticWidth textarea, .exampleStaticWidth .textareaClone {
+    width: 400px;
+}
+
+.exampleFonts textarea {
+  font-family: Arial;
+  color: orange;
+  letter-spacing: 2px;
+  font-style: italic;
+  font-size: 1.75em;
+}
+
+.exampleMinHeight textarea, .exampleMinHeight .textareaClone {
+  min-height: 6em;
+}
+
+.exampleMaxHeight textarea, .exampleMaxHeight .textareaClone {
+  max-height: 8em;
+}
+
+.exampleBorder textarea {
+    border: double 8px #333;
+    border-radius: 5px;
+}
+
+/* Need to include .textareaClone if the rule uses percentages.
+   This way everything can stay in sync without extra javascript */
+.exampleProportional textarea,
+.exampleProportional .textareaClone {
+    padding: 1em;
+    margin: 1em;
+    width: 50%;
+}
+
+.exampleCentered .expandingText {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.exampleDestroy textarea {
+    height: 120px;
+}
+
+#resizeLog {
+    display: none;
+}
+
+</style>
+<script type='text/javascript' src='jquery-1.7.js'></script>
+<script type='text/javascript' src='expanding.js'></script>
+</head>
+<body>
+
+
+<a href="http://github.com/bgrins/ExpandingTextareas"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+
+<div class='container'>
+
+
+<h1>Expanding Textareas jQuery Plugin</h1>
+
+<div class='example'>
+  <textarea class='expanding' placeholder='Enter Some Text And Watch the Textarea Grow'></textarea>
+</div>
+
+<div class='group'>
+
+    <h2>Usage</h2>
+    <div class='example'>
+    
+    <h3>Easy Way</h3>
+    <p>
+
+<pre><code>&lt;script src='expanding.js&gt;&lt;/script&gt;
+&lt;textarea class='expanding'&gt;&lt;/textarea&gt;</code></pre>
+    
+    No extra JavaScript calls needed if you already have the 'expanding' class on the textarea. 
+    </p>
+    
+    <h3>Manual Initialization</h3>
+    </p> 
+    If you'd like to manually call the plugin instead, use:
+     
+<pre><code>&lt;script&gt;
+    $("#element").expandingTextarea();
+&lt;/script&gt;</code></pre>
+    
+    See the <a href='http://github.com/bgrins/ExpandingTextareas'>project page</a> for an explanation of how it works.
+    </p>
+    </div>
+
+</div>
+
+
+<div class='group'>
+    
+    <h2>Highlights</h2>
+    <p>What makes this plugin cool?</p>
+    <ul>
+        <li><a href='http://www.alistapart.com/articles/expanding-text-areas-made-elegant/'>Expanding Text Areas Made Elegant</a></li>
+        <li>Mobile Friendly</li>
+        <li>Wide browser support.  Works in IE6+, Safari, Chrome, Firefox, Opera</li>
+        <li>No <code>cols</code> hacks, or counting characters</li>
+        <li>Easy to style</li>
+        <li>Resize Friendly.
+            Content automatically resizes <em>without using the window.resize event or JavaScript to calculate sizes</em>!
+            
+            <textarea class='expanding'>Resize your browser window to make this switch from one line to two, or two lines to three.  Try copying and pasting more content in then resizing.</textarea>
+        </li>
+    
+    </ul>
+</div>
+
+
+<div class='group'>
+    
+    <h2>Examples</h2>
+    <p>
+    Almost all customization of the expandingTextareas plugin is simply done in CSS.
+    Here are some of the things you can do:
+    </p>
+    
+    <div class='example exampleMinHeight'>
+      <h3>Minimum Height</h3>
+      <p>
+        Sometimes you may want to start off with a couple of lines to make it obvious that there is a textarea.
+        This is easy - just use CSS to add a min height to the textarea and the .textareaClone, like so:
+      </p>
+<pre><code>
+textarea, .textareaClone {
+    min-height: 6em;
+}</code></pre>
+    
+    
+      <textarea class='expanding' placeholder='Enter Some Text'></textarea>
+    </div>
+    <div class='example exampleMaxHeight'>
+      <h3>Maximum Height</h3>
+      <p>
+        Set a <code>max-height</code> on the textarea to get scrolling after a certain size.  
+        This is done just like the min height example above:
+      </p>
+<pre><code>
+textarea, .textareaClone {
+    max-height: 8em;
+}</code></pre>
+    
+      <textarea class='expanding' placeholder='Enter Some Text'></textarea>
+    </div>
+    
+    <div class='example exampleStaticWidth'>
+      <h3>Static Width</h3>
+      <p>
+        Just set a static width on the textarea, and the pre tag will snap to fit it!
+        
+      </p>
+<pre><code>
+textarea, .textareaClone {
+    width: 400px;
+}</code></pre>
+    
+    
+      <textarea class='expanding' placeholder='Enter Some Text'></textarea>
+    </div>
+    
+    <div class='example exampleFonts'>
+      <h3>
+        Custom font properties
+      </h3>
+        <p>
+            All fonts, colors, and spacings can be set to whatever you want, and the plugin will automatically copy the styles over to the invisible pre tag.
+        </p>
+      <textarea class='expanding'>This font is styled differently, but the resizing still works</textarea>
+    </div>
+    
+    <div class='example exampleBorder'>
+      <h3>Custom borders</h3>
+      <p>
+        Custom border sizes on the textarea are handled as well
+      </p>
+    
+      <textarea class='expanding' placeholder='Enter Some Text'></textarea>
+    </div>
+    
+    <div class='example exampleProportional'>
+      <h3>Proportional paddings, margins, and widths</h3>
+      <p>
+        Percentages are a little tricky.  <em>Firefox seems to have some problems rendering percentage paddings and margins on textareas, it is probably best if you avoid this technique.</em>  Using ems for margin and padding seems to work fine.
+        
+        You can use percentages on widths in all browsers, as you place the CSS rule on both elements, like so:
+      </p>
+<pre><code>
+textarea, .textareaClone {
+    padding: 1em;
+    margin: 1em;
+    width: 50%;
+}</code></pre>
+      <textarea class='expanding' placeholder='Enter Some Text'></textarea>
+    </div>
+    
+    
+    <div class='example exampleCentered'>
+      <h3>Centering</h3>
+      <p>Centering the textarea is actually pretty easy, just set a width and a <code>margin: 0 auto;</code> on the container.  Make sure your textarea has 100% width with border-box sizing too!</p>
+      
+<pre><code>
+.expandingText {
+    width: 75%;
+    margin: 0 auto;
+}
+
+textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}</code></pre>
+
+      <textarea class='expanding' placeholder='Enter Some Text'></textarea>
+    </div>
+    
+    <div class='example exampleDestroy'>
+      <h3>Destroying</h3>
+      <p>Allows for removing the expanding functionality.</p>
+      
+<pre><code>&lt;script&gt;
+    $("#element").expandingTextarea('destroy');
+&lt;/script&gt;</code></pre>
+
+      <textarea class='expanding'>This textarea
+        is currently
+            expanding...
+        But you 
+            can change that.
+        &darr;</textarea>
+      <button>Remove the expanding functionality.  Right now.</button>
+      <script type='text/javascript'>
+        $(function() {
+            $('.exampleDestroy button').click(function() {
+                var textarea = $('.exampleDestroy .expanding');
+                if (textarea.hasClass("expanding-init")) {
+                    textarea.expandingTextarea('destroy');
+                    $(this).text("Renable...");
+                }
+                else {
+                    textarea.expandingTextarea();
+                    $(this).text("Remove...");
+                }
+            });
+        });
+      </script>
+    </div>
+    
+    <div class='example exampleEvents'>
+        <h3>Callbacks</h3>
+        <h4><code>resize</code></h4>
+        <p>Sometimes other parts of your application need to be notified when a textarea changes its height (e.g., to move out of its way!).  You can dispatch such notifications through callback functions passed in when you first initialize the plug-in, like so:</p>
+<pre><code>&lt;script&gt;
+    $("#element").expandingTextarea({
+        resize: callback
+    });
+&lt;/script&gt;</code></pre>
+
+
+      <textarea>This textarea
+        will log changes below
+        &darr; </textarea>
+      <br />
+      <div id='resizeLog'>Current Height: <em></em></div>
+      <script type='text/javascript'>
+        $(function() {
+            $('.exampleEvents textarea').expandingTextarea({
+                resize: function(h) {
+                    $("#resizeLog").show().find("em").text($(this).height() + "px");
+                }
+            });
+        });
+      </script>
+    </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{namespace bitbucket.internal.widget.focusMessage}
+
+/**
+ * @param title
+ * @param? text text-only description
+ * @param? content HTML content
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? iconClass use 'icon-lock' or 'icon-skull', otherwise if you're providing your own icon image, make it at least 64x64px.
+ * @param? accessibilityText
+ */
+{template .message}
+    <div class="focus-message{call aui.renderExtraClasses data="all" /}"
+                             {call aui.renderExtraAttributes data="all" /}>
+        {if $iconClass}
+            <div class="focus-message-icon aui-icon{if $iconClass} {$iconClass}{/if}">
+                {$accessibilityText ? $accessibilityText : ''}
+            </div>
+        {/if}
+        <h2>{$title}</h2>
+        {if $text}<p>{$text}</p>{/if}
+        {if $content}{$content|noAutoescape}{/if}
+    </div>
+{/template}
+
+/**
+ * @param title
+ * @param? text
+ * @param? content
+ * @param? extraClasses
+ */
+{template .error}
+    {call .message}
+        {param title: $title /}
+        {param text: $text/}
+        {param content: $content /}
+        {param extraClasses: $extraClasses /}
+        {param iconClass: 'icon-skull' /}
+    {/call}
+{/template}

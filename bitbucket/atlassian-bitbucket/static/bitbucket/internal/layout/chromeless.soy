@@ -1,0 +1,44 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? theme String. Theme class name added to the BODY. Default is 'bitbucket-theme'
+ * @param? headContent Content inserted inside HEAD after TITLE.
+ * @param windowTitle Text for the TITLE element.
+ *
+ * data passed through to stash.layout.aui
+ * @param? bodyClass String. Additional classes to be added to the BODY
+ * @param content Main page content inserted inside the #content section
+ * @param? dataAttributes Data attributes for main content section
+ * @param? extraAttributes String or Object. Additional Extra attributes to apply to BODY
+ * @param? focusedPageSize Size of focused page if pageType is 'focused'. Default: xlarge. Options: small, medium, large, xlarge.
+ * @param? footerContent Content for page footer
+ * @param? globalPrimaryContent Content for global app header (left hand side)
+ * @param? globalSecondaryContent Content for global app header (right hand side)
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? pageType Default: default (full width). Options: default, focused, fixed, hybrid, generic (no class applied).
+ * @param? sidebarState String. 'collapsed', 'expanded' or left undefined. Used by AUI Sidebar to render the sidebar's initial state.
+ */
+{template .chromeless}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.base')}
+    {call bitbucket.internal.layout.aui}
+        {param bodyClass: $bodyClass /}
+        {param content: $content /}
+        {param dataAttributes: $dataAttributes /}
+        {param extraAttributes: $extraAttributes /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param footerContent: $footerContent /}
+        {param globalPrimaryContent: $globalPrimaryContent /}
+        {param globalSecondaryContent: $globalSecondaryContent /}
+        {param pageBottomContent: $pageBottomContent /}
+        {param pageType: $pageType /}
+        {param sidebarState: $sidebarState /}
+        {param theme: $theme ? $theme : 'bitbucket-theme' /}
+        {param headContent}
+            <link rel="shortcut icon" href="{plugin_resource('com.atlassian.bitbucket.server.bitbucket-web:favicon', 'favicon.ico')}" />
+            {if $headContent}
+                {$headContent|noAutoescape}
+            {/if}
+        {/param}
+        {param windowTitle: $windowTitle ? $windowTitle + ' - ' + $ij.instanceName : $ij.instanceName /}
+    {/call}
+{/template}

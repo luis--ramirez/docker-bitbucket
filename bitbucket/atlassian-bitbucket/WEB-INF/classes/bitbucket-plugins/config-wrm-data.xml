@@ -1,0 +1,30 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.config-wrm-data" name="Config WRM Data">
+
+    <!-- When adding a property listing here, follow the convention: key is the property key, data key is "data" -->
+
+    <web-resource key="attachment.upload.max.size" name="attachment.upload.max.size">
+        <data key="data" class="com.atlassian.stash.internal.web.fragments.AttachmentUploadMaxSizeDataProvider"/>
+        <dependency>com.atlassian.plugins.atlassian-plugins-webresource-plugin:data</dependency>
+    </web-resource>
+
+    <web-resource key="display.max.source.lines" name="display.max.source.lines">
+        <data key="data" class="com.atlassian.stash.internal.web.fragments.DisplayMaxSourceLinesDataProvider"/>
+        <dependency>com.atlassian.plugins.atlassian-plugins-webresource-plugin:data</dependency>
+    </web-resource>
+
+    <web-resource key="page.max.source.lines" name="page.max.source.lines">
+        <data key="data" class="com.atlassian.stash.internal.web.fragments.PageMaxSourceLinesDataProvider"/>
+        <dependency>com.atlassian.plugins.atlassian-plugins-webresource-plugin:data</dependency>
+    </web-resource>
+
+    <web-resource key="page.max.diff.lines" name="page.max.diff.lines">
+        <data key="data" class="com.atlassian.stash.internal.web.fragments.PageMaxDiffLinesDataProvider"/>
+        <dependency>com.atlassian.plugins.atlassian-plugins-webresource-plugin:data</dependency>
+    </web-resource>
+
+    <web-resource key="page.max.directory.recursive.children" name="page.max.directory.recursive.children">
+        <data key="data" class="com.atlassian.stash.internal.web.fragments.PageMaxDirectoryRecursiveChildrenDataProvider"/>
+        <dependency>com.atlassian.plugins.atlassian-plugins-webresource-plugin:data</dependency>
+    </web-resource>
+
+</atlassian-plugin>

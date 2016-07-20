@@ -1,0 +1,53 @@
+{namespace bitbucket.internal.admin.users}
+
+/**
+ * @param displayName
+ */
+{template .clearCaptchaDialog}
+    <div>
+        <p>{{getText('bitbucket.web.user.captcha.clear.explanation', $displayName)}}</p>
+        <p>{getText('bitbucket.web.user.captcha.clear.confirmation')}</p>
+    </div>
+{/template}
+
+/**
+ *
+ **/
+{template .passwordResetForm}
+    {call bitbucket.internal.widget.form}
+        {param action: nav_rest_admin_users() + '/credentials' /}
+        {param autocomplete: 'off' /}
+        {param content}
+            {call widget.aui.form.password}
+                {param id: 'password' /}
+                {param labelContent}{getText('bitbucket.web.user.password')}{/param}
+                {param initialValue: '' /}
+                {param required: true /}
+            {/call}
+            {call widget.aui.form.password}
+                {param id: 'passwordConfirm' /}
+                {param labelContent}{getText('bitbucket.web.user.confirmpassword')}{/param}
+                {param initialValue: '' /}
+                {param required: true /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ *
+ **/
+{template .renameUserForm}
+    {call bitbucket.internal.widget.form}
+        {param action: nav_rest_admin_users() + '/rename' /}
+        {param autocomplete: 'off'/}
+        {param content}
+            {call widget.aui.form.text}
+                {param id: 'newName' /}
+                {param labelContent}{getText('bitbucket.web.user.newName')}{/param}
+                {param initialValue: '' /}
+                {param required: true /}
+            {/call}
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,32 @@
+@import "/static/global.less";
+
+
+.admin .content-body header.aui-page-header {
+
+    .aui-nav-breadcrumbs {
+        margin-bottom: @baseSpacing;
+    }
+
+    .aui-page-header-actions {
+        vertical-align: bottom;
+    }
+}
+
+
+/* Make long group names wrap*/
+
+#content {
+    .aui-page-header-inner {
+        table-layout: fixed;
+    }
+
+    #group-name {
+        max-width: 100%;
+        word-wrap: break-word;
+        display: inline;
+    }
+
+    .aui-page-header-actions {
+        width: 20%;
+    }
+}

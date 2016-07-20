@@ -1,0 +1,10 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param repository
+ */
+{template .publicLozenge}
+{if isFeatureEnabled('public.access') and ($repository.public or $repository.project.public)}
+     <div class="public-lozenge aui-lozenge aui-lozenge-subtle">{getText('bitbucket.web.repository.public.lozenge')}</div>
+{/if}
+{/template}

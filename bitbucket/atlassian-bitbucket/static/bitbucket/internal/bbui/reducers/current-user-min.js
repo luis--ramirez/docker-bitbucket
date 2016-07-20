@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/reducers/current-user",["module","exports","../actions/actions","../utils/create-reducer"],function(c,b,d,a){Object.defineProperty(b,"__esModule",{value:!0});a=babelHelpers.interopRequireDefault(a);b.default=(0,a.default)({},babelHelpers.defineProperty({},d.SET_CURRENT_USER,function(b,a){return a.payload}));c.exports=b["default"]});

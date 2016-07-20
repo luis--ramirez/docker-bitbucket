@@ -1,0 +1,183 @@
+{namespace bitbucket.decorators.atlassian}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param properties meta properties
+ */
+{template .admin}
+    {call bitbucket.internal.layout.admin}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        // Support 'admin.active.tab' for Atlassian plugin compatibility, but otherwise everything else in Stash is usually 'activeTab'
+        {param activeTab: $properties['meta.activeTab'] ? $properties['meta.activeTab'] : $properties['meta.admin.active.tab'] /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param title The window title
+ * @param properties meta properties
+ */
+{template .general}
+    {call bitbucket.internal.layout.base}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        {param hideLoginLink: $properties['meta.hideLoginLink'] == 'true' /}
+        {param hideProfile: $properties['meta.hideProfile'] == 'true' /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param title The window title
+ */
+{template .mirror}
+    {call bitbucket.internal.layout.mirror}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param title window title
+ */
+{template .popup}
+    {call bitbucket.internal.layout.base}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param properties meta properties
+ */
+{template .focusedPageSmall}
+    {call .focusedLayout}
+        {param title: $title /}
+        {param head: $head /}
+        {param properties: $properties /}
+        {param body: $body /}
+        {param focusedPageSize: 'small' /}
+    {/call}
+{/template}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param properties meta properties
+ */
+{template .focusedPageMedium}
+    {call .focusedLayout}
+        {param title: $title /}
+        {param head: $head /}
+        {param properties: $properties /}
+        {param body: $body /}
+        {param focusedPageSize: 'medium' /}
+    {/call}
+{/template}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param properties meta properties
+ */
+{template .focusedPageLarge}
+    {call .focusedLayout}
+        {param title: $title /}
+        {param head: $head /}
+        {param properties: $properties /}
+        {param body: $body /}
+        {param focusedPageSize: 'large' /}
+    {/call}`
+{/template}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param properties meta properties
+ */
+{template .focusedPageXLarge}
+    {call .focusedLayout}
+        {param title: $title /}
+        {param head: $head /}
+        {param properties: $properties /}
+        {param body: $body /}
+        {param focusedPageSize: 'xlarge' /}
+    {/call}
+{/template}
+
+/**
+ * Decorator around the setup layout.
+ *
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ */
+{template .setup}
+    {call bitbucket.internal.layout.setup}
+        {param headContent: $head /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param title The window title
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param properties meta properties
+ * @param? focusedPageSize small, medium, large, xlarge. If not specified, it default to 'xlarge'
+ */
+{template .focusedLayout private="true"}
+    {call bitbucket.internal.layout.focused}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        {param contentTitle: $properties['meta.heading'] ? $properties['meta.heading'] : '' /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param title The window title
+ * @param properties meta properties
+ */
+{template .connectPanel}
+    {call bitbucket.internal.layout.connectPanel}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        {param connectHostUrl: $properties['meta.connectHostUrl'] /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param head Any extra <head> contents provided by the page being decorated
+ * @param body The body of the page being decorated
+ * @param title The window title
+ * @param properties meta properties
+ */
+{template .connectPage}
+    {call bitbucket.internal.layout.connectPage}
+        {param windowTitle: $title /}
+        {param headContent: $head /}
+        {param connectHostUrl: $properties['meta.connectHostUrl'] /}
+        {param content: $body /}
+    {/call}
+{/template}

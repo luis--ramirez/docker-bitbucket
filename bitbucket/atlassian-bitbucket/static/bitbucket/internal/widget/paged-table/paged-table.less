@@ -1,0 +1,61 @@
+@import "/static/global.less";
+
+.paged-table-filter {
+    background-color: @feintGreyColor;
+    border: solid @dividerColor;
+    border-width: 1px 0;
+
+    > .aui-item {
+        padding: @halfSpacing @baseSpacing;
+    }
+}
+
+.paged-table-filter-input {
+    .box-sizing();
+    .border-radius();
+    .box-shadow(inset 0 1px 3px @aui-form-input-shadow);
+    // Should match the AUI search icon
+    background: white url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAb0lEQVR42p2RMQ7AIAhFWXsG1h7Gtffo6urqyJGpwyetomnwJ38BH/wgfZSaS7PABbVOqkqm3Fzx6IQTatlDb5PJi21YBy1iuNgjJIgzFXqyCcXj1Z1DXNGTiw01aP252DCCgH7Fk41h8KaAGMDxADnaOPucd/m3AAAAAElFTkSuQmCC) no-repeat 7px 7px;
+    border: 1px solid @activeDividerColor;
+    font-family: @atlassianFontStack;
+    font-size: @font-size-default;
+    height: @tripleSpacing;
+    padding: @halfSpacing;
+    padding-left: @halfSpacing + @doubleSpacing;
+    width: 300px;
+}
+
+.paged-table-message {
+    color: @placeholderTextColor;
+    padding: @baseSpacing;
+    text-align: center;
+}
+
+.paged-table {
+    &.no-rows {
+        display: none;
+    }
+    ~ .spinner {
+        .square(@spinner-size-large);
+        margin: @doubleSpacing auto;
+    }
+
+    tr {
+        td:first-child {
+            border-left: 2px solid transparent;
+        }
+
+        &.focused {
+            background-color: @bodyBackgroundColor;
+
+            td:first-child {
+                border-left-color: @primaryLinkColor;
+            }
+
+            a:focus {
+                outline: none;
+                text-decoration: none;
+            }
+        }
+    }
+}

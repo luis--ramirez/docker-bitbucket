@@ -1,0 +1,24 @@
+@import "/static/global.less";
+
+@commentPadding: @aui-avatar-size-medium + @baseSpacing;
+@newCommentPaddingExtra: @baseSpacing;
+@newCommentPadding: @commentPadding + @newCommentPaddingExtra;
+
+.comment-box ol > li.comment.new > .content,
+.comment-container .general-comment-activity.comment.new > .content {
+    background-color: @newCommentColor;
+    margin-top: -1px !important;
+    border-top: 1px solid @dividerColor !important;
+    border-bottom: 1px solid @dividerColor !important;
+    border-radius: 0;
+}
+
+.comment-box ol.comment-list > li.comment.new:first-child > .content {
+    border-top-width: 0 !important;
+}
+
+.comment-box ol > li.comment.new > .content {
+    margin-left: -@newCommentPaddingExtra;
+    margin-right: -@newCommentPaddingExtra;
+    padding-left: @newCommentPadding;
+}

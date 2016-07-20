@@ -1,0 +1,11 @@
+{namespace bitbucket.internal.feature.compare}
+
+/**
+ * @param diffTreeHeaderWebItems
+ */
+{template .diff}
+    {call bitbucket.internal.feature.treeAndDiffView}
+        {param diffTreeHeaderWebItems: $diffTreeHeaderWebItems /}
+        {param extraClasses : 'tabbed' /}
+    {/call}
+{/template}

@@ -1,0 +1,59 @@
+@import "/static/global.less";
+
+table.aui.repository-table {
+    margin-top: 0;
+}
+
+.repository-table {
+    .aui-icon {
+        color: @secondaryTextColor;
+        margin-right: @baseSpacing;
+    }
+
+    + .spinner {
+        display: block;
+        height: 44px;
+    }
+
+    .public-lozenge {
+        float: right;
+    }
+
+    .aui-avatar {
+        display: inline-block;
+        margin-right: @baseSpacing;
+        vertical-align: top;
+    }
+
+    .project-name + .repository-name:before {
+        content: " / ";
+        display: inline-block;
+        vertical-align: text-bottom;
+    }
+
+    .project-name > a,
+    .repository-name > a {
+        display: inline-block;
+        max-width: 400px;
+        vertical-align: text-bottom;
+        .text-overflow();
+    }
+
+    .repository-name > a {
+        line-height: 1.23077; // TODO convert to unit(@icon-size-xsmall / @font-size-default); in LESS 1.4.x
+    }
+
+    .project-name > a,
+    .project-name + .repository-name:before,
+    .project-name + .repository-name > a {
+        line-height: 1.71429; // TODO convert to unit(@icon-size-small / @font-size-default); in LESS 1.4.x
+    }
+
+    .project-name .aui-avatar {
+        vertical-align: text-bottom;
+    }
+}
+
+.repository-table-message p {
+    padding: 7px 10px;
+}

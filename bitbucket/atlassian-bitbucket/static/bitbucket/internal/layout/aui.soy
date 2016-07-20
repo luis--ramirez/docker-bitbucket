@@ -1,0 +1,114 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? bodyClass String. Additional classes to be added to the BODY
+ * @param content Main page content inserted inside the #content section
+ * @param? dataAttributes Data attributes for main content section
+ * @param? footerContent Content for page footer
+ * @param? globalPrimaryContent Content for global app header (left hand side)
+ * @param? globalSecondaryContent Content for global app header (right hand side)
+ * @param? headContent Content inserted inside HEAD after TITLE.
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? theme String. Theme class name added to the BODY
+ * @param? resourceContext String. Loads the resources associated with the passed context, should be one of
+ *         'atl.general' or 'atl.admin'. Default to null (e.g. do not load any resources).
+ *
+ * data passed through to aui.page.document
+ * @param? extraAttributes String or Object. Additional Extra attributes to apply to BODY
+ * @param? focusedPageSize Size of focused page if pageType is 'focused'. Default: xlarge. Options: small, medium, large, xlarge.
+ * @param? pageType Default: default (full width). Options: default, focused, fixed, hybrid, sidebar, generic (no class applied).
+ * @param? sidebarState String. 'collapsed', 'expanded' or left undefined. Used by AUI Sidebar to render the sidebar's initial state.
+ * @param windowTitle Text for the TITLE element.
+ */
+{template .aui}
+{call aui.page.document}
+    {param extraClasses}{if $theme}{$theme}{/if}{if $bodyClass}{sp}{$bodyClass}{/if}{/param}
+    {param extraAttributes: $extraAttributes /}
+    {param focusedPageSize: $focusedPageSize /}
+    {param pageType: $pageType /}
+    {param sidebarState: $sidebarState /}
+    {param windowTitle: $windowTitle /}
+    {param headContent}
+        {if $resourceContext}
+            {webResourceManager_requireResourcesForContext($resourceContext)}
+        {/if}
+        {webResourceManager_includeResources()}
+        {if $headContent}
+            {$headContent|noAutoescape}
+        {/if}
+    {/param}
+    {param content}
+    <ul id="assistive-skip-links" class="assistive">
+        {if $pageType == 'sidebar'}
+            <li><a href="#aui-sidebar-content">Skip to sidebar navigation</a></li>
+            <li><a href="#aui-page-panel-content-body">Skip to content</a></li>
+        {else}
+            <li><a href="#content">Skip to content</a></li>
+        {/if}
+    </ul>
+    <div id="page">
+        <!-- start #header -->
+        {if $globalPrimaryContent or $globalSecondaryContent}
+            <header id="header" role="banner">
+                <section class="notifications">
+                    {foreach $webPanel in getWebPanels('bitbucket.notification.banner.header')}
+                        {$webPanel}
+                    {/foreach}
+                </section>
+                <nav class="aui-header aui-dropdown2-trigger-group" role="navigation">
+                    <div class="aui-header-inner">
+                        <div class="aui-header-before">
+                            {foreach $webPanel in getWebPanels('header.global.before')}
+                                {$webPanel}
+                            {/foreach}
+                        </div>
+                        {if $globalPrimaryContent}
+                            <div class="aui-header-primary">
+                                {$globalPrimaryContent |noAutoescape}
+                            </div>
+                        {/if}
+                        {if $globalSecondaryContent}
+                            <div class="aui-header-secondary">
+                                {$globalSecondaryContent |noAutoescape}
+                            </div>
+                        {/if}
+                    </div> <!-- End .aui-header-inner -->
+                </nav> <!-- End .aui-header -->
+            </header>
+        {/if}
+        <!-- End #header -->
+
+        <!-- Start #content -->
+        <section id="content" role="main" tabindex="-1" {if $ij.timezone or $ij.timezone == 0}data-timezone="{$ij.timezone}" {/if}
+        {call bitbucket.internal.util.dataAttributes}
+            {param data: $dataAttributes/}
+        {/call}
+        >
+            {$content|noAutoescape}
+        </section>
+        <!-- End #content -->
+
+        <!-- Start #footer -->
+        {if $footerContent}
+            <footer id="footer" role="contentinfo">
+                <section class="notifications">
+                    {foreach $webPanel in getWebPanels('bitbucket.notification.banner.footer')}
+                        {$webPanel}
+                    {/foreach}
+                </section>
+
+                <section class="footer-body">
+                    {$footerContent |noAutoescape}
+                    <div id="footer-logo"><a href="http://www.atlassian.com/" target="_blank">Atlassian</a></div>
+                </section>
+            </footer>
+        {/if}
+        <!-- End #footer -->
+    </div>
+    {includePageData()|noAutoescape}
+    {if $pageBottomContent}
+        {$pageBottomContent |noAutoescape}
+    {/if}
+    {/param}
+{/call}
+{/template}

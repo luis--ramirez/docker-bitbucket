@@ -1,0 +1,28 @@
+{namespace bitbucket.internal.widget.captcha}
+
+/**
+ * @param labelContent
+ * @param? tooltip
+ * @param? fieldErrors
+ * @param? disabled
+ * @param? required
+ */
+{template .field}
+    {call widget.aui.form.text data="all"}
+        {param id: 'captcha' /}
+        {param accessKey: 'a'/}
+        {param errors: $fieldErrors ? $fieldErrors.captcha : null /}
+        {param required: $required /}
+        {param disabled: $disabled /}
+        {param sizeClass: 'medium' /}
+    {/call}
+{/template}
+
+/**
+ */
+{template .container}
+    <div id="captcha-container">
+        <img id="captcha-image" src="{nav_captcha()}" alt="{getText('bitbucket.web.captcha.tooltip')}">
+        <span id="captcha-reload" class="aui-icon icon-reload"></span>
+    </div>
+{/template}

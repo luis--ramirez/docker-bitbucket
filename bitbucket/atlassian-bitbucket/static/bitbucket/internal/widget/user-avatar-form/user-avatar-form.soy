@@ -1,0 +1,32 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param user
+ * @param? withPicker whether to include a button to open the avatar picker
+ */
+{template .userAvatarForm}
+    <div class="user-avatar-form">
+        {call bitbucket.internal.widget.avatar}
+           {param person: $user /}
+           {param size: 'xxxlarge' /}
+        {/call}
+        {if $withPicker}
+            {call bitbucket.internal.buttons.button}
+                {param buttonText: getText('bitbucket.web.user.avatar.upload.button') /}
+                {param extraClasses: 'avatar-picker-trigger' /}
+                {param title: getText('bitbucket.web.user.avatar.upload.button') /}
+            {/call}
+        {/if}
+        {foreach $webPanel in getWebPanels('bitbucket.web.user.account.avatar.caption', [ 'accountUser' : $user ])}
+           {$webPanel}
+        {/foreach}
+        <div class="avatar-delete-overlay">
+            {call bitbucket.internal.buttons.deleteButton}
+                {param href: nav_rest_user_avatar($user.slug) /}
+                {param extraClasses: 'avatar-delete-trigger' /}
+                {param size: 'small' /}
+                {param title: getText('bitbucket.web.user.avatar.delete.button') /}
+            {/call}
+        </div>
+    </div>
+{/template}

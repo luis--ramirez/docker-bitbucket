@@ -1,0 +1,114 @@
+@import "/static/global.less";
+/* Stash overrides for Embedded Crowd Plugin (User Directories page) */
+
+.bitbucket-theme {
+    &.admin {
+        /* Stash overrides for STP */
+        #stp-container {
+
+            a {
+                color: @primaryLinkColor;
+                text-decoration: none;
+                background-color: transparent;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .tabs-menu {
+                z-index: 1; /* over the pane, but under the admin dropdowns */
+                margin-right: @doubleSpacing;
+            }
+
+            #logFilePathControl {
+                padding: 0.5em 0 0 0.5em;
+            }
+
+            li.aui-tabs-group {
+                margin: 5px 0 0 0;
+                padding: 5px 0;
+                border-bottom: 1px solid @dividerColor;
+            }
+
+            li.aui-tabs-group > strong {
+                font-size: @font-size-small;
+                text-transform: uppercase;
+                color: @labelTextColor;
+                padding: 5px 10px;
+                display: block;
+            }
+
+            li.aui-tabs-group .aui-tabs-group-menu {
+
+                margin-left: 0;
+
+                a {
+                    display: block;
+                    padding: 7px 10px;
+
+                    &:hover,
+                    &:active {
+                        background-color: @secondaryHighlight;
+                    }
+
+
+                }
+
+                strong {
+                    font-weight: normal;
+                }
+
+                .menu-item.active-tab a {
+                    color: @bodyTextColor;
+
+                    strong {
+                        font-weight: bold;
+                    }
+                }
+
+                > .menu-item:first-child {
+                    margin-top: 0;
+                }
+            }
+
+            #support-zip div.checkbox {
+                padding-left: 20px;
+                margin-top: 5px;
+            }
+
+            .stp-propertystore {
+                h2 {
+                    font-size: @font-size-default;
+                    font-weight: bold;
+                    background-position: 0 3px;
+                    margin: 10px 0;
+                }
+
+                .stp-propertystore {
+                    margin-left: @doubleSpacing;
+                }
+            }
+        }
+
+        #upm-container{
+            h2, h3 {
+                color: @bodyTextColor;
+            }
+        }
+
+        #ual .v2-url-input {
+            // To fix the override provided by UAL
+            padding-left: 145px;
+        }
+    } //&.admin
+}
+
+@media screen and (max-width: 1080px) {
+.bitbucket-theme.admin #stp-container form.aui .long-field {
+        width: 300px;
+    }
+}
+
+
+

@@ -1,0 +1,5 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-ref-metadata" name="Metadata Plugin">
+
+    <ref-metadata-provider key="outgoing-pull-request-metadata" class="com.atlassian.stash.internal.web.pull.PullRequestMetadataProvider"/>
+
+</atlassian-plugin>

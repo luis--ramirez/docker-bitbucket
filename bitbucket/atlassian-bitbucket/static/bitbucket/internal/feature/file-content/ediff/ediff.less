@@ -1,0 +1,94 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+
+@darkTextSelection: lighten(@cmSearchingColor, 12%);
+
+@darkTextHighlight: darken(@adg-color-orange, 12%);
+.added.line {
+    .ediff-add,
+    .ediff-change {
+        background-color: @addedLineColorEdiff;
+
+        &.cm-searching {
+            background-color: @darkTextSelection;
+
+            &.CodeMirror-selectedtext {
+                background-color: @darkTextHighlight;
+            }
+        }
+    }
+}
+
+.removed.line {
+    .ediff-change,
+    .ediff-delete {
+        background-color: @deletedLineColorEdiff;
+
+        &.cm-searching {
+            background-color: @darkTextSelection;
+
+            &.CodeMirror-selectedtext {
+                background-color: @darkTextHighlight;
+            }
+        }
+    }
+}
+
+.CodeMirror-selectedtext {
+    &.ediff-change,
+    &.ediff-delete,
+    &.ediff-add {
+        background-color: darken(@feintGreyColor, 10%);
+    }
+}
+
+.CodeMirror-focused {
+    .CodeMirror-selectedtext {
+        &.ediff-change,
+        &.ediff-delete,
+        &.ediff-add {
+            background-color: darken(@commentLineBackgroundColor, 25%);
+        }
+    }
+}
+
+.hide-ediff {
+    .added.line {
+        .ediff-add,
+        .ediff-change {
+            &:not(.cm-searching) {
+                background-color: inherit;
+            }
+        }
+    }
+
+    .removed.line {
+        .ediff-change,
+        .ediff-delete {
+            &:not(.cm-searching) {
+                background-color: inherit;
+            }
+        }
+    }
+
+    // Win the specificity war with the block at the top of the file that is setting the dark orange.
+    // When ediff is enabled we can then override the dark orange again :(
+    .CodeMirror-selectedtext.cm-searching.cm-searching {
+        &.ediff-change,
+        &.ediff-delete,
+        &.ediff-add {
+            background-color: @adg-color-orange;
+        }
+    }
+
+    .CodeMirror-focused {
+        .CodeMirror-selectedtext.cm-searching.cm-searching {
+            &.ediff-change,
+            &.ediff-delete,
+            &.ediff-add {
+                background-color: @adg-color-orange;
+            }
+        }
+    }
+}

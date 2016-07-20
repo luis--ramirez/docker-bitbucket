@@ -1,0 +1,143 @@
+{namespace bitbucket.internal.component.mirroringAdmin}
+
+/**
+ * @param isEmpty
+ * @param? unavailableText
+ */
+{template .main}
+   {call .emptyState}
+        {param visible: $isEmpty /}
+        {param unavailableText: $unavailableText /}
+   {/call}
+   <div class="mirroring-admin {$isEmpty ? 'hidden' : ''}"></div>
+{/template}
+
+/**
+ * @param visible
+ * @param? unavailableText
+ */
+{template .emptyState}
+    <div class="empty-state {($visible) ? '' : 'hidden'}">
+        <div class="illustration"></div>
+        <h3>{getText('bitbucket.component.mirroring.admin.settings.empty.state.header')}</h3>
+        <p>{getText('bitbucket.component.mirroring.admin.settings.empty.state.description.one')}</p>
+        <p>{getText('bitbucket.component.mirroring.admin.settings.empty.state.description.two')}</p>
+        {if $unavailableText}
+            <p class="unavailable-message">{$unavailableText}</p>
+        {/if}
+        {call aui.buttons.button}
+           {param id: 'get-started-mirror-button' /}
+           {param text: getText('bitbucket.component.mirroring.admin.settings.empty.state.button') /}
+           {param type: 'primary'/}
+           {param href: bitbucket_help_url('bitbucket.help.mirroring.getting.started') /}
+           {param extraAttributes: ['target': '_blank'] /}
+        {/call}
+    </div>
+{/template}
+
+/**
+ * The NavBar on the left hand side of the mirroring UI.
+ * Shows mirrors and mirroring requests.
+ * @param mirrors
+ * @param requests
+ */
+{template .navbar}
+    <div class="mirroring-nav">
+        <nav class="aui-navgroup aui-navgroup-vertical">
+            <div class="aui-navgroup-inner">
+                <div class="aui-nav-heading">
+                    <strong>{getText('bitbucket.component.mirroring.admin.settings.nav.mirrors')}</strong>
+                    <div class="list-refresh-spinner"></div>
+                </div>
+                <ul class="aui-nav">
+                    {call .mirrorRequestsNav}
+                        {param requests: $requests /}
+                    {/call}
+                    {call .mirrorsNav}
+                        {param mirrors: $mirrors /}
+                    {/call}
+                    {call aui.buttons.button}
+                       {param id: 'learn-more-mirroring' /}
+                       {param text: getText('bitbucket.component.mirroring.admin.settings.learn.more.button')  /}
+                       {param type: 'link'/}
+                       {param href: bitbucket_help_url('bitbucket.help.mirroring.setup') /}
+                       {param extraAttributes: ['target': '_blank'] /}
+                    {/call}
+                </ul>
+            </div>
+        </nav>
+    </div>
+{/template}
+
+/**
+ * Renders all mirroring request nav items
+ * @param requests
+ */
+{template .mirrorRequestsNav}
+    {foreach $request in $requests}
+          {call .mirrorRequestNavItem}
+             {param request: $request /}
+          {/call}
+    {/foreach}
+{/template}
+
+/**
+ * Renders all mirror nav items
+ * @param mirrors
+ */
+{template .mirrorsNav}
+    {foreach $mirror in $mirrors}
+         {call .mirrorNavItem}
+            {param mirror: $mirror /}
+         {/call}
+    {/foreach}
+{/template}
+
+/**
+ * Renders a single mirror nav item
+ * @param mirror
+ */
+{template .mirrorNavItem}
+    <li class="mirror" data-id="{$mirror.id}" data-type="mirror">
+        <p class="name">{$mirror.name}</p>
+        <div class="status-container">
+            {call .mirrorStatus}
+                {param status: $mirror.state /}
+            {/call}
+        </div>
+    </li>
+{/template}
+
+/**
+ * Renders a single mirror request nav item
+ * @param request
+ */
+{template .mirrorRequestNavItem}
+    <li class="mirror mirror-request" data-id="{$request.id}" data-type="request">
+        <p class="name">{$request.mirrorName}</p>
+        <div class="status-container">
+            {call .mirrorStatus}
+                {param status: 'pending' /}
+            {/call}
+        </div>
+    </li>
+{/template}
+
+/**
+ * Renders the mirror's status
+ * @param status
+ */
+{template .mirrorStatus}
+    {switch $status}
+        {case 'enabled'}
+            <p class="status active enabled">{getText('bitbucket.component.mirroring.admin.settings.nav.mirror.approved')}</p>
+        {case 'pending'}
+            <p class="status pending">{getText('bitbucket.component.mirroring.admin.settings.nav.mirror.requested')}</p>
+        {case 'online'}
+            <p class="status active online">{getText('bitbucket.component.mirroring.admin.settings.nav.mirror.online')}</p>
+        {case 'offline'}
+            <p class="status pending offline">{getText('bitbucket.component.mirroring.admin.settings.nav.mirror.offline')}</p>
+        {default}
+            <p class="status inactive">{getText('bitbucket.component.mirroring.admin.settings.nav.mirror.inactive')}</p>
+    {/switch}
+{/template}

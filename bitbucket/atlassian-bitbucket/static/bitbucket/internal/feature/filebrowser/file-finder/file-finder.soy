@@ -1,0 +1,85 @@
+{namespace bitbucket.internal.feature.filefinder}
+
+/**
+ */
+{template .fileFinderInput}
+    <div class="file-finder-input">
+       <input type="text" autofocus="autofocus" maxlength="1000" size="30" class="filter-files" placeholder="{getText('bitbucket.web.file.finder.filter.label')}" >
+        {call aui.icons.icon}
+            {param extraClasses: 'file-finder-search-icon' /}
+            {param size: 'small' /}
+            {param useIconFont: true /}
+            {param icon: 'search-small' /}
+        {/call}
+    </div>
+    {call aui.icons.icon}
+        {param extraClasses: 'file-finder-tip' /}
+        {param size: 'small' /}
+        {param useIconFont: true /}
+        {param icon: 'info' /}
+    {/call}
+{/template}
+
+/**
+ * @param files
+ * @param resultSetId unique identifier for the result set. Used by tests to identify when results are refreshed.
+ */
+{template .fileFinderTable}
+    {call widget.aui.table}
+        {param id: 'browse-table' /}
+        {param extraClasses: 'file-finder-table' /}
+        {param dataAttributes: ['result-set-id':$resultSetId] /}
+        {param content}
+            {if length($files) > 0}
+                {foreach $file in $files}
+                    {call .fileFinderRow}
+                        {param url: $file.url /}
+                        {param name: $file.highlightedName ? $file.highlightedName : $file.name /}
+                    {/call}
+                {/foreach}
+            {else}
+                {call .tableRow}
+                    {param extraClasses: 'no-results-row' /}
+                    {param content}{getText('bitbucket.web.file.finder.nomatches')}{/param}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+
+/**
+ * @param url
+ * @param name
+ */
+{template .fileFinderRow}
+    {call .tableRow}
+        {param extraClasses: 'file file-row'/}
+        {param content}
+            /* tabindex set to -1 since file navigation is handled in filebrowser.js */
+            <a href="{$url}" tabindex="-1">{$name|noAutoescape}</a>
+        {/param}
+     {/call}
+{/template}
+
+
+/**
+ * @param extraClasses
+ * @param content
+ */
+{template .tableRow private="true"}
+    <tr class="{$extraClasses}">
+        <td>
+            {$content|noAutoescape}
+        </td>
+    </tr>
+{/template}
+
+/**
+ * @param limit
+ */
+{template .tableLimitedWarning}
+    <p class="file-finder-warning">
+        {getTextAsHtml('bitbucket.web.file.finder.children.limit.html', $limit, bitbucket_help_url('bitbucket.help.config.properties.paging'), productName())}
+    </p>
+{/template}

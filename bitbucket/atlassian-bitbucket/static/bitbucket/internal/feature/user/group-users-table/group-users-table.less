@@ -1,0 +1,60 @@
+@import "/static/global.less";
+
+#group-users-table {
+    &.no-rows {
+        display: table;
+    }
+
+    .user-avatar {
+        margin-right: @baseSpacing;
+    }
+
+    .aui-lozenge-success {
+        margin-left: @baseSpacing;
+    }
+
+    td {
+        &[headers=user] {
+            > .avatar-with-name,
+            > .username {
+                .text-overflow();
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            > .avatar-with-name {
+                max-width: 600px;
+            }
+
+            > .username {
+                color: @labelTextColor;
+                font-size: 90%;
+                margin-left: @baseSpacing;
+                max-width: 150px;
+            }
+        }
+
+        &[headers=actions] {
+            .delete-button {
+                float: right;
+            }
+        }
+    }
+
+    // the multi-selectors' styles should be consistent with the ones
+    // on the global permission UI; see permission-table.css and
+    // permission/multi-selector.less
+    .users-multi-selector-container {
+        background-color: @bodyBackgroundColor;
+        border-top: 1px solid @dividerColor;
+
+        .aui-item + .aui-item {
+            width: 250px;
+        }
+
+        .users-multi-selector {
+            max-width: none; // @aui-override
+            vertical-align: top;
+        }
+    }
+}

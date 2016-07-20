@@ -1,0 +1,62 @@
+@import "../../../../global.less";
+
+.repoResultProjectWidth(@baseWidth) {
+    max-width: @baseWidth           // full width of container
+        - 2 * @doubleSpacing        // - padding on both sides
+        - @aui-avatar-size-small    // - project avatar
+        - @baseSpacing              // - project avatar margin
+        - @halfSpacing              // - slash in project name
+        - @baseSpacing;             // - make it look right
+}
+
+.search-result-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    .result {
+        &.focus {
+            background-color: @primaryHighlightColor;
+            color: @invertedBodyTextColor;
+            a {
+                color: @invertedBodyTextColor;
+            }
+        }
+
+        .aui-avatar {
+            margin-right: @baseSpacing;
+        }
+    }
+
+    .repository {
+        .separator, .project-name {
+            margin-right: 3px;
+        }
+
+        // Use flexbox for displaying long repo and/or project names across two lines
+        a {
+            padding: @halfSpacing @baseSpacing;
+            .flex-container();
+        }
+
+        .aui-avatar, .project-and-repository {
+            .text-overflow();
+        }
+
+        .project-and-repository {
+            .flex-container();
+            .flex-wrap(wrap);
+        }
+
+        .project-name,
+        .separator,
+        .name {
+            .text-overflow();
+            .flex-shrink(50);
+        }
+
+        .aui-avatar, .separator {
+            .flex-shrink(0);
+        }
+    }
+}

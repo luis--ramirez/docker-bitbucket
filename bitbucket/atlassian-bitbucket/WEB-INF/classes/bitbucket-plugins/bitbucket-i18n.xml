@@ -1,0 +1,58 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-i18n" name="Atlassian Bitbucket i18n Plugin">
+
+    <plugin-info>
+        <description>Bitbucket's i18n Plugin</description>
+        <version>1.0</version>
+        <vendor name="Atlassian" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <!-- These _need_ to be in a subdirectory for Spring classpath scanning to work across jars (see ClassLoaderPluginPathScanner) -->
+    <resource type="i18n" name="Bitbucket DAO Impl i18n" location="i18n.bitbucket-dao-impl" />
+    <resource type="i18n" name="Bitbucket Platform i18n" location="i18n.bitbucket-platform" />
+    <resource type="i18n" name="Bitbucket SCM Common i18n" location="i18n.bitbucket-scm-common" />
+    <resource type="i18n" name="Bitbucket Service Impl i18n" location="i18n.bitbucket-service-impl" />
+    <resource type="i18n" name="Bitbucket SPI i18n" location="i18n.bitbucket-spi" />
+
+    <!-- Webapp i18n -->
+    <resource type="i18n" name="Bitbucket Webapp i18n" location="i18n.bitbucket-webapp" />
+    <resource type="i18n" name="Bitbucket Web Admin i18n" location="i18n.bitbucket-webapp-admin" />
+    <resource type="i18n" name="Bitbucket Web Commit i18n" location="i18n.bitbucket-webapp-commit" />
+    <resource type="i18n" name="Bitbucket Web Config i18n" location="i18n.bitbucket-webapp-config" />
+    <resource type="i18n" name="Bitbucket Web Diff i18n" location="i18n.bitbucket-webapp-diff" />
+    <resource type="i18n" name="Bitbucket Web Error i18n" location="i18n.bitbucket-webapp-error" />
+    <resource type="i18n" name="Bitbucket Web File i18n" location="i18n.bitbucket-webapp-file" />
+    <resource type="i18n" name="Bitbucket Web Keyboard Shortcut i18n" location="i18n.bitbucket-webapp-keyboardshortcut" />
+    <resource type="i18n" name="Bitbucket Web Permission i18n" location="i18n.bitbucket-webapp-permission" />
+    <resource type="i18n" name="Bitbucket Web Project i18n" location="i18n.bitbucket-webapp-project" />
+    <resource type="i18n" name="Bitbucket Web Pull Request i18n" location="i18n.bitbucket-webapp-pullrequest" />
+    <resource type="i18n" name="Bitbucket Web Repository i18n" location="i18n.bitbucket-webapp-repository" />
+    <resource type="i18n" name="Bitbucket Web Setup i18n" location="i18n.bitbucket-webapp-setup" />
+    <resource type="i18n" name="Bitbucket Web User i18n" location="i18n.bitbucket-webapp-user" />
+    <resource type="i18n" name="Bitbucket Web Tasks i18n" location="i18n.bitbucket-webapp-tasks" />
+
+    <resource type="i18n" name="Stash Help Paths" location="help-paths" />
+
+    <form-fragment key="userLocalAdminFormFragment" location="bitbucket.admin.serversettings"
+                   class="com.atlassian.stash.internal.web.locale.AdminLocaleFormFragment" weight="10">
+    </form-fragment>
+
+    <form-fragment key="userLocalAccountFormFragment" location="bitbucket.page.user.settings"
+                   class="com.atlassian.stash.internal.web.locale.UserLocaleFormFragment" weight="100">
+    </form-fragment>
+
+    <form-fragment key="systemTimeZoneFormFragment" location="bitbucket.admin.serversettings"
+                   class="com.atlassian.stash.internal.web.timezone.ServerTimeZoneFormFragment" weight="20">
+    </form-fragment>
+
+    <form-fragment key="userTimeZoneFormFragment" location="bitbucket.page.user.settings"
+                   class="com.atlassian.stash.internal.web.timezone.UserTimeZoneFormFragment" weight="110">
+    </form-fragment>
+
+    <client-resource key="locale-server-config-fields" name="Locale Configuration Page Resources">
+        <context>bitbucket.page.admin.server</context>
+        <context>bitbucket.page.setup.database</context>
+        <!-- Make sure $ is extended with auiSelect2 -->
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:locale</dependency>
+    </client-resource>
+
+</atlassian-plugin>

@@ -1,0 +1,39 @@
+@import "../../../../global.less";
+
+@inboxTableMaxHeight: 400px;
+
+#inbox-wapper {
+    .inbox-spinner-padding {
+        padding: 50px;
+    }
+    h2 {
+        padding: @baseSpacing @doubleSpacing;
+        border-bottom: 1px solid @dividerColor;
+    }
+    .aui-tabs {
+        max-height: @inboxTableMaxHeight;
+        overflow: auto;
+        padding: @baseSpacing @doubleSpacing @doubleSpacing @doubleSpacing;
+        .tabs-pane {
+            border-top: none;
+            tr.prNeedsWork {
+                background-color: @feintGreyColor;
+            }
+            .overflow-reviewers-tooltip {
+                cursor: help;
+            }
+            .empty-inbox-message {
+                padding: @baseSpacing;
+                text-align: center;
+                color: @descriptionTextColor;
+                border-top: 1px solid @dividerColor;
+            }
+        }
+    }
+}
+
+#inbox-pull-request-reviewer {
+    .user-avatar {
+        margin-right: 0;
+    }
+}

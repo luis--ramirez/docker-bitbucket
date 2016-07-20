@@ -1,0 +1,32 @@
+@import "/static/global.less";
+
+.monospace-lozenge {
+    font-family: @monospaceFontStack;
+}
+
+.merge-lozenge {
+    cursor: default;
+}
+
+.pull-request-state-lozenge {
+    cursor: default;
+
+    &.needs-work {
+        background-color: @adg-color-white;
+        border-color: @adg-color-orange;
+        color: saturate(darken(@adg-color-orange, 22%), 10%);
+    }
+}
+
+.lozenge-enabled,
+.lozenge-disabled {
+    color: @lozengeTextColor;
+}
+.lozenge-enabled {
+    border-color: @lozengeAddedColor;
+    background-color: @lozengeAddedColor;
+}
+.lozenge-disabled {
+    border-color: @lozengeRemovedColor;
+    background-color: @lozengeRemovedColor;
+}

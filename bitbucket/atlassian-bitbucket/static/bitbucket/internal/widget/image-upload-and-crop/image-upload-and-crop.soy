@@ -1,0 +1,47 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param? imageSrc Source of image if it's to be supplied initially
+ * @param? maskShape The shape of the mask to use (defaults to square)
+ * @param? fallbackDescription Description to use when using the iframe uploader. If it's not supplied, $description will be used.
+ * @param? enableWebcam Enable webcam to take a photo
+ */
+{template .imageUploadAndCrop}
+    <div class="image-upload-and-crop-container">
+        {call bitbucket.internal.widget.imageExplorer}
+            {param imageSrc: $imageSrc/}
+            {param maskShape: $maskShape/}
+        {/call}
+        {if $enableWebcam}
+            {call bitbucket.internal.widget.webcamCapture /}
+        {/if}
+        <form class="aui">
+            {call aui.buttons.buttons}
+                {param extraClasses: 'input-buttons' /}
+                {param content}
+                    {call bitbucket.internal.widget.fauxUploadField.labelButton}
+                        {param text: getText('bitbucket.web.avatar.image.upload')/}
+                        {param extraClasses: 'image-select-button'/}
+                    {/call}
+                    {if $enableWebcam}
+                        {call aui.buttons.button}
+                            {param text: getText('bitbucket.web.avatar.photo.take') /}
+                            {param extraClasses: 'use-webcam' /}
+                            {param extraAttributes: [ 'type' : 'button', 'title' : getText('bitbucket.web.avatar.photo.take.tooltip') ] /}
+                        {/call}
+                    {/if}
+                {/param}
+            {/call}
+            {if $enableWebcam}
+                {call aui.buttons.button}
+                    {param text: getText('bitbucket.web.avatar.photo.retake') /}
+                    {param extraClasses: 'use-webcam retake-photo hidden' /}
+                    {param extraAttributes: [ 'type' : 'button' ] /}
+                {/call}
+            {/if}
+            {if $fallbackDescription}
+                <div class="description fallback">{$fallbackDescription}</div>
+            {/if}
+        </form>
+    </div>
+{/template}

@@ -1,0 +1,27 @@
+@import "/static/global.less";
+
+.pr-list-open-task-count {
+
+    .aui-icon {
+        margin-right: @halfSpacing;
+    }
+
+    .task-list-dialog-link:hover,
+    .task-list-dialog-link:focus {
+        text-decoration: none;
+    }
+}
+
+/*
+ * The below aren't namespaced due to their use in plugin points where we can't
+ * add the additional 'stash-plugin-pull-request-tasks' class required
+ */
+.pull-request-list-task-count-column {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.pull-request-list-task-count-column-value {
+    white-space: nowrap;
+    color: @secondaryTextColor;
+}

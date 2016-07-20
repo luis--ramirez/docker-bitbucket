@@ -1,0 +1,50 @@
+@import "/static/global.less";
+
+nav.aui-header .user-dropdown {
+    display: none;
+}
+
+.setup-layout {
+    #content {
+        > .aui-page-header:first-child {
+            margin: @standalonePagePanelMargin auto 0;
+            padding: @doubleSpacing 0;
+        }
+    }
+
+    h1 {
+        display: block;
+    }
+
+    form .buttons {
+        padding: 0 0 5px 0;
+    }
+
+    form.aui p.jira-user-mgmt-info {
+        padding: 0;
+        margin-bottom: @doubleSpacing;
+    }
+
+    form.aui.long-label input[type=text] {
+        width: 400px;
+    }
+
+    p.jira-integration-about,
+    ul.jira-integration-about {
+        color: @bodyTextColor;
+    }
+
+    ul.jira-integration-about {
+        margin-bottom: @doubleSpacing;
+    }
+}
+
+form.license .field-group {
+    textarea {
+        resize: vertical;
+    }
+
+    .field-value a {
+        font-weight: normal;
+    }
+}

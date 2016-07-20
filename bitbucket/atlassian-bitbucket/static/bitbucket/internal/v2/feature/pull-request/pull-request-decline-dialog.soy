@@ -1,0 +1,45 @@
+{namespace bitbucket.internal.feature.pullRequest.decline}
+
+/**
+ * @param content
+ */
+{template .dialog}
+    {call aui.dialog.dialog2}
+        {param id: 'pull-request-decline-dialog' /}
+        {param content}
+            {$content|noAutoescape}
+        {/param}
+
+        {param titleText: getText('bitbucket.web.pullrequest.decline.dialog.title') /}
+        {param footerActionContent}
+            {call aui.buttons.button}
+                {param text: getText('bitbucket.web.button.decline') /}
+                {param type: 'primary' /}
+                {param extraClasses: 'confirm-button' /}
+            {/call}
+            {call aui.buttons.button}
+                {param text: getText('bitbucket.web.button.cancel') /}
+                {param type: 'link' /}
+                {param extraClasses: 'cancel-button' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+
+/**
+ * @param errors
+ */
+{template .errors private="true"}
+    {call aui.message.error}
+        {param content}
+            {foreach $error in $errors}
+                {call bitbucket.internal.widget.errorContent}
+                    {param message: $error.message /}
+                    {param details: $error.details /}
+                    {param detailListExtraClasses: 'errors' /}
+                {/call}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}

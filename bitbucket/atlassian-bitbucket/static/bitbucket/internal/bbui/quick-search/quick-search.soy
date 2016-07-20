@@ -1,0 +1,113 @@
+{namespace bitbucket.internal.component.quickSearch}
+
+/**
+ * @param? searchUrl
+ */
+{template .searchBox}
+    <form class="aui-quicksearch" method="GET" action="{$searchUrl}">
+        <div class="quick-search-trigger">
+            <label class="assistive" for="quick-search">{getText('bitbucket.component.quick-search.label')}</label>
+            <input id="quick-search" name="q"
+                type="text"
+                autocomplete="off"
+                placeholder="{getText('bitbucket.component.quick-search.placeholder')}"
+                aria-autocomplete="both"
+                aria-controls="quick-search-dialog"
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-activedescendant=""
+                role="combobox"
+                />
+            <div class="spinner"></div>
+        </div>
+    </form>
+{/template}
+
+/**
+ */
+{template .searchPanel}
+    <bb-panel id="quick-search-dialog" anchor-to="quick-search" role="listbox">
+        <div class="quick-search-error">
+            <div class="content">
+                <div class="warning-icon"></div>
+                <div class="error-text">
+                    <div class="error-text-primary">{getText('bitbucket.component.quick-search.error.primary')}</div>
+                    <div class="error-text-secondary">{getText('bitbucket.component.quick-search.error.secondary')}</div>
+                </div>
+            </div>
+            <div class="footer">
+                {getTextAsHtml('bitbucket.component.quick-search.error.troubleshoot')}
+            </div>
+        </div>
+        <div class="quick-search-main">
+            <ul id="quick-search-results" class="quick-search-results search-result-list" role="presentation">
+                {call .codeResult /}
+            </ul>
+        </div>
+    </bb-panel>
+{/template}
+
+/**
+ */
+{template .codeResult}
+    <li class="code result navigable">
+        <a id="code-result"
+            class="code-link"
+            role="option"
+            title="">
+            <div class="code-search-hint" aria-hidden="true">
+                <span class="aui-icon aui-icon-small aui-iconfont-search"></span>
+                {getTextAsHtml('bitbucket.component.quick-search.terms.html')}
+            </div>
+        </a>
+    </li>
+{/template}
+
+/**
+ * @param repos
+ * @param totalRepoCount
+ * @param? extraClasses
+ */
+{template .repositoryResults}
+    // Repositories heading and count
+    {if $totalRepoCount > 0}
+    <li class="repository-heading">
+        <h2 class="section-title">
+            {getText('bitbucket.component.quick-search.section.repositories')}
+        </h2>
+        <aui-badge>{cap_int($totalRepoCount, 99)}</aui-badge>
+    </li>
+    {/if}
+    {foreach $repo in $repos}
+        <li class="repository result navigable{if $extraClasses} {$extraClasses}{/if}">
+            <a id="repository-result-{index($repo)}"
+                class="repository-link"
+                data-proj-key="{$repo.project.key}"
+                data-repo-slug="{$repo.slug}"
+                data-repo-id="{$repo.id}" data-project-id="{$repo.project.id}"
+                href="{nav_repo_browse($repo.project, $repo)}"
+                role="option"
+                title="{{getText('bitbucket.component.quick-search.tooltip', $repo.project.name, $repo.name)}}">
+                    {call .repositoryItemContent}
+                        {param repository: $repo /}
+                    {/call}
+            </a>
+        </li>
+    {/foreach}
+{/template}
+
+/**
+ * @param repository
+ */
+{template .repositoryItemContent}
+    {call bitbucket.internal.component.avatars.projectAvatar}
+        {param size: 'small' /}
+        {param project: $repository.project /}
+        {param extraAttributes}aria-hidden="true"{/param}
+    {/call}
+    <span class="project-and-repository" aria-hidden="true">
+        <span class="project-name">{$repository.project.name}</span>
+        <span class="separator">/</span>
+        <span class="name">{$repository.name}</span>
+    </span>
+{/template}

@@ -1,0 +1,33 @@
+@import "/static/global.less";
+
+.plugin-section-primary > .plugin-item:not(.hidden) ~ .plugin-section-separator {
+    border-bottom: 1px solid @dividerColor;
+    margin-bottom: @baseSpacing;
+}
+
+.plugin-item {
+    padding-bottom: @baseSpacing;
+    position: relative;
+    padding-left: @auiIconSmall + @baseSpacing;
+
+    a {
+        display: inline-block;
+    }
+
+    .aui-icon {
+        position: absolute;
+        top: 2px; // fudging the position to align the icons properly with the baseline
+        left: 0;
+        color: @secondaryTextColor; // for aui-iconfont icons
+
+        img {
+            .square(@auiIconSmall);
+            display: block;
+        }
+    }
+
+    .item-extra-content {
+        margin-left: @baseSpacing;
+        display: inline-block;
+    }
+}

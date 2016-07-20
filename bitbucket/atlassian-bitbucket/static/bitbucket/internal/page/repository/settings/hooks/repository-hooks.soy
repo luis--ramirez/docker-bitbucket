@@ -1,0 +1,54 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param dataAttributes
+ * @param preReceiveHookPage
+ * @param postReceiveHookPage
+ */
+{template .repositoryHookSettings}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.repository.settings.hooks')}
+    {call bitbucket.internal.layout.repositorySettings}
+        {{param windowTitle: getText('bitbucket.web.repository.settings.hooks', $repository.project.name, $repository.name) /}}
+        {param repository: $repository /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeSettingsTab: 'repository-settings-hooks' /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2 class="hook-title-main">{getText('bitbucket.web.repository.settings.hooks.title')}</h2>
+                    {call aui.buttons.button}
+                        {param text: getText('bitbucket.web.repository.settings.hooks.addhook')/}
+                        {param extraClasses: 'add-hook-button' /}
+                    {/call}
+                {/param}
+                {param actionListContent}
+                    <a href="{bitbucket_help_url('bitbucket.help.repository.settings.hooks.guide')}" target="_blank">{getText('bitbucket.web.repository.settings.hooks.learn.more')}</a>
+                {/param}
+            {/call}
+            <p>{getText('bitbucket.web.repository.settings.hooks.description', productName())}
+            </p>
+
+            {call bitbucket.internal.feature.repository.hookList}
+                {param id: 'pre-receive-hook-table' /}
+                {param page: $preReceiveHookPage /}
+                {param title: getText('bitbucket.web.repository.settings.hooks.pre-receive.title') /}
+                {param description: getText('bitbucket.web.repository.settings.hooks.pre-receive.description') /}
+                {param descriptionLong: getText('bitbucket.web.repository.settings.hooks.pre-receive.description-long') /}
+            {/call}
+
+            {call bitbucket.internal.feature.repository.hookList}
+                {param id: 'post-receive-hook-table' /}
+                {param page: $postReceiveHookPage /}
+                {param title: getText('bitbucket.web.repository.settings.hooks.post-receive.title') /}
+                {param description: getText('bitbucket.web.repository.settings.hooks.post-receive.description') /}
+                {param descriptionLong: getText('bitbucket.web.repository.settings.hooks.post-receive.description-long') /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/repository/hooks').onReady({to_json($preReceiveHookPage)|noAutoescape}, {to_json($postReceiveHookPage)|noAutoescape});
+            </script>
+        {/param}
+    {/call}
+{/template}

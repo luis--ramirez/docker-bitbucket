@@ -1,0 +1,34 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ */
+{template .webcamCapture}
+    <div class="webcam-capture">
+        <div class="video-container">
+            <video class="video"></video>
+            <div class="countdown hidden"></div>
+        </div>
+        <div class="video-placeholder">
+            <div class="grant-access">
+                <span class="placeholder-icon"></span>
+                <div class="message">{getText('bitbucket.web.webcam.grantaccess')}</div>
+            </div>
+            {call aui.message.warning}
+                {param extraClasses: 'no-access hidden' /}
+                {param titleContent: getText('bitbucket.web.webcam.noaccess.title') /}
+                {param content}
+                    {getText('bitbucket.web.webcam.noaccess.message', '<a class="retry-webcam" href="#">', '</a>')|noAutoescape}
+                {/param}
+            {/call}
+        </div>
+        <div class="webcam-buttons">
+            {call aui.buttons.button}
+                {param text: '' /}
+                {param iconClass: 'icon-take-photo' /}
+                {param iconType: 'aui' /}
+                {param extraClasses: 'take-photo' /}
+                {param extraAttributes: [ 'type' : 'button', 'title' : getText('bitbucket.web.webcam.shortcut.disguise.tooltip') ] /}
+            {/call}
+        </div>
+    </div>
+{/template}

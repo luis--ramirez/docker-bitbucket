@@ -1,0 +1,27 @@
+{namespace bitbucket.internal.maintenance}
+
+/**
+ * @param? cancelToken
+ * @param? errorTexts
+ * @param status
+ */
+{template .backup}
+{webResourceManager_requireResourcesForContext('bitbucket.page.backup')}
+{call bitbucket.internal.layout.maintenance}
+    {param windowTitle : getText('bitbucket.web.maintenance.title') /}
+    {param cancelToken: $cancelToken /}
+    {param status: $status /}
+    {param errorTexts: $errorTexts /}
+    {param heading: getText('bitbucket.web.maintenance.backup.title') /}
+    {param description:
+        $cancelToken ?
+            getText('bitbucket.web.maintenance.backup.description.admin') :
+            getText('bitbucket.web.maintenance.backup.description') /}
+    {param cancelButtonText: getText('bitbucket.web.backup.button.cancel') /}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/maintenance/backup').onReady({if $cancelToken}true{else}false{/if});
+        </script>
+    {/param}
+{/call}
+{/template}

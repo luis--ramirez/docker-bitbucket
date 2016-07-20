@@ -1,0 +1,41 @@
+{namespace bitbucket.feature.pullRequest}
+
+/**
+ * This template can be used in the 'bitbucket.pull-request.related-entities' web panel location to ensure a consistent look-and-feel
+ * with the other items in that location. It should be used when displaying a type of "thing" that can be related to the pull request,
+ * such as JIRA issues, builds, TODOs, etc.
+ *
+ * @param linkText Display text. This should generally be either a "name" for the thing, or the "type" of thing.
+ * @param linkHref Where this item should direct to. Use null or '#' if you plan to handle the item with JS.
+ * @param? linkClass Any CSS classes you'd like to be added to your link, as a string.
+ * @param? linkExtraAttributes Any extra HTML attributes to add to the link, as a string or SoyMap.
+ * @param? iconClass If $iconClass or $iconUrl is provided, an element will be added for the icon.
+ *                   Any CSS classes you'd like to add to your icon should be provided as a string in $iconClass.
+ * @param? iconUrl If $iconClass or $iconUrl is provided, an element will be added to display the icon.
+ *                 $iconUrl specifies the URL for the icon image.
+ * @param? count A count of the number of "things" that are related to this pull request.
+ * @param? extraContent Any extra HTML you'd like to display
+ * @param? extraClasses Additional CSS classes to add to the root element.
+ */
+{template .relatedEntitiesWebPanel}
+    {call bitbucket.internal.widget.summaryPanel.relatedEntitiesWebPanel data="all" /}
+{/template}
+
+/**
+ * This template can be used in the 'bitbucket.pull-request.links' web panel location to ensure a consistent look-and-feel
+ * with the other items in that location. It can be used for arbitrary links.
+ *
+ * @param linkContent Arbitrary HTML to show inside the link. Beware that your inputs here will not be HTML-escaped.
+ * @param linkHref Where this item should direct to. Use null or '#' if you plan to handle the item with JS.
+ * @param? linkClass Any CSS classes you'd like to be added to your link, as a string.
+ * @param? linkExtraAttributes Any extra HTML attributes to add to the link, as a string or SoyMap.
+ * @param? iconClass If $iconClass or $iconUrl is provided, an element will be added for the icon.
+ *                   Any CSS classes you'd like to add to your icon should be provided as a string in $iconClass.
+ * @param? iconUrl If $iconClass or $iconUrl is provided, an element will be added to display the icon.
+ *                 $iconUrl specifies the URL for the icon image.
+ * @param? extraContent Any extra HTML you'd like to display
+ * @param? extraClasses Additional CSS classes to add to the root element.
+ */
+{template .linkWebPanel}
+    {call bitbucket.internal.widget.summaryPanel.linkWebPanel data="all" /}
+{/template}

@@ -1,0 +1,5 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-comment-properties" name="Comment Property Providers">
+
+    <comment-property-provider key="comment-repository-property-provider" class = "bean:commentRepositoryProvider"/>
+
+</atlassian-plugin>

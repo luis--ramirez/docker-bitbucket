@@ -1,0 +1,15 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ */
+{template .bitbucketScmServiceResourceQueueing}
+    {call bitbucket.internal.util.notifications.pollingFlag}
+        {param notificationName: 'resourceQueueing' /}
+        {param type: 'warning' /}
+        {param title: getText('bitbucket.web.scm.resource.queueing.tooltip', productName()) /}
+        {param content}
+            {getText('bitbucket.web.scm.resource.queueing.details')} {{getTextAsHtml('bitbucket.web.scm.resource.queueing.help.html', bitbucket_help_url('bitbucket.help.scaling'), bitbucket_help_title('bitbucket.help.scaling'))}}
+        {/param}
+    {/call}
+{/template}
+

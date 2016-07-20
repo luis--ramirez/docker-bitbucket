@@ -1,0 +1,35 @@
+@import "/static/global.less";
+
+@separator-width: 10px;
+
+.repository-item {
+    .aui-avatar {
+        margin-right: @halfSpacing;
+        vertical-align: middle;
+    }
+
+    .aui-avatar,
+    .repository-separator {
+        .flex(none);
+    }
+
+    .project-name,
+    .name {
+        .flex(0 1 auto);
+        max-width: 150px;
+    }
+
+    .project-name {
+        min-width: 20px;
+    }
+
+    .project-name {
+        color: @descriptionTextColor;
+        margin-right: @halfSpacing;
+    }
+
+    .separator {
+        color: @descriptionTextColor;
+        margin-right: 8px; /** extra right padding to balance any space on left caused by ellipses */
+    }
+}

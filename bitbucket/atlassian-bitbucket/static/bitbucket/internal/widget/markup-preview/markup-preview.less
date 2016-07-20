@@ -1,0 +1,31 @@
+@import "/static/global.less";
+
+.markup-preview {
+    .border-top-left-radius();
+    .border-top-right-radius();
+    .box-sizing();
+    background-color: @feintGreyColor;
+    border: 1px solid @dividerColor;
+    cursor: pointer;
+    display: none;
+    min-height: @textareaStartHeight;
+    padding: @halfSpacing; //Mimic AUI form style
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+&.previewing {
+    textarea {
+        opacity: 0.5;
+    }
+}
+
+&.loaded {
+    .expandingText {
+        display: none;
+    }
+
+    .markup-preview {
+        display: block;
+    }
+}

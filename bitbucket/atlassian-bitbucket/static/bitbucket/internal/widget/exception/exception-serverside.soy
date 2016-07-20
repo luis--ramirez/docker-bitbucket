@@ -1,0 +1,19 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * Displays a stacktrace from a Throwable in a collapsible div.
+ *
+ * @param messageContent
+ * @param throwable
+ */
+{template .exception}
+    {call aui.message.error data="all"}
+        {param content}
+            {$messageContent|noAutoescape}
+            <div class="formatted-throwable-toggle">{getText('bitbucket.web.message.throwable.twixie.show')}</div>
+            <div class="formatted-throwable">
+                <pre>{format_throwable($throwable)}</pre>
+            </div>
+        {/param}
+    {/call}
+{/template}

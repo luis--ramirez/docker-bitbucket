@@ -1,0 +1,25 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param? notInitialised
+ */
+{template .emptyRepository}
+{webResourceManager_requireResourcesForContext('bitbucket.page.repository.empty')}
+{requirePageData('bitbucket.empty.repository.instructions', [ 'repository' : $repository ])}
+    {call bitbucket.internal.layout.repository}
+        {param windowTitle: $repository.name /}
+        {param repository: $repository /}
+        {param activeNav: 'bitbucket.repository.nav.files' /}
+        {param content}
+            <div class="repo-getting-started">
+                <h2>{getText('bitbucket.web.repository.empty.heading')}</h2>
+                <p>{getText('bitbucket.web.repository.empty.description')}</p>
+                <div id="empty-repository-instructions"></div>
+            </div>
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/page/repository/emptyRepository').onReady( {not not $notInitialised} );</script>
+        {/param}
+    {/call}
+{/template}

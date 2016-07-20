@@ -1,0 +1,48 @@
+{namespace bitbucket.internal.page.pullRequest}
+
+/**
+ * @param repository
+ * @param pullRequestPage
+ * @param? dataAttributes
+ * @param? pageBottomContent
+ * @param? pullRequestOrder
+ * @param? repositoryHasPullRequests boolean, true if there are _any_ pull requests targeting $repository
+ * @param? selectedAuthor
+ * @param? selectedTargetBranch
+ */
+{template .list}
+{webResourceManager_requireResourcesForContext('bitbucket.page.pullRequest.list')}
+    {call bitbucket.internal.layout.repository}
+        {{param windowTitle: getText('bitbucket.web.list-pull-requests.windowtitle', $repository.slug) /}}
+        {param dataAttributes: $dataAttributes /}
+        {param panelContentHeader: getText('bitbucket.web.repository.nav.pull-requests') /}
+        {param panelContentHeaderActions}
+            {if $repositoryHasPullRequests}
+                {call aui.buttons.button}
+                    {param text: getText('bitbucket.web.list-pull-requests.button.create') /}
+                    {param href: nav_create_pull($repository.project.key, $repository.slug) /}
+                    {param id: 'list-create-pr-button' /}
+                {/call}
+            {/if}
+        {/param}
+        {param content}
+            <div id='pull-requests-content'></div>
+        {/param}
+        {param repository: $repository /}
+        {param activeNav: 'bitbucket.repository.nav.pull-requests' /}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/pull-requests-list').onReady({lb}
+                    initialData: {to_json($pullRequestPage)|noAutoescape},
+                    gettingStarted: {not $repositoryHasPullRequests},
+                    pullRequestOrder: {if $pullRequestOrder}'{$pullRequestOrder|escapeJs}'{else}null{/if},
+                    selectedAuthor: {$selectedAuthor ? to_json($selectedAuthor, [ 'avatarSize': 'small' ]) : 'null'|noAutoescape},
+                    selectedTargetBranch: {$selectedTargetBranch ? to_json($selectedTargetBranch) : 'null'|noAutoescape}
+                {rb});
+            </script>
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {{/param}}
+    {/call}
+{/template}

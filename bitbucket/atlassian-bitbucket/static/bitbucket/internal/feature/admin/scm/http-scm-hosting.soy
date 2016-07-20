@@ -1,0 +1,17 @@
+{namespace bitbucket.internal.feature.admin.scm}
+
+/**
+ * @param enabled
+ * @param product
+ */
+{template .http}
+    <h4>{getText('bitbucket.web.admin.scm.http.title')}</h4>
+    {call widget.aui.form.checkbox}
+        {param checked: $enabled /}
+        {param descriptionContent}
+            {{getTextAsHtml('bitbucket.web.admin.scm.http.description.html', $product, bitbucket_help_url('bitbucket.help.http.hosting.general'))}}
+        {/param}
+        {param id: 'httpEnabled' /}
+        {param labelContent}{getText('bitbucket.web.admin.scm.http.enabled')}{/param}
+    {/call}
+{/template}

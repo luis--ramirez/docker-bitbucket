@@ -1,0 +1,27 @@
+{namespace bitbucket.internal.feature.fileContent}
+
+/**
+ * @param lineStart
+ * @param? lineEnd
+ * @param destOffset
+ * @param changeType
+ * @param isBelow
+ * @param isAbove
+ * @param tooltip
+ */
+{template .hunkSeparator}
+    {call bitbucket.internal.feature.fileContent.skippedContainer}
+        {param hasContentAbove: $isAbove /}
+        {param hasContentBelow: $isBelow /}
+        {param canShowMore: true /}
+        {param showMoreTooltip: $tooltip /}
+        {param extraAttributes}
+            data-line-start="{$lineStart}"
+            {if $lineEnd} data-line-end="{$lineEnd}"{/if}
+            {sp}data-dest-offset="{$destOffset}"
+            {sp}data-change-type="{$changeType}"
+            {sp}data-below="{$isBelow}"
+            {sp}data-above="{$isAbove}"
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/repository/branch-selector",["aui","jquery","bitbucket/internal/feature/repository/revision-reference-selector"],function(b,c,d){return function(e,a){a=c.extend({show:{branches:!0,tags:!1,commits:!1},triggerPlaceholder:b.I18n.getText("bitbucket.web.branch.selector.default"),paginationContext:"branch-selector"},a);return new d(e,a)}});

@@ -1,0 +1,19 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param percentage an integer between 0 and 100 (inclusive)
+ * @param? active whether the progress bar is active, default: true
+ * @param? message an optional message associated with the progress
+ * @param? id the id for the container
+ * @param? reversed if the animation is reversed
+ **/
+{template .progressBar}
+<div class="progress-container"{if $id} id="{$id}"{/if}>
+    <div class="progress-bar{if not ($active == false)} active{/if}{if $reversed} reversed{/if}">
+        <div class="bar" style="width: {$percentage ? $percentage : 0}%"></div>
+    </div>
+    {if $message}
+        <p class="progress-message">{$message}</p>
+    {/if}
+</div>
+{/template}

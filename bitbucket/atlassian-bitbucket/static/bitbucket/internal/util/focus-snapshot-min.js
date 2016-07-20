@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/focus-snapshot",["jquery"],function(d){return function(){var a,b;return{save:function(){var c=document.activeElement;c&&(a=d(c),a.is(":text, textarea")&&(b=a.getSelection()))},restore:function(){a&&(a.focus(),b&&a.setSelection(b.start,b.end))}}}()});

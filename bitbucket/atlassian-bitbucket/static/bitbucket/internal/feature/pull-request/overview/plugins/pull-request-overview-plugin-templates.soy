@@ -1,0 +1,15 @@
+{namespace bitbucket.internal.feature.pullRequest.overview.plugins}
+
+/**
+ */
+{template .learnMore}
+    {call bitbucket.internal.widget.summaryPanel.linkWebPanel}
+        {param extraClasses: 'learn-more' /}
+        {param iconClass : 'aui-iconfont-help' /}
+        {param linkHref : bitbucket_help_url('bitbucket.help.pull.request') /}
+        {param linkExtraAttributes: [ 'target' : '_blank' ] /}
+        {param linkContent}
+            {getText('bitbucket.web.pullrequest.learn.more')}
+        {/param}
+    {/call}
+{/template}

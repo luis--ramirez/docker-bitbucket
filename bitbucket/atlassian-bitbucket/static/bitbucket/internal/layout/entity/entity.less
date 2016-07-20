@@ -1,0 +1,51 @@
+@import "/static/global.less";
+
+#content {
+    > .aui-tabs > ul.tabs-menu li.menu-item.active-tab strong {
+        cursor : inherit; /* active tab is still clickable on entity pages */
+    }
+}
+
+.page-panel-content-header {
+    margin-top: 0;
+    padding-bottom: @baseSpacing;
+}
+
+.sidebar-settings-group {
+    // we're adding an empty nav heading above the settings button so that we get the sidebar group dividers,
+    // but we don't want the padding which is normally above the nav heading text
+    // @aui-override until https://ecosystem.atlassian.net/browse/AUI-2809 is fixed
+    .aui-nav-heading {
+        padding-top: 0;
+    }
+}
+
+.aui-sidebar .aui-sidebar-footer .aui-sidebar-toggle {
+    // make the sidebar toggle button span the full width of the sidebar footer area
+    width: 100%;
+    text-align: right;
+}
+
+.aui-message + .page-panel-content-header {
+    margin-top: @baseSpacing;
+}
+
+.page-header-flex {
+    .aui-page-header-inner {
+        .flex-container();
+        .align-items(flex-end);
+    }
+
+    .aui-page-header-main,
+    .aui-page-header-actions {
+        display: block; // @aui-override to remove `display: table-cell` and turn these into flex items
+        min-width: 0; // flexbox defaults to the intrinsic width of the content, which overflows out of the container. This is the workaround to make it shrink and enable truncation to work
+        overflow: hidden; // IE11 needs this to constrain the width of the nested flexbox used for the breadcrumbs on the repo layout
+    }
+
+    .aui-page-header-actions {
+        .flex(1 0 auto);
+        padding-bottom: @baseSpacing;
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,17 @@
+{namespace bitbucket.internal.layout.branch}
+
+/**
+ *  @param repository
+ *  @param atRevisionRef
+ */
+{template .actionsDropdownMenu}
+    <ul>
+        {foreach $webItem in getWebItems('bitbucket.branch.layout.actions.dropdown', [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ])}
+            <li class="branch-action-item">
+                {call bitbucket.internal.widget.webItem data="$webItem"}
+                    {param url: $webItem.url ? $webItem.url : '#' /}
+                {/call}
+            </li>
+        {/foreach}
+    </ul>
+{/template}

@@ -1,0 +1,76 @@
+@import "/static/global.less";
+
+h2.hook-title-main {
+    display: inline-block;
+}
+
+.add-hook-button {
+    margin-left: 10px;
+}
+
+#add-dialog-cancel {
+    padding: 5px 0;
+}
+
+.hook-title {
+    background-color: @feintGreyColor;
+
+    span {
+        font-size: 14px;
+        font-weight: normal;
+        color: @secondaryTextColor;
+    }
+}
+
+table.hook-list-table {
+
+     margin-top: 40px;
+
+    .cell-icon {
+        vertical-align: top;
+        width: @aui-avatar-size-large;
+    }
+
+    .cell-enabled-state,
+    .cell-actions {
+        vertical-align: middle;
+    }
+
+    .cell-actions {
+        .shrinkwrap();
+        white-space: nowrap;
+    }
+
+    .hook-name > a {
+        color: @bodyTextColor;
+    }
+
+    h4 {
+        display: inline-block;
+    }
+
+    a.edit-button {
+        margin-left: @halfSpacing;
+    }
+
+    .hook-description {
+        margin-top: 5px;
+
+        .empty-description {
+           font-style: italic;
+        }
+    }
+
+    .spinner {
+        .square(16px);
+        display: inline-block;
+        margin-left: @halfSpacing;
+        vertical-align: middle;
+    }
+}
+
+#repository-hook-dialog .dialog-page-body .spinner {
+  margin-top: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}

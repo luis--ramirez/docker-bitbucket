@@ -1,0 +1,33 @@
+@import "/static/global.less";
+
+.group-table {
+    table-layout: fixed;
+
+    .group-avatar {
+        margin-right: @baseSpacing;
+    }
+
+    #actions {
+        width: @icon-size-xxsmall + @doubleSpacing;
+    }
+
+    td {
+        white-space: nowrap;
+
+        &[headers=group] > a {
+            .text-overflow();
+            max-width: 100%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        &[headers=actions] {
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .group-avatar {
+            vertical-align: middle;
+        }
+    }
+}

@@ -1,0 +1,38 @@
+@import "/static/global.less";
+
+.bitbucket-theme {
+    .aui-message p.scm-command, /* override aui-message margin-top */
+    .scm-command {
+        font-family: monospace;
+        margin-top: 16px;
+        word-wrap: break-word;
+    }
+
+    &.scrolling-forwarded {
+        #page {
+            position: fixed;
+            min-width: @baseLayoutMinWidth;
+        }
+
+        .aui-page-panel-content {
+            padding-bottom: 0;
+        }
+    }
+}
+
+.aui-page-focused {
+    .aui-page-panel {
+        margin-top: @standalonePagePanelMargin;
+
+        p:last-child {
+            margin-bottom: @doubleSpacing;
+        }
+    }
+}
+
+.aui-page-hybrid #content > .aui-page-header {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+

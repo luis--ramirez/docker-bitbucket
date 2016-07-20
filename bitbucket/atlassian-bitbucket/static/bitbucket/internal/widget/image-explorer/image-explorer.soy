@@ -1,0 +1,19 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param? imageSrc Source of image if it's to be supplied initially
+ * @param? maskShape The shape of the mask to use (defaults to 'square'). Possible values are 'circle', 'square', 'rounded-square'
+ */
+{template .imageExplorer}
+    <div class="image-explorer-container {if not $imageSrc}empty{/if}">
+        <div class="image-explorer-image-view" tabindex="0"> //Tabindex is to allow the explorer to be focused so image data can be pasted into it
+            <img class="image-explorer-source" {if $imageSrc}src="{$imageSrc}"{/if} alt="{getText('bitbucket.web.avatar.image.upload.label')}" />
+            <div class="image-explorer-mask {$maskShape ? $maskShape : 'square'}-mask"></div>
+            <div class="image-explorer-drag-delegate"></div>
+        </div>
+        <div class="image-explorer-scale-slider-wrapper">
+            <input class="image-explorer-scale-slider {if not $imageSrc}disabled{/if}"
+                type="range" min="0" max="100" step="1" value="0" {if not $imageSrc}disabled{/if}/>
+        </div>
+    </div>
+{/template}

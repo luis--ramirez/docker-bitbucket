@@ -1,0 +1,84 @@
+{namespace bitbucket.internal.page.admin.db}
+
+/**
+ * @param currentDbType
+ * @param dbTypes
+ * @param dcName
+ * @param isDataCenter
+ * @param? dbConfigForm
+ * @param? formErrors
+ * @param? fieldErrors
+ * @param? testPassed
+ * @param? migrationException
+ */
+{template .migrateConfig}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.editDbConfig')}
+    {let $dcSupported: $currentDbType.clusterable or not $isDataCenter /}
+    {let $isDisabled: not ($dcSupported and $currentDbType.driverAvailable) /}
+    {call bitbucket.internal.layout.focused}
+        {param contentTitle: getText('bitbucket.web.admin.db.migrate.title') /}
+        {param focusedPageSize: 'large' /}
+        {param content}
+            {if $testPassed}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.admin.db.migrate.test.passed')}
+                    {/param}
+                {/call}
+            {/if}
+            <p class="migration-form-description">{{getText('bitbucket.web.database.migrate.database.help',
+                   '<a href="' + bitbucket_help_url('bitbucket.help.db.migration') + '">', '</a>', productName())|noAutoescape}}</p>
+            {call bitbucket.internal.widget.xsrfProtectedForm}
+                {param action: '' /}
+                {param errors: $formErrors /}
+                {param isLongLabels: true /}
+                {param content}
+                    {if $migrationException}
+                        {call bitbucket.internal.widget.exception}
+                            {param messageContent}
+                                {$migrationException.localizedMessage}
+                            {/param}
+                            {param throwable: $migrationException /}
+                        {/call}
+                    {/if}
+                    {call bitbucket.internal.feature.admin.db.editDbConfigFields}
+                        {param currentDbType: $currentDbType /}
+                        {param dbConfigForm: $dbConfigForm /}
+                        {param dbTypes: $dbTypes /}
+                        {param dcName: $dcName /}
+                        {param dcSupported : $dcSupported /}
+                        {param fieldErrors: $fieldErrors /}
+                        {param isDataCenter: $isDataCenter /}
+                        {param isDisabled: $isDisabled /}
+                    {/call}
+                    {call widget.aui.form.buttons}
+                        {param content}
+                            {call widget.aui.form.submit}
+                                {param id: 'submit' /}
+                                {param isPrimary: true /}
+                                {param disabled: $isDisabled /}
+                                {param accessKey: 's' /}
+                                {param label: getText('bitbucket.web.button.migrate') /}
+                            {/call}
+                            {call widget.aui.form.submit}
+                                {param id: 'test' /}
+                                {param disabled: $isDisabled /}
+                                {param label: getText('bitbucket.web.button.test') /}
+                            {/call}
+                            {call widget.aui.form.cancelButton}
+                                {param id: 'cancel' /}
+                                {param href: nav_admin_db() /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/widget/exception').onReady();
+                require('bitbucket/internal/page/admin/db/migrate').onReady();
+            </script>
+        {/param}
+    {/call}
+{/template}

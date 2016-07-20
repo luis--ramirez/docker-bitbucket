@@ -1,0 +1,57 @@
+{namespace bitbucket.internal.page}
+
+/**
+* @param projectPage a page of projects
+*/
+{template .projectList}
+{webResourceManager_requireResourcesForContext('bitbucket.page.projectList')}
+{call bitbucket.internal.layout.entity}
+    {param windowTitle: getText('bitbucket.web.project.list.window.title') /}
+    {param entityName: getText('bitbucket.web.project.heading') /}
+    {param activeHeaderNav: 'projects-menu' /}
+    {param panelClass: 'fixed-right' /}
+    {param actionWebItems: getWebItems('bitbucket.project.list.actions') /}
+    {param content}
+        {call widget.aui.group.group}
+            {param extraClasses: 'project-banners' /}
+            {param content}
+                {foreach $webPanel in getWebPanels('bitbucket.web.project.list.banner', ['projectPage' : $projectPage])}
+                    {call widget.aui.group.item}
+                        {param content}
+                            {$webPanel}
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/param}
+        {/call}
+
+        {call bitbucket.internal.feature.project.projectTable}
+            {param projectPage: $projectPage /}
+            {param id: 'projects-table' /}
+        {/call}
+    {/param}
+    {param panelSidebarContent}
+        <section>
+            {foreach $webItem in getWebItems('bitbucket.project.list.sidebar.items')}
+                {call bitbucket.internal.widget.welcomeMat}
+                    {param title: $webItem.linkText /}
+                    {param href: $webItem.url /}
+                    {param content}
+                        <p>
+                        {$webItem.tooltip}
+                        </p>
+                    {/param}
+                    {param size: 'small' /}
+                    {param backgroundClass: $webItem.styleClass /}
+                    {param webItemKey: $webItem.completeKey /}
+                {/call}
+            {/foreach}
+        </section>
+    {/param}
+    {param pageBottomContent}
+    <script>
+        require('bitbucket/internal/page/project-list').onReady('projects-table');
+    </script>
+    {/param}
+{/call}
+{/template}

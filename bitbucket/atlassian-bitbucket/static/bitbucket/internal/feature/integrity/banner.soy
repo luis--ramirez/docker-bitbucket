@@ -1,0 +1,13 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ * @param? integrityCheckState the current state of the integrity checks
+ */
+{template .bitbucketIntegrityCheckRunning}
+    {if $integrityCheckState}
+        <div id="integrity-check-banner"></div>
+        <script type="text/javascript">
+            require('bitbucket/internal/feature/integrity/banner').init('integrity-check-banner', {to_json($integrityCheckState)|noAutoescape});
+        </script>
+    {/if}
+{/template}

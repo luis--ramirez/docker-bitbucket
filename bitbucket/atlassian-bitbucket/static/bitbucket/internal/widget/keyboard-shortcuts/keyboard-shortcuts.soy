@@ -1,0 +1,113 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param contextNames
+ * @param contexts
+ */
+{template .keyboardShortcutsContent}
+    {call aui.group.group}
+        {param extraClasses: 'keyboard-shortcut-help' /}
+        {param extraAttributes: [ 'tabindex' : '-1' ] /}
+        {param content}
+            {call aui.group.item}
+                {param content}
+                    {foreach $contextName in $contextNames}
+                        {if index($contextName) % 2 == 0}
+                            {call .keyboardShortContext}
+                                {param contextName:$contextName/}
+                                {param contextShortcuts: $contexts[index($contextName)]/}
+                            {/call}
+                        {/if}
+                    {/foreach}
+                {/param}
+            {/call}
+            {call aui.group.item}
+                {param content}
+                    {foreach $contextName in $contextNames}
+                        {if index($contextName) % 2 == 1}
+                            {call .keyboardShortContext}
+                                {param contextName:$contextName/}
+                                {param contextShortcuts: $contexts[index($contextName)]/}
+                            {/call}
+                        {/if}
+                    {/foreach}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+
+/**
+ * @param contextName The context for the list of shortcuts
+ * @param contextShortcuts
+ */
+{template .keyboardShortContext}
+    <div class="keyboard-shortcut-context">
+        <h3>{$contextName}</h3>
+        <dl>
+            {foreach $shortcut in $contextShortcuts}
+                {if not $shortcut.hidden }
+                    {call .keyboardShortcutItem}
+                        {param shortcut: $shortcut /}
+                    {/call}
+                {/if}
+            {/foreach}
+        </dl>
+    </div>
+{/template}
+
+/**
+ * @param shortcut a shortcut object which contains an array of shortcut key options
+ */
+{template .keyboardShortcutItem private="true"}
+    <dt>{$shortcut.description}</dt>
+    {foreach $option in $shortcut.keys}
+        {if not isFirst($option) and not isLast($option)}<dd class='separator'>{getText('bitbucket.web.keyboardshortcut.shortcut.comma')}</dd>{/if}
+        {if not isFirst($option) and isLast($option)}<dd class='separator'>{getText('bitbucket.web.keyboardshortcut.shortcut.or')}</dd>{/if}
+        <dd>
+            {call .keyboardShortcutOption}
+                {param sequence: $option /}
+            {/call}
+        </dd>
+    {/foreach}
+{/template}
+
+/**
+ * @param sequence an array containing shortcut keys in a sequence (key x then key y)
+ */
+{template .keyboardShortcutOption private="true"}
+    {foreach $keypress in $sequence}
+        {if not isFirst($keypress)} {getText('bitbucket.web.keyboardshortcut.shortcut.then')} {/if}
+        {if $keypress.modifiers}
+            {call .keyboardShortcutModifier}
+                {param keypress: $keypress /}
+            {/call}
+        {else}
+            {call .keyboardShortcutKey}
+                {param key: $keypress /}
+            {/call}
+        {/if}
+    {/foreach}
+{/template}
+
+/**
+ * @param keypress an array containing a combination of shortcut keys (eg modifier + key)
+ */
+{template .keyboardShortcutModifier private="true"}
+    {foreach $modifier in $keypress.modifiers}
+        {call .keyboardShortcutKey}
+            {param key: $modifier /}
+        {/call}
+    {/foreach}
+    {call .keyboardShortcutKey}
+        {param key: $keypress.key /}
+    {/call}
+{/template}
+
+/**
+ * @param key a single key
+ */
+{template .keyboardShortcutKey private="true"}
+    <kbd>{$key}</kbd>
+{/template}

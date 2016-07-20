@@ -1,0 +1,38 @@
+@import "/static/global.less";
+
+#merge-help-dialog {
+    .merge-help {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-top: 1px solid #ddd;
+
+        > * {
+            margin-left: 24px;
+        }
+
+        > h3 .aui-iconfont-warning {
+            color: @aui-iconfont-warning-color;
+            margin-right: @baseSpacing;
+        }
+    }
+
+    .merge-help:first-child {
+        padding-top: 0px;
+        border-top: none;
+    }
+
+    .merge-help p:first-child {
+        margin-bottom: @doubleSpacing;
+    }
+
+    .instruction-block {
+        word-wrap: break-word;
+    }
+
+    //We should avoid usage of last-child because of <IE9 borkage but writing this
+    //any other way is tough because instruciton-block is defined in the theme and
+    //it really is the last-child we need to modify
+    .instruction-block:last-child {
+        margin-bottom: 0px;
+    }
+}

@@ -1,0 +1,249 @@
+@import "/static/global.less";
+
+// dimensions
+@marketingPageWidthWide: 1280px;
+@marketingPageInnerWidth: (@marketingPageWidthWide - (@marketingPanelLeftRightPadding * 2));
+@marketingPageHeaderPadding: 50px;
+@marketingPageFooterPadding: 60px;
+@marketingPanelTopBottomPadding: 100px;
+@marketingPanelLeftRightPadding: 70px;
+@marketingPanelGutterSpacing: 70px;
+@marketingPanelHeaderTextContentWidth: 390px;
+@marketingPanelTextContentWidth: 350px;
+@marketingPanelImageContentWidth: 680px;
+
+// colours
+@marketingPanelHeadingColor: #194f82;
+@marketingPanelTextColor: #272727;
+@marketingPanelHeaderHeadingColor: #2a5181;
+@marketingPanelFooterBackgroundColor: #2a5082;
+
+// font sizes
+@marketingHeading1: 48px;
+@marketingHeading2: 32px;
+
+.bitbucket-theme.getting-started-page {
+    .aui-header {
+        border-bottom: 0;
+    }
+}
+
+.marketing-panel {
+    .box-sizing();
+    .clearfix();
+    padding: @marketingPanelTopBottomPadding @marketingPanelLeftRightPadding;
+
+    &:nth-child(odd) {
+        background-color: @contentBackgroundColor;
+    }
+
+    &:nth-child(even) {
+        background-color: @bodyBackgroundColor;
+    }
+
+    h2 {
+        color: @marketingPanelHeadingColor;
+        font-weight: bold;
+        font-size: @marketingHeading2;
+        line-height: 1.25;
+        margin-bottom: 30px;
+    }
+
+    p {
+        color: @marketingPanelTextColor;
+        font-size: @font-size-large;
+        line-height: 1.625;
+    }
+
+    &.marketing-page-header {
+        background-color: @contentBackgroundColor;
+        padding: @marketingPageHeaderPadding @marketingPanelLeftRightPadding (@marketingPageHeaderPadding * 2);
+
+        h1 {
+            color: @marketingPanelHeaderHeadingColor;
+            font-size: (@marketingHeading1 / 1.5);
+
+            // @aui-override to trump aui typography selector strength
+            &:first-child {
+                margin-top: 100px;
+            }
+
+            strong {
+                font-size: @marketingHeading1;
+            }
+        }
+
+        .skip-welcome {
+            margin-top: 40px;
+            color: @bodyTextColor;
+
+            a {
+                color: @bodyTextColor;
+                text-decoration: underline;
+            }
+        }
+
+        .marketing-panel-text {
+            width: (100% * (@marketingPanelHeaderTextContentWidth / @marketingPageInnerWidth)); // approx 390px @ 1280px window width
+
+            @media only screen and (max-width: (@marketingPageWidthWide - 1px) ) {
+                h1 {
+                    margin-top: 50px;
+                    font-size: (@marketingHeading1 * 0.5);
+
+                    strong {
+                        font-size: (@marketingHeading1 * 0.75);
+                    }
+                }
+            }
+        }
+    }
+
+
+    .marketing-panel-image {
+        background-size: 100% auto;
+        background-position: 50% 0%;
+        background-repeat: no-repeat;
+        border: 1px solid @dividerColor;
+        border-radius: @baseBorderRadius;
+        float: left;
+        width: (100% * (@marketingPanelImageContentWidth / @marketingPageInnerWidth)); // approx 680px @ 1280px window width
+
+        &:after {
+            content: '';
+            display: block;
+            height: 0;
+        }
+    }
+
+    .marketing-panel-text {
+        float: right;
+        width: (100% * (@marketingPanelTextContentWidth / @marketingPageInnerWidth)); // approx 350px @ 1280px window width
+
+        &.aui-item {
+            padding-left: @marketingPanelGutterSpacing;
+            padding-right: @marketingPanelGutterSpacing;
+        }
+    }
+
+    &.marketing-panel-wide {
+        text-align: center;
+
+        .marketing-panel-image {
+            margin: 100px auto 0 auto;
+            max-width: @marketingPageInnerWidth;
+            float: none;
+            width: 100%;
+        }
+    }
+
+    &.marketing-panel-swapped {
+        .marketing-panel-image {
+            float: right;
+        }
+
+        .marketing-panel-text {
+            float: left;
+        }
+    }
+
+    .marketing-panel-inner {
+        margin: 0 auto;
+
+        @media only screen and (min-width: @marketingPageWidthWide) {
+            max-width: (@marketingPageWidthWide - (@marketingPanelLeftRightPadding * 2));
+        }
+    }
+
+}
+
+.marketing-page-footer {
+    background-color: @marketingPanelFooterBackgroundColor;
+    box-sizing: border-box;
+    text-align: center;
+    padding: @marketingPageFooterPadding 0;
+
+    h2,
+    a,
+    p {
+        color: @invertedBodyTextColor;
+    }
+
+    h2 {
+        font-weight: bold;
+        font-size: 46px;
+        line-height: 54px;
+
+        + .aui-button.aui-button-subtle {
+            margin-top: (@marketingPanelGutterSpacing / 2);
+        }
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    p {
+        font-size: 18px;
+        line-height: 26px;
+    }
+
+    .aui-button.aui-button-subtle {
+        border: 1px solid @invertedBodyTextColor;
+        font-size: 22px;
+        color: @invertedBodyTextColor;
+        margin: 0 0 (@marketingPanelGutterSpacing / 2) 0;
+        text-shadow: none;
+        font-weight: bold;
+        padding: 4px 25px;
+        line-height: 40px;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            background: @invertedBodyTextColor;
+            border-color: @invertedBodyTextColor;
+            color: @marketingPanelFooterBackgroundColor;
+        }
+    }
+}
+
+.marketing-panel-get-started {
+    background-image: url(images/get-started_2x.png);
+
+    &:after {
+        padding-top: (768px / 1360px) * 99.7%; // 768px/1360px to get the aspect ratio (height / width of image)
+    }
+}
+
+.marketing-panel-birds-eye-view {
+    background-image: url(images/birds-eye-view_2x.png);
+
+    &:after {
+        padding-top: (896px / 2346px) * 99.9%; // aspect ratio (height / width of image) + fudge factor
+    }
+}
+
+.marketing-panel-develop-freely {
+    background-image: url(images/develop-freely_2x.png);
+
+    &:after {
+        padding-top: (822px / 1360px) * 99.69%; // aspect ratio (height / width of image) + fudge factor
+    }
+}
+
+.marketing-panel-feedback-in-context {
+    background-image: url(images/feedback-in-context_2x.png);
+
+    &:after {
+        padding-top: (822px / 1360px) * 99.69%; // aspect ratio (height / width of image) + fudge factor
+    }
+}
+
+.marketing-panel-link-to-jira {
+    background-image: url(images/link-to-jira_2x.png);
+
+    &:after {
+        padding-top: (822px / 1360px) * 99.69%; // aspect ratio (height / width of image) + fudge factor
+    }
+}

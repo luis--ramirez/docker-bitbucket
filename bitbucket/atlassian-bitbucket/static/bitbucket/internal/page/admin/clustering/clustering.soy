@@ -1,0 +1,127 @@
+{namespace bitbucket.internal.admin}
+
+/**
+ * @param isAvailable
+ * @param clusterInformation
+ * @param dcProductName
+ */
+{template .clustering}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.admin.clustering')}
+    {call bitbucket.internal.layout.admin}
+        {param activeTab: 'admin-settings-clustering'/}
+        {param content}
+            {if $isAvailable and $clusterInformation.running}
+                {call .pageHeader /}
+                {call .clusteringInfo}
+                    {param clusterInformation: $clusterInformation /}
+                {/call}
+            {elseif not $clusterInformation.running}
+                {call .pageHeader /}
+                {call .notRunning /}
+            {elseif not $isAvailable}
+                {call .dataCenterInfo}
+                    {param dcProductName: $dcProductName /}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ *
+ */
+{template .pageHeader}
+    {call aui.page.pageHeader}
+        {param content}
+            <h2>{getText('bitbucket.web.config.clustering')}</h2>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param clusterInformation
+ */
+{template .clusteringInfo}
+    <p class="clustering-header">
+        {getText('bitbucket.web.config.clustering.header.nodesare', productName())}{sp}
+        <a href="{bitbucket_help_url('bitbucket.help.clustering')}" target="_blank">{getText('bitbucket.web.config.clustering.header.nodesare.learnmore')}</a>
+    </p>
+    {call aui.table}
+        {param id: 'cluster-information-table'/}
+        {param extraClasses: 'cluster-information-table' /}
+        {param theadContent}
+            <tr>
+                <th id="cluster-node-id" scope="col">{getText('bitbucket.web.config.clustering.node.id')}</th>
+                <th id="cluster-node-name" scope="col">{getText('bitbucket.web.config.clustering.node.name')}</th>
+                <th id="cluster-node-address" scope="col">{getText('bitbucket.web.config.clustering.node.address')}</th>
+            </tr>
+        {/param}
+        {param content}
+            {foreach $node in $clusterInformation.nodes}
+                <tr id="{$node.id}"{if $node.local} class="cluster-local"{/if}>
+                    <td class="cluster-node-id" headers="cluster-node-id">
+                        <div class="cluster-status-icons">
+                            <div class="cluster-node"{if $node.local} title="{getText('bitbucket.web.config.clustering.node.status.local.tooltip')}"{/if}></div>
+                            <div class="cluster-node-link"></div>
+                        </div>
+                        {$node.id}
+                    </td>
+                    <td class="cluster-node-name" headers="cluster-node-name">{$node.name}</td>
+                    <td class="cluster-node-address" headers="cluster-node-address">{$node.address}</td>
+                </tr>
+            {/foreach}
+        {/param}
+    {/call}
+    <p class="clustering-footer">
+        {getText('bitbucket.web.config.clustering.footer.addnodes')}
+        <br>
+        <a href="{bitbucket_help_url('bitbucket.help.clustering.add.node')}" target="_blank">{getText('bitbucket.web.config.clustering.footer.addnodes.learnmore')}</a>
+    </p>
+    <script>
+        require('bitbucket/internal/page/admin/clustering').onReady('tr.cluster-local .cluster-node');
+    </script>
+{/template}
+
+/**
+ * @param dcProductName
+ */
+{template .dataCenterInfo}
+    <div id="data-center">
+        <div>
+            <div class="data-center-icon data-center-server-pair"></div>
+            <h1>{$dcProductName}</h1>
+            <p>{getText('bitbucket.web.config.clustering.unavailable.dc.description')}</p>
+        </div>
+        <div class="data-center-learn-more">
+            <a target="_blank" href="{bitbucket_help_url('bitbucket.wac.dc')}" class="aui-button aui-button-primary"><span>{getText('bitbucket.web.config.clustering.unavailable.dc.learnmore')}</span></a>
+        </div>
+        <div class="aui-group">
+            <div class="aui-item">
+                <div class="data-center-icon data-center-high-availability"></div>
+                <h3>{getText('bitbucket.web.config.clustering.unavailable.dc.highavailability')}</h3>
+                <p>{getText('bitbucket.web.config.clustering.unavailable.dc.highavailability.description')}</p>
+            </div>
+            <div class="aui-item">
+                <div class="data-center-icon data-center-high-performance-scale"></div>
+                <h3>{getText('bitbucket.web.config.clustering.unavailable.dc.performanceatscale')}</h3>
+                <p>{getText('bitbucket.web.config.clustering.unavailable.dc.performanceatscale.description')}</p>
+            </div>
+            <div class="aui-item">
+                <div class="data-center-icon data-center-instant-scale"></div>
+                <h3>{getText('bitbucket.web.config.clustering.unavailable.dc.instantscalability')}</h3>
+                <p>{getText('bitbucket.web.config.clustering.unavailable.dc.instantscalability.description')}</p>
+            </div>
+        </div>
+    </div>
+{/template}
+
+/**
+ *
+ */
+{template .notRunning}
+    {call aui.message.warning}
+        {param content}
+            {getText('bitbucket.web.config.clustering.notrunning')}
+        {/param}
+    {/call}
+{/template}

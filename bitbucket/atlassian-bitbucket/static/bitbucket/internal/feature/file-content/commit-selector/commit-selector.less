@@ -1,0 +1,131 @@
+@import "/static/global.less";
+
+@commit-selector-icon-size: 12px;
+
+.bitbucket-theme {
+
+    #inline-dialog-commit-selector {
+        #arrow-commit-selector {
+            display: none;
+        }
+
+        .contents {
+            margin-top: -11px; //mimic the look of a dropdown after the arrow is removed
+        }
+    }
+
+    #inline-dialog-until-commit .contents,
+    #inline-dialog-commit-selector .contents {
+        padding: 0;  //overrides aui's default 20px padding
+    }
+
+    .commit-selector {
+        .border-radius(@baseBorderRadius);
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 350px;
+
+        li.no-more-results {
+            background-color: transparent;
+            color: @secondaryTextColor;
+            cursor: default;
+            padding: @baseSpacing;
+        }
+
+        .spinner-container {
+            height: @baseSpacing;
+            padding-top: @doubleSpacing;
+        }
+
+        .commit-list-item {
+            &.focused,
+            &:focus,
+            &:hover {
+                background-color: @secondaryHighlight;
+            }
+            &.selected {
+                background-color: @primaryActiveColor;
+            }
+        }
+    }
+
+    .commit-selector-item-message {
+
+        height: 2 * @font-size-large + 2 * @baseSpacing;
+        box-sizing: border-box;
+
+        .user-avatar {
+            margin-right: @halfSpacing;
+            .square(@commit-selector-icon-size);
+
+            .aui-avatar-inner {
+                .square(@commit-selector-icon-size);
+            }
+        }
+
+        .commit-icon {
+            flex-shrink: 0;
+
+            &:before {
+                color: @descriptionTextColor;
+            }
+        }
+
+        .commit-selector-details {
+            line-height: @font-size-large;
+            margin-left: @baseSpacing;
+            overflow: hidden;
+
+            .commit-badge-oneline {
+                align-items: center;
+                color: @secondaryTextColor;
+                font-size: @font-size-small;
+                line-height: @font-size-small;
+                margin-top: 3px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%;
+
+                .user-avatar {
+                    align-self: auto;
+                }
+
+                .commit-author {
+                    font-weight: normal;
+                }
+
+                .commitid,
+                .commit-author,
+                .commit-message {
+                    color: @secondaryTextColor;
+                }
+
+                time {
+                    font-style: italic;
+                }
+            }
+
+            .commit-message {
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        &:focus,
+        &:hover {
+            background-color: @secondaryHighlight;
+            outline: 0;
+
+            .commit-selector-details {
+                time,
+                .commitid,
+                .commit-author,
+                .commit-badge-oneline {
+                    color: @bodyTextColor;
+                }
+            }
+        }
+    }
+}

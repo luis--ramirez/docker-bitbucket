@@ -1,0 +1,12 @@
+{namespace bitbucket.internal.feature.fileContent.codemirror}
+
+/**
+ * @param fixed
+ * @param isMac
+ */
+{template .scrollbar}
+    <div class="CodeMirror-hscrollbar{if $fixed} stash-scroll-fixed{/if}" cm-not-content="true"
+        {if $isMac}style="min-height: 18px"{/if}>
+        <div class="stash-scroll-inner"></div>
+    </div>
+{/template}

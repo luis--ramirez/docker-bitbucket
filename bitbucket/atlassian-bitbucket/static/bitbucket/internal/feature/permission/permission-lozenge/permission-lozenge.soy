@@ -1,0 +1,43 @@
+{namespace bitbucket.internal.feature.permission}
+
+/**
+ * @param? permission
+ */
+{template .lozenge}
+    {switch $permission}
+        {case 'SYS_ADMIN'}
+            {call bitbucket.internal.widget.lozenge.lozenge}
+                {param htmlElement: 'span' /}
+                {param extraClasses: 'permission-lozenge sys-admin' /}
+                {param text: getText('bitbucket.web.permission.lozenge.sysadmin') /}
+                {param tooltip: getText('bitbucket.service.permission.sys.admin.name') /}
+            {/call}
+        {case 'ADMIN'}
+            {call bitbucket.internal.widget.lozenge.lozenge}
+                {param htmlElement: 'span' /}
+                {param extraClasses: 'permission-lozenge admin' /}
+                {param text: getText('bitbucket.web.permission.lozenge.admin') /}
+                {param tooltip: getText('bitbucket.service.permission.admin.name') /}
+            {/call}
+        {case 'PROJECT_CREATE'}
+            {call bitbucket.internal.widget.lozenge.lozenge}
+                {param htmlElement: 'span' /}
+                {param extraClasses: 'permission-lozenge project-create' /}
+                {param text: getText('bitbucket.service.permission.project.create.name') /}
+            {/call}
+        {case 'LICENSED_USER'}
+            {call bitbucket.internal.widget.lozenge.lozenge}
+                {param htmlElement: 'span' /}
+                {param extraClasses: 'permission-lozenge licensed-user' /}
+                {{param text: getText('bitbucket.service.permission.licensed.user.name', productName()) /}}
+                {{param tooltip: getText('bitbucket.web.global.permission.lozenge.stashuser.tooltip', $ij.instanceName) /}}
+            {/call}
+        {default}
+            {call bitbucket.internal.widget.lozenge.lozenge}
+                {param htmlElement: 'span' /}
+                {param extraClasses: 'permission-lozenge unlicensed' /}
+                {param text: getText('bitbucket.web.permission.lozenge.unlicensed') /}
+                {{param tooltip: getText('bitbucket.web.global.permission.lozenge.unlicensed.tooltip', $ij.instanceName) /}}
+            {/call}
+    {/switch}
+{/template}

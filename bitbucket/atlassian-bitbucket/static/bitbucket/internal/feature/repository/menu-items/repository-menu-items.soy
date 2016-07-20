@@ -1,0 +1,22 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param repos
+ * @param? extraClasses
+ * @param? projectHighlightText
+ * @param? repositoryHighlightText
+ */
+{template .menuItems}
+    {foreach $repo in $repos}
+        <li class="repository-item repository-menu-item{if $extraClasses} {$extraClasses}{/if}">
+            <a data-proj-key="{$repo.project.key}" data-repo-slug="{$repo.slug}" data-repo-id="{$repo.id}" href="{nav_repo_browse($repo.project.key, $repo.slug)}"
+                    title="{{getText('bitbucket.web.widget.repositorymenuitems.tooltip', $repo.name, $repo.project.name)}}">
+                {call .repositoryItemContent}
+                    {param repository: $repo /}
+                    {param projectNameContent: highlight($repo.project.name, $projectHighlightText, 'i') /}
+                    {param repositoryNameContent: highlight($repo.name, $repositoryHighlightText, 'i') /}
+                {/call}
+            </a>
+        </li>
+    {/foreach}
+{/template}

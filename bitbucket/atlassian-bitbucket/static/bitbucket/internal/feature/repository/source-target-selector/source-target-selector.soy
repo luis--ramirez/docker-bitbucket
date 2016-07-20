@@ -1,0 +1,172 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? isHorizontal
+ * @param? sourceTitle
+ * @param sourceRepository
+ * @param? sourceBranch
+ * @param sourceHeadCommit
+ * @param? sourceRepositoryFieldName
+ * @param? sourceBranchFieldName
+ * @param? targetTitle
+ * @param targetRepository
+ * @param targetBranch
+ * @param targetHeadCommit
+ * @param? targetRepositoryFieldName
+ * @param? targetBranchFieldName
+ **/
+{template .sourceTargetSelector}
+    {call .sourceTargetLayout}
+        {param id: $id /}
+        {param isHorizontal: $isHorizontal /}
+        {param extraClasses: 'source-target-selector ' + ($extraClasses ? $extraClasses : '') /}
+        {param sourceBranchItem}
+            {call .branchItem}
+                {param header: $sourceTitle /}
+                {param context: 'source' /}
+                {param serverContextName: 'from' /}
+                {param repository: $sourceRepository /}
+                {param branch: $sourceBranch ? hydrate_ref_from_id($sourceBranch, null, null, $sourceHeadCommit.id) : null /}
+                {param headCommit: $sourceHeadCommit /}
+                {param autofocusRepoSelector: true /}
+                {param repositoryFieldName: $sourceRepositoryFieldName /}
+                {param branchFieldName: $sourceBranchFieldName /}
+                {param branchSelectorActionsContent}
+                    {call .branchSwapButton /}
+                {/param}
+            {/call}
+        {/param}
+        {param targetBranchItem}
+            {call .branchItem}
+                {param header: $targetTitle /}
+                {param context: 'target' /}
+                {param serverContextName: 'to' /}
+                {param repository: $targetRepository /}
+                {param branch: $targetBranch ? hydrate_ref_from_id($targetBranch, null, null, $targetHeadCommit.id) : null /}
+                {param headCommit: $targetHeadCommit /}
+                {param repositoryFieldName: $targetRepositoryFieldName /}
+                {param branchFieldName: $targetBranchFieldName /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? isHorizontal
+ * @param sourceBranchItem
+ * @param targetBranchItem
+ */
+{template .sourceTargetLayout private="true"}
+    {if $isHorizontal == false}
+        <div{if $id}{sp}id="{$id}"{/if} class="vertical-layout{if $extraClasses}{sp}{$extraClasses}{/if}">
+            {$sourceBranchItem|noAutoescape}
+            {$targetBranchItem|noAutoescape}
+        </div>
+    {else}
+        {call widget.aui.group.group}
+            {param id: $id /}
+            {param extraClasses: 'horizontal-layout ' + ($extraClasses ? $extraClasses : '') /}
+            {param content}
+                {call widget.aui.group.item}
+                    {param content}
+                        {$sourceBranchItem|noAutoescape}
+                    {/param}
+                {/call}
+                {call widget.aui.group.item}
+                    {param extraClasses: 'icon-right-arrow'/}
+                    {param content}
+                        {call aui.icons.icon}
+                            {param useIconFont: true /}
+                            {param iconFontSet: 'devtools' /}
+                            {param icon: 'arrow-right' /}
+                        {/call}
+                    {/param}
+                {/call}
+                {call widget.aui.group.item}
+                    {param content}
+                        {$targetBranchItem|noAutoescape}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param? header
+ * @param context
+ * @param serverContextName fields on server use from and to instead of source and target
+ * @param repository
+ * @param branch
+ * @param? headCommit
+ * @param? autofocusRepoSelector
+ * @param? repositoryFieldName
+ * @param? branchFieldName
+ * @param? branchSelectorActionsContent
+ */
+{template .branchItem private="true"}
+    {call .featureBox}
+        {param context: $context + '-selector' /}
+        {param header: $header /}
+        {param content}
+            {call bitbucket.internal.feature.repository.relatedRepositorySelectorTriggerWithField}
+                {param id: $context + 'Repo' /}
+                {param extraClasses: $context + 'Repo' /}
+                {param fieldName: $repositoryFieldName ? $repositoryFieldName : $serverContextName + 'RepoId' /}
+                {param repository: $repository /}
+                {param autofocus: $autofocusRepoSelector /}
+            {/call}
+            {call bitbucket.internal.feature.repository.branchSelectorTriggerWithField}
+                {param id: $context + 'Branch' /}
+                {param extraClasses: $context + 'Branch' /}
+                {param fieldName: $branchFieldName ? $branchFieldName : $serverContextName + 'Branch' /}
+                {param ref: $branch /}
+            {/call}
+            <div class='commit-badge-detailed'>
+                {if $headCommit}
+                    {call bitbucket.internal.feature.commit.commitBadge.oneline}
+                        {param commit: $headCommit /}
+                        {param linkAuthor: false /}
+                        {param repository: $repository /}
+                    {/call}
+                {/if}
+            </div>
+            {if $branchSelectorActionsContent}
+                {$branchSelectorActionsContent|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ */
+{template .branchSwapButton private="true"}
+    {call aui.buttons.button}
+        {param extraClasses: 'aui-button-subtle aui-button-compact swap-button' /}
+        {param extraAttributes: ['title': getText('bitbucket.web.branch.selector.swap')] /}
+        // @aui-overide restore these when ADG-813 is resolved
+        // {param iconClass: 'aui-icon-small aui-iconfont-swap' /}
+        // {param iconText: getText('bitbucket.web.branch.selector.swap') /}
+        // {param iconType: 'aui' /}
+        {param text: '' /}
+        {param extraAttributes: ['type': 'button'] /}
+    {/call}
+{/template}
+
+/**
+ * @param? header
+ * @param context
+ * @param content
+ */
+{template .featureBox private="true"}
+<div class="feature-box {$context}">
+    {if $header}
+        <h2>{$header}</h2>
+    {/if}
+    <div>{$content|noAutoescape}</div>
+</div>
+{/template}

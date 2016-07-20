@@ -1,0 +1,26 @@
+{namespace bitbucket.decorators.pullrequest}
+
+/**
+ * @param title The window title
+ * @param repository repository object
+ * @param pullRequest pullRequest object
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param? dataAttributes
+ * @param maxChanges
+ * @param mergeTimeout
+ */
+{template .view}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.pullRequest.view')}
+    {call bitbucket.internal.v2.layout.pullRequest}
+        {param windowTitle : $title /}
+        {param repository: $repository /}
+        {param pullRequest: $pullRequest /}
+        {param activeTab: $properties['meta.activeTab'] /}
+        {param content: $body /}
+        {param dataAttributes: $dataAttributes /}
+        {param maxChanges : $maxChanges /}
+        {param mergeTimeout: $mergeTimeout /}
+        {param hasRepoWrite: hasRepoWrite($repository) /}
+    {/call}
+{/template}

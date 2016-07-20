@@ -1,0 +1,19 @@
+@import "/static/global.less";
+
+/* @aui-override AUI Dialog with Red headers for errors and confirmation of destructive actions */
+.aui-dialog {
+    h2.dialog-title.warning-header,
+    h2.dialog-title.error-header {
+        background-color: @dialogErrorHeaderColor;
+        color: @invertedBodyTextColor;
+    }
+
+    .dialog-button-panel.disabled .button-panel-link {
+        color: #D0D0D0;
+
+        &:hover {
+            text-decoration: none;
+            cursor: default;
+        }
+    }
+}

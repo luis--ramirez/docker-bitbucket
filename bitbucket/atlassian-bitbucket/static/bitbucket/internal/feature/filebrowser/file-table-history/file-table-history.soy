@@ -1,0 +1,20 @@
+{namespace bitbucket.internal.widget.filetablehistory}
+
+/**
+ * @param? commit
+ * @param? fileUrl
+ */
+{template .row}
+    <td class="directory-file-history message hide">
+        {if $commit}
+            <a href="{$fileUrl}" class="commit-preview-trigger" data-commit-id="{$commit.id}" data-commit-message="{$commit.message|escapeHtml}">{$commit.shortMessage|escapeHtml}</a>
+        {/if}
+    </td>
+    <td class="directory-file-history timestamp hide">
+        {if $commit}
+            {call bitbucket.internal.widget.date.shortAge}
+                {param date: $commit.authorTimestamp /}
+            {/call}
+        {/if}
+    </td>
+{/template}

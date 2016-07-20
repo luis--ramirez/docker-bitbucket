@@ -1,0 +1,165 @@
+{namespace bitbucket.internal.component.search}
+
+/**
+ * @param? searchUrl
+ * @param? query
+ */
+{template .emptyState}
+<form id="search-form" class="aui top-label unsectioned search-form" method="GET" action="{if $searchUrl}{$searchUrl}{/if}">
+    <div class="field-group search-query-container">
+        <span class="aui-icon aui-icon-small aui-iconfont-search"></span>
+        <input type="text" name="q" class="text search-query full-width-field"
+            title="{getText('bitbucket.search.placeholder')}"
+            placeholder="{getText('bitbucket.search.placeholder')}"
+            value="{if $query}{$query}{/if}">
+    </div>
+    <div class="search-query-after"></div>
+</form>
+<div class="search-results"></div>
+{/template}
+
+/**
+ */
+{template .main}
+    <div class="search">
+        <table class="search-results">
+        </table>
+    </div>
+{/template}
+
+/**
+ */
+{template .querySubstituted}
+    <p class="query-substituted">{getText('bitbucket.search.badquery.substituted')}</p>
+{/template}
+
+/**
+ * @param totalMatches
+ * @param totalResults
+ * @param loadedResults
+ * @param scope
+ */
+{template .codeResults}
+    <div class="code-search-results primary-results-container{if $totalMatches == 0} no-results{/if}">
+        {if $totalMatches > 0}
+            <h3 class="result-summary">{getTextAsHtml('bitbucket.search.summary.results.html', $totalMatches)}</h3>
+        {/if}
+        {if $scope.project or $scope.owner}
+            <div class="results-scope">
+                {let $escapedTitle}
+                    {if $scope.owner}
+                        {$scope.owner.name}
+                    {/if}
+                    {if $scope.project}
+                        {if $scope.owner}
+                            {sp}/
+                        {/if}
+                        {$scope.project.name}
+                    {/if}
+                    {if $scope.repository}
+                        {sp}/ {$scope.repository.name}
+                    {/if}
+                {/let}
+                <a href="{$scope.repository ?
+                        nav_repo_browse($scope.repository.project, $scope.repository) :
+                        nav_project($scope.project)}">
+                     {if $scope.project}
+                        {call bitbucket.internal.component.avatars.projectAvatar}
+                            {param size: 'large' /}
+                            {param extraClasses: 'code-search-scope-avatar' /}
+                            {param project: $scope.project /}
+                            {param title : $escapedTitle /}
+                        {/call}
+                    {/if}
+                </a>
+                <div class="search-scope-text">
+                    <h3 class="code-search-scope-title">{$escapedTitle|noAutoescape}</h3>
+                    <button class="code-search-everwhere-link aui-button aui-button-link">{getText('bitbucket.search.scope.everywhere')}</button>
+                </div>
+            </div>
+        {/if}
+        <ul class="primary-results">
+        </ul>
+        {if $totalResults > 0 and $loadedResults < $totalResults}
+            <div class="result-load-progress">
+                {call .resultLoadProgress}
+                    {param loaded: $loadedResults /}
+                    {param total: $totalResults /}
+                 {/call}
+             </div>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param loaded number of results already loaded
+ * @param total number of results that can be loaded
+ */
+{template .resultLoadProgress}
+    <p>{getText('bitbucket.search.result.progress', $loaded, $total)}</p>
+{/template}
+
+/**
+*/
+{template .searching}
+<div class='code-search-searching'>
+    <div class='spin-container'></div>
+    <p>{getText('bitbucket.search.searching')}</p>
+</div>
+{/template}
+
+/**
+ * @param resultContent
+ */
+{template .secondaryResults}
+<div class="secondary-results-container loaded">{$resultContent|noAutoescape}</div>
+{/template}
+
+/**
+ * @param query
+ * @param? includeAdvancedHelp
+ */
+{template .noResults}
+    <div class="code-search-no-results">
+        <div class="main">
+            <h2>{getText('bitbucket.search.noresults.heading.html')}<br><strong>{$query}</strong></h2>
+            <p>{getText('bitbucket.search.noresults.refine')}</p>
+        </div>
+        {if $includeAdvancedHelp}
+        <div class="advanced">
+            <h2><span class="aui-icon aui-icon-small aui-iconfont-info"></span>{getText('bitbucket.search.noresults.filter.heading')}</h2>
+            <p>{getTextAsHtml('bitbucket.search.noresults.modifiers.html')}</p>
+            <p>{getTextAsHtml('bitbucket.search.noresults.learnmore.html', bitbucket_help_url('help.search.guide'))}</p>
+        </div>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param query
+ * @param reason
+ */
+{template .badQuery}
+    <div class="code-search-error code-search-bad-query">
+        <h2>{getText('bitbucket.search.badquery.heading', $query)}</h2>
+        <p>{$reason}</p>
+        <p>{getTextAsHtml('bitbucket.search.badquery.body.html', bitbucket_help_url('help.search.query'))}</p>
+    </div>
+{/template}
+
+/**
+ */
+{template .serverError}
+    <div class="code-search-error code-search-server-error">
+        <h2>{getText('bitbucket.search.servererror.heading')}</h2>
+        <p>{getTextAsHtml('bitbucket.search.servererror.detail.html', bitbucket_help_url('help.search.troubleshoot'))}</p>
+    </div>
+{/template}
+
+/**
+ * @param loaded
+ */
+{template .allResults}
+    <span class="aui-icon aui-icon-large aui-iconfont-success">{getText('bitbucket.search.result.all.loaded')}</span>
+    <p>{getText('bitbucket.search.result.progress', $loaded, $loaded)}</p>
+{/template}

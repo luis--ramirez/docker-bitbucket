@@ -1,0 +1,33 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param repository
+ * @param sourceRepository
+ * @param? sourceBranch
+ * @param? targetBranch
+ * @param? title
+ * @param? description
+ * @param? fieldErrors
+ * @param? pluginFieldsContent
+ */
+{template .create}
+    {{let $branchesAreIdentical:  $sourceRepository.id == $repository.id and $sourceBranch.id == $targetBranch.id/}}
+    {call bitbucket.internal.feature.pullRequest.detailsForm data="all" /}
+    {call aui.form.buttons}
+        {param content}
+            {call aui.form.submit}
+                {param id: 'submit-form' /}
+                {param type: 'primary' /}
+                {param text: getText('bitbucket.web.button.pull-request.create.simple') /}
+                {param isDisabled: $branchesAreIdentical /}
+            {/call}
+            {call aui.buttons.button}
+                {param type: 'link' /}
+                {param extraAttributes: ['type': 'button'] /} // specify this so it doesn't turn into a submit button
+                {param extraClasses: 'show-hide-button' /}
+                {param id: 'cancel-button' /}
+                {param text: getText('bitbucket.web.button.pull-request.cancel') /}
+            {/call}
+        {/param}
+    {/call}
+{/template}

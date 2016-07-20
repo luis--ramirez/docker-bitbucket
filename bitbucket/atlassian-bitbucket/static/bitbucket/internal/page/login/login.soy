@@ -1,0 +1,207 @@
+{namespace bitbucket.internal.auth}
+
+/**
+ * @param allowSignUp
+ * @param showCaptcha
+ * @param showRememberMe
+ * @param? nextUrl
+ * @param? error
+ * @param? lastUsername
+ * @param? permission
+ * @param? warning
+ * @param? wasSuccessfulSignedUp
+ */
+{template .login}
+{webResourceManager_requireResourcesForContext('bitbucket.page.login')}
+{call bitbucket.internal.layout.focused}
+    {{param windowTitle: getText('bitbucket.web.login.title') /}}
+    {param hideProfile: true /}
+    {param bodyClass: 'user-login'/}
+    {param focusedPageSize: 'small' /}
+    {{param contentTitle: getText('bitbucket.web.login.header') /}}
+    {param content}
+        {call .loginPageHeaders data="all" /}
+        {if $wasSuccessfulSignedUp}
+            {call aui.message.success}
+                {param extraClasses: 'successful-signup'/}
+                {param content}
+                    {getText('bitbucket.web.signup.success')}
+                {/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.form}
+            {param action}{nav_security_check()}{/param}
+            {param isTopLabels: true /}
+            {param content}
+                {call widget.aui.form.text}
+                    {param id: 'j_username' /}
+                    {param accessKey: 'u'/}
+                    {param autofocus: $lastUsername ? false : true /}
+                    {param labelContent}{getText('bitbucket.web.login.username.html')}{/param}
+                    {param initialValue: $lastUsername /}
+                    {param sizeClass: 'long' /}
+                {/call}
+                {call widget.aui.form.password}
+                    {param id: 'j_password' /}
+                    {param autofocus: $lastUsername ? true : false /}
+                    {param accessKey: 'p'/}
+                    {param labelContent}{getText('bitbucket.web.login.password.html')}{/param}
+                    {param sizeClass: 'long' /}
+                {/call}
+                {if $showCaptcha}
+                    {call bitbucket.internal.widget.captcha.field}
+                        {param required: false /}
+                        {param labelContent}{getText('bitbucket.web.signup.captcha.html')}{/param}
+                        {param description: getText('bitbucket.web.signup.captcha') /}
+                    {/call}
+                    {call bitbucket.internal.widget.captcha.container /}
+                {/if}
+                <div class="aui-group">
+                    {if $showRememberMe}
+                        {call widget.aui.form.checkbox}
+                            {param id: '_atl_remember_me' /}
+                            {param accessKey: 'r' /}
+                            {param labelContent}{getText('bitbucket.web.login.remember.me.html')}{/param}
+                            {param checked: true /}
+                        {/call}
+                    {/if}
+                </div>
+                <div class="aui-group">
+                    {call .loginPageHiddenParams data="all" /}
+                    {call widget.aui.form.submit}
+                        {param id: 'submit' /}
+                        {param accessKey: 's' /}
+                        {param isPrimary: true /}
+                        {param label: getText('bitbucket.web.login.submit') /}
+                    {/call}
+                    {call widget.aui.form.linkButton}
+                        {param id: 'forgot' /}
+                        {param href: nav_password_reset() /}
+                        {param text: getText('bitbucket.web.login.forgot') /}
+                    {/call}
+                </div>
+                {if $allowSignUp}
+                    <div class="aui-group">
+                        {call widget.aui.form.description}
+                            {param content}
+                                {{getTextAsHtml('bitbucket.web.login.signup.html', nav_signup())}}
+                            {/param}
+                        {/call}
+                    </div>
+                {/if}
+
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script type="text/javascript">
+            require('bitbucket/internal/page/login').onReady();
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * @param showCaptcha
+ * @param? nextUrl
+ * @param? error
+ * @param? lastUsername
+ * @param? permission
+ * @param? warning
+ * @param? helpText
+ */
+{template .loginEmbedded}
+{webResourceManager_requireResourcesForContext('bitbucket.page.login')}
+{call bitbucket.internal.layout.chromeless}
+    {{param windowTitle: getText('bitbucket.web.login.title') /}}
+    {param bodyClass: 'user-login user-login-embedded'/}
+    {param content}
+        {call .loginPageHeaders data="all" /}
+        {call bitbucket.internal.widget.form}
+            {param action}{nav_security_check()}{/param}
+            {param content}
+                {call widget.aui.form.text}
+                    {param id: 'j_username' /}
+                    {param accessKey: 'u'/}
+                    {param autofocus: $lastUsername ? false : true /}
+                    {param labelContent}{getText('bitbucket.web.login.username.html')}{/param}
+                    {param initialValue: $lastUsername /}
+                {/call}
+                {call widget.aui.form.password}
+                    {param id: 'j_password' /}
+                    {param autofocus: $lastUsername ? true : false /}
+                    {param accessKey: 'p'/}
+                    {param labelContent}{getText('bitbucket.web.login.password.html')}{/param}
+                {/call}
+                {if $showCaptcha}
+                    {call bitbucket.internal.widget.captcha.field}
+                        {param required: false /}
+                        {param labelContent}{getText('bitbucket.web.signup.captcha.html')}{/param}
+                        {param description: getText('bitbucket.web.signup.captcha') /}
+                    {/call}
+                    {call bitbucket.internal.widget.captcha.container /}
+                {/if}
+                <input name="embedded" type="hidden" value="true"/>
+                {call .loginPageHiddenParams data="all" /}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param accessKey: 's' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.login.submit') /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script type="text/javascript">
+            require('bitbucket/internal/page/login').onReady();
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * @param? error
+ * @param? warning
+ * @param? helpText
+ */
+{template .loginPageHeaders private="true"}
+    {if $error}
+        {call aui.message.error}
+            {param content}
+                {$error}
+            {/param}
+        {/call}
+    {/if}
+    {if $warning}
+        {call aui.message.warning}
+            {param content}{$warning}{/param}
+        {/call}
+    {/if}
+    {if $helpText}
+        // TODO AUI Help styles are currently broken due to https://ecosystem.atlassian.net/browse/DP-266
+        // check that this is rendered correctly when we update to AUI 5.7 final
+        <div class="aui-help aui-help-text">
+            <div class="aui-help-content">
+                {$helpText}
+            </div>
+        </div>
+    {/if}
+{/template}
+
+/**
+ * @param? nextUrl
+ * @param? permission
+ */
+{template .loginPageHiddenParams private="true"}
+    {if $nextUrl}
+        <input name="next" type="hidden" value="{$nextUrl}"/>
+    {/if}
+    {if $permission}
+        <input name="permission" type="hidden" value="{$permission}"/>
+    {/if}
+{/template}

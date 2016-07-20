@@ -1,0 +1,13 @@
+{namespace bitbucket.web.repository}
+
+/**
+ */
+{template .gettingStartedInfo}
+<a target="_blank" href="{bitbucket_help_url('bitbucket.wac.git.clone')}">{getText('bitbucket.web.repository.clone.learn.more')}</a>
+{/template}
+
+/**
+ */
+{template .readOnlyInfo}
+{{getText('bitbucket.web.repository.readonly.tooltip', '<strong>', '</strong>')|noAutoescape}}
+{/template}

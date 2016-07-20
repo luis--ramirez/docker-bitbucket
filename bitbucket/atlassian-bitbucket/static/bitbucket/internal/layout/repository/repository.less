@@ -1,0 +1,197 @@
+@import "/static/global.less";
+
+.aui-page-header-main {
+
+    .repository-badges {
+        display: inline-block;
+        padding: 0;
+        margin: 0 0 0 @baseSpacing;
+        list-style: none;
+
+        .repository-badge {
+            margin-left: @halfSpacing;
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            .badge {
+                .circle(@icon-size-xxsmall);
+                background-size: @icon-size-xxsmall @icon-size-xxsmall;
+                vertical-align: top;
+
+                &.repository-read-only {
+                    background-image: url('icons/icon-readonly-lock.png');
+                    background-color: #979797;
+                }
+            }
+        }
+    }
+
+    .fork-origin {
+        color: @placeholderTextColor;
+        white-space: nowrap;
+        margin-top: @halfSpacing;
+        margin-bottom: @halfSpacing;
+        margin-left: -(@auiIconSmall + @halfSpacing);
+        padding-left: (@auiIconSmall + @halfSpacing);
+
+        a {
+            .text-overflow();
+            color: @placeholderTextColor;
+            display: inline-block;
+            max-width: 100%;
+            vertical-align: bottom;
+        }
+
+        .aui-icon {
+            margin-right: @baseSpacing;
+            margin-left: -(@auiIconSmall + @baseSpacing);
+        }
+    }
+}
+
+.aui-page-header-actions {
+
+    > li > a,
+    > li > span {
+        margin-left: 5px;
+    }
+
+    > li > a,
+    > li > div,
+    > li > span {
+        vertical-align: top;
+    }
+
+    .aui-button > .aui-icon {
+        margin-right: @baseSpacing;
+        color: @secondaryTextColor;
+    }
+
+    .clone-repo:after {
+        .dropdown-arrow();
+        content: "";
+        vertical-align: middle;
+        margin-left: @halfSpacing;
+    }
+
+} // .aui-page-header-actions
+
+.aui-button.repository-protocol {
+    .border-top-right-radius(0);
+    .border-bottom-right-radius(0);
+}
+
+#repo-clone-dialog {
+
+    @cloneUrlDialogWidth: 360px;
+    @cloneUrlDialogPadding: @baseSpacing + @halfSpacing;
+
+    @defaultCloneProtocolSelectorWidth: 60px;
+    // wider to accommodate dropdown arrow icon
+    @defaultCloneProtocolDropdownSelectorWidth: @defaultCloneProtocolSelectorWidth + @dropdown-arrow-width + @halfSpacing;
+
+    // @aui-override
+    .aui-inline-dialog-contents {
+        padding: 0; // override AUI inline dialog default
+        width: @cloneUrlDialogWidth
+    }
+
+    .clone-prompts {
+        p {
+            padding: @cloneUrlDialogPadding;
+        }
+    }
+
+    .clone-url {
+        padding: @cloneUrlDialogPadding;
+
+        .aui-button,
+        input {
+            float: left;
+            display: block;
+        }
+
+        .aui-button {
+            width: @defaultCloneProtocolSelectorWidth;
+        }
+
+        input {
+            .border-radius(0 3.01px 3.01px 0);
+            padding: 0 @halfSpacing;
+            border-left: none;
+            max-width: none;
+            width: @cloneUrlDialogWidth - (2 * @cloneUrlDialogPadding) - @defaultCloneProtocolSelectorWidth;
+            height: @auiButtonHeight;
+            font-size: @font-size-small;
+            font-family: monospace;
+        }
+
+        .aui-dropdown2-trigger {
+            width: @defaultCloneProtocolDropdownSelectorWidth;
+
+            ~ input {
+                width: @cloneUrlDialogWidth - (2 * @cloneUrlDialogPadding) - @defaultCloneProtocolDropdownSelectorWidth;
+            }
+        }
+    }
+}
+
+// @aui-override for 'disabled' button when there's only one option for the repo clone URL
+.repository-protocol[disabled],
+.repository-protocol[disabled]:hover,
+.repository-protocol[disabled]:focus,
+.repository-protocol[disabled]:active,
+.repository-protocol[aria-disabled="true"],
+.repository-protocol[aria-disabled="true"]:hover,
+.repository-protocol[aria-disabled="true"]:focus,
+.repository-protocol[aria-disabled="true"]:active,
+.repository-protocol[aria-disabled="true"][aria-pressed] {
+    color: @bodyTextColor;
+    text-shadow: 0 1px 0 #fff;
+}
+// end @aui-override
+
+#content {
+    // only do this for the main page header actions div, and not those inside the aui-page-panel
+    > .aui-page-header .aui-page-header-actions {
+        white-space: nowrap;
+    }
+}
+
+// tweak the AUI sidebar styles so that the project and repo name tooltip is left aligned, and has the new tooltip
+// "description" style. remove the @aui-override (the `b` element selector styles) when implemented in AUI
+.aui-sidebar-section-tooltip {
+    @bitbucket-tooltip-description-color: #ccc;
+
+    .tipsy-inner {
+        @tooltip-arrow-width: 4px;
+
+        .text-overflow();
+        max-width: @baseLayoutMinWidth - (@aui-sidebar-collapsed-width + (@doubleSpacing * 2) + @tooltip-arrow-width);
+        text-align: left;
+
+        b {
+            color: @bitbucket-tooltip-description-color;
+            display: block;
+            font-weight: normal;
+        }
+    }
+}
+
+.repository-breadcrumbs {
+    .flex-container();
+    margin-bottom: @baseSpacing;
+
+    li {
+        .text-overflow();
+        .align-items(baseline);
+        float: none;
+        min-width: 2em; // flexbox defaults to the width of the content, which overflows out of the container. This is the workaround to make it shrink and enable truncation to work
+    }
+}
+
+.aui-sidebar[aria-expanded="true"] #clone-dialog-collapsed-trigger {
+    position: relative;
+}

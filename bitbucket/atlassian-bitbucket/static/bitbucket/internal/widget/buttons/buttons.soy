@@ -1,0 +1,184 @@
+{namespace bitbucket.internal.buttons}
+
+/**
+ * Button wrapper to create grouped buttons
+ * @param content One or more aui-button elements. Must not contain anything else.
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ **/
+{template .buttons}
+    {call aui.buttons.buttons}
+        {param id: $id /}
+        {param content: $content /}
+        {param extraClasses: $extraClasses /}
+        {param extraAttributes: $extraAttributes /}
+    {/call}
+{/template}
+
+/**
+ * @param buttonText
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? href
+ * @param? tagName
+ * @param? title
+ * @param? type
+ * @param? isPrimary
+ * @param? isDisabled
+ * @param? isPressed
+ * @param? iconType Options: "aui" or "custom". Adds a SPAN (type:custom) or a SPAN.aui-icon (type:aui) to A and BUTTON elements. Not supported for INPUT.
+ * @param? iconText String for assistive/hidden/alternative text for icons.
+ * @param? iconClass String added to the class attribute of the icon span. Used to set extra icon class.
+ * @param? hasLabel
+ */
+{template .button}
+    {call aui.buttons.button}
+        {param tagName: $tagName ? $tagName : ($href ? 'a' : null) /}
+        {param id: $id /}
+        {param type: $isPrimary ? 'primary' : $type /}
+        {param isDisabled: $isDisabled /}
+        {param isPressed: $isPressed /}
+        {param text: $buttonText /}
+        {param iconType: $iconType /}
+        {param iconText: $iconText /}
+        {param iconClass: $iconClass /}
+        {param extraClasses : $extraClasses /}
+        {param extraAttributes}
+            {call aui.renderExtraAttributes}{param extraAttributes: $extraAttributes /}{/call}
+            {if $href} href="{$href}"{/if}
+            {if $title} title="{$title}"{/if}
+            // @aui-override https://ecosystem.atlassian.net/browse/AUI-1398
+            // Firefox likes to maintain the disabled state of a button on page refresh. autocomplete="off" stops this.
+            {sp}autocomplete="off"
+        {/param}
+        {param hasLabel: $hasLabel/}
+    {/call}
+{/template}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? href
+ * @param? size
+ * @param? title
+ */
+{template .deleteButton}
+    <a href="{$href ? $href : '#'}"
+        {sp}class="delete-button{if $extraClasses} {$extraClasses}{/if}"
+        {if $id} id="{$id}"{/if}
+        {if $title} title="{$title}"{/if}
+        {if $extraAttributes}
+            {call aui.renderExtraAttributes}
+                {param extraAttributes: $extraAttributes /}
+            {/call}
+        {/if}>
+        {call aui.icons.icon}
+            {param icon: 'remove' /}
+            {param size: $size /}
+            {param useIconFont: true /}
+        {/call}
+    </a>
+{/template}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? href
+ * @param? title
+ */
+{template .editButton}
+    <a href="{$href ? $href : '#'}"
+        {sp}class="edit-button{if $extraClasses} {$extraClasses}{/if}"
+        {if $id} id="{$id}"{/if}
+        {if $title} title="{$title}"{/if}
+        {if $extraAttributes}
+            {call aui.renderExtraAttributes}
+                {param extraAttributes: $extraAttributes /}
+            {/call}
+        {/if}>
+        {call aui.icons.icon}
+            {param icon: 'edit' /}
+            {param useIconFont: true /}
+        {/call}
+    </a>
+{/template}
+
+/**
+ * Renders a pair of buttons representing a 'switch' with on and off mode. The 'off' button will have
+ * a `switch-mode-off` and the 'on' button a `switch-mode-on` class.
+ *
+ * @param isOn whether the switch is currently on, this will affect the pressed state of the rendered buttons
+ * @param? id optional ID of the switch container
+ * @param? onId optional ID of the 'on' button
+ * @param? offId optional ID of the 'off' button
+ * @param? extraClasses extra CSS classes for the switch container
+ * @param? onExtraClasses extra CSS classes for the 'on' button
+ * @param? offExtraClasses extra CSS classes for the 'off' button
+ * @param? onExtraAttributes extra attributes for the 'on' button
+ * @param? offExtraAttributes extra attributes for the 'off' button
+ * @param? onText
+ * @param? offText
+ * @param? onTitle
+ * @param? offTitle
+ */
+{template .switchButtons}
+    {call bitbucket.internal.buttons.buttons}
+        {param id: $id /}
+        {param extraClasses}
+            switch
+            {call aui.renderExtraClasses}
+                {param extraClasses: $extraClasses /}
+            {/call}
+        {/param}
+        {param content}
+            {call bitbucket.internal.buttons.button}
+                {param id: $offId /}
+                {param extraClasses}
+                    switch-mode-off
+                    {call aui.renderExtraClasses}
+                         {param extraClasses: $offExtraClasses /}
+                    {/call}
+                {/param}
+                {param extraAttributes: $offExtraAttributes /}
+                {param isPressed: not $isOn /}
+                {param buttonText: $offText /}
+                {param title: $offTitle /}
+            {/call}
+            {call bitbucket.internal.buttons.button}
+                {param id: $onId /}
+                {param extraClasses}
+                    switch-mode-on{sp}
+                    {call aui.renderExtraClasses}
+                         {param extraClasses: $onExtraClasses /}
+                    {/call}
+                {/param}
+                {param extraAttributes: $onExtraAttributes /}
+                {param isPressed: $isOn /}
+                {param buttonText: $onText /}
+                {param title: $onTitle /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+// TODO: replaced with an AUI button when AUI-2880 is resolved
+/**
+ * @param content
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .linkButton}
+    <button
+        class="stash-link-button{if $extraClasses} {$extraClasses}{/if}"
+        {if $extraAttributes}
+            {call aui.renderExtraAttributes}
+                {param extraAttributes: $extraAttributes /}
+            {/call}
+        {/if}>
+        {$content|noAutoescape}
+    </button>
+{/template}

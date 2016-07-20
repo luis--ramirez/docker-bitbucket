@@ -1,0 +1,62 @@
+@import "/static/global.less";
+
+@avatarSize: @aui-avatar-size-xxxlarge;
+
+.user-avatar-form {
+    position: relative;
+
+    // the delete overlay is absolutely positioned above the avatar icon
+    .avatar-delete-overlay {
+        .square(@avatarSize);
+        left: 0;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+
+        &:hover {
+            background-color: @secondaryHighlight;
+            opacity: 0.6;
+        }
+
+        @avatarDeleteIconColor: darken(@labelTextColor, 30%); // darken to offset the opacity of the overlay
+
+        .avatar-delete-trigger {
+            color: @avatarDeleteIconColor;
+            display: block;
+            margin: @halfSpacing;
+
+            &:hover {
+                color: @avatarDeleteIconColor; // override the Stash theme to have the icon stay the same color on hover
+            }
+        }
+    }
+
+    .avatar-picker-trigger {
+        .text-overflow();
+        display: block;
+        margin: @baseSpacing 0;
+    }
+
+    .avatar-picker-trigger, .gravatar-notice {
+        width: @avatarSize;
+    }
+
+    .gravatar-notice {
+        display: none;
+        text-align: center;
+    }
+
+    .user-avatar {
+        margin-right: 0; // @aui-override
+    }
+}
+
+.gravatar-source {
+    .avatar-delete-overlay {
+        display: none;
+    }
+
+    .gravatar-notice {
+        display: block;
+    }
+}

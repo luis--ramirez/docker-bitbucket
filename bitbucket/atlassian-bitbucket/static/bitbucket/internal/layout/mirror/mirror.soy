@@ -1,0 +1,32 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * The base layout for mirrors.
+ *
+ * @param content
+ * @param? headContent
+ * @param? windowTitle
+ */
+{template .mirror}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.mirror')}
+    {call bitbucket.internal.layout.aui}
+        {param content: $content /}
+        {param windowTitle: $windowTitle ? $windowTitle + ' - ' + $ij.instanceName : $ij.instanceName /}
+        {param theme: 'bitbucket-theme' /}
+        {param globalPrimaryContent}
+            {getWebPanel('header.global.primary', 'home-link')}
+        {/param}
+        {param headContent}
+            <meta name="application-name" content="Bitbucket">
+            <link rel="shortcut icon" type="image/x-icon" href="{plugin_resource('com.atlassian.bitbucket.server.bitbucket-web:favicon', 'favicon.ico')}" />
+            {if $headContent}
+                {$headContent|noAutoescape}
+            {/if}
+        {/param}
+        {param footerContent}
+            {foreach $webPanel in getWebPanels('bitbucket.web.footer')}
+                {$webPanel}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/search",["./search/search"],function(a){return a});

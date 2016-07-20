@@ -1,0 +1,57 @@
+{namespace bitbucket.internal.component.mirroringAdmin.mirrorView}
+
+/**
+ * @param item
+ */
+{template .main}
+    <div class="mirror-details">
+        <h2 id="mirror-name">{$item.name}</h2>
+        <a id="mirror-url" href="{$item.baseUrl}">{$item.baseUrl}</a>
+        {call aui.buttons.button}
+            {param id: 'mirror-remove-button' /}
+            {param text: getText('bitbucket.component.mirroring.admin.mirror.delete.dialog.buttons.delete') /}
+        {/call}
+        <div id="mirror-remove-button-spinner"></div>
+        <div id="mirror-details-panel"></div>
+    </div>
+{/template}
+
+/**
+ */
+{template .mirrorConnectionError}
+    <div id="mirror-error">
+        <div class="warning-icon"></div>
+        <h2>{getText('bitbucket.component.mirroring.admin.connection.error.title')}</h2>
+        <p>{getTextAsHtml('bitbucket.component.mirroring.admin.connection.error.text.html', 'mirror-reload')}</p>
+    </div>
+{/template}
+
+/**
+ */
+{template .loading}
+    <div id="mirror-loading"></div>
+{/template}
+
+/**
+ * @param mirrorName
+ */
+{template .deleteDialog}
+    <section role="dialog" id="delete-mirror-dialog" class="aui-layer aui-dialog2 aui-dialog2-small aui-dialog2-warning" aria-hidden="true">
+        <header class="aui-dialog2-header">
+            <h2 class="aui-dialog2-header-main">{getText('bitbucket.component.mirroring.admin.mirror.delete.dialog.title')}</h2>
+            <a class="aui-dialog2-header-close">
+                <span class="aui-icon aui-icon-small aui-iconfont-close-dialog">{getText('bitbucket.component.mirroring.admin.request.view.decline.dialog.cancel')}</span>
+            </a>
+        </header>
+        <div class="aui-dialog2-content">
+            <p>{getTextAsHtml('bitbucket.component.mirroring.admin.mirror.delete.dialog.content.one.html', $mirrorName)}</p>
+            <p>{getText('bitbucket.component.mirroring.admin.mirror.delete.dialog.content.two')}</p>
+        </div>
+        <footer class="aui-dialog2-footer">
+            <div class="aui-dialog2-footer-actions">
+                <button id="dialog-delete-button" class="aui-button">{getText('bitbucket.component.mirroring.admin.mirror.delete.dialog.buttons.delete')}</button>
+                <button id="dialog-cancel-button" class="aui-button aui-button-link">{getText('bitbucket.component.mirroring.admin.request.view.decline.dialog.cancel')}</button>
+            </div>
+        </footer>
+    </section>
+{/template}

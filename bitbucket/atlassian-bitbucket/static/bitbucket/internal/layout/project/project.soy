@@ -1,0 +1,92 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? project
+ *
+ * data passed through to stash.layout.entity
+ * @param? activeNav
+ * @param? bodyClass String. Additional classes to be added to the BODY
+ * @param content Main page content inserted inside the #content section
+ * @param? dataAttributes Data attributes for main content section
+ * @param? entityContext
+ * @param? entityHeaderRightItemsContent
+ * @param? entityNameExtraContent
+ * @param? entityNotificationsContent
+ * @param? entityParentName
+ * @param? entityParentUrl
+ * @param? entitySecondaryActionsContent
+ * @param? entityUrl
+ * @param? extraAttributes String or Object. Additional Extra attributes to apply to BODY
+ * @param? focusedPageSize Default: xlarge. Options: small, medium, large, xlarge.
+ * @param? headContent
+ * @param? hideLoginLink Boolean. Hides the "Login" link in global app header. Primarily used on the login page itself
+ * @param? hideProfile Boolean. Hides the user profile information, including login link in global app header.
+ * @param? isVerticalNav
+ * @param? navClass
+ * @param? pageHeaderContent Content to put inside a aui.page.pageHeader at the top of the page
+ * @param? pageType Default: default (full width). Options: default, focused, fixed, hybrid, generic (no class applied).
+ * @param? panelClass
+ * @param? panelContentHeader a heading to display inside the page panel content area
+ * @param? panelNavContent
+ * @param? panelSidebarContent
+ * @param? secondaryActionWebItems
+ * @param? theme String. Theme class name added to the BODY. Default is 'bitbucket-theme'
+ * @param? useAdminContext Boolean. Loads resources for Admin page context (atl.admin instead of atl.general). Default false.
+ * @param windowTitle Text for the TITLE element.
+ */
+{template .project}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.project')}
+    {call bitbucket.internal.layout.entity}
+        {param actionWebFragmentsLocation: 'bitbucket.project.overview.actions' /}
+        {param actionWebFragmentsContext:[ 'project' : $project ] /}
+        {param activeHeaderNav: 'projects-menu' /}
+        {param activeNav: $activeNav /}
+        {param bodyClass: $bodyClass /}
+        {param content: $content /}
+        {param dataAttributes: $dataAttributes /}
+        {param entityContext: $entityContext /}
+        {param entityHeaderRightItemsContent: $entityHeaderRightItemsContent /}
+        {param entityName: $project.name /}
+        {param entityNameExtraContent: $entityNameExtraContent /}
+        {param entityNav: getWebItems('atl.project.nav', [ 'project' : $project ] ) /}
+        {param entityNotificationsContent: $entityNotificationsContent /}
+        {param entityParentName: $entityParentName /}
+        {param entityParentUrl: $entityParentUrl /}
+        {param entitySecondaryActionsContent: $entitySecondaryActionsContent /}
+        {param entityUrl: $entityUrl /}
+        {param extraAttributes: $extraAttributes /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param headContent: $headContent /}
+        {param hideLoginLink: $hideLoginLink /}
+        {param hideProfile: $hideProfile /}
+        {param isVerticalNav: $isVerticalNav /}
+        {param navClass: $navClass /}
+        {param pageHeaderContent: $pageHeaderContent /}
+        {param pageType: $pageType /}
+        {param panelClass: $panelClass /}
+        {param panelContentHeader: $panelContentHeader /}
+        {param panelNavContent: $panelNavContent /}
+        {param panelSidebarContent: $panelSidebarContent /}
+        {param sidebarSettingsWebItems: getWebItems('internal.project.sidebar.footer', [ 'project' : $project ] ) /}
+        {param secondaryActionWebItems: $secondaryActionWebItems /}
+        {param theme: $theme /}
+        {param useAdminContext: $useAdminContext /}
+        {param windowTitle: $windowTitle /}
+        {param headerClasses: 'aui-sidebar-header-large' /}
+        {param headerImageContent}
+            {call bitbucket.internal.feature.project.avatar}
+                {param size: 'xxxlarge' /}
+                {param project: $project /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/layout/project').onReady({to_json($project)|noAutoescape});</script>
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+

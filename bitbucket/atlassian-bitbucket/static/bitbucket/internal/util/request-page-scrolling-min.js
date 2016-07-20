@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/request-page-scrolling",["bitbucket/internal/layout/page-scrolling-manager"],function(a){return function(){return a._requestScrollControl()}});

@@ -1,0 +1,87 @@
+@import "/static/global.less";
+
+.base-repository-selector,
+.base-repository-selector-trigger {
+    @separator-width: 10px;
+
+    .repository {
+        white-space: nowrap;
+    }
+
+    .aui-avatar {
+        position: absolute;
+        top: 6px; // 2px border + 16px avatar + 6px padding top and bottom = 30px button
+        left: @baseSpacing;
+    }
+
+    .project-and-repo-wrapper {
+        .box-sizing();
+        display: inline-block;
+        width: 100%;
+        padding-left: @icon-size-xxsmall + @halfSpacing;
+    }
+
+    .separator {
+        text-align: center;
+        width: @separator-width;
+        color: @secondaryTextColor;
+    }
+
+    .name,
+    .project-name {
+        .text-overflow();
+        max-width: (@max-button-width -
+                        (@dropdown-arrow-width + @baseSpacing + @halfSpacing) -
+                        @baseSpacing -
+                        @separator-width -
+                        (@aui-avatar-size-xsmall + @halfSpacing)) / 2;
+    }
+
+    /* Don't truncate the project & repo names in results */
+    .results .result a {
+        .name,
+        .project-name {
+            max-width: none;
+            white-space: normal;
+            display: inline;
+        }
+    }
+
+
+    .name,
+    .project-name,
+    .aui-avatar,
+    .separator {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: @aui-avatar-size-xsmall; // Ensuring that vertical align middle keeps the text and avatar inline with each other.
+    }
+
+    .project-name {
+        color: @secondaryTextColor;
+    }
+}
+
+.base-repository-selector-trigger {
+    margin-bottom: @baseSpacing;
+    text-align: left;
+}
+
+.base-repository-selector {
+    .result a{
+        &:hover,
+        &:active {
+            .project-name,
+            .separator {
+                color: @invertedBodyTextColor;
+            }
+        }
+    }
+
+    .result.focused a {
+        .project-name,
+        .separator {
+            color: @invertedBodyTextColor;
+        }
+    }
+}

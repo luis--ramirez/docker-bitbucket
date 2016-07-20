@@ -1,0 +1,17 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param repository
+ * @param commitPage
+ * @param commitsTableWebSections
+ * @param? pullRequest
+ */
+{template .commits}
+    {call bitbucket.internal.feature.commits.commitsTableImpl}
+        {param repository: $repository /}
+        {param commitPage : $commitPage /}
+        {param pullRequest : $pullRequest /}
+        {param tableId : 'pull-request-commits-table'/}
+        {param webSections : $commitsTableWebSections /}
+    {/call}
+{/template}

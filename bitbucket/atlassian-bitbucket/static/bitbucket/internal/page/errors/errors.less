@@ -1,0 +1,55 @@
+@import "/static/global.less";
+
+.bitbucket-errors {
+    #content > .content-body {
+        padding: 75px 16px;
+    }
+
+    h2,
+    p {
+        text-align: center;
+    }
+
+    h2 {
+        margin-top: 1.3em;
+        font-weight: normal;
+    }
+
+    p {
+        font-size: @font-size-large;
+        color: #666;
+        margin-top: 0.5em;
+    }
+}
+
+.error-image {
+    display: block;
+    margin: 50px auto;
+    width: 200px;
+    height: 128px;
+    background-image: url('errors.png');
+    background-repeat: no-repeat;
+    background-position: 50 0%;
+
+    &._401 {
+        background-position: 50% -138px;
+    }
+
+    &._404 {
+        background-position: 50% -276px;
+    }
+
+    &._500 {
+        background-position: 50% -414px;
+    }
+
+    &._503 {
+        background-position: 50% -552px;
+    }
+}
+
+.bitbucket-theme {
+    &.bitbucket-errors #content {
+        padding-top: 0;
+    }
+}

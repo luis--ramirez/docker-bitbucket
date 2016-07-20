@@ -1,0 +1,25 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ * @param recoveryUsername
+ * @param recoveryUserLoggedIn
+ * @param helpUrl
+ * @param helpTitle
+ */
+{template .bitbucketRecoveryModeOn}
+    {if $recoveryUserLoggedIn}
+        {call aui.message.warning}
+            {param content}
+                {{getTextAsHtml('bitbucket.web.recoverymode.on.restartreminder.html', $helpUrl, $helpTitle, productName())}}
+            {/param}
+            {param extraAttributes : [ 'title' : getText('bitbucket.web.recoverymode.on.title', productName())] /}
+        {/call}
+    {else}
+        {call aui.message.warning}
+            {param content}
+                {{getTextAsHtml('bitbucket.web.recoverymode.on.details.html', $recoveryUsername, $helpUrl, $helpTitle, productName())}}
+            {/param}
+            {param extraAttributes : [ 'title' : getText('bitbucket.web.recoverymode.on.title', productName())] /}
+        {/call}
+    {/if}
+{/template}

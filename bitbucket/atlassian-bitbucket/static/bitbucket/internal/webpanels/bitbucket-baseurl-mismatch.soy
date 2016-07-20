@@ -1,0 +1,10 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ * @param serverSettingsUrl
+ */
+{template .bitbucketBaseUrlMismatch}
+    <div class="aui-banner aui-banner-error" role="banner" title="{getText('bitbucket.web.admin.base.url.mismatch.title')}">
+        {{getTextAsHtml('bitbucket.web.admin.base.url.mismatch.body.html', productName(), $serverSettingsUrl)}}
+    </div>
+{/template}

@@ -1,0 +1,158 @@
+@import "/static/global.less";
+
+#change-password-dialog {
+    height: auto !important; /* AJS-627: AUI computes the correct height for the internal panels, but not for the dialog's height itself */
+}
+
+.user-details-form .error {
+    display: block; /* ensures error spans are not squashed at the edge of the page - puts them on the line after the inputs */
+}
+
+/*create user page*/
+form.aui.disabled {
+    color: #999;
+}
+
+.create-user #content form.aui > .aui-message-error > p {
+    display: inline;
+}
+
+/* edit user page */
+#content {
+    .panel-details {
+        .aui-item:first-child {
+            /* avatar image */
+            width: @aui-avatar-size-xxxlarge;
+        }
+
+        .details form {
+            position: relative;
+            width: 100%;
+        }
+
+        .buttons a.cancel {
+            padding-left: @halfSpacing;
+        }
+
+        .error {
+            color: @errorTextColor;
+        }
+
+        label {
+            padding: 0;
+        }
+
+        #fullname {
+            .text-overflow();
+            font-size: @font-size-xlarge;
+            width: 100%;
+        }
+
+        #update-password-user,
+        #view-oauth-tokens {
+            font-size: @font-size-small;
+        }
+
+        span.separator {
+            padding: 0 @halfSpacing;
+        }
+
+        form {
+            input[type='text'] {
+                background-color: transparent;
+                border: 1px solid transparent;
+                font-family: sans-serif;
+                color: @bodyTextColor;
+            }
+
+            #fullname {
+                margin-top: 0;
+            }
+
+            #name,
+            #email {
+                .text-overflow();
+                width: 100%;
+                font-size: @font-size-default;
+                height: 16px;  // override browser defaults
+                margin: 0;     // override browser defaults
+            }
+
+            &.editing {
+                #fullname,
+                #email {
+                    border-color: #d3d3d3;
+                    background-color: @contentBackgroundColor;
+                }
+
+                .buttons-container {
+                    display: block;
+                }
+            }
+
+            .buttons-container {
+                margin-top: @halfSpacing;
+                display: none;
+            }
+
+
+        } // form
+    } // .panel-details
+
+    #password-dialog-template {
+        display: none;
+    }
+
+    .user-permission > .permission-lozenge {
+        margin-right: @halfSpacing;
+    }
+
+} // #page
+
+.bitbucket-theme #content {
+    .panel-details form {
+        .field-group {
+            padding-left: 24px;
+            margin-bottom: 0;
+
+            &:first-child,
+            &.user-permission{
+            /* User's full name and permissions lozenge */
+                padding-left: 0;
+            }
+
+            label {
+            /* smaller label widths because we're using icons */
+                margin-left: -24px;
+                width: @icon-size-xxsmall;
+            }
+        }
+
+        .buttons-container {
+            padding-left: 0;
+
+        }
+    }
+
+    > .aui-group.group-picker {
+        margin-top: 48px;
+    }
+
+    .aui-group.user-secondary-section {
+        margin-top: @doubleSpacing;
+    }
+}
+
+.admin #content {
+    .aui-group.breadcrumbs + .aui-group {
+        margin-bottom: 0;
+    }
+
+    .aui-group.panel-details {
+        margin-top: @doubleSpacing;
+    }
+
+    .user-secondary-section {
+        margin-top: @doubleSpacing;
+    }
+}

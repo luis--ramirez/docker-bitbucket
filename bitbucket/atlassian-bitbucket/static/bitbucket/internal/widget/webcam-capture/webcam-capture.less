@@ -1,0 +1,97 @@
+@import "/static/global.less";
+
+@flashColour: #fff;
+@-webkit-keyframes flash {
+    100% { background: transparent;}
+}
+
+@keyframes flash {
+    100% { background: transparent;}
+}
+
+@contentWidth: 320px;
+.webcam-capture {
+    width: @contentWidth;
+    margin: 0 auto;
+
+    .video-container {
+        display: none;
+        margin: @doubleSpacing 0;
+        position: relative;
+
+        video {
+            .square(100%);
+            vertical-align: top;
+
+            &.mirror {
+                .rotateY(180deg);
+            }
+        }
+
+        .countdown {
+            opacity: 0.4;
+            color: @invertedBodyTextColor;
+            font-size: 105px;
+            position: absolute;
+            text-align: center;
+            text-shadow: 2px 2px @secondaryTextColor;
+            top: 20%;
+            width: 100%;
+        }
+    }
+
+    .video-placeholder {
+        .square(@contentWidth);
+        display: table-cell;
+        vertical-align: middle;
+
+        .placeholder-icon {
+            .square(@icon-size-large);
+            background: transparent url(icons/icon-camera.svg) no-repeat;
+            display: inline-block;
+        }
+
+        .grant-access {
+            color: @placeholderTextColor;
+            font-size: @font-size-xlarge;
+            text-align: center;
+        }
+    }
+
+    .webcam-buttons {
+        text-align: center;
+        display: none;
+
+        .take-photo {
+            margin: 0 auto @baseSpacing;
+            width: 75px;
+
+            .icon-take-photo {
+                background: transparent url(icons/icon-camera.svg) no-repeat;
+            }
+        }
+
+        .shortcut-hint {
+            color: @secondaryTextColor;
+        }
+    }
+
+    &.streaming {
+
+        .webcam-buttons, .video-container {
+            display: block;
+        }
+
+        .video-placeholder {
+            display: none;
+        }
+    }
+}
+
+.flasher {
+    .animation(flash 1s);
+    .square(100%);
+    background-color: @flashColour;
+    position: absolute;
+    top: 0;
+}

@@ -1,0 +1,81 @@
+{namespace bitbucket.internal.feature.user}
+
+/**
+ * @param id
+ * @param editable
+ * @param user
+ */
+{template .userGroupsTable}
+    {call bitbucket.internal.feature.user.groupTable}
+        {param id: $id /}
+        {param filterable: false /}
+        {param extraDataAttributes: ['username' : $user.name]/}
+        {param extraHeaderContent}
+            {if $editable}
+                <tr class="groups-multi-selector-container">
+                    <th colspan="2">
+                        {call aui.form.form}
+                            {param action: '' /}
+                            {param content}
+                                {call aui.group.group}
+                                    {param extraClasses: 'aui-group-split'/}
+                                    {param content}
+                                        {call aui.group.item}
+                                            {param content}
+                                                <input type="text" class="groups-multi-selector" placeholder="{getText('bitbucket.web.user.group.membership.add')}"/>
+                                            {/param}
+                                        {/call}
+                                        {call aui.group.item}
+                                            {param content}
+                                                {call aui.buttons.button}
+                                                    {param extraClasses: 'add-button' /}
+                                                    {param text: getText('bitbucket.web.button.add') /}
+                                                {/call}
+                                            {/param}
+                                        {/call}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                    </th>
+                </tr>
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param groups
+ */
+{template .userGroupsRows}
+    {foreach $group in $groups}
+        {call .userGroupsRow}
+            {param group: $group /}
+        {/call}
+    {/foreach}
+{/template}
+
+/**
+ * @param group
+ **/
+{template .userGroupsRow}
+    <tr data-name="{$group.name}">
+        <td headers="group">
+            {call bitbucket.internal.widget.groupAvatar}
+                {param size: 'small'/}
+                {param name: $group.name /}
+            {/call}
+            <a href="{nav_admin_group($group.name)}" title="{$group.name}">{$group.name}</a>
+        </td>
+        <td headers="actions">
+            {if $group.deletable}
+                {call bitbucket.internal.buttons.deleteButton}
+                    {param href: nav_admin_group_delete($group.name) /}
+                    {param extraAttributes: [ 'data-for' : $group.name ] /}
+                    {param extraClasses: 'delete-group-link' /}
+                    {param title: getText('bitbucket.web.button.delete') /}
+                {/call}
+            {/if}
+        </td>
+    </tr>
+{/template}

@@ -1,0 +1,21 @@
+{namespace bitbucket.internal.auth}
+
+/**
+ */
+{template .logout}
+{webResourceManager_requireResourcesForContext('bitbucket.page.logout')}
+{call bitbucket.internal.layout.focused}
+    {param windowTitle: getText('bitbucket.web.logout.title') /}
+    {param bodyClass: 'user-logout'/}
+    {param activeHeaderNav: '' /}
+    {param contentTitle: getText('bitbucket.web.logout.header') /}
+    {param focusedPageSize: 'small' /}
+    {param content}
+        <p><strong>{getText('bitbucket.web.logout.logged.out')}</strong></p>
+        <p>
+            {getText('bitbucket.web.logout.didnt.mean.to.logout')}&nbsp;
+            <a href="{nav_login()}">{getText('bitbucket.web.logout.login.again')}</a>.
+        </p>
+    {/param}
+{/call}
+{/template}

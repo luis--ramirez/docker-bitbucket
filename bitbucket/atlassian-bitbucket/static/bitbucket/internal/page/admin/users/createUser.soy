@@ -1,0 +1,135 @@
+{namespace bitbucket.internal.admin.users}
+
+/**
+* @param form
+* @param? fieldErrors
+* @param? formErrors
+* @param userCount
+* @param userLimit
+* @param userLimitReached
+* @param canNotify
+* @param canResetPassword
+*/
+{template .create}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.admin.users.create')}
+    {call .createInternal data="all"}
+        {param notify: $canNotify and $form.notify and not ($fieldErrors.password or $fieldErrors.confirmPassword) /}
+    {/call}
+{/template}
+
+/**
+* @param form
+* @param? fieldErrors
+* @param? formErrors
+* @param userCount
+* @param userLimit
+* @param userLimitReached
+* @param notify
+* @param canNotify
+* @param canResetPassword
+*/
+{template .createInternal private="true"}
+{call bitbucket.internal.layout.focused}
+    {param windowTitle: getText('bitbucket.web.user.create.header') /}
+    {param contentTitle: getText('bitbucket.web.user.create.header') /}
+    {param focusedPageSize: 'medium' /}
+    {param content}
+        {if $userLimit >= 0}
+            {if not $userLimitReached}
+                {{getText('bitbucket.web.user.created', $userLimit - $userCount, $userLimit)|noAutoescape}}
+            {else}
+                {call aui.message.error}
+                    {param extraClasses: 'at-limit'/}
+                    {param content}
+                        {{getText('bitbucket.web.license.atlimit',
+                            $userLimit, nav_admin_global_perms(), 'https://www.atlassian.com/purchase/upgrade')|noAutoescape}}
+                    {/param}
+                {/call}
+            {/if}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: nav_admin_user_create() /}
+            {param errors: $formErrors /}
+            {param extraClasses: $userLimitReached ? 'disabled' : '' /}
+            {param autocomplete: 'off' /}
+            {param content}
+                {call widget.aui.form.text}
+                    {param id: 'username' /}
+                    {param autofocus: true /}
+                    {param required: true /}
+                    {param labelContent}{getText('bitbucket.web.user.username.html')}{/param} // reuse the login page's i18n keys, so that both text is the same
+                    {param initialValue: $form.username /}
+                    {param maxLength: 255 /}
+                    {param errors: $fieldErrors ? $fieldErrors.username : null /}
+                    {param disabled: $userLimitReached/}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'fullname' /}
+                    {param labelContent}{getText('bitbucket.web.user.fullname.html')}{/param}
+                    {param initialValue: $form.fullname /}
+                    {param maxLength: 255 /}
+                    {param errors: $fieldErrors ? $fieldErrors.fullname : null /}
+                    {param required: true /}
+                    {param disabled: $userLimitReached/}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'email' /}
+                    {param labelContent}{getText('bitbucket.web.user.email.html')}{/param}
+                    {param initialValue: $form.email /}
+                    {param maxLength: 255 /}
+                    {param errors: $fieldErrors ? $fieldErrors.email : null /}
+                    {param required: true /}
+                    {param disabled: $userLimitReached/}
+                {/call}
+                {if $canResetPassword}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'notify' /}
+                        {param labelContent}{getText('bitbucket.web.user.create.email')}{/param}
+                        {param checked: $notify /}
+                        {param errors: $fieldErrors ? $fieldErrors.notify : null /}
+                        {param disabled: not $canNotify or $userLimitReached /}
+                        {{param descriptionContent: $canNotify ? '' : getText('bitbucket.web.user.create.cantnotify.description',
+                                 '<a href="' + nav_admin_mail_server() + '">', '</a>') /}}
+                    {/call}
+                    {call widget.aui.form.password}
+                        {param id: 'password' /}
+                        {param labelContent}{getText('bitbucket.web.user.password.html')}{/param}
+                        {param initialValue: '' /}
+                        {param maxLength: 255 /}
+                        {param errors: $fieldErrors ? $fieldErrors.password : null /}
+                        {param fieldGroupClass: $notify ? 'hidden' : null /}
+                        {param required: not $notify /}
+                        {param disabled: $userLimitReached/}
+                    {/call}
+                    {call widget.aui.form.password}
+                        {param id: 'confirmPassword' /}
+                        {param labelContent}{getText('bitbucket.web.user.confirmpassword.html')}{/param}
+                        {param initialValue: '' /}
+                        {param maxLength: 255 /}
+                        {param errors: $fieldErrors ? $fieldErrors.confirmPassword : null /}
+                        {param fieldGroupClass: $notify ? 'hidden' : null /}
+                        {param required: not $notify /}
+                        {param disabled: $userLimitReached/}
+                    {/call}
+                {/if}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param label: getText('bitbucket.web.button.create.user') /}
+                            {param isPrimary: true /}
+                            {param disabled: $userLimitReached /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin_users() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/admin/userCreate').onReady();</script>
+    {/param}
+{/call}
+{/template}

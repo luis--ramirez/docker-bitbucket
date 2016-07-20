@@ -1,0 +1,125 @@
+{namespace bitbucket.internal.page.setup}
+
+/**
+ * @param createAccountAndGenerateEvalUrl
+ * @param generateEvalUrl
+ * @param serverId
+ * @param? dataAttributes
+ * @param? fieldErrors
+ * @param? form
+ * @param? formErrors
+ */
+{template .settings}
+{webResourceManager_requireResourcesForContext('bitbucket.page.setup.settings')}
+    {call bitbucket.internal.layout.setup}
+        {param step: getText('bitbucket.web.setup.title.settings') /}
+        {param dataAttributes: $dataAttributes /}
+        {param content}
+            {call bitbucket.internal.widget.xsrfProtectedForm}
+                {param action: '' /}
+                {param errors: $formErrors /}
+                {param id: 'settings' /}
+                {param isLongLabels: true /}
+                {param content}
+                    <input type='hidden' name='step' value='settings'/>
+                    {call aui.form.textField}
+                        {param errorTexts: $fieldErrors ? $fieldErrors.applicationTitle : null /}
+                        {param id: 'applicationTitle' /}
+                        {param isRequired: true /}
+                        {param labelContent: getText('bitbucket.web.setup.settings.app.title') /}
+                        {param maxLength: 255 /}
+                        {param value: firstNonNull($form.applicationTitle, 'Bitbucket') /}
+                    {/call}
+                    {call aui.form.textField}
+                        {param descriptionContent: getText('bitbucket.web.setup.settings.base.url.description', productName()) /}
+                        {param errorTexts: $fieldErrors ? $fieldErrors.baseUrl : null /}
+                        {param id: 'baseUrl' /}
+                        {param isRequired: true /}
+                        {param labelContent: getText('bitbucket.web.setup.settings.base.url') /}
+                        {param maxLength: 255 /}
+                        {param value: firstNonNull($form.baseUrl, nav_base_url()) /}
+                    {/call}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'server-id' /}
+                        {param labelContent: getText('bitbucket.web.config.serverid') /}
+                        {param valueContent}{$serverId}{/param}
+                    {/call}
+                    {call aui.form.radioField}
+                        {param id: 'license-type' /}
+                        {param legendContent: getText('bitbucket.web.setup.settings.license.label') /}
+                        {param fields: [
+                                            [
+                                                'labelText': getText('bitbucket.web.setup.settings.license.eval.needed'),
+                                                'id': 'no-key-radio',
+                                                'isChecked': false,
+                                                'value' : 'false'
+                                            ], [
+                                                'labelText': getText('bitbucket.web.setup.settings.license.eval.unneeded', productName()),
+                                                'id': 'has-key-radio',
+                                                'isChecked': $fieldErrors or $form.license ? true : false,
+                                                'value': $fieldErrors or $form.license ? 'true' : 'false'
+                                            ]
+                                        ] /}
+                        {param isRequired: true /}
+                    {/call}
+                    <div id="no-key" class="license-section" hidden>
+                        <h2>{getText('bitbucket.web.setup.settings.license.generate')}</h2>
+                        <p class="generate-license-heading">
+                            {getText('bitbucket.web.setup.settings.evaluate.description')}
+                        </p>
+                        <div class="generate-license-buttons">
+                            {call aui.buttons.button}
+                                {param href: $generateEvalUrl /}
+                                {param id: 'generate-license-button' /}
+                                {param text: getText('bitbucket.web.setup.settings.evaluate.account.exists') /}
+                                {param type: 'primary' /}
+                            {/call}
+                            {call aui.buttons.button}
+                                {param href: $createAccountAndGenerateEvalUrl /}
+                                {param id: 'no-account-button' /}
+                                {param text: getText('bitbucket.web.setup.settings.evaluate.account.create') /}
+                                {param type: 'link' /}
+                            {/call}
+                        </div>
+                    </div>
+                    <div id="has-key" class="license-section" {($form and $form.license) or $formErrors or $fieldErrors ? null : 'hidden'}>
+                        <input type="hidden" value="" id="licenseHidden" name="license" />
+                        {call widget.aui.form.largetext}
+                            {param disabled: not $fieldErrors and ($form and $form.license) /}
+                            {param errors: $fieldErrors ? $fieldErrors.license : null /}
+                            {param extraClasses: 'required' /}
+                            {param labelContent: '' /}
+                            {param id: 'license' /}
+                            {param initialValue: $form ? $form.license : null /}
+                            {param monospace: true /}
+                            {param name: 'licenseDisplay' /}
+                            {param required: true /}
+                            {param rows: 7 /}
+                        {/call}
+                        <p class="info-text">{getTextAsHtml('bitbucket.web.setup.settings.license.info', 'https://my.atlassian.com')}</p>
+                        {call widget.aui.form.buttons}
+                            {param content}
+                                <p class="agreement-text">{getTextAsHtml('bitbucket.web.setup.settings.agree.html',
+                                                    'https://www.atlassian.com/legal/privacy-policy',
+                                                    'https://www.atlassian.com/legal/customer-agreement')}</p>
+                                {call widget.aui.form.submit}
+                                    {param id: 'submit' /}
+                                    {param isPrimary: true /}
+                                    {param label: getText('bitbucket.web.setup.next') /}
+                                {/call}
+                                <div id="submit-spinner" class="button-spinner inline-button-spinner"></div>
+                                <div id="submit-progress" class="next-text inline-spinner-text"></div>
+                            {/param}
+                        {/call}
+                    </div>
+                {/param}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/setupSettings').onReady();
+                require('bitbucket/internal/widget/setup-tracking').track('setup-settings-license');
+            </script>
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,78 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param status
+ * @param? windowTitle
+ * @param heading
+ * @param description
+ * @param? progressbarId
+ * @param? cancelButtonId
+ * @param? hideCancel if true, the cancel maintenance form is always hidden behind a toggle, otherwise
+ *                    dependent on whether a cancel token is provided.
+ * @param? hideProgress if true, no progress bar is displayed
+ * @param? cancelButtonText
+ * @param? cancelExtraContent
+ * @param? cancelToken
+ * @param? errorTexts
+ * @param? pageBottomContent
+ */
+{template .maintenance}
+{call bitbucket.internal.layout.chromeless}
+    {param windowTitle : $windowTitle ? $windowTitle : getText('bitbucket.web.maintenance.title') /}
+    {param pageType: 'focused' /}
+    {param focusedPageSize: 'large' /}
+    {param content}
+        {call widget.aui.panel}
+            {param content}
+                {call aui.page.pagePanelContent}
+                    {param content}
+                        <h2>{$heading}</h2>
+                        <p id="maintenance-description">
+                            {$description}
+                        </p>
+                        {if not $hideProgress}
+                            {call bitbucket.internal.widget.progressBar}
+                                {param id: $progressbarId ? $progressbarId : 'progress' /}
+                                {param percentage: $status.percentage /}
+                                {param message: $status.message /}
+                            {/call}
+                        {/if}
+                        {if ($hideCancel or not $cancelToken) and not $errorTexts}
+                            <p><a href="#" class="cancel-link">{$cancelButtonText}</a></p>
+                        {/if}
+                        {call aui.form.form}
+                            {param extraClasses: 'cancel-form'  + ((not $hideCancel and $cancelToken) or $errorTexts ? ' visible' : '') /}
+                            {param isTopLabels: true /}
+                            {param action: nav_maintenance() /}
+                            {param content}
+                                {if $cancelToken}
+                                    <input type="hidden" name="token" value="{$cancelToken}">
+                                {/if}
+                                {if $cancelExtraContent}
+                                    {$cancelExtraContent|noAutoescape}
+                                {/if}
+                                {if not $cancelToken}
+                                    {call bitbucket.internal.layout.maintenance.tokenInputField}
+                                        {param errorTexts: $errorTexts/}
+                                    {/call}
+                                {/if}
+                                {call widget.aui.form.buttons}
+                                    {param content}
+                                        {call widget.aui.form.submit}
+                                            {param id: $cancelButtonId ? $cancelButtonId : 'cancel' /}
+                                            {param label: $cancelButtonText ? $cancelButtonText : getText('bitbucket.web.maintenance.button.cancel') /}
+                                        {/call}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        {$pageBottomContent|noAutoescape}
+    {/param}
+{/call}
+{/template}

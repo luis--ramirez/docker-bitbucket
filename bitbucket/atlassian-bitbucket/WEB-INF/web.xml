@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0" metadata-complete="true">
+
+    <!-- STOP! Chances are whatever you came here to do doesn't belong here. Configuration is now done in Java.
+         See StashWebApplicationInitializer. The following attributes remain here only because, as of Servlet 3,
+         there is still no other way to specify them. -->
+
+    <display-name>Atlassian Bitbucket</display-name>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <exception-type>org.springframework.security.web.authentication.rememberme.CookieTheftException</exception-type>
+        <location>/mvc/login</location>
+    </error-page>
+
+    <error-page>
+        <error-code>401</error-code>
+        <location>/mvc/error401</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/mvc/error404</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/mvc/error500</location>
+    </error-page>
+
+</web-app>

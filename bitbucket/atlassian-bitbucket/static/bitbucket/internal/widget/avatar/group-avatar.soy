@@ -1,0 +1,23 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param name
+ * @param size either 'xxxlarge', 'xxlarge', 'xlarge', 'large', 'medium', 'small' or 'xsmall'
+ * @param? extraClasses
+ */
+{template .groupAvatar}
+    <span class="aui-avatar aui-avatar-{$size} group-avatar{$extraClasses ? ' ' + $extraClasses : ''}" data-groupname="{$name}"></span>
+{/template}
+
+/**
+ * @param name
+ * @param size either 'xxxlarge', 'xxlarge', 'xlarge', 'large', 'medium', 'small' or 'xsmall'
+ * @param? extraClasses
+ * @param? avatarClasses
+ */
+{template .groupAvatarWithName}
+    <span title="{$name}"{if $extraClasses}{sp}class="{$extraClasses}"{/if}>
+        <span class="aui-avatar aui-avatar-{$size} group-avatar{$avatarClasses ? ' ' + $avatarClasses : ''}" data-groupname="{$name}"></span>
+        {$name}
+    </span>
+{/template}

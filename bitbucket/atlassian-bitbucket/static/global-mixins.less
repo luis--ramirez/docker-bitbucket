@@ -1,0 +1,419 @@
+@import 'global-colours.less';
+@import 'global-variables.less';
+
+.user-select(@val: none) {
+    -moz-user-select: @val;
+    -ms-user-select: @val;
+    -webkit-user-select: @val;
+    user-select: @val;
+}
+
+.box-sizing(@sizing: border-box) { // defaults to border-box if the @sizing parameter is not passed in
+    box-sizing: @sizing;
+}
+
+.background-clip(@clip) {
+    background-clip: @clip;
+}
+
+.calc(@prop, @value) {
+    @{prop}: calc(@value);
+}
+
+.width-max-width(@width) {
+    width: @width;
+    max-width: @width;
+}
+
+// Table cell sizing
+.shrinkwrap() {
+    width: 1%; // to force the table cell to shrinkwrap to the longest element and not expand with browser width
+}
+
+// For use in inner wrapping element table cells (e.g. <td><span class="this">...contents...</span></td>.
+// Column will expand up to the max-width to fit text, and then start elliding text.
+.bounded-cell-contents(@max-width) {
+    .text-overflow();
+    display: inline-block;
+    max-width: @max-width;
+}
+
+// Background size
+.background-size(@size){
+    background-size: @size;
+}
+
+// Text
+
+// Requires explicit width and inline-block or block to work
+.text-overflow() {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tab-width(@width) {
+    -moz-tab-size: @width;
+    tab-size: @width;
+}
+
+// Clearfix
+
+.clearfix() {
+    &:after {
+        clear: both;
+        content: ' ';
+        display: block;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+        line-height: 0;
+    }
+}
+
+
+// CSS3 Properties
+// Border Radius
+.border-radius(@radius: @baseBorderRadius) { // defaults to @baseBorderRadius (see variables above) if the @radius parameter is not passed in
+    .background-clip(padding-box);
+    border-radius: @radius;
+}
+
+.border-top-left-radius(@radius: @baseBorderRadius) {
+    border-top-left-radius: @radius;
+}
+
+.border-top-right-radius(@radius: @baseBorderRadius) {
+    border-top-right-radius: @radius;
+}
+
+.border-bottom-left-radius(@radius: @baseBorderRadius) {
+    border-bottom-left-radius: @radius;
+}
+
+.border-bottom-right-radius(@radius: @baseBorderRadius) {
+    border-bottom-right-radius: @radius;
+}
+
+// Box Shadows
+.box-shadow(@boxshadow: 0 0 5px @aui-dropdown-shadow) {
+    box-shadow: @boxshadow;
+}
+
+// Deprecated for removal in 4.0 (just directly use property now)
+.opacity(@opacity) {
+    opacity: @opacity;
+}
+
+// Inner shadows for scrolling lists
+.scrolling-shadow() {
+    background:
+    linear-gradient(@contentBackgroundColor, rgba(255, 255, 255, 0)),
+    linear-gradient(rgba(255, 255, 255, 0), @contentBackgroundColor) 0 100%,
+    linear-gradient(top, @aui-dropdown-shadow, rgba(0, 0, 0, 0)),
+    linear-gradient(bottom, @aui-dropdown-shadow, rgba(0, 0, 0, 0)) 0 100%;
+
+    background-attachment: local, local, scroll, scroll;
+    background-size: 100% 20px, 100% 20px, 100% 3px, 100% 3px; // 3px height of the shadows to match AUI Dropdown2 shadows
+    background-repeat: no-repeat;
+    background-color: @contentBackgroundColor;
+}
+
+// Opacity presets for filtering elements
+.shown() {
+    opacity: 1.0;
+}
+
+.filtered() {
+    opacity: 0.35;
+}
+
+// Gradients - removed @angle parameter as it's a minefield of changing specs and implementations across the browsers
+// use either .linear-gradient-vertical or .linear-gradient-horizontal as needed, and if you need a specific gradient
+// angle, be aware that the working draft spec specifies 0deg as east and goes counter-clockwise, while the candidate
+// recommendation specifies 0deg as north and goes clockwise. The keywords have a more predictable output, but only
+// Firefox 10+, Opera 11.6+ and IE10 support the new 'to (side)' syntax (as of 2012-10-03).
+// More info: http://caniuse.com/#search=linear-gradient
+
+.linear-gradient-vertical(@firstColor: #FFF, @secondColor: #F2F2F2) {
+    background-image: linear-gradient(to bottom, @firstColor,  @secondColor);
+}
+
+.linear-gradient-horizontal(@firstColor: #FFF, @secondColor: #F2F2F2) {
+    background-image: linear-gradient(to right, @firstColor,  @secondColor);
+}
+
+// Stripes
+.diagonal-stripes(@firstColor, @secondColor) {
+    background-color: @firstColor;
+    background-image: linear-gradient(-45deg, @secondColor 25%, transparent 25%, transparent 50%, @secondColor 50%, @secondColor 75%, transparent 75%, transparent);
+}
+
+// Transitions
+.transition(@trans) {
+    transition: @trans;
+}
+
+.transitionDelay(@delay) {
+    transition-delay: @delay;
+}
+
+.transitions {
+    .transitionListItem() {
+        transition: transform .2s, height .5s, padding .5s;
+        &.offScreen {
+            transform: translateX(-100%);
+            height: 0 !important;
+            padding: 0 !important;
+        }
+    }
+}
+
+// Animations
+.keyframes (@name, @fromRules, @toRules) {
+    @-webkit-keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+    @keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+}
+
+.keyframes-complex (@name, @rules) {
+    @-webkit-keyframes ~'@{name}' { @rules(); }
+    @keyframes ~'@{name}' { @rules(); }
+}
+
+.animation(@ani) {
+    -webkit-animation: @ani;
+    animation: @ani;
+}
+
+// Transformations
+.rotate(@degrees) {
+    -webkit-transform: rotate(@degrees);
+    transform: rotate(@degrees);
+}
+
+.rotateY(@degrees) {
+    -webkit-transform: rotateY(@degrees);
+    transform: rotateY(@degrees);
+}
+
+.scale(@ratio) {
+    -webkit-transform: scale(@ratio);
+    transform: scale(@ratio);
+}
+
+.translate(@x, @y) {
+    -webkit-transform: translate(@x, @y);
+    transform: translate(@x, @y);
+}
+
+.skew(@x, @y) {
+    -webkit-transform: skew(@x, @y);
+    transform: skew(@x, @y);
+}
+
+.translate3d(@x, @y, @z) {
+    -webkit-transform: translate(@x, @y, @z);
+    transform: translate(@x, @y, @z);
+}
+
+.transform(@composedProperty) {
+    transform: ~"@{composedProperty}";
+}
+
+.transform(@prop; @value) {
+    .transform(~"@{prop}(@{value})");
+}
+// Shapes
+
+.square(@length) {
+    width: @length;
+    height: @length;
+}
+
+.circle(@diameter) {
+    .border-radius(@diameter/2);
+    width: @diameter;
+    height: @diameter;
+}
+
+// Centering
+.centered() {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+.centered(@width) {
+    .centered(@width, @width);
+}
+
+.centered(@width, @height) {
+    .centered();
+    margin-left: -@width/2;
+    margin-top: -@height/2;
+}
+
+// Dropdown arrow
+.dropdown-arrow(@color: @bodyTextColor, @size: 4px) {
+    width: 0;
+    height: 0;
+    border: @size solid transparent;
+    border-bottom: none;
+    border-top-color: @color;
+    opacity: 0.8;
+    display: inline-block;
+}
+
+// Flexbox
+
+// September 2012 RC 'New' Flexbox syntax supported by Chrome 21+, Firefox 20+, Safari 6.1+, and Opera 12.1+
+// We can eventually get rid of all the .flexlegacy-* mixins when we don't need to support them anymore
+.flex-container() {
+    .flexlegacy-flexbox();
+    display: -webkit-flex;
+    display: flex;
+}
+
+.inline-flex-container() {
+    .flexlegacy-inline-flexbox();
+    display: -webkit-inline-flex;
+    display: inline-flex;
+}
+
+// @direction: column | column-reverse | row | row-reverse
+.flex-direction(@direction) {
+    -ms-flex-direction: @direction;
+    -webkit-flex-direction: @direction;
+    flex-direction: @direction;
+}
+
+// @wrap : nowrap | wrap | wrap-reverse
+// use .flexlegacy-flex-wrap() in addition to this for for IE10 support
+.flex-wrap(@wrap) {
+    -webkit-flex-wrap: @wrap;
+    flex-wrap: @wrap;
+}
+
+// shorthand for flex-direction and flex-wrap
+// @options <flex-direction> || <flex-wrap>
+// use .flexlegacy-flex-flow() in addition to this for for IE10 support
+.flex-flow(@options) {
+    -webkit-flex-flow: @options;
+    flex-flow: @options;
+}
+
+// @order: <integer>
+.order(@order) {
+    -ms-flex-order: @order;
+    -webkit-order: @order;
+    order: @order;
+}
+
+// shorthand for flex-grow, flex-shrink and flex-basis
+// @options: none | initial | auto | <flex-grow> | [<flex-grow> <flex-shrink>] | [<flex-grow> <flex-shrink> <flex-basis>]
+.flex(@options) {
+    -ms-flex: @options;
+    -webkit-flex: @options;
+    flex: @options;
+}
+
+.flex-grow(@grow-factor) {
+    -webkit-flex-grow: @grow-factor;
+    flex-grow: @grow-factor;
+}
+
+.flex-shrink(@shrink-factor) {
+    -webkit-flex-shrink: @shrink-factor;
+    flex-shrink: @shrink-factor;
+}
+
+.flex-basis(@size) {
+    -webkit-flex-basis: @size;
+    flex-basis: @size;
+}
+
+// @alignment: center | flex-end | flex-start | space-around | space-between
+.justify-content(@alignment) {
+    -webkit-justify-content: @alignment;
+    justify-content: @alignment;
+}
+
+// @alignment: baseline | center | flex-end | flex-start | stretch
+.align-items(@alignment) {
+    -webkit-align-items: @alignment;
+    align-items: @alignment;
+}
+
+// @alignment: auto | baseline | center | flex-end | flex-start | stretch
+// use .flexlegacy-item-align() in addition to this for for IE10 support
+.align-self(@alignment) {
+    -webkit-align-self: @alignment;
+    align-self: @alignment;
+}
+
+// @alignment: center | flex-end | flex-start | space-around | space-between | stretch
+// use .flexlegacy-line-pack() in addition to this for for IE10 support
+.align-content(@alignment) {
+    -webkit-align-content: @alignment;
+    align-content: @alignment;
+}
+
+
+
+// March 2012 Flexbox working draft syntax supported by IE 10
+
+// superceded by display: flex;
+.flexlegacy-flexbox() {
+    display: -ms-flexbox;
+}
+
+.flexlegacy-inline-flexbox() {
+    display: -ms-inline-flexbox;
+}
+
+// superceded by flex-wrap
+// @wrap: none | wrap | wrap-reverse
+.flexlegacy-flex-wrap(@wrap) {
+    -ms-flex-wrap: @wrap;
+}
+
+// shorthand. superceded by flex-flow. Split out because -ms-flex-wrap uses 'none' instead of 'nowrap'
+// @options -ms-flex-direction || -ms-flex-wrap
+.flexlegacy-flex-flow(@options) {
+    -ms-flex-flow: @options;
+}
+
+// superceded by align-self. split out because 'end' and 'start' params are now 'flex-end' and 'flex-start' in the final spec
+// @alignment: auto | baseline | center | end | start | stretch
+.flexlegacy-item-align(@alignment) {
+    -ms-flex-item-align: @alignment;
+}
+
+// superceded by align-content. split out because 'end' and 'start' params are now 'flex-end' and 'flex-start' in the final spec,
+// and two new params ' space-around' and 'space-between' have been added, and 'distribute' and 'justify' have been removed
+// @alignment: center | distribute | end | justify | start | stretch
+.flexlegacy-line-pack(@alignment) {
+    -ms-flex-line-pack: @alignment;
+}
+
+.input-placeholder(@rules) {
+    &::-webkit-input-placeholder {
+        @rules();
+    }
+
+    &::-moz-placeholder {
+        @rules();
+    }
+
+    &:-ms-input-placeholder {
+        @rules();
+    }
+}
+
+.action-separator() {
+    content: "·";
+    color: @bodyTextColor;
+    font-size: @font-size-default;
+    padding: 0 @halfSpacing;
+    line-height: 1;
+}

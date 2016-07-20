@@ -1,0 +1,198 @@
+{namespace bitbucket.internal.page.setup}
+
+/**
+ * @param? form
+ * @param? fieldErrors
+ * @param? jiraIntegrationError
+ * @param? formErrors
+ * @param? credentialsProblem
+ * @param? stashUalTypesMissing
+ * @param? jiraUpmUrl
+ * @param? dataAttributes
+ */
+{template .jiraIntegration}
+{webResourceManager_requireResourcesForContext('bitbucket.page.setup.jiraIntegration')}
+{call bitbucket.internal.layout.setup}
+    {param step: getText('bitbucket.web.setup.title.jira.integration') /}
+    {param dataAttributes: $dataAttributes /}
+    {param content}
+        <p class='jira-integration-about'>
+            {getText('bitbucket.web.setup.jira.about.title')}
+        </p>
+        <ul class='jira-integration-about'>
+            <li>{getText('bitbucket.web.setup.jira.about.user-import')}</li>
+            <li>{getText('bitbucket.web.setup.jira.about.code-changes')}</li>
+            <li>{getText('bitbucket.web.setup.jira.about.navigate')}</li>
+            <li>{getText('bitbucket.web.setup.jira.about.bug-fixes')}</li>
+        </ul>
+        {if $jiraIntegrationError}
+            {call aui.message.error}
+                {param extraClasses: 'jira-integration-error' /}
+                {param content}
+                    <p>{$jiraIntegrationError}</p>
+                    <p>{{getText('bitbucket.web.jiraintegration.troubleshootingguide',
+                            getText('bitbucket.web.jiraintegration.troubleshootingguide.link',
+                                '<a href="', bitbucket_help_url('bitbucket.help.jira.integration.setup'), '" target="_blank">', '</a>'))|noAutoescape}}</p>
+                {/param}
+            {/call}
+        {/if}
+        {if $credentialsProblem}
+            {call .credentialsProblem}
+                {param usernameContent}
+                    {call .usernameContent}
+                        {param escapedUsername: $form.jiraAdminUsername /}
+                    {/call}
+                {/param}
+            {/call}
+        {/if}
+        {if $stashUalTypesMissing}
+            {call .ualTypeMissingMessage}
+                {param escapedJiraUpmUrl: $jiraUpmUrl /}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param isLongLabels: true /}
+            {param content}
+                <input type='hidden' name='step' value='jira'/>
+                <input type='hidden' id='skip' name='skip' value='false'/>
+                <h2>{getText('bitbucket.web.setup.jira.connection.heading')}</h2>
+                {call widget.aui.form.fieldset}
+                    {param content}
+                        {call widget.aui.form.text}
+                            {param id: 'jiraBaseUrl' /}
+                            {param autofocus: true /}
+                            {param required: true /}
+                            {param labelContent}{getText('bitbucket.web.setup.jira.base.url')}{/param}
+                            {param description: getText('bitbucket.web.setup.jira.base.url.description') /}
+                            {param initialValue: $form.jiraBaseUrl /}
+                            {param maxLength: 255 /}
+                            {param errors: $fieldErrors ? $fieldErrors.jiraBaseUrl : null /}
+                        {/call}
+                        {call widget.aui.form.text}
+                            {param id: 'jiraAdminUsername' /}
+                            {param required: true /}
+                            {param labelContent}{getText('bitbucket.web.setup.jira.admin.username')}{/param}
+                            {param description: getText('bitbucket.web.setup.jira.admin.username.description') /}
+                            {param initialValue: $form.jiraAdminUsername /}
+                            {param maxLength: 255 /}
+                            {param autocomplete: 'off' /}
+                            {param errors: $fieldErrors ? $fieldErrors.jiraAdminUsername : null /}
+                        {/call}
+                        {call widget.aui.form.password}
+                            {param id: 'jiraAdminPassword' /}
+                            {param required: true /}
+                            {param labelContent}{getText('bitbucket.web.setup.jira.password')}{/param}
+                            {param description: getText('bitbucket.web.setup.jira.password.description') /}
+                            {param initialValue: '' /}
+                            {param maxLength: 255 /}
+                            {param autocomplete: 'off' /}
+                            {param errors: $fieldErrors ? $fieldErrors.jiraAdminPassword : null /}
+                        {/call}
+                        {call widget.aui.form.text}
+                            {param id: 'stashBaseUrl' /}
+                            {param required: true /}
+                            {param labelContent}{getText('bitbucket.web.setup.stash.base.url', productName())}{/param}
+                            {param description: getText('bitbucket.web.setup.stash.base.url.description', productName()) /}
+                            {param initialValue: $form.stashBaseUrl ? $form.stashBaseUrl : nav_base_url() /}
+                            {param maxLength: 255 /}
+                            {param errors: $fieldErrors ? $fieldErrors.stashBaseUrl : null /}
+                        {/call}
+                    {/param}
+                {/call}
+                <h2>{getText('bitbucket.web.setup.jira.user.database.heading')}</h2>
+                <p class='jira-user-mgmt-info'>
+                    {getText('bitbucket.web.setup.jira.user.management.info', productName())}
+                    &nbsp;<a href="{bitbucket_help_url('bitbucket.help.jira.integration.setup')}">{getText('bitbucket.web.setup.jira.user.management.learn.more')}</a>
+                </p>
+                {call widget.aui.form.checkbox}
+                    {param id: 'addUserDirectory' /}
+                    {param labelContent}{getText('bitbucket.web.setup.jira.as.user.database')}{/param}
+                    {param checked: $form.addUserDirectory /}
+                    {param errors: $fieldErrors ? $fieldErrors.publicSignUp : null /}
+                    {param description: '' /}
+                {/call}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'done' /}
+                            {param isPrimary: true /}
+                            {param label}
+                                {if $fieldErrors or $formErrors or $credentialsProblem or $stashUalTypesMissing}
+                                    {getText('bitbucket.web.setup.retry.button')}
+                                {else}
+                                    {getText('bitbucket.web.setup.connect.button')}
+                                {/if}
+                            {/param}
+                        {/call}
+                        {call widget.aui.form.linkButton}
+                            {param id: 'submitSkip' /}
+                            {param href: '' /}
+                            {param text: getText('bitbucket.web.setup.skip') /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/setup/jiraIntegration').onReady();
+            require('bitbucket/internal/widget/setup-tracking').track('setup-jira-integration');
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * @param escapedUsername
+ */
+{template .usernameContent}
+    <strong>{$escapedUsername}</strong>
+{/template}
+
+/**
+ * @param usernameContent
+ */
+{template .credentialsProblem private="true"}
+    {call aui.message.warning}
+        {param titleContent}
+            {getText('bitbucket.web.setup.jira.credentials.problem.title')}
+        {/param}
+        {param content}
+            <p>
+            {{getText('bitbucket.web.setup.jira.credentials.problem.message', $usernameContent)|noAutoescape}}
+            </p>
+            <ul>
+                <li>{{getText('bitbucket.web.setup.jira.credentials.problem.reason1')}}</li>
+                <li>{{getText('bitbucket.web.setup.jira.credentials.problem.reason2', $usernameContent)|noAutoescape}}</li>
+                <li>{{getText('bitbucket.web.setup.jira.credentials.problem.reason3', $usernameContent)|noAutoescape}}</li>
+            </ul>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param escapedJiraUpmUrl
+ */
+{template .ualTypeMissingMessage private="true"}
+    {call aui.message.warning}
+        {param titleContent}
+            {getText('bitbucket.web.setup.jira.missing.ual.type.title')}
+        {/param}
+        {param content}
+            <p>
+            {{getText('bitbucket.web.setup.jira.missing.ual.type.message',
+                       '<strong>', '</strong>',
+                       getText('bitbucket.web.setup.jira.missing.ual.type.message.upm.link', '<a href="', $escapedJiraUpmUrl, '" target="_blank">', '</a>'),
+                       getText('bitbucket.web.setup.jira.missing.ual.type.message.plugin.name', '<a href="', bitbucket_help_url('bitbucket.help.jira.compatibility'), '" target="_blank">', '</a>'),
+                       productName()
+                )|noAutoescape}}
+            </p>
+            <p>
+            {{getText('bitbucket.web.setup.jira.missing.ual.type.message.retry', getText('bitbucket.web.setup.retry', '<strong>', '</strong>'))|noAutoescape}}
+            </p>
+        {/param}
+    {/call}
+{/template}

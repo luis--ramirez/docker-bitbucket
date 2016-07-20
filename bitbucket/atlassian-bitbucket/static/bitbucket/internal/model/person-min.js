@@ -1,0 +1,1 @@
+define("bitbucket/internal/model/person",["backbone-brace"],function(a){return a.Model.extend({namedAttributes:{emailAddress:"string",name:"string"},idAttribute:"name",initialize:function(){null==this.namedAttributes.id&&this.setId(this.attributes[this.idAttribute])}})});

@@ -1,0 +1,206 @@
+{namespace bitbucket.internal.feature.permission}
+
+/**
+ * @param id
+ * @param permissionDataList
+ * @param? grantablePermissionDataList
+ * @param entityTitleText
+ * @param addEntityText
+ * @param addButtonClass
+ * @param noResultsText
+ */
+{template .permissionTable private="true"}
+    <h3>{$entityTitleText}</h3>
+    {call widget.aui.table}
+        {param extraClasses: 'permissions-table' /}
+        {param id: $id /}
+        {param theadContent}
+            <tr>
+                <th class="name-column" scope="col">{getText('bitbucket.web.permission.table.name.column')}</th>
+                {foreach $permissionData in $permissionDataList}
+                <th class="permission-column" title="{$permissionData.i18nName}" scope="col">
+                    {$permissionData.i18nName}
+                    {if $permissionData.i18nDescription}
+                        {call aui.icons.icon}
+                            {param icon: 'help' /}
+                            {param useIconFont: true /}
+                        {/call}
+
+                        <span class="permission-column-desc">{$permissionData.i18nDescription}</span>
+                    {/if}
+                </th>
+                {/foreach}
+                <th class="remove-permissions-column" scope="col"></th>
+            </tr>
+            {call .multiSelector}
+                {param id: $id /}
+                {param colspan: length($permissionDataList) + 2 /}/* the +2 is for the columns that are always there */
+                {param extraClasses: $addButtonClass /}
+                {param placeholderText: $addEntityText /}
+                {param permissionDataList: $grantablePermissionDataList ? $grantablePermissionDataList : $permissionDataList /}
+            {/call}
+        {/param}
+        {param content}{/param}
+        {param tfootContent}
+            <tr class="no-results-row">
+                <td colspan="{length($permissionDataList) + 2}"> /* the +2 is for the columns that are always there */
+                    <div>{$noResultsText}</div>
+                </td>
+            </tr>
+            <tr class="load-more-row">
+                <td colspan="{length($permissionDataList) + 2}"> /* same as above - +2 for the columns that are always there */
+                    <a href="#" class="load-more">{getText('bitbucket.web.permission.table.load.more')}</a>
+                </td>
+            </tr>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param permissionDataList a list of com.atlassian.stash.web.widgets.permissions.PermissionData
+ * @param? grantablePermissionDataList a list of com.atlassian.stash.web.widgets.permissions.PermissionData
+ * @param noResultsText
+ */
+{template .userPermissionTable}
+    {call .permissionTable}
+        {param id: 'user-permissions-table' /}
+        {param permissionDataList: $permissionDataList /}
+        {param grantablePermissionDataList: $grantablePermissionDataList /}
+        {param entityTitleText: getText('bitbucket.web.permission.individual.users') /}
+        {param addEntityText: getText('bitbucket.web.permission.add.user') /}
+        {param addButtonClass: 'add-user' /}
+        {param noResultsText: $noResultsText /}
+    {/call}
+{/template}
+
+/**
+* @param permissionDataList a list of com.atlassian.stash.web.widgets.permissions.PermissionData
+* @param? grantablePermissionDataList a list of com.atlassian.stash.web.widgets.permissions.PermissionData
+* @param noResultsText
+*/
+{template .groupPermissionTable}
+    {call .permissionTable}
+        {param id: 'group-permissions-table' /}
+        {param permissionDataList: $permissionDataList /}
+        {param grantablePermissionDataList: $grantablePermissionDataList /}
+        {param entityTitleText: getText('bitbucket.web.permission.groups') /}
+        {param addEntityText: getText('bitbucket.web.permission.add.group') /}
+        {param addButtonClass: 'add-group' /}
+        {param noResultsText: $noResultsText /}
+    {/call}
+{/template}
+
+/**
+ * @param entity a user object
+ * @param entityPermissions a list of permission data like { name : string, granted : boolean, inherited : boolean }
+ * @param tooltip
+ * @param showRemovePermsButton
+ * @param linkToEntities
+ */
+{template .userPermissionRow}
+    <tr data-entity-id="{$entity.name}" {if $tooltip}title="{$tooltip}"{/if}>
+        <td>
+            <div class="permissions-item">
+                {call bitbucket.internal.widget.avatarWithName}
+                    {param size: 'small'/}
+                    {param person: $entity /}
+                    {param link: $linkToEntities /}
+                    {param href: nav_admin_user($entity.name) /}
+                    {param deleted: not $entity.active /}
+                {/call}
+            </div>
+        </td>
+        {call .permissionCells}{param entityPermissions: $entityPermissions /}{/call}
+        <td>
+            {if $showRemovePermsButton}
+            {call bitbucket.internal.buttons.deleteButton}
+                {param title: getText('bitbucket.web.permission.remove.user') /}
+            {/call}
+            {/if}
+        </td>
+    </tr>
+{/template}
+
+/**
+ * @param entity a group object
+ * @param entityPermissions a list of permission data like { name : string, granted : boolean, inherited : boolean }
+ * @param priviledgedTooltip
+ * @param showRemovePermsButton
+ * @param linkToEntities
+ */
+{template .groupPermissionRow}
+    <tr data-entity-id="{$entity.name}" {if $priviledgedTooltip}title="{$priviledgedTooltip}"{/if}>
+        <td>
+            <div class="permissions-item name">
+                {call bitbucket.internal.widget.groupAvatar}
+                    {param size: 'small'/}
+                    {param name: $entity.name /}
+                {/call}
+                {if $linkToEntities}
+                    <a href="{nav_admin_group($entity.name)}" class="display-name" title="{$entity.name}">{$entity.name}</a>
+                {else}
+                    {$entity.name}
+                {/if}
+            </div>
+        </td>
+        {call .permissionCells}{param entityPermissions: $entityPermissions /}{/call}
+        <td>
+            {if $showRemovePermsButton}
+            {call bitbucket.internal.buttons.deleteButton}
+                {param title: getText('bitbucket.web.permission.remove.group') /}
+            {/call}
+            {/if}
+        </td>
+    </tr>
+{/template}
+
+/**
+ * @param entityId
+ * @param numRows
+ * @param message
+ */
+{template .errorPermissionRow}
+    <tr data-entity-id="{$entityId}" class="permission-error">
+        <td colspan="{$numRows}">
+            {$message}
+        </td>
+    </tr>
+{/template}
+
+/**
+ * @param entityPermissions a list of permission data like { name : string, granted : boolean, inherited : boolean, privileged : boolean, tooltip : string }
+ */
+{template .permissionCells}
+    {foreach $permission in $entityPermissions}
+        <td>
+            <input type="checkbox" value="{$permission.name}" {if $permission.tooltip}title="{$permission.tooltip}"{/if}
+            {if $permission.inherited or $permission.granted or isLast($permission)}checked {/if}
+            {if $permission.privileged or $permission.inherited or isLast($permission)}disabled class="disabled"{/if}
+            />
+        </td>
+    {/foreach}
+{/template}
+
+/**
+ * @param entity
+ * @param isUser
+ * @param inactiveText
+ */
+{template .permissionModalItem}
+    <div{if not $entity.visible and not $entity.active} class="inactive"{/if}>
+        {if $isUser}
+            {call bitbucket.internal.widget.avatar}
+                {param person: $entity /}
+                {param size: 'xsmall' /}
+            {/call}
+        {/if}
+        <span class="display-name"{if not $entity.visible and not $entity.active} title="{$inactiveText}"{/if}>
+            {$entity.displayName or $entity.name}
+        </span>
+        {if $entity.displayName and $entity.name}
+            <span class="name"{if not $entity.visible and not $entity.active} title="{$inactiveText}"{/if}>
+                {$entity.name}
+            </span>
+        {/if}
+    </div>
+{/template}

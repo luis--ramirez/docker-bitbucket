@@ -1,0 +1,33 @@
+@import "/static/global.less";
+
+.avatar-dropdown {
+    width: 220px;
+}
+
+.avatar-dropdown .aui-list-truncate {
+    max-height: 330px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.avatar-dropdown .user-avatar {
+    vertical-align: middle;
+}
+
+.avatar-dropdown .aui-avatar-badged {
+    margin: 7px @baseSpacing; /* top margin prevents the badge from getting clipped off inside the dropdown */
+
+    .user-avatar {
+        margin-right: 0;
+        vertical-align: top;
+    }
+}
+
+/* @aui-override  */
+
+.avatar-dropdown > .aui-list-truncate .participant-item {
+    .text-overflow();
+}
+
+/* end @aui-override  */
+

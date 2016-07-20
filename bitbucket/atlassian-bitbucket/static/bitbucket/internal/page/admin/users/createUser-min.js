@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/admin/userCreate",["jquery","exports"],function(a,d){function b(){a("#password, #confirmPassword").parent(".field-group").toggleClass("hidden",a(this).is(":checked"))}d.onReady=function(){var c=a("#notify");c.click(b);b.call(c[0])}});

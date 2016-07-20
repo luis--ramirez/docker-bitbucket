@@ -1,0 +1,114 @@
+{namespace bitbucket.internal.feature.pullRequest.merge}
+
+/**
+ * @param person
+ * @param pullRequest
+ */
+{template .dialog}
+    {call aui.dialog.dialog2}
+        {param id: 'pull-request-merge-dialog' /}
+        {param content}
+            <div class="commit-message-container">
+                <div class="committer-avatar">
+                    {call bitbucket.internal.widget.avatar}
+                        {param size: 'medium' /}
+                        {param person: $person /}
+                    {/call}
+                </div>
+                {call bitbucket.internal.widget.codeBlock}
+                    {param content}
+                        {call .mergeMessage}
+                            {param pullRequest: $pullRequest /}
+                        {/call}
+                    {/param}
+                    {param extraClasses: 'default-commit-message' /}
+                {/call}
+                {call bitbucket.internal.widget.form}
+                    {param action: '' /}
+                    {param autocomplete: 'off' /}
+                    {param extraClasses: 'commit-message-form collapsed' /}
+                    {param content}
+                        {call widget.aui.form.expandingTextarea}
+                            {param id: 'commit-message' /}
+                            {param name: 'commit-message'/}
+                            {param extraClasses: 'text commit-message full-width-field' /}
+                            {param placeholderText: getTextAsHtml('bitbucket.web.pullrequest.merge.dialog.commit.message.prompt.html') /}
+                        {/call}
+                        {call aui.buttons.button}
+                            {param type: 'link' /}
+                            {param text: getText('bitbucket.web.button.cancel') /}
+                            {param extraClasses: 'commit-message-action cancel-commit-message-link' /}
+                        {/call}
+                    {/param}
+                {/call}
+            </div>
+
+            {call bitbucket.internal.feature.repository.branchDiagram}
+                {param type: 'merge' /}
+                {param id: 'merge-branch'/}
+                {param sourceRef: $pullRequest.fromRef /}
+                {param sourceRepo: $pullRequest.fromRef.repository.id != $pullRequest.toRef.repository.id ? $pullRequest.fromRef.repository : null /}
+                {param targetRef: $pullRequest.toRef /}
+                {param targetRepo: $pullRequest.fromRef.repository.id != $pullRequest.toRef.repository.id ? $pullRequest.toRef.repository : null /}
+            {/call}
+        {/param}
+
+        {param titleText: getText('bitbucket.web.pullrequest.merge.dialog.title') /}
+        {param footerHintContent}
+            {foreach $webPanel in getWebPanels('internal.stash.pull-request.merge-dialog.footer.hint')}
+                {if isFirst($webPanel)}
+                    {$webPanel}
+                {/if}
+            {/foreach}
+        {/param}
+        {param footerActionContent}
+            {call aui.buttons.button}
+                {param text: getText('bitbucket.web.button.merge') /}
+                {param type: 'primary' /}
+                {param extraClasses: 'confirm-button' /}
+            {/call}
+            {call aui.buttons.button}
+                {param text: getText('bitbucket.web.button.cancel') /}
+                {param type: 'link' /}
+                {param extraClasses: 'cancel-button' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param pullRequest
+ */
+{template .mergeMessage private="true"}
+    {let $crossRepo: $pullRequest.toRef.repository.id != $pullRequest.fromRef.repository.id /}
+
+    Merge pull request #{$pullRequest.id} in {$pullRequest.toRef.repository.project.key}/{$pullRequest.toRef.repository.slug} from
+    {sp}{if $crossRepo}{$pullRequest.fromRef.repository.project.key}/{$pullRequest.fromRef.repository.slug}:{/if}{$pullRequest.fromRef.displayId}
+    {sp}to {$pullRequest.toRef.displayId}
+{/template}
+
+/**
+ * @param errors
+ */
+{template .errors private="true"}
+    {call aui.message.error}
+        {param content}
+            {foreach $error in $errors}
+                {if $error.conflicted or $error.vetoes and $error.vetoes.length}
+                    {$error.message}
+                    {call aui.buttons.button}
+                        {param text: getText('bitbucket.web.pullrequest.merge.view.details') /}
+                        {param type: 'link' /}
+                        {param extraClasses: 'view-merge-veto-details-button' /}
+                    {/call}
+                {else}
+                    {call bitbucket.internal.widget.errorContent}
+                        {param message: $error.message /}
+                        {param details: $error.details /}
+                        {param detailListExtraClasses: 'errors' /}
+                    {/call}
+                {/if}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}

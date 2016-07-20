@@ -1,0 +1,130 @@
+@import "/static/global.less";
+@import "file-content-variables.less";
+
+// This is to override the default sidebar behaviour so we can get consistent behaviour in IE and Chrome/FF
+// `position:fixed` gets affected by the `transform:translate3d` that page-scrolling-manager puts on the .page
+// but only in Chrome and FF, IE it remains unaffected.
+// Using `position:absolute` is unaffected by the transform and behaves the same in all browsers, this requires more
+// work to scroll the sidebar but we had to do that anyway in Chrome/FF when it was `position:fixed` to counter the
+// transform anyway.
+.scrolling-forwarded .aui-sidebar .aui-sidebar-wrapper.aui-is-docked {
+    position: absolute;
+}
+
+.file-content {
+    .box-sizing();
+    background-color: @contentBackgroundColor;
+    width: auto;
+    display: block;
+    vertical-align: top;
+
+    .diff-view .line-numbers {
+        left: @doubleSpacing + 1px; // 1px extra for the #file-content border
+    }
+
+    .content-view {
+        .box-sizing();
+        position: relative;
+        min-height: 50px;
+        width: 100%;
+        white-space: nowrap;
+        clear: both;
+        overflow: hidden;
+
+        &.fully-loaded {
+            padding-bottom: 0;
+        }
+
+        &.scroll-x,
+        &.diff-view.scroll-x {
+            overflow-x: auto;
+        }
+
+        &.empty-file {
+            color: @secondaryTextColor;
+            padding: 50px 0;
+            min-height: 250px;
+            line-height: inherit;
+
+            .icon-empty-file, .icon-empty-diff {
+                .square(@icon-size-large);
+                background-image: url(icons/icon-document.svg);
+                background-size: @icon-size-large;
+            }
+        }
+
+        + .aui-message {
+            margin: 0 @doubleSpacing @doubleSpacing;
+        }
+
+        .line {
+            font-size: @font-size-small;
+        }
+    }
+
+    @fileCommentsDividerWidth: 2px;
+    @fileCommentsDividerColor: @textContentBackgroundColor;
+    .file-comments .comment-container {
+        border-bottom: @fileCommentsDividerWidth solid @fileCommentsDividerColor;
+    }
+
+    .file-toolbar {
+        /* AUI does not provide a trigger button style unless its a dropdown.
+           However, revision picker is an inline-dialog */
+        .until-commit-button:after {
+            .dropdown-arrow();
+            content: "";
+            margin-left: 6px;
+            margin-top: -2px;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        // We need to wrap the options menu; in webkit a horizontal scrollbar appears when the dropdown2 menu is shown
+        .diff-view-options {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            vertical-align: top; // Strangely this fixes a layout issue in Gecko/Trident
+            margin-left: 0
+        }
+    }
+
+    .file-content-spinner {
+        width: 100px;
+        height: 200px;
+        position: relative;
+        margin-left: -50px;
+        bottom: 0;
+        left: 50%;
+    }
+}
+.file-content-errors + .file-content {
+    margin-top: 15px;
+}
+
+// This AUI Dropdown2 needs to have a higher z-index than the .file-content area
+.diff-options-dropdown {
+    z-index: 10;
+
+    a {
+        cursor: pointer;
+    }
+}
+
+.change-type-lozenge-tooltip .tipsy-inner {
+    max-width: @baseLayoutMinWidth / 2;
+    text-align: left;
+
+    .added {
+        color: @addedLineColorEdiff;
+    }
+
+    .deleted {
+        color: @deletedLineColorEdiff;
+    }
+}
+
+.change-type-placeholder {
+    display: inline-block;
+}

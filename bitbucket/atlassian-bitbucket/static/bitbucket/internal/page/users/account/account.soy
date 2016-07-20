@@ -1,0 +1,214 @@
+{namespace bitbucket.internal.users.account}
+
+/**
+ * @param user
+ * @param accountSettingsForm
+ * @param mutableDetails
+ * @param pluginFieldsContent
+ * @param? saved
+ * @param? fieldErrors
+ * @param? formErrors
+ */
+{template .settings}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.user.account.settings')}
+    {call bitbucket.internal.layout.users.account}
+        {param user: $user /}
+        {param activeNav: 'account-settings-section' /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{getText('bitbucket.web.user.account.settings.title')}</h2>
+                {/param}
+            {/call}
+            {if not $mutableDetails}
+                {call aui.message.info}
+                    {param content}
+                        {getText('bitbucket.web.user.account.settings.read.only.warning')}
+                    {/param}
+                {/call}
+            {elseif $saved}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.user.account.settings.changes.saved')}
+                    {/param}
+                {/call}
+            {/if}
+            {call widget.aui.group.group}
+                {param extraClasses: 'account-settings' /}
+                {param content}
+                    {call widget.aui.group.item}
+                        {param content}
+                            {call .settingsForm data="all" /}
+                        {/param}
+                    {/call}
+                    {call widget.aui.group.item}
+                        {param extraClasses: 'avatar-item' /}
+                        {param content}
+                            {call bitbucket.internal.widget.userAvatarForm}
+                                {param user: $user /}
+                                {param withPicker: true /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/users/account').onReady({to_json($user)|noAutoescape}, '.user-avatar-form');
+            </script>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param user
+ * @param accountSettingsForm
+ * @param mutableDetails
+ * @param pluginFieldsContent
+ * @param? fieldErrors
+ * @param? formErrors
+ */
+{template .settingsForm}
+    {call bitbucket.internal.widget.xsrfProtectedForm}
+        {param action: nav_account() /}
+        {param errors: $formErrors /}
+        {param content}
+            {foreach $webPanel in getWebPanels('bitbucket.user.account.settings.beforefields', ['accountUser' : $user])}
+                {$webPanel}
+            {/foreach}
+            {call widget.aui.form.text}
+                {param id: 'displayName' /}
+                {param disabled: not $mutableDetails /}
+                {param errors: $fieldErrors ? $fieldErrors['displayName'] : null /}
+                {param labelContent}{getText('bitbucket.web.user.account.settings.name.html')}{/param}
+                {param initialValue: $accountSettingsForm.displayName /}
+                {param required: true /}
+                {param autofocus: true /}
+                {param autocomplete: 'off' /}
+            {/call}
+            {call widget.aui.form.text}
+                {param id: 'emailAddress' /}
+                {param disabled: not $mutableDetails /}
+                {param errors: $fieldErrors ? $fieldErrors['emailAddress'] : null /}
+                {param labelContent}{getText('bitbucket.web.user.account.settings.email.html')}{/param}
+                {param initialValue: $accountSettingsForm.emailAddress /}
+                {param required: true /}
+                {param autocomplete: 'off' /}
+            {/call}
+            {foreach $webPanel in getWebPanels('bitbucket.user.account.settings.afterfields', ['accountUser' : $user])}
+                {$webPanel}
+            {/foreach}
+            {$pluginFieldsContent|noAutoescape}
+            {call widget.aui.form.buttons}
+                {param content}
+                    {call widget.aui.form.submit}
+                        {param id: 'submit' /}
+                        {param isPrimary: true /}
+                        {param label: getText('bitbucket.web.button.save') /}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param user
+ * @param editablePassword
+ * @param? saved
+ * @param? fieldErrors
+ * @param? formErrors
+ */
+{template .password}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.user.account.password')}
+    {call bitbucket.internal.layout.users.account}
+        {param user: $user /}
+        {param activeNav: 'account-password-section' /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{getText('bitbucket.web.user.account.password.title')}</h2>
+                {/param}
+            {/call}
+            {if not $editablePassword}
+                {call aui.message.info}
+                    {param content}
+                        {getText('bitbucket.web.user.account.password.read.only.warning')}
+                    {/param}
+                {/call}
+            {elseif $saved}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.user.account.password.changes.saved')}
+                    {/param}
+                {/call}
+            {/if}
+            {call .passwordForm data="all" /}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param user
+ * @param editablePassword
+ * @param? fieldErrors
+ * @param? formErrors
+ */
+{template .passwordForm}
+    {call bitbucket.internal.widget.xsrfProtectedForm}
+        {param action: nav_account_password() /}
+        {param errors: $formErrors /}
+        {param content}
+            {foreach $webPanel in getWebPanels('bitbucket.user.account.password.beforefields', ['accountUser' : $user])}
+                {$webPanel|noAutoescape}
+            {/foreach}
+            {call widget.aui.form.password}
+                {param id: 'currentPassword' /}
+                {param disabled: not $editablePassword /}
+                {param errors: $fieldErrors ? $fieldErrors['currentPassword'] : null /}
+                {param labelContent}{getText('bitbucket.web.user.account.password.current.html')}{/param}
+                {param required: true /}
+                {param autofocus: true /}
+            {/call}
+            {call widget.aui.form.password}
+                {param id: 'newPassword' /}
+                {param disabled: not $editablePassword /}
+                {param errors: $fieldErrors ? $fieldErrors['newPassword'] : null /}
+                {param labelContent}{getText('bitbucket.web.user.account.password.new.html')}{/param}
+                {param required: true /}
+            {/call}
+            {call widget.aui.form.password}
+                {param id: 'confirmNewPassword' /}
+                {param disabled: not $editablePassword /}
+                {param errors: $fieldErrors ? $fieldErrors['confirmNewPassword'] : null /}
+                {param labelContent}{getText('bitbucket.web.user.account.password.confirm.new.html')}{/param}
+                {param required: true /}
+            {/call}
+            {foreach $webPanel in getWebPanels('bitbucket.user.account.password.afterfields', ['accountUser' : $user])}
+                {$webPanel}
+            {/foreach}
+            {call widget.aui.form.buttons}
+                {param content}
+                    {call widget.aui.form.submit}
+                        {param id: 'submit' /}
+                        {param disabled: not $editablePassword /}
+                        {param isPrimary: true /}
+                        {param label: getText('bitbucket.web.button.save') /}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * Used by the com.atlassian.bitbucket.server.bitbucket-web:account-view-profile-button web panel
+ */
+{template .viewProfileButton}
+    {call bitbucket.internal.buttons.button}
+        {param buttonText: getText('bitbucket.web.user.account.view.profile.button.text') /}
+        {param href: nav_profile() /}
+        {param title: getText('bitbucket.web.user.account.view.profile.button.title') /}
+    {/call}
+{/template}

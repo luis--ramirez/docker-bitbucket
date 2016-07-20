@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/pull-request/can-merge",["bitbucket/internal/util/events"],function(a){return function(){a.trigger("bitbucket.internal.feature.pull-request.merge-check")}});

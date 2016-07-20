@@ -1,0 +1,31 @@
+{namespace bitbucket.internal.feature.fileContent}
+
+/**
+ * @param commit
+ * @param repository
+ * @param spannedLines
+ */
+{template .fileBlameGutterDetailed}
+    <div class="blame" data-commitid="{$commit.id}" data-span="{$spannedLines}">
+        {call bitbucket.internal.widget.avatar}
+            {param person : $commit.author /}
+            {param size: 'xsmall' /}
+        {/call}
+        {call bitbucket.internal.widget.userLink}
+            {param user: $commit.author /}
+            {param extraClasses: 'blame-author secondary-link' /}
+        {/call}
+        {call bitbucket.internal.feature.commit.link}
+            {param repository: $repository /}
+            {param commit: $commit /}
+        {/call}
+        <div class="blame-timestamp" title="{format_date($commit.authorTimestamp, 'full')}">{format_date($commit.authorTimestamp, 'short')}</div>
+    </div>
+{/template}
+
+/**
+ * @param commit
+ */
+{template .fileBlameGutterSpan}
+    <div class="blame" data-commitid="{$commit.id}" title="{personDisplayName($commit.author)}">&nbsp;</div>
+{/template}

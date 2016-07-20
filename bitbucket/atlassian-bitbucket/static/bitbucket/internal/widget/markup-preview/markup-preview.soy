@@ -1,0 +1,33 @@
+{namespace bitbucket.internal.widget.markupPreview}
+
+/**
+ */
+{template .preview}
+    <div class="markup-preview markup" title="{getText('bitbucket.web.markup.clickToEdit')}"></div>
+{/template}
+
+/**
+ */
+{template .previewHelp}
+    {call bitbucket.internal.buttons.button}
+        {param href: bitbucket_help_url('bitbucket.help.markup.syntax.guide')/}
+        {param extraClasses: 'aui-button-subtle aui-button-compact markup-preview-help' /}
+        {param title: getText('bitbucket.web.markup.syntax.guide') /}
+        {param iconType: 'custom' /}
+        {param iconClass: 'aui-icon aui-icon-small aui-iconfont-help' /}
+        {param iconText: getText('bitbucket.web.markup.syntax.guide') /}
+        {param buttonText: '' /}
+        {param extraAttributes: ['target': '_blank']/}
+    {/call}
+{/template}
+
+/**
+ * @param title
+ */
+{template .previewButton}
+    {call bitbucket.internal.buttons.button}
+        {param extraClasses: 'aui-button-subtle aui-button-compact markup-preview-button' /}
+        {param buttonText: getText('bitbucket.web.markup.preview') /}
+        {param extraAttributes: ['type': 'button', 'data-preview-tooltip' : $title] /}
+    {/call}
+{/template}

@@ -1,0 +1,613 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-bbui-components" name="BBUI component dependencies exposed as Web Resources">
+    <plugin-info>
+        <description>Plugin containing the Bitbucket Server BBUI shared component dependencies</description>
+        <version>1.0.0</version>
+        <vendor name="Atlassian" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <resource type="i18n" name="bbui" location="com.atlassian.stash.internal.web.i18n.bbui" />
+
+    <client-resource key="actions" name="actions">
+        <description>BBUI: actions</description>
+        <directory location="/static/bitbucket/internal/bbui/actions/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="analytics" name="analytics">
+        <description>BBUI: analytics</description>
+        <directory location="/static/bitbucket/internal/bbui/analytics/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="aui-react" name="aui-react">
+        <description>BBUI: aui-react</description>
+        <directory location="/static/bitbucket/internal/bbui/aui-react/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="avatar-list" name="avatar-list">
+        <description>BBUI: avatar-list</description>
+        <directory location="/static/bitbucket/internal/bbui/avatar-list/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="avatars" name="avatars">
+        <description>BBUI: avatars</description>
+        <directory location="/static/bitbucket/internal/bbui/avatars/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="bb-panel" name="bb-panel">
+        <description>BBUI: bb-panel</description>
+        <directory location="/static/bitbucket/internal/bbui/bb-panel/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:skate-AMD</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="branch-from-to" name="branch-from-to">
+        <description>BBUI: branch-from-to</description>
+        <directory location="/static/bitbucket/internal/bbui/branch-from-to/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="codeblock" name="codeblock">
+        <description>BBUI: codeblock</description>
+        <directory location="/static/bitbucket/internal/bbui/codeblock/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-data-provider" name="data-provider-data-provider">
+        <description>BBUI: data-provider-data-provider</description>
+        <resource type="download" name="data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/data-provider.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:json-validation</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-paged" name="data-provider-paged">
+        <description>BBUI: data-provider-paged</description>
+        <resource type="download" name="paged-data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/paged.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:json-validation</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-participants" name="data-provider-participants">
+        <description>BBUI: data-provider-participants</description>
+        <resource type="download" name="participants-data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/participants.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-paged-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-pull-request-list" name="data-provider-pull-request-list">
+        <description>BBUI: data-provider-pull-request-list</description>
+        <resource type="download" name="pull-request-list-data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/pull-request-list.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:json-validation</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-paged-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-pull-request" name="data-provider-pull-request">
+        <description>BBUI: data-provider-pull-request</description>
+        <resource type="download" name="pull-request-data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/pull-request.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-ref" name="data-provider-ref">
+        <description>BBUI: data-provider-ref</description>
+        <resource type="download" name="ref-data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/ref.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:json-validation</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-paged-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="data-provider-user" name="data-provider-user">
+        <description>BBUI: data-provider-user</description>
+        <resource type="download" name="user-data-provider.js" location="/static/bitbucket/internal/bbui/data-provider/user.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:json-validation</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-paged-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="ediff" name="ediff">
+        <description>BBUI: ediff</description>
+        <directory location="/static/bitbucket/internal/bbui/ediff/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="filter-bar" name="filter-bar">
+        <description>BBUI: filter-bar</description>
+        <directory location="/static/bitbucket/internal/bbui/filter-bar/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:atlassian-navigator</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="history" name="history">
+        <description>BBUI: history</description>
+        <directory location="/static/bitbucket/internal/bbui/history/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:atlassian-navigator</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="image-differ" name="image-differ">
+        <description>BBUI: image-differ</description>
+        <directory location="/static/bitbucket/internal/bbui/image-differ/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:resemblejs</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="inbox" name="inbox">
+        <description>BBUI: inbox</description>
+        <directory location="/static/bitbucket/internal/bbui/inbox/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:paged-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:pull-request-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:utils</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="javascript-errors" name="javascript-errors">
+        <description>BBUI: javascript-errors</description>
+        <directory location="/static/bitbucket/internal/bbui/javascript-errors/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="json-validation" name="json-validation">
+        <description>BBUI: json-validation</description>
+        <directory location="/static/bitbucket/internal/bbui/json-validation/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="list-and-detail-view" name="list-and-detail-view">
+        <description>BBUI: list-and-detail-view</description>
+        <directory location="/static/bitbucket/internal/bbui/list-and-detail-view/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="mirror-clone-selector" name="mirror-clone-selector">
+        <description>BBUI: mirror-clone-selector</description>
+        <directory location="/static/bitbucket/internal/bbui/mirror-clone-selector/" source="webContextStatic">
+            <exclude>/**/*.soy</exclude>
+        </directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:mirror-clone-selector-templates</dependency>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <web-resource key="mirror-clone-selector-templates">
+        <transformation extension="soy">
+            <transformer key="soyTransformer" />
+            <transformer key="stashJsHelp" />
+            <transformer key="jsI18n" />
+        </transformation>
+        <resource type="download" name="mirror-clone-selector.soy.js" location="/static/bitbucket/internal/bbui/mirror-clone-selector/mirror-clone-selector.soy">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+    </web-resource>
+
+    <client-resource key="mirroring-admin" name="mirroring-admin">
+        <description>BBUI: mirroring-admin</description>
+        <directory location="/static/bitbucket/internal/bbui/mirroring-admin/" source="webContextStatic">
+            <exclude>/**/*.soy</exclude>
+        </directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:mirroring-admin-templates</dependency>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:list-and-detail-view</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-request</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <web-resource key="mirroring-admin-templates">
+        <transformation extension="soy">
+            <transformer key="soyTransformer" />
+            <transformer key="stashJsHelp" />
+            <transformer key="jsI18n" />
+        </transformation>
+        <resource type="download" name="mirroring-admin.soy.js" location="/static/bitbucket/internal/bbui/mirroring-admin/mirroring-admin.soy">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+        <resource type="download" name="mirror-view.soy.js" location="/static/bitbucket/internal/bbui/mirroring-admin/mirror-view/mirror-view.soy">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+        <resource type="download" name="request-view.soy.js" location="/static/bitbucket/internal/bbui/mirroring-admin/request-view/request-view.soy">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+    </web-resource>
+
+    <client-resource key="models" name="models">
+        <description>BBUI: models</description>
+        <directory location="/static/bitbucket/internal/bbui/models/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:json-validation</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="paged-scrollable" name="paged-scrollable">
+        <description>BBUI: paged-scrollable</description>
+        <directory location="/static/bitbucket/internal/bbui/paged-scrollable/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:atlassian-functional</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:atlassian-navigator</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="paged-table" name="paged-table">
+        <description>BBUI: paged-table</description>
+        <directory location="/static/bitbucket/internal/bbui/paged-table/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:paged-scrollable</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:scroll-handler</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="pull-request-header" name="pull-request-header">
+        <description>BBUI: pull-request-header</description>
+        <directory location="/static/bitbucket/internal/bbui/pull-request-header/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:branch-from-to</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:codeblock</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:reviewer-avatar-list</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:reviewer-status</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-web-fragments</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="pull-request-list-table" name="pull-request-list-table">
+        <description>BBUI: pull-request-list-table</description>
+        <directory location="/static/bitbucket/internal/bbui/pull-request-list-table/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:paged-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:pull-request-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:ref-label</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:time</dependency>
+    </client-resource>
+
+    <client-resource key="pull-request-list" name="pull-request-list">
+        <description>BBUI: pull-request-list</description>
+        <directory location="/static/bitbucket/internal/bbui/pull-request-list/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:filter-bar</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:pull-request-list-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:pull-request-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:widget</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:atlassian-navigator</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-participants-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-pull-request-list-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-ref-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="pull-request-table" name="pull-request-table">
+        <description>BBUI: pull-request-table</description>
+        <directory location="/static/bitbucket/internal/bbui/pull-request-table/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:avatar-list</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:avatars</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:paged-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:ref-label</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:reviewer-avatar-list</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:utils</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-web-fragments</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:time</dependency>
+    </client-resource>
+
+    <client-resource key="quick-search" name="quick-search">
+        <description>BBUI: quick-search</description>
+        <directory location="/static/bitbucket/internal/bbui/quick-search/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.search.bitbucket-search-query:search-analytics-utils</dependency>
+        <dependency>com.atlassian.bitbucket.search.bitbucket-search-query:search-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:avatars</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:bb-panel</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:search-common</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-analytics</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-request</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="reducers" name="reducers">
+        <description>BBUI: reducers</description>
+        <directory location="/static/bitbucket/internal/bbui/reducers/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:actions</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:pull-request-header</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:utils</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:redux</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="ref-label" name="ref-label">
+        <description>BBUI: ref-label</description>
+        <directory location="/static/bitbucket/internal/bbui/ref-label/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="request" name="request">
+        <description>BBUI: request</description>
+        <directory location="/static/bitbucket/internal/bbui/request/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="reviewer-avatar-list" name="reviewer-avatar-list">
+        <description>BBUI: reviewer-avatar-list</description>
+        <directory location="/static/bitbucket/internal/bbui/reviewer-avatar-list/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:reviewer-avatar</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:self-reviewer</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="reviewer-avatar" name="reviewer-avatar">
+        <description>BBUI: reviewer-avatar</description>
+        <directory location="/static/bitbucket/internal/bbui/reviewer-avatar/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="reviewer-status" name="reviewer-status">
+        <description>BBUI: reviewer-status</description>
+        <directory location="/static/bitbucket/internal/bbui/reviewer-status/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="scroll-handler" name="scroll-handler">
+        <description>BBUI: scroll-handler</description>
+        <directory location="/static/bitbucket/internal/bbui/scroll-handler/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="search-common" name="search-common">
+        <description>BBUI: search-common</description>
+        <directory location="/static/bitbucket/internal/bbui/search-common/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.search.bitbucket-search-query:search-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="search" name="search">
+        <description>BBUI: search</description>
+        <directory location="/static/bitbucket/internal/bbui/search/" source="webContextStatic">
+            <exclude>/**/*.soy</exclude>
+        </directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:search-templates</dependency>
+
+        <dependency>com.atlassian.bitbucket.search.bitbucket-search-query:search-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:avatars</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:history</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:paged-table</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:search-common</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-analytics</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-paged-data-provider</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-request</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:bitbucket-urls</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <web-resource key="search-templates">
+        <transformation extension="soy">
+            <transformer key="soyTransformer" />
+            <transformer key="stashJsHelp" />
+            <transformer key="jsI18n" />
+        </transformation>
+        <resource type="download" name="search.soy.js" location="/static/bitbucket/internal/bbui/search/search.soy">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+    </web-resource>
+
+    <client-resource key="self-reviewer" name="self-reviewer">
+        <description>BBUI: self-reviewer</description>
+        <directory location="/static/bitbucket/internal/bbui/self-reviewer/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:aui-react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:models</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:reviewer-avatar</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:tipsy</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:classnames</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="tipsy" name="tipsy">
+        <description>BBUI: tipsy</description>
+        <directory location="/static/bitbucket/internal/bbui/tipsy/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="urls" name="urls">
+        <description>BBUI: urls</description>
+        <directory location="/static/bitbucket/internal/bbui/urls/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="utils" name="utils">
+        <description>BBUI: utils</description>
+        <directory location="/static/bitbucket/internal/bbui/utils/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:react</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="web-fragments" name="web-fragments">
+        <description>BBUI: web-fragments</description>
+        <directory location="/static/bitbucket/internal/bbui/web-fragments/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bbui-components:javascript-errors</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+    <client-resource key="widget" name="widget">
+        <description>BBUI: widget</description>
+        <directory location="/static/bitbucket/internal/bbui/widget/" source="webContextStatic"></directory>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-bower-components:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+    </client-resource>
+
+</atlassian-plugin>

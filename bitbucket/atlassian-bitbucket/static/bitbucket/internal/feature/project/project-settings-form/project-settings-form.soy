@@ -1,0 +1,68 @@
+{namespace bitbucket.internal.feature.project}
+
+/**
+* @param? project
+* @param? projectForm
+* @param? fieldErrors
+* @param? detailedErrors
+* @param? formErrors
+*/
+{template .settingsForm}
+    {call bitbucket.internal.widget.xsrfProtectedForm}
+        {param extraClasses: 'project-settings' /}
+        {param action: $project ? '' : nav_project_create() /}
+        {param errors: $formErrors /}
+        {param detailedErrors: $detailedErrors /}
+        {param content}
+            {foreach $webPanel in getWebPanels('bitbucket.web.project.create.beforefields')}
+                {$webPanel}
+            {/foreach}
+            {call widget.aui.form.text}
+                {param id: 'name' /}
+                {param errors: $fieldErrors ? $fieldErrors['name'] : null /}
+                {param labelContent}{getText('bitbucket.web.project.name.html')}{/param}
+                {param initialValue: $projectForm ? $projectForm.name : ($project ? $project.name : null) /}
+                {param required: true /}
+                {param autofocus: true /}
+                {param autocomplete: 'off' /}
+            {/call}
+            {call widget.aui.form.text}
+                {param id: 'key' /}
+                {param errors: $fieldErrors ? $fieldErrors['key'] : null /}
+                {param labelContent}{getText('bitbucket.web.project.key.html')}{/param}
+                {param initialValue: $projectForm ? $projectForm.key : ($project ? $project.key : null) /}
+                {param description: $project ? getText('bitbucket.web.project.key.description') : getText('bitbucket.web.project.key.help.text') /}
+                {param required: true /}
+                {param autocomplete: 'off' /}
+                {param sizeClass: 'short' /}
+            {/call}
+            {call widget.aui.form.largetext}
+                {param id: 'description' /}
+                {param errors: $fieldErrors ? $fieldErrors['description'] : null /}
+                {param labelContent}{getText('bitbucket.web.project.description.html')}{/param}
+                {param initialValue: $projectForm ? $projectForm.description : ($project ? $project.description : null) /}
+                {param isExpanding: true /}
+                {param sizeClass: 'long' /}
+            {/call}
+            {call bitbucket.internal.feature.project.avatarPicker }
+                {param project: $project/}
+                {param projectForm: $projectForm/}
+            {/call}
+            {foreach $webPanel in getWebPanels('bitbucket.web.project.create.afterfields')}
+                {$webPanel}
+            {/foreach}
+            {call widget.aui.form.buttons}
+                {param content}
+                    {call widget.aui.form.submit}
+                        {param id: 'submit' /}
+                        {param isPrimary: true /}
+                        {param label: $project ? getText('bitbucket.web.button.save') : getText('bitbucket.web.button.create.project') /}
+                    {/call}
+                    {call widget.aui.form.cancelButton}
+                        {param href: $project ? nav_project($project) : nav_list_projects() /}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}

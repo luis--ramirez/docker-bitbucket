@@ -1,0 +1,32 @@
+{namespace bitbucket.internal.component.refLabel}
+
+/**
+ * @param ref
+ * @param? repository the repository the branch is in - only specify this if you want the repository to be shown.
+ * @param? href
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? title override the default tooltips with your own
+ * @param? refAccessibilityText override the default accessibility text of the ref
+ */
+{template .main}
+    <span class="ref-label{if $extraClasses}{sp}{$extraClasses}{/if}"
+        {if $href} href="{$href}"{/if}{if $title} title="{$title}" data-ref-tooltip=""{/if}
+        {if $extraAttributes}{call aui.renderExtraAttributes}{param extraAttributes: $extraAttributes /}{/call}{/if}>
+        {if $repository}
+            <span class="repository">
+                {call bitbucket.internal.component.avatars.projectAvatar}
+                     {param size: 'xsmall' /}
+                     {param project: $repository.project /}
+                     {param tagName: 'span' /}
+                {/call}
+                <span class="name">{$repository.name}</span>
+            </span>
+        {/if}
+        <span class="ref {$ref.type or 'branch'}">
+            <span class="name" aria-label="{if $refAccessibilityText}{$refAccessibilityText}{else}{getText('refLabel.branch.ariaLabel', $ref.display_id)}{/if}">
+                {$ref.display_id}
+            </span>
+        </span>
+    </span>
+{/template}

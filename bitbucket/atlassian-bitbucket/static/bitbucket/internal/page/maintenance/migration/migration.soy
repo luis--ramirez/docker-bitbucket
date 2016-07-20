@@ -1,0 +1,26 @@
+{namespace bitbucket.internal.maintenance}
+
+/**
+ * @param? cancelToken
+ * @param? errorTexts
+ * @param status
+ */
+{template .migration}
+{webResourceManager_requireResourcesForContext('bitbucket.page.migration')}
+{call bitbucket.internal.layout.maintenance}
+    {param cancelToken: $cancelToken /}
+    {param status: $status /}
+    {param errorTexts: $errorTexts /}
+    {param heading: getText('bitbucket.web.maintenance.migration.title') /}
+    {param description:
+            $cancelToken ?
+                getText('bitbucket.web.maintenance.migration.description.admin', productName()) :
+                getText('bitbucket.web.maintenance.migration.description') /}
+    {param cancelButtonText: getText('bitbucket.web.migration.button.cancel') /}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/maintenance/migration').onReady({if $cancelToken}true{else}false{/if});
+        </script>
+    {/param}
+{/call}
+{/template}

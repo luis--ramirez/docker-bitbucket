@@ -1,0 +1,104 @@
+{namespace bitbucket.internal.feature.fileContent}
+
+/**
+ */
+{template .commitSelector}
+    <div class="commit-selector">
+        {call bitbucket.internal.widget.commit.commitList}{param content : '' /}{/call}
+        <div class="spinner-container"/>
+    </div>
+{/template}
+
+/**
+ * @param? lastPageMessage
+ */
+{template .commitSelectorNoMoreResults}
+    <li class="no-more-results">{$lastPageMessage}</li>
+{/template}
+
+/**
+ * Emphasises author of the commit, used in the file history on source page and in merge commit dropdown
+ *
+ * @param commit
+ * @param? repository
+ * @param? href
+ */
+{template .commitSelectorItemAuthor}
+    <a href="{$href ? $href : ''}" class="commit-selector-item-author" data-id="{$commit.id}">
+        {if $commit.message} // Commit
+            {call bitbucket.internal.widget.avatar}
+                {param person: $commit.author /}
+                {param size: 'small' /}
+            {/call}
+            {call bitbucket.internal.feature.commit.commitBadge.detailed}
+                {param commit: $commit/}
+                {param linkAuthor: false /}
+                {param maxMessageLength : 90 /}
+                {param repository: $repository /}
+            {/call}
+        {else} // MinimalCommit
+            <span class="icon"></span>{$commit.displayId}
+        {/if}
+    </a>
+{/template}
+
+/**
+ * Emphasises commit message, used in the commit selector on pull request diff page
+ *
+ * @param commit
+ * @param? href
+ */
+{template .commitSelectorItemMessage}
+    <a href="{$href ? $href : ''}" class="commit-selector-item-message" data-id="{$commit.id}">
+        {if $commit.message} // Commit
+            {call .commitSelectorItemIcon}{param commit: $commit /}{/call}
+            <div class="commit-selector-details">
+                {call bitbucket.internal.feature.commit.commitBadge.message}
+                    {param commit: $commit /}
+                {/call}
+                {call bitbucket.internal.feature.commit.commitBadge.oneline}
+                    {param commit: $commit /}
+                    {param withAvatar: true /}
+                    {param linkAuthor: false /}
+                    {param abbreviatedMerge: true /}
+                    {param includeCommentCount: true /}
+                {/call}
+            </div>
+        {else} // MinimalCommit
+            <span class="icon"></span>{$commit.displayId}
+        {/if}
+    </a>
+{/template}
+
+/**
+ * @param? commit
+ */
+{template .commitSelectorItemIcon}
+    {if $commit}
+        {call aui.icons.icon}
+            {param extraClasses: 'commit-icon' /}
+            {param icon: 'commit' /}
+            {param iconFontSet: 'devtools' /}
+            {param size: 'small' /}
+            {param useIconFont: true /}
+        {/call}
+    {else}
+        <img class="commit-icon" width="16" height="20" src="{plugin_resource('com.atlassian.bitbucket.server.bitbucket-web:commit-selector', 'icons/icon-all-changes.svg')}"
+            alt="{getText('bitbucket.web.diff.all.changes.alt')}" />
+    {/if}
+{/template}
+
+/**
+ * Only contains 'All commits' message
+ *
+ * @param message
+ * @param href
+ */
+{template .commitSelectorAllChanges}
+    <a href="{$href}" class="commit-selector-item-message">
+        {call .commitSelectorItemIcon /}
+        <div class="commit-selector-details">
+            {$message}
+        </div>
+    </a>
+{/template}

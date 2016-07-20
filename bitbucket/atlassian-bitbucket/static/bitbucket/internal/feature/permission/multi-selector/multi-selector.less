@@ -1,0 +1,21 @@
+@import "/static/global.less";
+
+.permission-multi-selector-container {
+    background-color: @primaryHighlight;
+
+
+    .aui-item + .aui-item {
+        width: 250px;
+    }
+
+    form.aui .permission-multi-selector {
+        background-color: @contentBackgroundColor;
+        max-width: none;
+        vertical-align: top;
+
+        // @aui-override - on IE10/11 we hide the clear field X widget
+        .select2-input::-ms-clear {
+            display: none;
+        }
+    }
+}

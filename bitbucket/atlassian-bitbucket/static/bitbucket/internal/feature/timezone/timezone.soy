@@ -1,0 +1,91 @@
+{namespace bitbucket.internal.feature.timezone}
+
+/**
+ * @param defaultOption the default option (default timezone). Selecting this will 'nullify' the setting.
+ * @param? description the field description
+ * @param isLong true if the input is a long input, false for a short input
+ * @param regions a list of regions
+ * @param selected the value of the selected option
+ * @param? errors
+ */
+{template .timeZoneField}
+    {let $inputId: 'timezone' /}
+    {call widget.aui.form.field}
+        {param id: $inputId /}
+        {param labelContent: getText('bitbucket.web.timezone') /}
+        {param description: $description /}
+        {param input}
+            <select id="{$inputId}" name="{$inputId}" class="{if $isLong}long-field{/if}">
+                {call .timeZone}
+                    {param tz: $defaultOption /}
+                    {param selected: $selected /}
+                    {param extraClasses: 'default-option' /}
+                {/call}
+                {foreach $region in $regions}
+                    {call .region}
+                        {param region: $region /}
+                        {param selected: $selected /}
+                    {/call}
+                {/foreach}
+            </select>
+        {/param}
+        {param errors: $errors /}
+    {/call}
+    <script>
+        require('bitbucket/internal/feature/timezone').onReady('{$inputId}');
+    </script>
+{/template}
+
+/**
+ * An <optgroup> header
+ * @param label
+ */
+{template .regionHeader}
+    <span class="region-header">{$label}</span>
+{/template}
+
+/**
+ * Select2 selection and result element
+ * @param label the primary label to display
+ * @param displayName an internationalized display name for the timezone
+ * @param offset the GMT offset of the timezone
+ * @param value the ZoneId for this option
+ * @param? extraClasses any extra classes to apply to the element
+ */
+{template .selection}
+    <div class="zone{if $extraClasses} {$extraClasses}{/if}" data-value="{$value}">
+        <span class="zone-label">{$label}</span>
+        <span class="zone-name" title="{$displayName}">{$displayName}</span>
+        <span class="zone-offset aui-lozenge aui-lozenge-subtle">{$offset}</span>
+    </div>
+{/template}
+
+/**
+ * @param tz the timezone object
+ * @param selected true if the option is selected, otherwise false
+ * @param? extraClasses any extra classes to apply to the element
+ */
+{template .timeZone private="true"}
+    <option value="{$tz.id}" class="time-zone-option{if $extraClasses} {$extraClasses}{/if}"
+            data-label="{$tz.label}"
+            data-display-name="{$tz.displayName}"
+            data-offset="{$tz.offset}" {if $selected == $tz.id}selected{/if}>
+            {$tz.label}
+    </option>
+{/template}
+
+/**
+ * A group of timezones, grouped by region
+ * @param region an object containing a label string and a list of values
+ * @param selected
+ */
+{template .region private="true"}
+    <optgroup label={$region.name}>
+        {foreach $tz in $region.timeZones}
+            {call .timeZone}
+                {param tz: $tz /}
+                {param selected: $selected /}
+            {/call}
+        {/foreach}
+    </optgroup>
+{/template}

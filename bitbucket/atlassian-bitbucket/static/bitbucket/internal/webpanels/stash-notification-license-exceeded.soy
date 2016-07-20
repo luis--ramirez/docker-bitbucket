@@ -1,0 +1,10 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ * @param licenseStatus
+ */
+{template .bitbucketNotificationLicenseExceeded}
+    <div class="aui-banner aui-banner-error" role="banner" title="{getText('bitbucket.web.scm.push.disabled.purchaselicense.tooltip', productName())}">
+        {$licenseStatus.localisedMessage} {{getTextAsHtml('bitbucket.web.scm.purchaselicense.message.html', bitbucket_help_url('bitbucket.wac.purchase'))}}
+    </div>
+{/template}

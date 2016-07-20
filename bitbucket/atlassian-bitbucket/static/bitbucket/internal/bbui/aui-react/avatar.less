@@ -1,0 +1,46 @@
+@import "../../../../global.less";
+@badgeSize: 16px;
+
+.avatar-with-name {
+    .aui-avatar {
+        margin-right: @baseSpacing;
+        vertical-align: middle;
+    }
+}
+
+.aui-avatar-badged {
+    position: relative;
+    vertical-align: middle;
+}
+
+.badge.needs-work {
+    background: transparent url(images/icons/icon-needs-work.svg) no-repeat 0 0;
+}
+
+.badge.approved {
+    background: transparent url(images/icons/icon-approved.svg) no-repeat 0 0;
+}
+
+.aui-avatar-badged .badge {
+    opacity: 1;
+    transition: all 0.2s cubic-bezier(.14,.01,.65,1.61);
+    background-size: @badgeSize;
+    transition-property: opacity, transform;
+    transform: scale(1);
+    width: @badgeSize;
+    height: @badgeSize;
+    color: #fff;
+    position: absolute;
+    right: -@badgeSize/2;
+    top: -@badgeSize/2;
+    text-align: center;
+    display: block;
+    font-size: @font-size-xsmall;
+    line-height: @font-size-large;
+    text-indent: -999em
+}
+
+.aui-avatar-badged .badge.badge-hidden {
+    opacity: 0;
+    transform: scale(0);
+}

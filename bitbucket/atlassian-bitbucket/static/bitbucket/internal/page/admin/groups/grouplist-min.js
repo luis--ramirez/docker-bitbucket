@@ -1,0 +1,2 @@
+define("bitbucket/internal/page/admin/groupsList",["aui","bitbucket/internal/feature/user/group-table","bitbucket/internal/util/notifications","bitbucket/internal/widget/delete-dialog","exports"],function(b,d,c,e,a){a.onReady=function(a,f){c.showFlashes();(new d({target:a})).init();e.bind(f,b.I18n.getText("bitbucket.web.group.delete"),b.I18n.getText("bitbucket.web.group.delete.success"),b.I18n.getText("bitbucket.web.group.delete.fail"),function(a){c.addFlash(b.I18n.getText("bitbucket.web.group.delete.success",
+a));location.reload()})}});

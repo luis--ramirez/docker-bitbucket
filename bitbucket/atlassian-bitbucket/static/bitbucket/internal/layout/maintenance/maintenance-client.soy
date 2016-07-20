@@ -1,0 +1,14 @@
+{namespace bitbucket.internal.layout.maintenance}
+
+/**
+ * @param errorTexts
+ */
+{template .tokenInputField}
+    {call aui.form.textField}
+        {param id: 'cancelToken' /}
+        {param name: 'token' /}
+        {param errorTexts: $errorTexts /}
+        {param labelContent}{getText('bitbucket.web.maintenance.token.label')}{/param}
+        {param descriptionText: getText('bitbucket.web.maintenance.token.label.description', productName()) /}
+    {/call}
+{/template}

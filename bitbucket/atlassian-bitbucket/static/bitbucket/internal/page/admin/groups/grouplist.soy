@@ -1,0 +1,38 @@
+{namespace bitbucket.internal.admin.groups}
+
+/**
+* @param groupPage
+* @param? filter
+*/
+{template .list}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.groups.list')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-general-groups' /}
+    {param content}
+        {call widget.aui.pageHeader}
+            {param content}
+                <h2>{getText('bitbucket.web.group')}</h2>
+            {/param}
+            {param actionListContent}
+                {foreach $webItem in getWebItems('bitbucket.group.list.actions')}
+                    {call bitbucket.internal.widget.webItemButton data="$webItem" /}
+                {/foreach}
+            {/param}
+        {/call}
+        <div class="notifications">
+        // Used for deleted group notifications
+        </div>
+        {call bitbucket.internal.feature.user.groupTable}
+            {param id: 'list-groups' /}
+            {param filterable: true /}
+            {param page: $groupPage /}
+            {param filter: $filter /}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/admin/groupsList').onReady('#list-groups', 'a.delete-group-link');
+        </script>
+    {/param}
+{/call}
+{/template}

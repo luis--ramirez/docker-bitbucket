@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/repository/noDefaultBranch",["bitbucket/util/navbuilder","bitbucket/internal/util/events","exports"],function(c,a,d){d.onReady=function(){a.on("bitbucket.internal.feature.repository.revisionReferenceSelector.revisionRefChanged",function(a){var b=c.parse(location.href);b.addQueryParam("at",a.getId());location.href=b.toString()})}});

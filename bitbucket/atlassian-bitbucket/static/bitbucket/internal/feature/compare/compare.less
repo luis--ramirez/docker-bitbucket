@@ -1,0 +1,54 @@
+@import "/static/global.less";
+
+#branch-compare {
+    .instructions {
+        padding: @halfSpacing 0;
+        margin: @baseSpacing 0 @quadSpacing 0;
+    }
+
+    .collapsed-branches {
+        padding: @doubleSpacing 0;
+
+        .branch-change {
+            margin-left: @doubleSpacing;
+            color: @secondaryTextColor;
+        }
+
+
+        > .aui-iconfont-devtools-arrow-right {
+            color: @lozengeGenericColor;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+
+    .continue-button-row {
+        // @aui-override change the display of the buttons container so we can align things next to it
+        .buttons-container {
+            display: inline;
+
+            .buttons {
+                display: inline-block;
+            }
+        }
+
+        .pr-create-warning {
+            display: inline-block;
+            padding-left: @baseSpacing;
+            color: @secondaryTextColor;
+
+            .aui-icon {
+                padding-right: @halfSpacing;
+            }
+        }
+    }
+
+    .aui-tabs {
+        margin-top: @quadSpacing;
+    }
+
+    .ref-lozenge {
+        // 292px is the perfect size to make the branch lozenges line up with the form.
+        max-width: 292px;
+    }
+}

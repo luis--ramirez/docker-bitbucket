@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/file-content/line-handle",function(){return function(b,c,d,a){this.fileType=b;this.lineType=c;this.lineNumber=d;this._handle=a;a._stashHandle=this}});

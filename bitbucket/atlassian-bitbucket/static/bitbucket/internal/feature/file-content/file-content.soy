@@ -1,0 +1,126 @@
+{namespace bitbucket.internal.feature.fileContent}
+    
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param contentMode 'diff' or 'source'
+ * @param commentMode 'create-new', 'reply-only', 'read' or 'none'
+ * @param fileChange
+ * @param? preloaded whether the data has been preloaded (i.e., do we need to setup spinners)
+ * @param? untilRevisionPicker true to show an 'until' revision picker
+ * @param? rawLink true to show a link to raw download
+ * @param? sourceLink true to show a link to a source view of the 'until' revision (for diffs)
+ * @param? modeToggle true to show a toggle for switching between source and diff modes (using the default toolbar configs)
+ * @param? fileIcon true to show a file icon in the toolbar
+ * @param? breadcrumbs true to show the path to the file
+ * @param? changeTypeLozenge if provided, a lozenge will be displayed with the type of modification shown in the diff.
+ * @param? changeModeLozenge if provided, a lozenge will be displayed with the file change mode.
+ * @param? sourceUrl url for current source view
+ * @param? diffUrl url for current diff view
+ * @param? pullRequestDiffLink true to show the button to diff in PR
+ * @param? pullRequestDiffCurrent true to enable the if the comment is still current and not been orphaned/eclipsed
+ * @param? diffType the type of diff on which the comment was added
+ */
+{template .main}
+    <div{if $id} id="{$id}"{/if} class="file-content{if $extraClasses} {$extraClasses}{/if}">
+        {call bitbucket.internal.feature.file.fileToolbar}
+            {param fileIcon: $fileIcon /}
+            {param breadcrumbs: false /}
+            {param primaryToolbarContent}
+                {if $modeToggle}
+                    {call bitbucket.internal.buttons.buttons}
+                        {param extraClasses : 'mode-toggle' /}
+                        {param content}
+                            {call bitbucket.internal.buttons.button}
+                                {param extraClasses: 'mode-source' /}
+                                {param isPressed: $contentMode == 'source' /}
+                                {param href: $sourceUrl /}
+                                {param buttonText: getText('bitbucket.web.sourceview.button.sourceview') /}
+                                {param title: getText('bitbucket.web.sourceview.button.sourceview.tooltip') /}
+                            {/call}
+                            {call bitbucket.internal.buttons.button}
+                                {param extraClasses: 'mode-diff' /}
+                                {param isPressed: $contentMode == 'diff' /}
+                                {param href: $diffUrl /}
+                                {param buttonText: getText('bitbucket.web.sourceview.button.diff') /}
+                                {param title: getText('bitbucket.web.sourceview.button.diff.tooltip') /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/if}
+                {if $untilRevisionPicker}
+                    {call bitbucket.internal.buttons.button}
+                        {param extraClasses: 'aui-dd-trigger until-commit-button' /}
+                        {param buttonText: getText('bitbucket.web.sourceview.button.history') /}
+                        {param title: getText('bitbucket.web.sourceview.button.history.tooltip') /}
+                    {/call}
+                {/if}
+                {if $breadcrumbs}
+                    {call bitbucket.internal.widget.breadcrumbs.breadcrumbs}
+                        {param pathComponents: [] /}
+                    {/call}
+                {/if}
+                {if $changeTypeLozenge}<div class="change-type-placeholder"></div>{/if}
+                {if $changeModeLozenge}<div class="change-mode-placeholder"></div>{/if}
+            {/param}
+            {param secondaryToolbarContent}
+                {if $sourceLink}
+                    {call bitbucket.internal.buttons.button}
+                        {param href: '#' /}
+                        {param extraClasses: 'aui-button-subtle source-view-link' /}
+                        {param title: getText('bitbucket.web.sourceview.button.viewsource') /}
+                        {param iconType: 'custom' /}
+                        {param iconClass: 'aui-icon aui-icon-small aui-iconfont-devtools-file' /}
+                        {param iconText: getText('bitbucket.web.sourceview.button.viewsource') /}
+                        {param buttonText: '' /}
+                    {/call}
+                {/if}
+                {if $rawLink}
+                    {call bitbucket.internal.buttons.button}
+                        {param href: '#' /}
+                        {param buttonText: getText('bitbucket.web.sourceview.button.rawFile') /}
+                        {param extraClasses: 'aui-button-link raw-view-link' /}
+                    {/call}
+                {/if}
+                {if $pullRequestDiffLink}
+                    {if $pullRequestDiffCurrent == false}
+                        {if $diffType == 'EFFECTIVE'}
+                            {call bitbucket.internal.widget.lozenge.lozenge}
+                                {param text: getText('bitbucket.web.pullrequest.activity.status.outdated') /}
+                                {param htmlElement: 'span' /}
+                                {param extraClasses: 'aui-lozenge-current aui-lozenge-subtle pull-request-diff-outdated-lozenge' /}
+                                {param tooltip: getText('bitbucket.web.pullrequest.activity.status.outdated.tooltip') /}
+                            {/call}
+                        {else}
+                        // BSERVDEV-13137 moved "removed" lozenge into summary paragraph for comments on files in removed commits
+                        {/if}
+                    {/if}
+                {elseif $contentMode == 'diff'}
+                    <div class="diff-view-options">
+                        {call bitbucket.internal.feature.fileContent.diffViewOptionsPanel.main}
+                            {param commentMode: $commentMode /}
+                            {param displayType: $contentMode /}
+                            {param fileChange: $fileChange /}
+                        {/call}
+                    </div>
+                {/if}
+            {/param}
+        {/call}
+
+        <div class="content-view {$contentMode}-view{if $preloaded} fully-loaded{/if}"></div>
+    </div>
+{/template}
+
+/**
+ * @param errors
+ */
+{template .errors}
+    <div class="file-content-errors">
+        {foreach $error in $errors}
+            {call aui.message.warning}
+                {param content}{$error}{/param}
+                {param isCloseable: true /}
+            {/call}
+        {/foreach}
+    </div>
+{/template}

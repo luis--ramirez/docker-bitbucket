@@ -1,0 +1,23 @@
+{namespace widget.form}
+
+/**
+ * @deprecated since 3.5 for removal in 4.0. Use stash.widget.xsrfProtectedForm instead
+ * @param content
+ * @param action
+ * @param? method
+ * @param? unsectioned
+ * @param? longLabels
+ * @param? topLabels
+ * @param? extraClass
+ * @param? autocomplete
+ * @param? errors
+ * @param? detailedErrors
+ * @param? additionalErrorContent
+ */
+{template .xsrfProtectedForm}
+    // calling the deprecated widget.aui.form.form template for compatibility. Please use stash.widget.form instead.
+    {call widget.aui.form.form data="all"}
+        {param xsrfTokenName: $ij.xsrfTokenName ? $ij.xsrfTokenName : null /}
+        {param xsrfTokenValue: $ij.xsrfTokenValue ? $ij.xsrfTokenValue : null /}
+    {/call}
+{/template}

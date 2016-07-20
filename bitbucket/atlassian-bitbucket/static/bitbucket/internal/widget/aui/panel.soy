@@ -1,0 +1,12 @@
+{namespace widget.aui}
+
+/**
+ * @param content
+ * @param? extraClasses
+ */
+{template .panel}
+    {call aui.page.pagePanel}
+        {param extraClasses: 'content-body' + ($extraClasses ? ' ' + $extraClasses : '' ) /}
+        {param content: $content /}
+    {/call}
+{/template}

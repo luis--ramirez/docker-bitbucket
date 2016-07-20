@@ -1,0 +1,225 @@
+@import "/static/global.less";
+
+html { height: 100%; }
+
+/* MIN WIDTH FOR BODY */
+.bitbucket-theme {
+    min-width: @baseLayoutMinWidth;
+    height: 100%;
+
+    .aui-page-header-main.entity-item h1 {
+        display: inline-block;
+
+        + .aui-button {
+            margin-bottom: -1px; // fudge factor to make it look visually centered.
+            margin-left: @baseSpacing;
+            vertical-align: text-bottom;
+        }
+    }
+
+    /**
+    * DEFAULT THEME SPACING
+    */
+    #content {
+
+        > header {
+            .box-sizing();
+
+            .aui-group-split {
+                margin-top: 0;
+            }
+
+            + .horizontal-tabs {
+                margin-top: 0;
+            }
+
+        }
+
+        > .content-body  .aui-page-header h1 {
+            display: block;
+        }
+
+        table.aui {
+            // The fix for STASHDEV-5685 is in permission-table.less, overriding the setting of the background-color on
+            // the TR here. If the hover state issues happen on other AUI tables, then the same fix should be applied here
+            // (apply the :hover background-color to the child TD instead of the TR)
+            > tbody > tr:hover {
+                background-color: #F5F5F5;
+            }
+
+            td.empty-field {
+                color: @placeholderTextColor;
+            }
+        }
+
+        .tabs-pane header {
+            margin-top: @baseSpacing;
+            padding-bottom: @baseSpacing;
+        }
+
+        .no-more-results {
+            text-align: center;
+            color: @secondaryTextColor;
+        }
+
+        .aui-page-panel-inner {
+            min-height: @minPagePanelHeight;
+        }
+
+        .aui-page-panel:focus,
+        &:focus {
+            // clicking on an element with tabindex="-1" still shows a focus outline, we set the tabindex so that input
+            // focus is shifted when uses the 'skip to content' accessibility links, so we hide the focus outline here
+            outline: none;
+        }
+    } //#content
+
+    //focused pages (e.g. login/logout/project&repo create) should not have a min-height
+    &.aui-page-focused #content .aui-page-panel-inner {
+        min-height: 0;
+    }
+
+    > #page {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    #header {
+        z-index: 500;
+    } //#header
+
+    #footer {
+        .footer-body {
+            // @aui-override to ensure footer doesn't get wrapped on narrow focused pages
+            width: auto;
+        }
+
+    }
+
+    /*  -- Dropdown 1 styles -- */
+
+    .aui-dd-parent .aui-dropdown,
+    .aui-dropdown, .aui-dd-parent .aui-shadow-parent {
+        border: 1px solid #CCC;
+        border: 1px solid rgba(0, 0, 0, .18);
+    }
+
+    .tabs-menu .aui-dropdown {
+        border-color: #ccc;
+        margin-left: -1px;
+        margin-top: 0;
+    }
+
+    .aui-dropdown2 {
+        z-index: 10;
+
+        // above overrides the z-index: 9999 on .select2-drop so add it back
+        &.select2-drop {
+            z-index: 9999;
+        }
+    }
+
+    /*  -- Other styles -- */
+
+    h3.entity-empty {
+        text-align: center;
+        color: @labelTextColor;
+        font-size: @font-size-xxlarge;
+        padding: @baseSpacing 0;
+        font-weight: normal;
+    }
+
+    /* 'No results' table row  */
+    table tr.no-results-row td {
+        color: @placeholderTextColor;
+    }
+
+    table tr.no-results-row:hover {
+        background-color: transparent;
+    }
+
+    /* User keyboard input (eg terminal commands) */
+    kbd {
+        .border-radius(4px);
+        font-size: 11px;
+        border: 1px solid #ccc;
+        background-color: @feintGreyColor;
+        padding: 2px 4px;
+    }
+
+    // Overrides for disabled buttons in aui dialogs. Remove me when new aui-button components are added to aui-dialog.
+    .aui-dialog .dialog-button-panel button.button-panel-button[disabled],
+    .aui-dialog .dialog-button-panel button.button-panel-button[disabled]:hover,
+    .aui-dialog .dialog-button-panel button.button-panel-button[disabled]:focus,
+    .aui-dialog .dialog-button-panel button.button-panel-button[disabled]:active,
+    .aui-dialog .dialog-button-panel button.button-panel-button[aria-disabled="true"],
+    .aui-dialog .dialog-button-panel button.button-panel-button[aria-disabled="true"]:hover,
+    .aui-dialog .dialog-button-panel button.button-panel-button[aria-disabled="true"]:focus,
+    .aui-dialog .dialog-button-panel button.button-panel-button[aria-disabled="true"]:active {
+        background: #f2f2f2;
+        background: -moz-linear-gradient(top, #FFF 0%, #f2f2f2 100%); /* FF3.6+ */
+        background: -webkit-linear-gradient(top, #FFF 0%,#f2f2f2 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top, #FFF 0%,#f2f2f2 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top, #FFF 0%,#f2f2f2 100%); /* IE10+ */
+        background: linear-gradient(top, #FFF 0%,#f2f2f2 100%); /* W3C */
+        border-color: #ccc;
+        box-shadow: none;
+        color: #999;
+        cursor: default;
+        text-shadow: none;
+    }
+
+    // lower visual hierarchy of links
+    a.secondary-link {
+        color: @secondaryTextColor;
+    }
+
+    /* @aui-override */
+    /* Until AUI-2476 gets resolved. We want the line-height to be closer to 20.0 than AUI's built-in of 20.44 */
+    .aui-tabs {
+        line-height: 1.42858;
+    }
+
+    /* @aui-override */
+    /* Until warning banners are added to AUI. The import is needed for the icon-bar() mixin. */
+    @import "plugin://com.atlassian.auiplugin/src/less/imports/global.less";
+    .aui-banner {
+        &.aui-banner-warning {
+            #aui.icon-bar();
+
+            background-color: @bitbucket-banner-warning-bg;
+            color: @bitbucket-banner-warning-text-color;
+
+            /* These two styles are copied from #aui.icon-glyph() to allow us to get the right colors */
+            &:after {
+                content: "\f15a";
+                color: @bitbucket-banner-warning-text-color;
+            }
+            &:before {
+                background-color: @bitbucket-banner-warning-bg;
+            }
+
+            a,
+            a:link,
+            a:visited {
+                color: @bitbucket-banner-warning-text-color;
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+/* @aui-override */
+/* padding and truncation for dropdown2 menu items that aren't links */
+
+.aui-dropdown2.aui-style-default li > span {
+    padding: 5px 10px;
+}
+
+.aui-dropdown2 .aui-list-truncate > li > span {
+    .text-overflow();
+    .box-sizing();
+    display: inline-block;
+    width: 100%;
+    position: relative;
+}

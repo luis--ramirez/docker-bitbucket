@@ -1,0 +1,88 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param project
+ * @param scms
+ * @param? repositoryForm
+ * @param? formErrors
+ * @param? detailedErrors
+ * @param? fieldErrors
+ * @param? dataAttributes
+ * @param? repoNameMaxSize
+ */
+{template .createRepo}
+{webResourceManager_requireResourcesForContext('bitbucket.page.repository.create')}
+{call bitbucket.internal.layout.focused}
+    {param windowTitle: getText('bitbucket.web.repository.create.title') /}
+    {{param contentTitle: $project.type == 'PERSONAL' ?
+                            getText('bitbucket.web.repository.create.personal.repository') :
+                            getText('bitbucket.web.repository.create.repository', $project.name)/}}
+    {param bodyClass: 'repository-create'/}
+    {param activeHeaderNav: 'repositories-menu' /}
+    {param focusedPageSize: 'medium' /}
+    {param dataAttributes: $dataAttributes /}
+    {param content}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param detailedErrors: $detailedErrors /}
+            {param extraClasses: 'stash-repository-create-form' /}
+            {param content}
+                {foreach $webPanel in getWebPanels('bitbucket.web.repository.create.beforefields', [ 'project' : $project ])}
+                    {$webPanel}
+                {/foreach}
+                {call widget.aui.form.text}
+                    {param id: 'name' /}
+                    {param labelContent}{getText('bitbucket.web.repository.create.name')}{/param}
+                    {param initialValue: $repositoryForm ? $repositoryForm.name : null /}
+                    {param errors: $fieldErrors ? $fieldErrors.name : null /}
+                    {param required: true /}
+                    {param autofocus: true /}
+                    {param autocomplete: 'off' /}
+                    {param maxLength: $repoNameMaxSize /}
+                    {param descriptionContent}
+                        {getText('bitbucket.web.repository.create.description')}
+                        {call bitbucket.internal.feature.repository.cloneUrlGen /}
+                    {/param}
+                {/call}
+                {if length($scms) > 1}
+                    {call aui.form.radioField}
+                        {param id: 'scmId' /}
+                        {param errorTexts: $fieldErrors ? $fieldErrors.scmId : null /}
+                        {param legendContent}
+                            {getText('bitbucket.web.repository.create.scm')}
+                        {/param}
+                        {param fields: $scms /}
+                        {param isRequired: true /}
+                    {/call}
+                {else}
+                    <input type="hidden" id="scmId" name="scmId" value="{$scms[0].value}"/>
+                {/if}
+                {call widget.aui.form.input}
+                    {param id: 'forkable' /}
+                    {param initialValue: 'true' /}
+                    {param type: 'hidden'/}
+                {/call}
+                {foreach $webPanel in getWebPanels('bitbucket.web.repository.create.afterfields', [ 'project' : $project ])}
+                    {$webPanel}
+                {/foreach}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.button.create.repository') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: $project.owner ? nav_user($project.owner) : nav_project($project) /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/page/repository-create').onReady({to_json($project)|noAutoescape});</script>
+    {/param}
+{/call}
+{/template}

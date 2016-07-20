@@ -1,0 +1,119 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * AUI Form params passed through to aui.form.form
+ * @param content
+ * @param action
+ * @param? method
+ * @param? enctype
+ * @param? isUnsectioned
+ * @param? isLongLabels
+ * @param? isTopLabels
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ *
+ * Stash-specific params
+ * @param? errors
+ * @param? headingContent
+ * @param? detailedErrors
+ * @param? additionalErrorContent
+ * @param? preventDoubleSubmit Boolean. Default is true
+ * @param? autocomplete String. Enables/disables autocomplete for all the fields in the form. Valid values are 'on' or 'off'. Default is null (attribute is not added).
+ */
+{template .form}
+    {call aui.form.form}
+        {param content}
+            {if $headingContent}
+                {$headingContent|noAutoescape}
+            {/if}
+            {if $errors}
+                {foreach $message in $errors}
+                    {call aui.message.error}
+                        {param content}
+                            {call bitbucket.internal.widget.errorContent}
+                                {param message: $message /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/if}
+            {if $detailedErrors}
+                {foreach $error in $detailedErrors}
+                    {call aui.message.error}
+                        {param content}
+                            {call bitbucket.internal.widget.errorContent data="$error" /}
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/if}
+            {if $additionalErrorContent}
+                {$additionalErrorContent|noAutoescape}
+            {/if}
+            {$content|noAutoescape}
+        {/param}
+        {param action: $action /}
+        {param method: $method /}
+        {param enctype: $enctype /}
+        {param isUnsectioned: $isUnsectioned /}
+        {param isLongLabels: $isLongLabels /}
+        {param isTopLabels: $isTopLabels /}
+        {param id: $id /}
+        {param extraClasses}
+            {if not ($preventDoubleSubmit == false)}prevent-double-submit{sp}{/if}
+            {call aui.renderExtraClasses data="all" /}
+        {/param}
+        {param extraAttributes}
+            accept-charset="UTF-8"
+            {if $autocomplete}{sp}autocomplete="{$autocomplete}"{/if}
+            {call aui.renderExtraAttributes data="all" /}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param content
+ * @param? headingContent
+ * @param action
+ * @param? method
+ * @param? enctype
+ * @param? isUnsectioned
+ * @param? isLongLabels
+ * @param? isTopLabels
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? errors
+ * @param? detailedErrors
+ * @param? additionalErrorContent
+ * @param? preventDoubleSubmit Boolean. Default is true
+ * @param? autocomplete String. Enables/disables autocomplete for all the fields in the form. Valid values are 'on' or 'off'. Default is null (attribute is not added).
+ * @param? xsrfTokenName
+ * @param? xsrfTokenValue
+ */
+{template .xsrfProtectedForm}
+    {call .form}
+        {param action: $action /}
+        {param method: $method /}
+        {param enctype: $enctype /}
+        {param isUnsectioned: $isUnsectioned /}
+        {param isLongLabels: $isLongLabels /}
+        {param isTopLabels: $isTopLabels /}
+        {param id: $id /}
+        {param extraClasses: $extraClasses /}
+        {param extraAttributes: $extraAttributes /}
+        {param errors: $errors /}
+        {param detailedErrors: $detailedErrors /}
+        {param additionalErrorContent: $additionalErrorContent /}
+        {param preventDoubleSubmit: $preventDoubleSubmit /}
+        {param autocomplete: $autocomplete /}
+        {param headingContent: $headingContent ? $headingContent : null /}
+        {param content}
+            {let $xsrfTokenName: $xsrfTokenName ? $xsrfTokenName : ($ij.xsrfTokenName ? $ij.xsrfTokenName : null) /}
+            {$content|noAutoescape}
+            {if $xsrfTokenName}
+                <input type="hidden" name="{$xsrfTokenName}" value="{$xsrfTokenValue ? $xsrfTokenValue : ($ij.xsrfTokenValue ? $ij.xsrfTokenValue : null) }">
+            {/if}
+        {/param}
+    {/call}
+{/template}

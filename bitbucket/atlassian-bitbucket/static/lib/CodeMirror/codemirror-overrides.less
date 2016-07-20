@@ -1,0 +1,92 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+@selectionColour: darken(@commentLineBackgroundColor, 12%);
+
+.content-view {
+    .CodeMirror {
+        height: 100%;
+        font-family: inherit;
+        line-height: @codeLineHeight;
+        font-size: @font-size-small;
+
+        pre {
+            font-family: monospace;
+        }
+
+        .markup pre {
+            .box-sizing();
+            border-right: 0;
+            width: inherit;
+            max-width: 100%;
+            margin-top: @baseSpacing;
+            padding: 0;
+        }
+    }
+
+    .CodeMirror-gutters {
+        z-index: 2;
+        border-right: 0;
+
+        // Removing this background-color explicitly to prevent it showing through when
+        // the line numbers are being highlighted/faded in after a context expansion
+        background-color: transparent;
+    }
+
+    .CodeMirror-gutter-wrapper {
+        // The gutter can move position in the DOM, so it's safer to position it to the top and
+        // use offsets on individual gutter markers where required.
+        top: 0;
+    }
+
+    .CodeMirror-selected,
+    .CodeMirror-selectedtext {
+        background: @feintGreyColor;
+    }
+
+    .CodeMirror-focused .CodeMirror-selected,
+    .CodeMirror-focused .CodeMirror-selectedtext {
+        background: @selectionColour;
+    }
+
+    .CodeMirror-dialog {
+        font-size: @font-size-small;
+        color: @bodyTextColor;
+        padding: @baseSpacing @doubleSpacing;
+        background-color: @feintGreyColor;
+        font-weight: bold;
+    }
+
+    .CodeMirror-dialog-top {
+        border-bottom: 1px solid @dividerColor;
+    }
+
+    .CodeMirror-dialog-bottom {
+        border-top: 1px solid @dividerColor;
+    }
+
+    .CodeMirror-dialog input {
+        border: 1px solid @dividerColor;
+        .border-radius();
+        padding: @halfSpacing;
+        width: 75%!important; //Width is set directly on the element
+        width: ~'calc(100% - 140px)'!important; //100% minus approx width of "Search:" and the buttons
+        background-color: @contentBackgroundColor;
+        font-size: @font-size-small;
+        font-weight: normal;
+
+    }
+}
+
+.pointer-events .CodeMirror.CodeMirror-focused:after {
+    .box-shadow(inset 0 0 8px @selectionColour);
+
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 8;
+    pointer-events: none; //Let mouse events pass through to the editor underneath
+}

@@ -1,0 +1,13 @@
+{namespace bitbucket.internal.sidebar.tooltip}
+
+/**
+ * @param? projectName
+ * @param repoName
+ */
+{template .fork}
+    {if $projectName}
+        <b>{{getText('bitbucket.web.repository.fork.origin.different.project', $projectName, $repoName)|noAutoescape}}</b>
+    {else}
+        <b>{{getText('bitbucket.web.repository.fork.origin.same.project', $repoName)|noAutoescape}}</b>
+    {/if}
+{/template}

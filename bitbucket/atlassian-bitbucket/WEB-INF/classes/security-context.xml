@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://atlassian.com/schema/spring/plugin
+                           http://atlassian.com/schema/spring/plugin.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <sec:global-method-security pre-post-annotations="enabled" order="2">
+        <sec:expression-handler ref="expressionHandler"/>
+    </sec:global-method-security>
+
+    <bean id="authenticationContext" class="com.atlassian.stash.internal.auth.DefaultAuthenticationContext" plugin:available="true">
+        <plugin:interface>com.atlassian.bitbucket.auth.AuthenticationContext</plugin:interface>
+    </bean>
+
+    <bean id="expressionHandler" class="com.atlassian.stash.internal.user.ExtendedMethodSecurityExpressionHandler"/>
+
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="authenticationProvider"/>
+    </sec:authentication-manager>
+
+    <bean id="encryptionProvider" class="com.atlassian.stash.internal.auth.trusted.SafeEncryptionProvider"/>
+
+    <bean id="formAuthenticationEntryPoint" class="com.atlassian.stash.internal.spring.security.StashLoginUrlAuthenticationEntryPoint">
+        <constructor-arg value="/login"/>
+        <constructor-arg ref="navBuilder"/>
+    </bean>
+
+    <bean id="authenticationFilter" class="com.atlassian.stash.internal.spring.security.StashAuthenticationFilter">
+        <constructor-arg index="0" ref="authenticationContext"/>
+        <constructor-arg index="1" ref="pluginHttpAuthenticationHandler"/>
+        <constructor-arg index="2" ref="authenticationHelper"/>
+        <constructor-arg index="3" ref="authenticationManager"/>
+        <constructor-arg index="4" ref="pluginHttpAuthenticationFailureHandler"/>
+        <constructor-arg index="5" ref="pluginHttpAuthenticationSuccessHandler"/>
+        <constructor-arg index="6" ref="i18nService"/>
+        <constructor-arg index="7" value="/mvc/login"/>
+    </bean>
+
+    <bean id="trustedApplicationsAuthenticationFilter" class="com.atlassian.security.auth.trustedapps.filter.TrustedApplicationsFilter">
+        <constructor-arg index="0" ref="trustedApplicationsManager"/>
+        <constructor-arg index="1" ref="trustedApplicationsUserResolver"/>
+        <constructor-arg index="2" ref="trustedApplicationsAuthController"/>
+        <constructor-arg index="3" ref="trustedApplicationsAuthListener"/>
+    </bean>
+
+    <bean id="pluginProvidedAuthenticationFilter" class="com.atlassian.stash.internal.web.auth.BeforeLoginPluginAuthenticationFilter" />
+
+    <bean id="tokenRepository" class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="customWebSecurityExpressionHandler" class="com.atlassian.stash.internal.user.ExtendedWebSecurityExpressionHandler">
+        <property name="permissionService" ref="permissionService"/>
+    </bean>
+
+    <bean id="webExpressionVoter" class="org.springframework.security.web.access.expression.WebExpressionVoter">
+        <property name="expressionHandler" ref="customWebSecurityExpressionHandler"/>
+     </bean>
+
+    <bean id="webAccessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <constructor-arg>
+            <list>
+                <ref bean="webExpressionVoter"/>
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="maintenanceRequestMatcher" class="com.atlassian.stash.internal.spring.security.MaintenanceRequestMatcher"/>
+    <bean id="userAvatarRequestMatcher" class="com.atlassian.stash.internal.spring.security.GetUserAvatarRequestMatcher"/>
+    <bean id="backupClientProgressPutRequestMatcher" class="com.atlassian.stash.internal.spring.security.BackupClientProgressRequestMatcher">
+        <constructor-arg index="0" ref="maintenanceService"/>
+    </bean>
+
+    <!-- This block defines URLs to which Spring Security should not be applied -->
+    <sec:http security="none" pattern="/download/**"/>
+    <sec:http security="none" pattern="/fatal.jsp"/>
+    <sec:http security="none" pattern="/status"/>
+    <sec:http security="none" pattern="/system/startup"/>
+    <sec:http security="none" pattern="/unavailable"/>
+
+    <!-- User avatars are not permission checked and are frequently requested from notification emails, which makes it
+     worthwhile adding an exclude for them -->
+    <sec:http security="none" request-matcher-ref="userAvatarRequestMatcher" />
+    <!-- Updates to client backup progress use the maintenance token -->
+    <sec:http security="none" request-matcher-ref="backupClientProgressPutRequestMatcher"/>
+    <!-- Requests for maintenance progress, lock status, or to unlock the system, should not be authenticated
+         because the database may not be available -->
+    <sec:http security="none" request-matcher-ref="maintenanceRequestMatcher"/>
+
+    <!-- This block defines URLs to which Spring Security should be applied -->
+    <sec:http use-expressions="true"
+              access-decision-manager-ref="webAccessDecisionManager"
+              entry-point-ref="formAuthenticationEntryPoint"
+              security-context-repository-ref="securityContextRepository">
+        <sec:access-denied-handler ref="handlerExceptionResolver" />
+        <sec:request-cache ref="httpSessionRequestCache"/>
+
+        <!-- Disable session fixation protection, any session fixation attack is not practically exploitable in Stash
+             because we don't accept a JSESSIONID param and the session cookie is HTTP only. Leaving session fixation
+             protection enabled would only lead to spurious warnings of the form
+             "o.s.s.w.a.s.ChangeSessionIdAuthenticationStrategy Your servlet container did not change the session ID
+             when a new session was created. You will not be adequately protected against session-fixation attacks".
+             See STASH-5458. -->
+        <sec:session-management session-fixation-protection="none"/>
+
+        <sec:custom-filter position="PRE_AUTH_FILTER" ref="pluginProvidedAuthenticationFilter" />
+        <sec:custom-filter position="FORM_LOGIN_FILTER" ref="authenticationFilter" />
+        <sec:custom-filter position="LOGOUT_FILTER" ref="logoutFilter"/>
+
+        <!-- Not accessible to anonymous users -->
+        <sec:intercept-url pattern="/mvc/getting-started" access="isAuthenticated()"/>
+        <sec:intercept-url pattern="/mvc/upgrade-onboarding" access="isAuthenticated()"/>
+
+        <!--admin-->
+        <sec:intercept-url pattern="/mvc/admin/db" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin/db/**" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin/mail-server" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin/mail-server/**" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin/server-settings" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin/server-settings/**" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin" access="hasGlobalPermission('ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/admin/**" access="hasGlobalPermission('ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/maintenance/lock" method="POST" access="hasGlobalPermission('SYS_ADMIN')"/>
+        <sec:intercept-url pattern="/mvc/maintenance/upgrade-notification" method="DELETE"
+                           access="hasGlobalPermission('SYS_ADMIN')"/>
+    </sec:http>
+
+    <bean id="logoutSuccessHandler" class="com.atlassian.stash.internal.spring.security.PluginLogoutSuccessHandler">
+        <property name="defaultTargetUrl" value="/logout"/>
+    </bean>
+
+    <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <constructor-arg index="0" ref="logoutSuccessHandler"
+                         type="org.springframework.security.web.authentication.logout.LogoutSuccessHandler"/>
+        <constructor-arg index="1">
+            <list>
+                <bean class="com.atlassian.stash.internal.spring.security.PluginLogoutHandler">
+                    <constructor-arg ref="pluginAccessor"/>
+                </bean>
+                <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+                    <property name="invalidateHttpSession" value="true"/>
+                </bean>
+            </list>
+        </constructor-arg>
+        <property name="filterProcessesUrl" value="/j_atl_security_logout"/>
+    </bean>
+
+    <bean id="securityContextRepository" class="com.atlassian.stash.internal.spring.security.HttpSessionSecurityContextRepository">
+        <constructor-arg index="0" ref="canCreateNewHttpSessionRequestMatcher"/>
+        <constructor-arg index="1" ref="userService"/>
+    </bean>
+
+    <bean id="httpSessionRequestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache">
+        <property name="requestMatcher">
+            <bean class="org.springframework.security.web.util.matcher.AndRequestMatcher">
+                <constructor-arg>
+                    <list>
+                        <ref bean="canCreateNewHttpSessionRequestMatcher"/>
+                        <ref bean="postRequestMatcher"/>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="canCreateNewHttpSessionRequestMatcher" class="com.atlassian.stash.internal.spring.security.CanCreateNewHttpSessionRequestMatcher"/>
+    <bean id="postRequestMatcher" class="com.atlassian.stash.internal.spring.MethodRequestMatcher">
+        <constructor-arg value="POST"/>
+    </bean>
+</beans>

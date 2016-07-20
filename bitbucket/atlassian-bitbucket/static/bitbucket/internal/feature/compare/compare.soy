@@ -1,0 +1,188 @@
+{namespace bitbucket.internal.feature.compare}
+
+/**
+ * @param activeTab
+ * @param sourceRepository
+ * @param? sourceBranch
+ * @param? sourceCommit
+ * @param targetRepository
+ * @param targetBranch
+ * @param? targetCommit
+ * @param? prCreateMode
+ * @param? prTitle
+ * @param? prDescription
+ * @param? fieldErrors
+ * @param? detailedErrors
+ * @param? formErrors
+ * @param? existingPullRequest
+ * @param? pluginFieldsContent
+ */
+{template .panel}
+    {let $refsAreEqual: $targetBranch.id == $sourceBranch.id /}
+    {let $bothSelected: $sourceBranch and $targetBranch /}
+    {let $showPRForm: $prCreateMode and $bothSelected and not $refsAreEqual and not
+                      (contains($targetBranch.id, 'refs/tags/') or contains($sourceBranch.id, 'refs/tags/')) /}
+    <div id="branch-compare">
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: nav_create_pull($targetRepository.project.key, $targetRepository.slug) /}
+            {param errors: $formErrors /}
+            {param detailedErrors: $detailedErrors /}
+            {param additionalErrorContent}
+                {if $existingPullRequest}
+                    {call aui.message.error}
+                        {param content}
+                            {{getText('bitbucket.web.pullrequest.create.duplicate.error', $sourceBranch.displayId, $targetBranch.displayId)}}{sp}
+                            <a title="{$existingPullRequest.title}" href="{nav_pull($targetRepository.project, $targetRepository, $existingPullRequest.id)}">
+                                {getText('bitbucket.web.pullrequest.create.duplicate.viewexisting')}
+                            </a>
+                        {/param}
+                    {/call}
+                {/if}
+            {/param}
+            {param content}
+                {call .expandedBranches}
+                    {param sourceRepository: $sourceRepository /}
+                    {param sourceBranch: $sourceBranch /}
+                    {param sourceCommit: $sourceCommit /}
+                    {param targetRepository: $targetRepository /}
+                    {param targetBranch: $targetBranch /}
+                    {param targetCommit: $targetCommit /}
+                {/call}
+                // extra div so buttons and text can be on one line
+                {if isAuthenticated()}
+                    <div class="continue-button-row">
+                        {call aui.form.buttons}
+                            {param content}
+                                {call aui.form.button}
+                                    {param id: 'show-create-pr-button' /}
+                                    {param inputType: 'button' /}
+                                    {param tagName: 'input' /}
+                                    {param text: $prCreateMode ? getText('bitbucket.web.button.pull-request.continue'):
+                                                                 getText('bitbucket.web.button.pull-request.create')
+                                     /}
+                                    {param isDisabled: $refsAreEqual /}
+                                    {param extraClasses}
+                                        show-hide-button {if $showPRForm}hidden{/if}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                        <div class="refs-equal-warning pr-create-warning hidden">
+                            {call aui.icons.icon}
+                                {param icon: 'warning' /}
+                                {param useIconFont: true /}
+                            {/call}
+                            <span>{{getText('bitbucket.web.pullrequest.create.branches.equal')}}</span>
+                        </div>
+                        <div class="tags-warning pr-create-warning hidden">
+                            {call aui.icons.icon}
+                                {param icon: 'warning' /}
+                                {param useIconFont: true /}
+                            {/call}
+                            <span>{{getText('bitbucket.web.pullrequest.create.tag')}}</span>
+                        </div>
+                    </div>
+                {/if}
+                <div class="pull-request-create-form {if not $showPRForm}hidden{/if}">
+                    {call bitbucket.internal.feature.pullRequest.create}
+                        {param repository: $targetRepository /}
+                        {param sourceRepository: $sourceRepository /}
+                        {param sourceBranch: $sourceBranch /}
+                        {param targetBranch: $targetBranch /}
+                        {param title: $prTitle /}
+                        {param description: $prDescription /}
+                        {param fieldErrors: $fieldErrors /}
+                        {param pluginFieldsContent: $pluginFieldsContent /}
+                    {/call}
+                </div>
+            {/param}
+        {/call}
+        {call bitbucket.internal.widget.webItemTabs}
+            {param location: 'bitbucket.repositories.compare.nav' /}
+            {param context: [ 'sourceRepository' : $sourceRepository, 'targetRepository' : $targetRepository] /}
+            {param extraClasses: $bothSelected ? '' : 'hidden' /}
+            {param activeTab: $activeTab /}
+            {param isDisabled: true /}
+            {param tabPanesContent}
+                {call widget.aui.tabPane}
+                    {param id: 'compare-content' /}
+                    {param isActive: true /}
+                    {param content: '' /}
+                {/call}
+            {/param}
+        {/call}
+    </div>
+{/template}
+
+/**
+ * @param sourceBranch
+ * @param targetBranch
+ */
+{template .collapsedBranches}
+    <div class='collapsed-branches'>
+        {call bitbucket.internal.feature.repository.refLozenge}
+            {param repository: $sourceBranch.repository /}
+            {param ref: $sourceBranch /}
+            {param extraClasses: 'source-branch' /}
+            {param refAccessibilityText: getText('bitbucket.web.pullrequest.create.branch.source.accessibility', $sourceBranch.displayId) /}
+        {/call}
+        {call aui.icons.icon}
+            {param icon: 'arrow-right' /}
+            {param useIconFont: true /}
+            {param iconFontSet: 'devtools' /}
+        {/call}
+        {call bitbucket.internal.feature.repository.refLozenge}
+            {param repository: $targetBranch.repository /}
+            {param ref: $targetBranch /}
+            {param extraClasses: 'target-branch' /}
+            {param refAccessibilityText: getText('bitbucket.web.pullrequest.create.branch.target.accessibility', $targetBranch.displayId) /}
+        {/call}
+        {call aui.buttons.button}
+            {param text: getText('bitbucket.web.button.pull-request.change') /}
+            {param type: 'link' /}
+            {param extraClasses: 'branch-change show-hide-button' /}
+            {param extraAttributes: ['type': 'button'] /}
+        {/call}
+    </div>
+{/template}
+
+/**
+ * @param targetBranch
+ * @param targetRepository
+ * @param targetCommit
+ * @param? sourceBranch
+ * @param? sourceRepository
+ * @param? sourceCommit
+ */
+{template .expandedBranches}
+    <div class='expanded-branches'>
+        <h3 class="instructions">{getText('bitbucket.web.repository.compare.instructions')}</h3>
+        {call bitbucket.internal.feature.repository.sourceTargetSelector}
+            {param extraClasses: 'compare-selector' /}
+            {param isHorizontal: false /}
+            {param sourceRepository: $sourceRepository /}
+            {param sourceBranch: $sourceBranch.id /}
+            {param sourceHeadCommit: $sourceCommit /}
+            {param targetRepository: $targetRepository /}
+            {param targetBranch: $targetBranch.id /}
+            {param targetHeadCommit: $targetCommit /}
+        {/call}
+    </div>
+{/template}
+
+/**
+ * @param maxChanges
+ * @param sourceRepository
+ */
+{template .tabDetailsJS}
+    // TODO Be good to make this pluggable based on just a web-item (or custom module type)
+    {lb}
+        commits: require('bitbucket/internal/feature/compare/compare-commits')(
+            {to_json(getWebSections('bitbucket.commits.extras', [ 'repository' : $sourceRepository ]))|noAutoescape}
+        ),
+        diff: require('bitbucket/internal/feature/compare/compare-diffs')(
+            {to_json(getWebItems('bitbucket.repository.difftree.header'))|noAutoescape},
+            {$maxChanges}
+        )
+    {rb}
+{/template}

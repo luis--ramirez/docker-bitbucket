@@ -1,0 +1,53 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param? title
+ * @param? description
+ * @param? fieldErrors
+ * @param? pluginFieldsContent
+ */
+{template .detailsForm}
+    <fieldset class="pull-request-details">
+        {call aui.form.textField}
+            {param id: 'title' /}
+            {param extraClasses: 'pull-request-title'/}
+            {param name: 'title'/}
+            {param value: $title ? $title : '' /}
+            {param errorTexts: $fieldErrors and $fieldErrors.title ? $fieldErrors.title : null /}
+            {param isRequired: true /}
+            {param maxLength: 255 /}
+            {param labelContent}{getText('bitbucket.web.pullrequest.create.title.title')}{/param}
+            {param fieldWidth: 'long' /}
+        {/call}
+        {call widget.aui.form.field}
+            {param id: 'description' /}
+            {param labelContent}{getText('bitbucket.web.pullrequest.create.description.title')}{/param}
+            {param errors: $fieldErrors and $fieldErrors.description ? $fieldErrors.description : null /}
+            {param fieldGroupClass: 'pull-request-description' /}
+            {param input}
+                {call bitbucket.internal.widget.markupEditor.editor}
+                    {param textareaId: 'pull-request-description'/}
+                    {param textareaName: 'description'/}
+                    {param text: $description/}
+                    {param previewButtonTitle: getText('bitbucket.web.pullrequest.create.description.preview') /}
+                    {param attachmentButtonTitle: getText('bitbucket.web.pullrequest.button.attach')/}
+                    {param attachmentButtonAccessibilityText: getText('bitbucket.web.pullrequest.button.attach.label') /}
+                {/call}
+            {/param}
+        {/call}
+        {call aui.form.textField}
+            {param id: 'reviewers' /}
+            {param extraClasses: 'pull-request-reviewers'/}
+            {param name: 'reviewers'/}
+            {param errorTexts: $fieldErrors and $fieldErrors.reviewers ? $fieldErrors.reviewers : null /}
+            {param labelContent}{getText('bitbucket.web.pullrequest.create.reviewers')}{/param}
+            {param descriptionText: getText('bitbucket.web.pullrequest.create.reviewers.description') /}
+            {param fieldWidth: 'long' /}
+        {/call}
+        {if $pluginFieldsContent}
+        {$pluginFieldsContent |noAutoescape}
+        {/if}
+    </fieldset>
+{/template}
+
+

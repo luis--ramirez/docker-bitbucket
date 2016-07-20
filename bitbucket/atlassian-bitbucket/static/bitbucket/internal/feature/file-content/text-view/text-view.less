@@ -1,0 +1,29 @@
+@import "webstatic:/static/global.less";
+@import "webstatic:/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.text-view {
+    .tab-width(4);
+
+    .CodeMirror-cursor {
+        display: none;
+    }
+
+    .CodeMirror-sizer {
+        padding-bottom: (@codeLineHeight + @codeLineBorderWidth) * 2;
+    }
+
+    .line,
+    .line .CodeMirror-gutter-elt > * {
+        background-color: @contentBackgroundColor;
+    }
+
+    .CodeMirror-scroll {
+        // CodeMirror has overflow:scroll!important;
+        // By Overriding this with hidden we don't change any of the basics of the element (like the fact that it
+        // has more content than can fit on screen at once) but we stop it from having scroll events that we don't
+        // control.
+        // This needs to be in effect as soon as CodeMirror is initialised so when it calculates the size of the
+        // scrollbar it works out as 0px.
+        overflow-y: hidden !important;
+    }
+}

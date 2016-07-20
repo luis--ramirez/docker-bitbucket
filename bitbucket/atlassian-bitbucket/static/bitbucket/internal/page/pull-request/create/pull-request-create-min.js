@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/pull-request-create",["jquery","bitbucket/internal/feature/compare","exports"],function(e,f,b){b.onReady=function(a,b,g,c,d){a={targetRepositoryJson:a,sourceRepositoryJson:b,tabs:g,prCreateMode:!0};c&&(a.submittedReviewers=c);d&&(a.additionalPreloadRepositories=d);return f.onReady(e("#branch-compare"),a)}});

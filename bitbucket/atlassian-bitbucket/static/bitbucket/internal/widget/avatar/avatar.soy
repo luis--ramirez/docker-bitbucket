@@ -1,0 +1,138 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param size either 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge' or 'xxxlarge'
+ * @param person a StashUser or Person
+ * @param? tooltip
+ * @param? extraClasses
+ * @param? imageClasses
+ * @param? badgeContent extra HTML for badge
+ * @param? hideBadge if true, the badge is hidden (but html is still present in the dom)
+ * @param? id
+ */
+{template .avatar}
+    {call aui.avatar.avatar}
+        {param size: $size /}
+        {param avatarImageUrl: avatarUrl($person, $size) /}
+        {param accessibilityText: personDisplayName($person) /}
+        {param title: $tooltip /}
+        {param badgeContent: $badgeContent /}
+        {param extraClasses: 'user-avatar' + ($hideBadge ? ' badge-hidden' : '') + ($extraClasses ? ' ' + $extraClasses : '' ) /}
+        {param imageClasses: $imageClasses /}
+        {param extraAttributes: ['data-username': $person.name] /}
+        {param id: $id /}
+    {/call}
+{/template}
+
+/**
+ * @param size either 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge' or 'xxxlarge'
+ * @param person a StashUser or Person
+ * @param? extraClasses this goes on the container span, as per standard practice of extraClasses going on the outermost element
+ * @param? avatarClasses this gets passed through to the .avatar template's extraClasses
+ * @param? imageClasses
+ * @param? badgeContent extra HTML for badge
+ * @param? hideBadge if true, the badge is hidden (but html is still present in the dom)
+ * @param? id
+ * @param? link whether to link the name
+ * @param? href link destination. Defaults to the user profile
+ * @param? deleted whether to show the avatar as being deleted (strikeout name)
+ * @param? linkExtraClasses
+ */
+{template .avatarWithName}
+    {let $personName: personDisplayName($person) /}
+    <div class="avatar-with-name{if $extraClasses} {$extraClasses}{/if}{if $deleted} deleted-user{/if}" title="{$personName}">
+        {call bitbucket.internal.widget.avatar}
+            {param size: $size /}
+            {param person: $person /}
+            {param imageClasses: $imageClasses /}
+            {param extraClasses: $avatarClasses /}
+            {param badgeContent: $badgeContent /}
+            {param hideBadge: $hideBadge /}
+            {param id: $id /}
+        {/call}
+        {if $link and not $deleted}
+            {call bitbucket.internal.widget.userLink}
+                {param user: $person /}
+                {param href: $href /}
+                {param extraClasses: $linkExtraClasses /}
+                {param skipTitle: true /}
+            {/call}
+        {else}
+            <span class="display-name">{$personName}</span>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param size either 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge' or 'xxxlarge'
+ * @param person a StashUser or Person
+ */
+{template .avatarWithNameAndEmail}
+    {call .avatarWithName}
+        {param size: $size /}
+        {param person: $person /}
+    {/call}
+    <span class="email-address" title="{$person.emailAddress}">{$person.emailAddress}</span>
+{/template}
+
+
+/**
+ * This is needed so avatarSize() can be used in javascript
+ * @param size either 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge' or 'xxxlarge'
+ * @param? showPx true if 'px' should be appened to the return value
+ */
+{template .avatarSizeInPx}
+    {avatarSize($size)}{if $showPx}px{/if}
+{/template}
+
+/**
+ * @param size either 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge' or 'xxxlarge'
+ * @param person a StashUser or Person
+ * @param? tooltip
+ * @param? imageClasses
+ * @param? badgeClasses
+ * @param? extraClasses
+ * @param? badgeText
+ * @param? hideBadge if true, the badge is hidden (but html is still present in the dom)
+ * @param? id
+ */
+{template .avatarWithBadge}
+    {call .avatar}
+        {param size: $size /}
+        {param person: $person /}
+        {param tooltip: $tooltip /}
+        {param imageClasses: $imageClasses /}
+        {param extraClasses: $extraClasses /}
+        {param id: $id /}
+        {param hideBadge: $hideBadge /}
+        {param badgeContent}
+            <span class="badge{$badgeClasses ? ' ' + $badgeClasses : ''}">{$badgeText}</span>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param size either 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge' or 'xxxlarge'
+ * @param person a StashUser or Person
+ * @param? extraClasses
+ * @param? avatarClasses
+ * @param? imageClasses
+ * @param? badgeClasses
+ * @param? badgeText
+ * @param? hideBadge if true, the badge is hidden (but html is still present in the dom)
+ * @param? id
+ */
+{template .avatarWithNameAndBadge}
+    {call .avatarWithName}
+        {param size: $size /}
+        {param person: $person /}
+        {param extraClasses: $extraClasses /}
+        {param avatarClasses: $avatarClasses /}
+        {param imageClasses: $imageClasses /}
+        {param id: $id /}
+        {param hideBadge: $hideBadge /}
+        {param badgeContent}
+            <span class="badge{$badgeClasses ? ' ' + $badgeClasses : ''}">{$badgeText}</span>
+        {/param}
+    {/call}
+{/template}

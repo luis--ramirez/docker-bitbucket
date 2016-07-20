@@ -1,0 +1,1 @@
+define("bitbucket/internal/model/participant",["backbone-brace","bitbucket/internal/model/stash-user"],function(a,b){return a.Model.extend({namedAttributes:{approved:"boolean",role:"string",user:b,status:"string"}})});

@@ -1,0 +1,240 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-client-web-fragments" name="Client Web Fragments">
+
+    <web-resource-transformer key="client-web-panel-transformer"
+                              name="Client Web Panel Transformer"
+                              class="com.atlassian.stash.internal.plugin.web.fragments.ClientWebPanelTransformer"/>
+
+    <web-resource-transformer key="client-web-section-transformer"
+                              name="Client Web Section Transformer"
+                              class="com.atlassian.stash.internal.plugin.web.fragments.ClientWebSectionTransformer"/>
+
+    <web-resource-transformer key="client-web-item-transformer"
+                              name="Client Web Item Transformer"
+                              class="com.atlassian.stash.internal.plugin.web.fragments.ClientWebItemTransformer"/>
+
+    <web-resource key="web-fragment-manager" name="Client-side Web Fragment Manager">
+        <resource type="download" name="web-fragment-manager.js" location="/static/lib/web-fragment-manager.js">
+            <param name="source" value="webContextStatic" />
+        </resource>
+        <context>atl.general</context>
+        <context>atl.admin</context>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-page-data:page-data-loader</dependency>
+    </web-resource>
+
+    <!-- Clone Dialog -->
+
+    <web-fragment-location key="clone-dialog-options-location" location="bitbucket.web.repository.clone.dialog.options" type="panel" />
+
+    <!-- Empty Repository -->
+
+    <web-fragment-location key="empty-repository-instructions-location" location="bitbucket.empty.repository.instructions" type="panel" />
+
+    <!-- Branch Layout -->
+
+    <web-fragment-location key="branch-layout-actions-dropdown-location" location="bitbucket.branch.layout.actions.dropdown" type="item" />
+
+    <!-- File content -->
+
+    <web-fragment-location key="file-source-toolbar-primary-location" location="bitbucket.file-content.source.toolbar.primary" type="fragment" />
+    <web-fragment-location key="file-source-toolbar-secondary-location" location="bitbucket.file-content.source.toolbar.secondary" type="fragment" />
+    <web-fragment-location key="file-diff-toolbar-primary-location" location="bitbucket.file-content.diff.toolbar.primary" type="fragment" />
+    <web-fragment-location key="file-diff-toolbar-secondary-location" location="bitbucket.file-content.diff.toolbar.secondary" type="fragment" />
+    <web-fragment-location key="file-content-diff-view-options" location="bitbucket.file-content.diff-view.options" type="item" />
+
+    <!-- Commit -->
+
+    <web-fragment-location key="commit-related-entities-panels" location="bitbucket.commit.related-entities" type="panel" />
+    <web-fragment-location key="commit-diff-toolbar-primary-location" location="bitbucket.commit.diff.toolbar.primary" type="fragment" />
+    <web-fragment-location key="commit-diff-toolbar-secondary-location" location="bitbucket.commit.diff.toolbar.secondary" type="fragment" />
+
+    <!-- Comments -->
+
+    <web-fragment-location key="comments-action-links" location="bitbucket.comments.actions" type="item" />
+    <web-fragment-location key="comments-info-panels" location="bitbucket.comments.info" type="panel" />
+    <web-fragment-location key="comments-extra-panels-internal" location="bitbucket.comments.extra" type="panel" />
+
+    <!-- Pull Request -->
+
+    <web-fragment-location key="pull-request-header-more-location" location="bitbucket.pullrequest.action" type="item" />
+
+    <web-fragment-location key="pull-request-related-entities-location" location="bitbucket.pull-request.related-entities" type="panel" />
+    <web-fragment-location key="pull-request-links-location" location="bitbucket.pull-request.links" type="panel" />
+    <web-fragment-location key="pull-request-overview-location" location="bitbucket.pull-request.overview.sections" type="section" />
+
+    <web-fragment-location key="pull-request-activity-diff-toolbar-primary-location" location="bitbucket.pull-request.activity.diff.toolbar.primary" type="fragment" />
+    <web-fragment-location key="pull-request-activity-diff-toolbar-secondary-location" location="bitbucket.pull-request.activity.diff.toolbar.secondary" type="fragment" />
+
+    <web-fragment-location key="pull-request-diff-toolbar-primary-location" location="bitbucket.pull-request.diff.toolbar.primary" type="fragment" />
+    <web-fragment-location key="pull-request-diff-toolbar-secondary-location" location="bitbucket.pull-request.diff.toolbar.secondary" type="fragment" />
+
+    <web-fragment-location key="pull-request-commit-diff-toolbar-primary-location" location="bitbucket.pull-request.commit.diff.toolbar.primary" type="fragment" />
+    <web-fragment-location key="pull-request-commit-diff-toolbar-secondary-location" location="bitbucket.pull-request.commit.diff.toolbar.secondary" type="fragment" />
+
+    <web-fragment-location key="pull-request-merge-dialog-footer-hint" location="internal.stash.pull-request.merge-dialog.footer.hint" type="panel" />
+
+    <web-fragment-location key="pull-request-table-column-before" location="bitbucket.pull-request.table-column.before" type="section" />
+    <web-fragment-location key="pull-request-table-column-after" location="bitbucket.pull-request.table-column.after" type="section" />
+
+    <!-- Branch list -->
+
+    <web-fragment-location key="branch-list-extras-location-sections" location="bitbucket.branches.extras" type="section" />
+    <web-fragment-location key="branch-list-extras-location" location="bitbucket.branches.extras" type="item" />
+    <web-fragment-location key="branch-list-actions-dropdown-location" location="bitbucket.branch.list.actions.dropdown" type="item" />
+
+
+    <!-- Fragments -->
+
+    <!-- File content -->
+    <client-web-item key="pull-request-add-file-comment" section="bitbucket.pull-request.diff.toolbar.secondary" weight="10">
+        <styleClass>aui-button-subtle add-file-comment-trigger</styleClass>
+        <param name="iconClass">aui-icon aui-icon-small aui-iconfont-add-comment</param>
+        <client-condition>function(ctx) { return ctx.commentMode === 'create-new' }</client-condition>
+        <tooltip key="bitbucket.web.comment.filecomments.add"/>
+    </client-web-item>
+
+    <client-web-item key="pull-request-commit-add-file-comment" section="bitbucket.pull-request.commit.diff.toolbar.secondary" weight="10">
+        <styleClass>aui-button-subtle add-file-comment-trigger</styleClass>
+        <param name="iconClass">aui-icon aui-icon-small aui-iconfont-add-comment</param>
+        <client-condition>function(ctx) { return ctx.commentMode === 'create-new' }</client-condition>
+        <tooltip key="bitbucket.web.comment.filecomments.add"/>
+    </client-web-item>
+
+    <client-web-item key="commit-add-file-comment" section="bitbucket.commit.diff.toolbar.secondary" weight="10">
+        <styleClass>aui-button-subtle add-file-comment-trigger</styleClass>
+        <param name="iconClass">aui-icon aui-icon-small aui-iconfont-add-comment</param>
+        <client-condition>function(ctx) { return ctx.commentMode === 'create-new' }</client-condition>
+        <tooltip key="bitbucket.web.comment.filecomments.add"/>
+    </client-web-item>
+
+    <client-web-item key="source-file-blame" section="bitbucket.file-content.source.toolbar.secondary" weight="10">
+        <label key="bitbucket.web.file.content.sourceview.showblame"/>
+        <styleClass>file-blame</styleClass>
+        <client-condition>ctx.handlerID === 'source-text'</client-condition>
+    </client-web-item>
+
+    <client-web-item key="diff-to-previous-blame" section="bitbucket.file-content.diff.toolbar.secondary" weight="20">
+        <label key="bitbucket.web.file.content.sourceview.showblame"/>
+        <client-condition>function(ctx) { return ctx.handlerID === 'diff-text-unified' }</client-condition>
+        <styleClass>file-blame</styleClass>
+    </client-web-item>
+
+    <client-web-item key="pull-request-diff-blame" section="bitbucket.pull-request.diff.toolbar.secondary" weight="20">
+        <label key="bitbucket.web.file.content.sourceview.showblame"/>
+        <client-condition>function(ctx) { return ctx.handlerID === 'diff-text-unified' }</client-condition>
+        <styleClass>file-blame</styleClass>
+    </client-web-item>
+
+    <client-web-item key="pull-request-commit-diff-blame" section="bitbucket.pull-request.commit.diff.toolbar.secondary" weight="20">
+        <label key="bitbucket.web.file.content.sourceview.showblame"/>
+        <client-condition>function(ctx) { return ctx.handlerID === 'diff-text-unified' }</client-condition>
+        <styleClass>file-blame</styleClass>
+    </client-web-item>
+
+    <client-web-item key="commit-diff-blame" section="bitbucket.commit.diff.toolbar.secondary" weight="20">
+        <label key="bitbucket.web.file.content.sourceview.showblame"/>
+        <client-condition>function(ctx) { return ctx.handlerID === 'diff-text-unified' }</client-condition>
+        <styleClass>file-blame</styleClass>
+    </client-web-item>
+    <!-- Commit -->
+
+    <!-- On branch 10 -->
+    <!-- Commit parents 20 -->
+    <!-- Build status 30 -->
+    <!-- JIRA issue 40 -->
+    <client-web-panel key="commit-participants" location="bitbucket.commit.related-entities" weight="50">
+        <client-context-provider>{ participants : require('bitbucket/internal/model/page-state').getCommitParticipants().toJSON() }</client-context-provider>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:pull-request-overview-plugin-templates/bitbucket.internal.feature.discussion.participants" />
+        <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+    </client-web-panel>
+
+    <client-web-panel key="commit-watch" location="bitbucket.commit.related-entities" weight="60">
+        <client-context-provider>
+        function() {
+            return {
+                isWatching : require('bitbucket/internal/model/page-state').getIsWatching()
+            }
+        }
+        </client-context-provider>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:discussion-plugin-templates/bitbucket.internal.feature.watch.summaryPanel" />
+        <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+    </client-web-panel>
+
+    <!-- Pull Request - Tasks Overview Panel -->
+    <client-web-panel key="pull-request-tasks-overview-panel" location="bitbucket.pull-request.related-entities" weight="20">
+        <client-context-provider>require('bitbucket/internal/feature/tasks/tasks-overview').openTaskCountContext</client-context-provider>
+        <resource type="soy" name="view" location="com.atlassian.bitbucket.server.bitbucket-web:tasks-overview-resources/bitbucket.internal.feature.tasks.tasksOverview.overviewPanel" />
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:tasks-overview-init-resource</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:task-list-init-resource</dependency>
+    </client-web-panel>
+
+    <client-web-panel key="pull-request-learnmore" location="bitbucket.pull-request.links" weight="20">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:pull-request-overview-plugin-templates/bitbucket.internal.feature.pullRequest.overview.plugins.learnMore" />
+    </client-web-panel>
+
+
+    <!-- Branch List - Actions -->
+
+    <!-- Copy branch name = 15 -->
+
+    <!-- Check out in SourceTree = 20 -->
+
+    <client-web-item key="create-pr-branch-list" name="Create PR action" section="bitbucket.branch.list.actions.dropdown" weight="30">
+        <label key="bitbucket.web.branch.actions.create.pullrequest"/>
+        <link type="js">
+            function(ctx) {
+            return require('bitbucket/util/navbuilder').project(ctx.repository.project).repo(ctx.repository).createPullRequest()
+                                             .sourceBranch(ctx.branch.id).targetBranch(ctx.baseRef.id).build();
+            }
+        </link>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:navbuilder</dependency>
+        <styleClass>create-pull-request</styleClass>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+            <param name="feature">PULL_REQUESTS</param>
+        </condition>
+        <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+            <param name="permission">REPO_READ</param>
+        </condition>
+    </client-web-item>
+
+    <!-- Edit permissions = 40 -->
+
+    <!-- Delete = 50 -->
+
+    <!-- Branch List - Columns -->
+
+    <client-web-section key="pull-requests-column" name="Pull requests column" weight="250" location="bitbucket.branches.extras">
+        <label key="bitbucket.web.repository.branches.col.pull.requests"/>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+            <param name="feature">PULL_REQUESTS</param>
+        </condition>
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">LICENSED_USER</param>
+        </condition>
+    </client-web-section>
+
+    <client-web-panel key="pull-requests-cell" name="Outgoing pull requests cell" location="pull-requests-column" weight="10">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:branch-table-pull-requests/bitbucket.internal.feature.repository.branch.table.pullRequests"/>
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">LICENSED_USER</param>
+        </condition>
+    </client-web-panel>
+
+    <!-- Tasks -->
+
+    <!-- Comment - Tasks UI  -->
+    <client-web-panel key="comment-task-list" name="Comment task list" location="bitbucket.comments.extra" weight="100">
+        <client-condition>require('bitbucket/internal/feature/tasks/taskable-comment').isPullRequest</client-condition>
+        <view type="js">require('bitbucket/internal/feature/tasks/taskable-comment').newTaskableCommentView</view>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:taskable-comment-resources</dependency>
+    </client-web-panel>
+
+    <!-- Comment - Create Task action link -->
+    <client-web-item key="comment-create-task" name="Comment create task action" section="bitbucket.comments.actions" weight="40">
+        <client-condition>require('bitbucket/internal/feature/tasks/taskable-comment').isPullRequest</client-condition>
+        <label key="bitbucket.web.tasks.createTask" />
+        <styleClass>task-create</styleClass>
+        <link>#</link>
+    </client-web-item>
+
+</atlassian-plugin>

@@ -1,0 +1,209 @@
+configure.installation.home.directory.screen.title=Select {0} Home
+configure.installation.home.directory.screen.subtitle=The location for {0} data.
+configure.installation.home.directory.screen.subtitle.console=Default location for {0} home directory
+configure.installation.home.directory.info.new-install.text=This will be the default location for repositories, plugins, and other data.<br><br>Ensure that this location is not used by another {0} installation.<br>
+configure.installation.home.directory.info.upgrade.text=Please provide the location of your existing home directory, where your repositories, plugins, and other data are stored.<br><br>Be sure to <b>STOP</b> your current instance and create a backup before proceeding.<br>
+configure.installation.delete.atlstash=\nDelete Stash dedicated user account
+configure.installation.delete.atlstash.subtitle=
+configure.installation.delete.atlstash.console=Delete Stash dedicated user account
+configure.installation.delete.atlstash.user=Delete the dedicated user account created by Stash
+configure.installation.delete.atlstash.user.desc=<html>A new dedicated user account will be created to run {0} Server, called {1}. Leaving this option checked removes the previous user account, called atlstash. <a href="https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+upgrade+guide?utm_source=stash-installer&utm_medium=installer&utm_campaign=stash#BitbucketServerupgradeguide-dedicateduser">Read more about this dedicated user account.</a></html>
+configure.installation.delete.atlstash.user.console=Delete the dedicated user account created by Stash
+configure.installation.confirm.disable.plugin.title=\nWarning: All user-installed add-ons will be disabled
+configure.installation.confirm.disable.plugin.title.subtitle=
+configure.installation.confirm.disable.plugin.title.subtitle.console=Warning: All user-installed add-ons will be disabled
+configure.installation.confirm.disable.plugin.desc=<html>You are upgrading Stash to Bitbucket Server. Before proceeding, ensure your add-ons are compatible with Bitbucket Server. Once the upgrade is complete you should upgrade and then re-enable your add-ons. <a href="https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+upgrade+guide?utm_source=stash-installer&utm_medium=installer&utm_campaign=stash#BitbucketServerupgradeguide-40">Learn more about upgrading add-ons.</a></html>
+configure.installation.confirm.disable.plugin.desc.console=You are upgrading Stash to Bitbucket Server. Before proceeding, ensure your add-ons are compatible with Bitbucket Server. Once the upgrade is complete you should upgrade and then re-enable your add-ons. Learn more about upgrading add-ons: "https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+upgrade+guide?utm_source=stash-installer&utm_medium=installer&utm_campaign=stash#BitbucketServerupgradeguide-40".\n
+configure.installation.confirm.disable.plugin.text=I acknowledge, and wish to proceed.
+configure.installation.confirm.disable.plugin.dialog=You must acknowledge disabling of all user-installed add-ons.
+
+default.port.number=Use default ports (HTTP: 7990, Control: 8006) - Recommended
+custom.port.number=Set custom value for HTTP and control ports
+http.port.number=HTTP Port Number
+server.port.number=Control Port Number
+install.as.service=Install {0} as a service
+configure.installation=\nConfigure TCP Ports
+configure.installation.subtitle=
+configure.installation.subtitle.console=Configure which ports {0} will use.
+configure.installation.service=\nRun as a service
+configure.installation.service.subtitle=
+configure.installation.description={0} requires two TCP ports that aren't being used by other applications.\n\nThe HTTP port is where users access {0} through their browsers. The control port is used to start and stop {0}.\n\n{0} also requires ports 7992 and 7993 are available to run an embedded Elasticsearch instance that provides search functionality to {0}.
+configure.installation.description.service=For a production server we recommend that you run {0} as a Windows/Linux service because {0} will restart automatically when the computer restarts.
+configure.installation.service.help=The installer will create a service account called '{0}'. You can change the account, or the password, if necessary. <br><br>See <a href="https://confluence.atlassian.com/display/STASH/Running+the+Stash+installer">Running {1} as a service</a>
+launch.application.question=Would you like to launch {0}?
+launching.stash=Launching {0}
+launching.word=Launching
+launching.stash.subtitle=Please wait a few moments while {0} starts up.
+finish.datacenter.heading=This machine now has {0} Data Center installed
+finish.datacenter.message=Your installation of {0} Data Center on this node is ready and can be accessed from your browser.<br /><br />For a complete {0} Data Center installation, you will need to also install and connect to: <br /><ul><li>Shared database system</li><li>Shared file system</li><li>Shared Elasticsearch instance</li></ul>
+finish.ready.message=Your installation of {0} is now ready and can be accessed via your browser.
+finish.launch.tomcat=<b>Separate 'Tomcat' window</b><br/>Please note that if you close this window, you will shutdown {0}.
+finish.launch.browser=Launch {0} in browser
+
+# Internal install4j Strings that we overwrite. You can find these strings by opening a language file in install4j
+# under "General Settings > Languages" and then selecting "Edit > Override System Messages".
+FinishedHeadingLabel=Installation of {0} is complete
+WelcomeLabel1={0} installation wizard
+WelcomeLabel3=Please choose one of the following:
+ClickNext=
+SelectDirDesc=
+SelectDirDescConsole=Where should {0} be installed?
+WizardCaption=Bitbucket Installation Wizard
+PrepareInstaller={0} is preparing the installation Wizard which will guide you through the rest of the setup process.
+WizardSelectDir=\nSelect Destination Directory
+NoWritePermissions=You have not chosen a writable directory. Please choose a different path.
+
+#Menu options
+menu.create.group=\nCreate a Start Menu program group
+menu.create.group.subtitle=Start Menu program group
+menu.access.stash=Access {0}
+menu.start.server=Start {0} Server
+menu.stop.server=Stop {0} Server
+menu.start.service=Start {0} Service
+menu.stop.service=Stop {0} Service
+
+#Error Messages
+error.directory.access=We were unable to access the chosen {0} directory. Please choose a different directory.
+error.directory.file=The chosen path for the {0} directory points to a file. Please choose a different path.
+error.directory.spaces=The {0} directory cannot contain spaces. Please choose another location.
+error.directory.structure=The {0} directory structure could not be recognized. Please choose a valid home directory.
+error.directory.existing.home.mirror.install=Home directory is not empty. A mirror must be installed into an empty home directory.
+error.directory.subdirectory=The installation directory cannot be a parent of the home directory. Please choose another location.
+error.directory.used=The target {0} directory is not empty.
+error.directory.used.home=home
+error.directory.used.installation=installation
+error.directory.invalid.contents=The contents of the target {0} directory are invalid. A file was found where a directory was expected.
+error.directory.lock.failed=Failed to lock the target {0} directory for installation.
+error.port.control.elasticsearch.http=By default Bitbucket uses port 7992 to communicate with its embedded Elasticsearch instance. Please choose a different control port number.
+error.port.control.elasticsearch.transport=By default Bitbucket uses port 7993 to communicate with its embedded Elasticsearch instance. Please choose a different control port number.
+error.port.control.range=The control port is not valid. Please enter a port number in the range from 1-65535.
+error.port.control.ssh=By default Bitbucket uses port 7999 to listen for SSH requests. Please choose a different control port number.
+error.port.control.used=The control port appears to be in use. Please choose a different port number.
+error.port.elasticsearch.used=Bitbucket uses ports 7992 and 7993 to communicate with its embedded Elasticsearch instance. Please ensure these ports are available before starting Bitbucket.
+error.port.elasticsearch.http.used=Bitbucket uses port 7992 to communicate with its embedded Elasticsearch instance. Please ensure this port is available before starting Bitbucket.
+error.port.elasticsearch.transport.used=Bitbucket uses port 7993 to communicate with its embedded Elasticsearch instance. Please ensure this port is available before starting Bitbucket.
+error.port.http.elasticsearch.http=By default Bitbucket uses port 7992 to communicate with its embedded Elasticsearch instance. Please choose a different HTTP port number.
+error.port.http.elasticsearch.transport=By default Bitbucket uses port 7993 to communicate with its embedded Elasticsearch instance. Please choose a different HTTP port number.
+error.port.http.range=The HTTP port is not valid. Please enter a port number in the range from 1-65535.
+error.port.http.ssh=By default Bitbucket uses port 7999 to listen for SSH requests. Please choose a different HTTP port number.
+error.port.http.used=The HTTP port appears to be in use. Please choose a different port number.
+error.port.range=The HTTP and control ports you are not valid. Please enter a port number in the range from 1-65535.
+error.port.same=Please choose different port numbers.
+error.port.used=The HTTP and control ports appear to be in use. Please choose different port numbers.
+error.service.admin=To install {0} as a service the installer must run with elevated privileges.
+error.ports.same=You must enter different ports!
+error.port.number.too.low=Port numbers less than 1024 may be reserved by the operating system and impossible for {0} to use without further configuration.\nIf you proceed, {0} may fail to start with a permission error. For more information, see http://go.atlassian.com/stashport
+error.invalid.http.port.range=The HTTP port is not valid. Please enter a port number in the range from 1-65535.
+error.invalid.server.port.range=The control port is not valid. Please enter a port number in the range from 1-65535.
+error.invalid.ports.range=The HTTP and control ports you are not valid. Please enter a port number in the range from 1-65535.
+error.http.port.in.use=The HTTP port appears to be in use. Please choose a different port number.
+error.server.port.in.use=The control port appears to be in use. Please choose a different port number.
+error.ports.in.use=The HTTP and control ports appear to be in use. Please choose different port numbers.
+error.no.admin.rights=You do not have administrator rights to this machine.\nYou will not be allowed to install {0} as a service or listen on any port that's not permitted by your firewall or security policy.\n\nAre you sure you want to continue?
+error.no.admin.rights.uninstall=You do not have administrator rights. Are you sure you want to continue?
+error.invalid.installation.dir=It appears that the target installation directory is not empty. Please choose an empty directory or new directory path.
+error.spaces.installation.dir=The installation directory cannot contain spaces. Please use another location.
+error.invalid.program.group=The program group you have chosen already exists. Please choose a different group.
+error.starting.service=There appears to have been a problem starting the service. Please start the service manually in Control Panel -> Administrative Tools -> Services.
+error.path.too.long=The path you have chosen is too long. The maximum path length in Windows is 260 characters, which will be \nexceeded by some of the files that will be installed. Please choose a shorter installation path.
+error.home.dir.under.install.dir=The home directory cannot be a sub-directory of the installation directory. Please use another location.
+error.home.dir.spaces=The home directory cannot contain spaces. Please use another location.
+error.chmod.sh.files=Unable to set correct permissions to .sh files. Please manually run 'chmod u+x bin/*.sh' inside the installation directory.
+error.setting.stash.home=Failed to set {0} Home in stashenv script. You must set it manually.
+error.changing.file.perms=Failed to change file permissions.
+error.starting.elasticsearch=The installer was unable to detect whether Elasticsearch started correctly\nPlease consult the '{0}bitbucket_search.log' file to verify that Elasticsearch started successfully
+error.starting.stash=The installer was unable to detect whether {0} started correctly\nPlease consult the '{1}atlassian-bitbucket.log' file to verify that {0} started successfully
+error.deleting.stash.user=Error while attempting to delete {0}'s user account. Please delete it manually later.
+error.registering.in.win.program.list=Failed to register {0} with 'Windows Add/Remove Programs' list!
+error.setting.stash.cfg.port=Unable to configure HTTP port in scripts.cfg file. You must set it manually.
+
+error.installation.detail.not.initiated=The installation detail object is not initiated yet.
+error.installation.detail.double.initiated=The installation detail object should not be initiated twice.
+
+error.git.unsupported.binary.title=\nThis version of Git is not supported
+error.git.unsupported.binary.subtitle=
+error.git.retry.unsupported=This version of Git is not supported. Please try to install a version that is supported by {0} before proceeding.
+
+error.git.unsupported.binary=Unsupported Git version found [{0}]. Please upgrade Git to a supported version before installing {1}. <br> See <a href="http://go.atlassian.com/installgit">http://go.atlassian.com/installgit</a> for more information.
+
+error.missing.git.binary=Unable to find Git! Please install Git before installing {0}.<br>For more information please visit: <a href="http://go.atlassian.com/installgit">http://go.atlassian.com/installgit
+error.missing.git.binary.title=\nUnable to find Git
+error.missing.git.binary.subtitle=
+error.git.retry.missing=Git is missing. Please install supported version of Git before proceeding.
+
+message.git.retry.successful=Git was found and the version is supported. Continuing with installation.
+
+error.stash.git.ignore=NOTE: If you proceed without a working Git, {0} won't be able to start after installation until a working Git is found.
+error.stash.git.ignore.message=If you proceed without a working Git, {0} won't be able to start after installation. \nAre you sure you want to continue?
+
+error.stash.git.problem.ignore.button.text=Ignore >
+
+error.unable.to.write.config=Unable to write to bitbucket.properties.
+
+stash.git.retry=Retry
+stash.git.retry.label=If you have fixed the problem, you can try again:
+
+#express install messages
+express.install.label=Express Install (use default settings)
+express.programgroup.conflict=* Start Menu (Existing start menu entry)\n
+
+#summary screen messages
+summary.screen.title=\nInstallation Summary
+summary.screen.subtitle.console=Please review your {0} installation settings
+summary.screen.description=
+summary.installdir.label=Installation Directory:
+summary.homedir.label=Home Directory:
+summary.httpport.label=HTTP Port:
+summary.serverport.label=Control Port:
+summary.service.label.install=Install as a service:
+summary.service.label.upgrade=Upgrade existing service:
+summary.install.next.button.text=Install
+summary.delete.stash.user.label=Delete Stash dedicated user:
+
+#service screen messages
+service.screen.title=Starting Bitbucket services manually
+service.screen.subtitle=An important note about changes to starting Bitbucket Server
+service.screen.unix.description=<div>Bitbucket Server standard startup commands have changed to automatically start a new service that enabled code search.</div><div>When starting Bitbucket Server manually, ensure you start all required services using both of these commands<pre>service atlbitbucket_search start</pre><pre>service atlbitbucket start</pre>The <code>atlbitbucket_search</code>
+service.screen.windows.description=<div>Bitbucket Server standard startup commands have changed to automatically start a new service that enabled code search.</div><div>When starting Bitbucket Server manually, ensure you start both of these required services<ul> <li>Atlassian Bitbucket Elasticsearch</li><li>Atlassian Bitbucket AtlassianBitbucket</li></ul></div>
+
+install.upgrade.selection.notice=Please choose one of the following:
+new.install.label=Custom Install (recommended for advanced users)
+message.button.yes=&Yes
+message.button.no=&No
+label.home.directory.exists=Home Directory Already Exists
+warning.service.override=It looks like a {0} service is already installed in the target environment.\nThe installation will replace any existing services. Do you want to continue?
+warning.message.continue=Do you want to continue?
+generic.text.yes=Yes
+generic.text.no=No
+warning.message.install=Install
+warning.message.exit=Exit
+
+# install or upgrade
+bitbucket.installation.install.heading=Install {0}
+bitbucket.installation.install.label=Install a new instance
+bitbucket.installation.install.context=Install a new {0}, Data Center or mirror instance.
+
+bitbucket.installation.upgrade.heading=Upgrade to {0}
+bitbucket.installation.upgrade.label=Upgrade an existing instance
+bitbucket.installation.upgrade.context=Upgrade an existing {0}, Data Center or mirror instance.
+
+#installation types
+bitbucket.installation.type.label=Please choose one of the following:
+
+bitbucket.installation.type.standard.install=Install a standard instance
+bitbucket.installation.type.standard.upgrade=Upgrade an existing instance
+
+bitbucket.installation.type.datacenter.context=Elasticsearch will not be installed with this option.
+bitbucket.installation.type.datacenter.install=Install a Data Center instance
+bitbucket.installation.type.datacenter.upgrade=Upgrade an existing Data Center instance
+bitbucket.installation.type.datacenter.readmore=Read more about <a href="http://docs.atlassian.com/bitbucketserver/docs-{0}/Installing+Bitbucket+Data+Center">installing Bitbucket Data Center</a>.
+
+bitbucket.installation.type.mirror.context=Connect to an existing Data Center instance.
+bitbucket.installation.type.mirror.install=Install a mirror instance
+bitbucket.installation.type.mirror.upgrade=Upgrade an existing mirror instance
+
+#Mirror finish screen.
+bitbucket.mirror.finish.title=Further Configuration Required
+bitbucket.mirror.finish.ssl=<strong>Warning:</strong> HTTPS must be configured before use. Read more about <a href="http://docs.atlassian.com/bitbucketserver/docs-{0}/Set+up+a+mirror#Setupamirror-secure">setting up HTTPS</a>.
+bitbucket.mirror.finish.ssl.console=Warning: HTTPS must be configured before use. Read more about setting up HTTPS at http://docs.atlassian.com/bitbucketserver/docs-{0}/Set+up+a+mirror#Setupamirror-secure.
+bitbucket.mirror.finish.complete=Installer completed.

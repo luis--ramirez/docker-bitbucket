@@ -1,0 +1,86 @@
+{namespace widget.aui}
+
+/**
+ * @param? isVertical
+ * @param? isDisabled tab links will function as normal links, rather than modifying the active tab.
+ * @param? extraClasses
+ * @param tabItems
+ * @param tabPanesContent
+ */
+{template .tabs}
+    {call .tabChrome data="all"}
+        {param tabItemsContent}
+            {foreach $item in $tabItems}
+                {call .tabMenuItem data="$item" /}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * Deprecated for removal in 4.0
+ * Use stash.widget.webItemTabs instead
+ * @param? isVertical
+ * @param? isDisabled tab links will function as normal links, rather than modifying the active tab.
+ * @param? extraClasses
+ * @param? webItems either webItems or location must be provided
+ * @param? location either webItems or location must be provided
+ * @param? context
+ * @param? activeTab
+ * @param? showFirstTab
+ * @param tabPanesContent
+ * @param? tabItemsContent
+ */
+{template .webItemTabs}
+    {call bitbucket.internal.widget.webItemTabs data="all" /}
+{/template}
+
+/**
+ * @param tabItemsContent
+ * @param tabPanesContent
+ * @param? isVertical
+ * @param? isDisabled tab links will function as normal links, rather than modifying the active tab.
+ * @param? extraClasses
+ */
+{template .tabChrome private="true"}
+<div class="aui-tabs {$isVertical ? 'vertical-tabs' : 'horizontal-tabs'}{if $isDisabled} aui-tabs-disabled{/if}{if $extraClasses} {$extraClasses}{/if}">
+    <ul class="tabs-menu">
+        {$tabItemsContent|noAutoescape}
+    </ul>
+    {$tabPanesContent|noAutoescape}
+</div>
+{/template}
+
+/**
+ * @param url
+ * @param text
+ * @param? id
+ * @param? tooltip
+ * @param? isActive
+ * @param? extraClasses
+ * @param? extraLinkClasses
+ * @param? extraLinkContent
+ * @param? extraAttributes
+ */
+{template .tabMenuItem private="true"}
+    <li class="menu-item{if $isActive} active-tab{/if}{if $extraClasses} {$extraClasses}{/if}"{call aui.renderExtraAttributes data="all" /}>
+        <a href="{$url}" {if $id}id="{$id}"{/if} {if $extraLinkClasses}class="{$extraLinkClasses}"{/if}{if $tooltip} title="{$tooltip}"{/if}>
+            <strong>{$text}</strong>
+            {if $extraLinkContent}{$extraLinkContent|noAutoescape}{/if}
+        </a>
+    </li>
+{/template}
+
+/**
+ * @param content
+ * @param? id
+ * @param? isActive
+ * @param? extraClasses
+ * @param? dataAttributes
+ */
+{template .tabPane}
+    <div class="tabs-pane{if $isActive} active-pane{/if}{if $extraClasses} {$extraClasses}{/if}"{if $id} id="{$id}"{/if}
+    {if $dataAttributes}{call bitbucket.internal.util.dataAttributes}{param data: $dataAttributes /}{/call}{/if}>
+        {$content |noAutoescape}
+    </div>
+{/template}

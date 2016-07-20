@@ -1,0 +1,12 @@
+cluster.name: bitbucket_search
+node:
+  name: bitbucket_bundled
+  local: true
+
+network.host: _local_
+discovery.zen.ping.multicast.enabled: false
+
+action.auto_create_index: false
+index.mapper.dynamic: false
+http.port: 7992
+transport.tcp.port: 7993

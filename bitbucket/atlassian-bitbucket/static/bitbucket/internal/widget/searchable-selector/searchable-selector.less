@@ -1,0 +1,155 @@
+@import "/static/global.less";
+
+.searchable-selector-trigger {
+    padding-right: @dropdown-arrow-width + @baseSpacing + @halfSpacing; // 8px (arrow width) + 10px (right padding) + 5px (margin between arrow and text)
+    position: relative;
+    max-width: @max-button-width;
+
+    &:after {
+        .dropdown-arrow();
+        content: "";
+        left: 100%; // "left" + "margin-left" required because of webkit not working properly with "right"
+        margin-left: -18px;
+        margin-top: -1px;
+        position: absolute;
+        top: 50%;
+    }
+
+    .name, .placeholder {
+        .text-overflow();
+        display: inline-block;
+        text-align: left;
+        vertical-align: top;
+        max-width: @max-button-width - (@dropdown-arrow-width + @baseSpacing + @halfSpacing) - @baseSpacing;
+        //Button width minus padding right for dropdown arrow (above) and button padding left
+    }
+
+    .name {
+        font-weight: bold;
+    }
+}
+
+.searchable-selector-dialog {
+    .contents {
+        .border-top-left-radius(0);
+        padding: 0;
+        background-color: @feintGreyColor;
+    }
+
+    .arrow {
+        display: none;
+    }
+}
+
+.searchable-selector {
+    header {
+        margin: @baseSpacing;
+    }
+
+    .results {
+        .scrolling-shadow();
+        max-height: 250px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 2px 0 8px 0;
+        background-color: @contentBackgroundColor;
+
+        .spinner {
+            height: @baseSpacing;
+            padding-top: @doubleSpacing;
+            margin: 0 auto;
+        }
+
+        .result a {
+            color: @bodyTextColor;
+            padding: 3px @baseSpacing;
+            display: block;
+            word-wrap: break-word;
+            position: relative;
+
+            .aui-icon {
+                position: absolute;
+                top: @halfSpacing;
+                left: @baseSpacing;
+
+                + .name {
+                    display: inline-block;
+                    padding-left: @icon-size-xxsmall + @halfSpacing;
+                }
+            }
+        }
+
+        .result.focused a {
+            background-color: @primaryHighlightColor;
+            color: @invertedBodyTextColor;
+
+            .aui-icon {
+                color: @invertedBodyTextColor;
+            }
+        }
+
+        .preload + .result:not(.preload):before {
+            content: '';
+            display: block;
+            margin: 0 auto 2px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid @dividerColor;
+        }
+
+        .no-results {
+            padding: 3px @baseSpacing;
+            word-wrap: break-word;
+            color: @placeholderTextColor;
+            text-align: center;
+        }
+    }
+
+    header + .results {
+        border-top: 1px solid @dividerColor;
+    }
+
+    .results.tabs-pane {
+        border-top: none;
+        display: none;
+    }
+
+    .results.active-pane {
+        display: block;
+    }
+
+    input {
+        .border-radius();
+        .box-sizing();
+        border: 1px solid @dividerColor;
+        color: @bodyTextColor;
+        height: 30px;
+        padding: 4px 5px;
+        width: 100%;
+        font-family: @atlassianFontStack;
+        font-size: @font-size-default;
+    }
+
+    .aui-tabs {
+        margin-top: @baseSpacing;
+        background-color: @contentBackgroundColor;
+    }
+
+    .aui-tabs > ul.tabs-menu {
+        background-color: @feintGreyColor;
+
+        li.menu-item {
+            font-size: @font-size-small;
+            border-bottom-color: @dividerColor;
+        }
+    }
+
+    .aui-tabs.horizontal-tabs > .tabs-menu > .menu-item:first-child {
+        margin-left: @baseSpacing;
+    }
+
+    ul.results-list {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+}

@@ -1,0 +1,143 @@
+@import "../../../../global.less";
+
+@prTitleLineHeight: 16px;
+@prTitlePadding: 12px;
+
+.pull-requests-table {
+
+    .author-avatar .user-avatar {
+        margin-right: 0;
+    }
+
+    tr.pull-request-row {
+        > td {
+            vertical-align: middle;
+        }
+
+        // we shrinkwrap some columns so they collapse to their smallest size.
+        // when we shrink the header/value cells they don't throw the non-empty
+        // ones out of wack
+        .build-status,
+        .count-column,
+        .count-column-value,
+        .reviewers {
+            .shrinkwrap();
+            white-space: nowrap;
+
+
+            // Collapsing the empty cells completely, this avoid keeping
+            // space reserved for these columns when it's not necessary
+            &:empty {
+                padding:0;
+                width:0;
+            }
+        }
+
+        &.focused,
+        &:hover {
+            .ref-label, .overflow-reviewers-trigger {
+                border-color: @adg-color-ash-gray;
+                background-color: #fff;
+            }
+        }
+    }
+
+    .aui-iconfont-devtools-arrow-right {
+        margin: 0 @baseSpacing;
+        color: @lozengeGenericColor;
+        vertical-align: middle;
+    }
+
+    .avatar-with-name,
+    .pull-request-updated-timestamp {
+        display: inline-block;
+    }
+
+    .pull-request-author {
+        padding-right: 0;
+        .shrinkwrap();
+    }
+
+    .avatar-with-name .user-avatar {
+        margin-right: @halfSpacing;
+    }
+
+    td.author-avatar {
+        width: @aui-avatar-size-medium;
+        padding-right: 0;
+    }
+
+    td.summary {
+        padding-top: @prTitlePadding;
+        padding-bottom: @prTitlePadding;
+        min-width: 125px;
+        max-width: 150px;
+        .pull-request-project-repo {
+            font-size: @font-size-small;
+            color: @descriptionTextColor;
+        }
+    }
+
+    // flexbox magic happens here
+    .title-and-target-branch {
+        .flex-container();
+        .justify-content(flex-start);
+        .align-items(center);
+
+        .pull-request-title {
+            .text-overflow();
+            .flex(~"0 100000 auto");
+            min-width: 5em;
+            max-width: 100%;
+            display: inline-block;
+            line-height: @prTitleLineHeight;
+        }
+
+        .aui-icon {
+            .flex(none);
+            min-width: @aui-icon-size-small;
+            width: @aui-icon-size-small;
+        }
+
+        .pull-request-target-branch {
+            .flex(~"1 1 auto");
+            .text-overflow();
+            box-sizing: border-box;
+            max-width: 100%;
+            display: inline-block; // needed by IE10 otherwise it doesn't get dimensions for overflow truncation
+            line-height: @prTitleLineHeight;
+        }
+
+        .ref-label {
+            .box-sizing();
+            .text-overflow();
+            vertical-align: top;
+            max-width: 100%;
+            margin: 0;
+            line-height: initial;
+        }
+
+    }
+
+    .pr-author-number-and-timestamp {
+        .text-overflow();
+        color: @labelTextColor;
+        font-size: @font-size-small;
+    }
+
+    &.no-rows + .paged-table-message .empty-banner-content {
+        margin-top: @tripleSpacing;
+    }
+
+
+    .count-column-value {
+        .aui-icon {
+            margin-right: @halfSpacing;
+        }
+    }
+
+    .count-column,
+    .count-column-value {
+        color: @secondaryTextColor;
+    }
+}

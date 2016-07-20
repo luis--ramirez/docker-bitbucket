@@ -1,0 +1,17 @@
+// IE9 doesn't handle `max-width` when applied to a <td> the same way all other browsers do.
+// To work around this we have to use table-layout:fixed then specify the widths on the <th>'s
+
+.branch-table {
+    table-layout: fixed;
+
+    th#ahead-behind-column {
+        width: 200px;
+    }
+    th#last-updated-column {
+        width: 100px;
+    }
+    th#pull-requests-column,
+    th#build-status-branch-list-col {
+        width: 100px;
+    }
+}

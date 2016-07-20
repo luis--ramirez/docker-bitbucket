@@ -1,0 +1,26 @@
+@import "/static/global.less";
+
+.code-block {
+    .border-radius(3px);
+    border: 1px solid @dividerColor;
+    background: @feintGreyColor;
+    font-family: monospace;
+    font-size: @font-size-small;
+    margin: 0;
+    padding:  @baseSpacing;
+    vertical-align: baseline;
+    overflow: auto;
+    padding: 6px @baseSpacing;
+
+    pre {
+        code {
+            padding: 0;
+            background: transparent;
+            color: @bodyTextColor;
+        }
+    }
+}
+
+.instruction-block {
+    margin: @baseSpacing 0 @doubleSpacing;
+}

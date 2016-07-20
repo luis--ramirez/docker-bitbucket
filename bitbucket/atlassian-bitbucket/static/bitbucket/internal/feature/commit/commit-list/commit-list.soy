@@ -1,0 +1,24 @@
+{namespace bitbucket.internal.widget.commit}
+
+/**
+ * @param content
+ */
+{template .commitList}
+    <ul class="commit-list">
+        {$content|noAutoescape}
+    </ul>
+{/template}
+
+/**
+ * @param content
+ * @param isSelected
+ * @param? extraClasses
+ * @param? title
+ * @param? isFocused
+ */
+{template .commitListItem}
+    <li class="commit-list-item{if $isSelected} selected{/if}{if $isFocused} focused{/if}{if $extraClasses} {$extraClasses}{/if}"
+    {if $title} title="{$title}"{/if}>
+        {$content|noAutoescape}
+    </li>
+{/template}

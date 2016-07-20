@@ -1,0 +1,47 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param project
+ * @param repository
+ * @param activeNav
+ * @param atRevisionRef
+ * @param isRepoAdmin
+ * @param dataAttributes
+ **/
+{template .noDefaultBranch}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.repository.noDefaultBranch')}
+    {call bitbucket.internal.layout.branch}
+        {param dataAttributes: $dataAttributes /}
+        {param project: $project /}
+        {param repository: $repository /}
+        {param atRevisionRef: $atRevisionRef /}
+        {param activeNav: $activeNav /}
+        {param content}
+            {call .noDefaultBranchMessage}
+                {param escapedBranchName}{$atRevisionRef.displayId}{/param}
+                {param escapedUrl}{nav_repo_settings($project, $repository)}{/param}
+                {param isRepoAdmin: $isRepoAdmin /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/page/repository/noDefaultBranch').onReady();</script>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param escapedBranchName
+ * @param escapedUrl
+ * @param isRepoAdmin
+ **/
+{template .noDefaultBranchMessage private="true"}
+    {call aui.message.warning}
+        {param content}
+            {if $isRepoAdmin}
+                {{getText('bitbucket.web.repository.nodefaultbranch.admin.html', $escapedBranchName, $escapedUrl)|noAutoescape}}
+            {else}
+                {{getText('bitbucket.web.repository.nodefaultbranch.html', $escapedBranchName)|noAutoescape}}
+            {/if}
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/file-content/diff-view-file-types",[],function(){return{FROM:"FROM",TO:"TO"}});

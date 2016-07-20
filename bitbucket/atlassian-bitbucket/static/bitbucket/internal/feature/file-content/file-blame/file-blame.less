@@ -1,0 +1,81 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.blame {
+    .transition(~"border-color 0.2s, background-color 0.2s, opacity 0.5s");
+    overflow: hidden;
+    font-family: monospace;
+    font-size: @font-size-small;
+    z-index: 1;
+    background-color: @contentBackgroundColor;
+    min-height: 100%;
+    padding: 0 0 0 @baseSpacing;
+    white-space: nowrap;
+    border-right: 4px solid @dividerColor;
+    line-height: 18px;
+    clear: both;
+
+    width: @blameColumnWidth;
+    opacity: 1;
+
+    .blame-disabled & {
+        width: 0;
+        border-width: 0;
+        padding: 0;
+        opacity: 0;
+    }
+
+
+    .CodeMirror-gutters > & {
+        border-color: @contentBackgroundColor;
+        background-color: @contentBackgroundColor;
+    }
+
+    // doubled for specificity (need to beat CodeMirror styles)
+    &.commitid-hovered.commitid-hovered {
+        background-color: @primaryHighlight;
+        border-right-color: @primaryHighlightColor;
+    }
+
+    .user-avatar {
+        margin-right: @halfSpacing;
+    }
+
+    .commitid {
+        margin: 0 @halfSpacing;
+        display: inline-block;
+    }
+    .blame-author {
+        .text-overflow();
+        width: 120px;
+        display: inline-block;
+        vertical-align: bottom;
+        text-align: left;
+    }
+
+    .blame-timestamp {
+        display: inline-block;
+        text-align: right;
+        width: 90px;
+    }
+
+} //.blame
+
+.diff-view {
+    .blame {
+        min-height: 0;
+        height: auto;
+    }
+
+    .conflict-marker .blame > *{
+        visibility: hidden;
+    }
+}
+
+.blame-spinner {
+    width: @auiIconSmall;
+    height: @auiButtonHeight;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: @baseSpacing;
+}

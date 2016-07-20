@@ -1,0 +1,507 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-keyboard-shortcuts" name="System Keyboard Shortcuts">
+
+    <!-- Global 100 -->
+
+    <keyboard-shortcut key="shortcut-close-shortcuts-dialog" i18n-name="bitbucket.web.keyboardshortcut.dialog.close" >
+        <description key="bitbucket.web.keyboardshortcut.dialog.close.desc"/>
+        <shortcut>[esc]</shortcut>
+        <operation type="evaluate">/* noop - handled by AUI Dialog */</operation>
+        <order>110</order>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-open-shortcuts-dialog" i18n-name="bitbucket.web.keyboardshortcut.dialog.open" >
+        <description key="bitbucket.web.keyboardshortcut.dialog.open.desc"/>
+        <shortcut>?</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('keyboardShortcutsDialog', this, '?');</operation>
+        <order>120</order>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-toggle-sidebar" i18n-name="bitbucket.web.keyboardshortcut.sidebar.toggle" >
+        <description key="bitbucket.web.keyboardshortcut.sidebar.toggle.desc"/>
+        <shortcut>[</shortcut>
+        <operation type="evaluate">/* noop - handled by AUI Sidebar */</operation>
+        <order>130</order>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-recent-repositories" i18n-name="bitbucket.web.keyboardshortcut.recent.repositories" >
+        <description key="bitbucket.web.keyboardshortcut.recent.repositories.desc"/>
+        <shortcut>gr</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('recentRepositories', this, 'gr');</operation>
+        <order>140</order>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-megazord" i18n-name="bitbucket.web.keyboardshortcut.what.time.is.it"  hidden="true">
+        <description key="bitbucket.web.keyboardshortcut.what.time.is.it.desc"/>
+        <shortcut>megazord</shortcut>
+        <operation type="execute">alert("It's Morphin' Time!")</operation>
+        <order>190</order>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-stash" i18n-name="bitbucket.web.keyboardshortcut.stash"  hidden="true">
+        <description key="bitbucket.web.keyboardshortcut.stash.desc"/>
+        <shortcut>stash</shortcut>
+        <operation type="execute">var a = jQuery('.aui-header-logo'), b = a.clone().removeClass('aui-header-logo-bitbucket').addClass('aui-header-logo-stash');a.fadeOut(function() { a.replaceWith(b); b.fadeIn(); })</operation>
+        <order>191</order>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-inbox" i18n-name="bitbucket.web.keyboardshortcut.open.inbox">
+        <description key="bitbucket.web.keyboardshortcut.open.inbox.desc"/>
+        <shortcut>gi</shortcut>
+        <operation type="moveToAndClick">#inbox-trigger</operation>
+        <context>global</context>
+    </keyboard-shortcut>
+
+    <!-- Repository 200 -->
+
+    <keyboard-shortcut key="shortcut-branch-selector" i18n-name="bitbucket.web.keyboardshortcut.branch.selector" >
+        <description key="bitbucket.web.keyboardshortcut.branch.selector.desc"/>
+        <shortcut>b</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('branchSelector', this, 'b');</operation>
+        <order>210</order>
+        <context>repository</context>
+    </keyboard-shortcut>
+
+    <!-- Commit 300 -->
+
+    <keyboard-shortcut key="shortcut-commit-post-comment" i18n-name="bitbucket.web.keyboardshortcut.commit.post.comment" >
+        <description key="bitbucket.web.keyboardshortcut.comment.post.desc"/>
+        <shortcut>[ctrl+return]</shortcut>
+        <operation type="evaluate">/* noop - handled by comment forms */</operation>
+        <order>310</order>
+        <context>commit</context>
+    </keyboard-shortcut>
+
+    <!-- If you modify this, please update markup-preview.js as well -->
+    <keyboard-shortcut key="shortcut-commit-comment-preview" i18n-name="bitbucket.web.keyboardshortcut.commit.previewcomment" >
+        <description key="bitbucket.web.keyboardshortcut.comment.preview.desc"/>
+        <shortcut>[ctrl+shift+p]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestPreviewComment', this, 'ctrl+shift+p');</operation>
+        <order>320</order>
+        <context>commit</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-add-comment" i18n-name="bitbucket.web.keyboardshortcut.commit.addfilecomment" >
+        <description key="bitbucket.web.keyboardshortcut.comment.add.file.desc"/>
+        <shortcut>m</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('addFileComment', this, 'm');</operation>
+        <order>330</order>
+        <context>commit</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-move-to-next-file" i18n-name="bitbucket.web.keyboardshortcut.commit.next.file" >
+        <description key="bitbucket.web.keyboardshortcut.commit.next.file.desc"/>
+        <shortcut>j</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToNextHandler', this, 'j');</operation>
+        <order>340</order>
+        <context>diff-tree</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-move-to-prev-file" i18n-name="bitbucket.web.keyboardshortcut.commit.prev.file" >
+        <description key="bitbucket.web.keyboardshortcut.commit.prev.file.desc"/>
+        <shortcut>k</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToPreviousHandler', this, 'k');</operation>
+        <order>350</order>
+        <context>diff-tree</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-search-files" i18n-name="bitbucket.web.keyboardshortcut.commit.searchfiles" >
+        <description key="bitbucket.web.keyboardshortcut.commit.searchfiles.desc"/>
+        <shortcut>f</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestDiffTreeSearch', this, 'f');</operation>
+        <order>355</order>
+        <context>diff-tree</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-toggle-diff-tree" i18n-name="bitbucket.web.keyboardshortcut.commit.toggle.diff.tree" >
+        <description key="bitbucket.web.keyboardshortcut.commit.toggle.diff.tree.desc"/>
+        <shortcut>["shift+["]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestToggleDiffTreeHandler', this, 'shift+[');</operation>
+        <order>360</order>
+        <context>diff-tree</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-back-to-commits" i18n-name="bitbucket.web.keyboardshortcut.commit.back.to.commits" >
+        <description key="bitbucket.web.keyboardshortcut.commit.back.to.commits.desc"/>
+        <shortcut>u</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestReturnToCommits', this, 'u');</operation>
+        <order>370</order>
+        <context>commit</context>
+    </keyboard-shortcut>
+    <!-- jira dialog 380 -->
+    <!-- build status 390 dialog-->
+
+
+    <!-- Commits 400 -->
+
+    <keyboard-shortcut key="shortcut-commits-move-to-next-commit" i18n-name="bitbucket.web.keyboardshortcut.commit.next.commit" >
+        <description key="bitbucket.web.keyboardshortcut.commit.next.commit.desc"/>
+        <shortcut>j</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToNextHandler', this, 'j');</operation>
+        <order>410</order>
+        <context>commits</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commits-move-to-prev-commit" i18n-name="bitbucket.web.keyboardshortcut.commit.prev.commit" >
+        <description key="bitbucket.web.keyboardshortcut.commit.prev.commit.desc"/>
+        <shortcut>k</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToPreviousHandler', this, 'k');</operation>
+        <order>420</order>
+        <context>commits</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commits-open-focused" i18n-name="bitbucket.web.keyboardshortcut.commit.open.focused" >
+        <description key="bitbucket.web.keyboardshortcut.commit.open.focused.desc"/>
+        <shortcut>o</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenItemHandler', this, 'o');</operation>
+        <order>430</order>
+        <context>commits</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commits-toggle-merges" i18n-name="bitbucket.web.keyboardshortcut.commit.toggle.merges" >
+        <description key="bitbucket.web.keyboardshortcut.commit.toggle.merges.desc"/>
+        <shortcut>t</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestToggleMergesHandler', this, 't');</operation>
+        <order>440</order>
+        <context>commits</context>
+    </keyboard-shortcut>
+
+    <!-- Pull Requests 500 -->
+
+    <keyboard-shortcut key="shortcut-pull-requests-move-to-next-commit" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.next.commit" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.next.pull-request.desc"/>
+        <shortcut>j</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToNextHandler', this, 'j');</operation>
+        <order>510</order>
+        <context>pull-request-list</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-requests-move-to-prev-commit" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.prev.commit" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.prev.pull-request.desc"/>
+        <shortcut>k</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToPreviousHandler', this, 'k');</operation>
+        <order>520</order>
+        <context>pull-request-list</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-requests-open-focused" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.open.focused" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.open.focused.desc"/>
+        <shortcut>o</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenItemHandler', this, 'o');</operation>
+        <order>530</order>
+        <context>pull-request-list</context>
+    </keyboard-shortcut>
+
+    <!-- Pull Request 600 -->
+
+    <keyboard-shortcut key="shortcut-pull-request-previous-tab" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.tab.previous"  hidden="true">
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.tab.previous.desc"/>
+        <!--
+          This shortcut is hidden. The display is handled in layout/pull-request
+         -->
+        <shortcut>1</shortcut>
+        <shortcut>2</shortcut>
+        <shortcut>3</shortcut>
+        <shortcut>4</shortcut>
+        <shortcut>5</shortcut>
+        <shortcut>6</shortcut>
+        <shortcut>7</shortcut>
+        <shortcut>8</shortcut>
+        <shortcut>9</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestChangePullRequestSectionHandler', this);</operation>
+        <order>605</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-request-post-comment" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.post.comment" >
+        <description key="bitbucket.web.keyboardshortcut.comment.post.desc"/>
+        <shortcut>[ctrl+return]</shortcut>
+        <operation type="evaluate">/* noop - handled by comment forms */</operation>
+        <order>610</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <!-- If you modify this, please update markup-preview.js as well -->
+    <keyboard-shortcut key="shortcut-pull-request-comment-preview" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.preview.comment" >
+        <description key="bitbucket.web.keyboardshortcut.comment.preview.desc"/>
+        <shortcut>[ctrl+shift+p]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestPreviewComment', this, 'ctrl+shift+p');</operation>
+        <order>620</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-requests-add-comment" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.addcomment" >
+        <description key="bitbucket.web.keyboardshortcut.comment.add.generalorfile.desc"/>
+        <shortcut>m</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('pullrequest.addCommentHandler', this, 'm');</operation>
+        <order>630</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-request-edit" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.edit" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.edit.desc"/>
+        <shortcut>e</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('pullRequestEdit', this, 'e');</operation>
+        <order>640</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-requests-watch" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.watch" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.watch.desc"/>
+        <shortcut>w</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('pullRequestWatch', this, 'w');</operation>
+        <order>645</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <!-- If you modify this, please update appendKeyboardInstructions method in approve.js as well -->
+    <keyboard-shortcut key="shortcut-pull-requests-approve" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.approve" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.approve.desc"/>
+        <shortcut>a</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('pullRequestApprove', this, 'a');</operation>
+        <order>650</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-pull-requests-goto-list" i18n-name="bitbucket.web.keyboardshortcut.pullrequest.gotolist" >
+        <description key="bitbucket.web.keyboardshortcut.pullrequest.goto.list.desc"/>
+        <shortcut>u</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestGotoPullRequestsListHandler', this, 'u');</operation>
+        <order>660</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-open-pull-request-task-list-dialog" i18n-name="bitbucket.web.tasks.dialog.open" >
+        <description key="bitbucket.web.tasks.dialog.open.desc"/>
+        <shortcut>[shift+t]</shortcut>
+        <operation type="execute">require('bitbucket/internal/feature/tasks/task-list').openTaskListDialogForCurrentPullRequest()</operation>
+        <order>670</order>
+        <context>pull-request</context>
+    </keyboard-shortcut>
+
+    <!-- File Browser 700 -->
+
+    <keyboard-shortcut key="shortcut-filebrowser-move-to-next-item" i18n-name="bitbucket.web.keyboardshortcut.filebrowser.next.item" >
+        <description key="bitbucket.web.keyboardshortcut.filebrowser.next.item.desc"/>
+        <shortcut>j</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToNextHandler', this, 'j');</operation>
+        <order>710</order>
+        <context>filebrowser</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-filebrowser-move-to-prev-item" i18n-name="bitbucket.web.keyboardshortcut.filebrowser.prev.item" >
+        <description key="bitbucket.web.keyboardshortcut.filebrowser.prev.item.desc"/>
+        <shortcut>k</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToPreviousHandler', this, 'k');</operation>
+        <order>720</order>
+        <context>filebrowser</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-filebrowser-open-focused" i18n-name="bitbucket.web.keyboardshortcut.filebrowser.open.focused" >
+        <description key="bitbucket.web.keyboardshortcut.filebrowser.open.focused.desc"/>
+        <shortcut>o</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenItemHandler', this, 'o');</operation>
+        <order>730</order>
+        <context>filebrowser</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-filebrowser-open-parent" i18n-name="bitbucket.web.keyboardshortcut.filebrowser.open.parent" >
+        <description key="bitbucket.web.keyboardshortcut.filebrowser.open.parent.desc"/>
+        <shortcut>u</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenParentHandler', this, 'u');</operation>
+        <order>740</order>
+        <context>filebrowser</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-filebrowser-open-file-finder" i18n-name="bitbucket.web.keyboardshortcut.filebrowser.open.find.files" >
+        <description key="bitbucket.web.keyboardshortcut.filebrowser.findfiles.open.desc"/>
+        <shortcut>f</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenFileFinderHandler', this, 'f');</operation>
+        <order>750</order>
+        <context>filebrowser</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-filebrowser-close-file-finder" i18n-name="bitbucket.web.keyboardshortcut.filebrowser.close.find.files"  hidden="true">
+        <description key="bitbucket.web.keyboardshortcut.filebrowser.findfiles.close.desc"/>
+        <shortcut>[esc]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestCloseFileFinderHandler', this, 'esc');</operation>
+        <order>760</order>
+        <context>filebrowser</context>
+    </keyboard-shortcut>
+
+    <!-- Source View 800 -->
+
+    <keyboard-shortcut key="shortcut-sourceview-open-parent" i18n-name="bitbucket.web.keyboardshortcut.sourceview.open.parent" >
+        <description key="bitbucket.web.keyboardshortcut.sourceview.open.parent.desc"/>
+        <shortcut>u</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenParentHandler', this, 'u');</operation>
+        <order>810</order>
+        <context>sourceview</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-sourceview-show-blame" i18n-name="bitbucket.web.keyboardshortcut.sourceview.show.blame" >
+        <description key="bitbucket.web.keyboardshortcut.sourceview.show.blame.desc"/>
+        <shortcut>[shift+b]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('showBlame', this, '[shift+b]');</operation>
+        <order>820</order>
+        <context>sourceview</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-source-view-find" i18n-name="bitbucket.web.keyboardshortcut.sourceview.find.find" >
+        <description key="bitbucket.web.keyboardshortcut.sourceview.find.find"/>
+        <shortcut>[ctrl+f]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').registerLazy('sourceViewFind', this, 'ctrl+f');</operation>
+        <order>830</order>
+        <context>sourceview</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-source-view-find-next" i18n-name="bitbucket.web.keyboardshortcut.sourceview.find.next" >
+        <description key="bitbucket.web.keyboardshortcut.sourceview.find.next"/>
+        <shortcut>[ctrl+g]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').registerLazy('sourceViewFindNext', this, 'ctrl+g');</operation>
+        <order>840</order>
+        <context>sourceview</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-source-view-find-prev" i18n-name="bitbucket.web.keyboardshortcut.sourceview.find.previous" >
+        <description key="bitbucket.web.keyboardshortcut.sourceview.find.previous"/>
+        <shortcut>[ctrl+shift+g]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').registerLazy('sourceViewFindPrev', this, 'ctrl+shift+g');</operation>
+        <order>850</order>
+        <context>sourceview</context>
+    </keyboard-shortcut>
+
+    <!-- Diff View 900 -->
+
+    <keyboard-shortcut key="shortcut-commit-ignore-whitespace" i18n-name="bitbucket.web.keyboardshortcut.commit.ignorewhitespace" >
+        <description key="bitbucket.web.keyboardshortcut.commit.ignorewhitespace.desc"/>
+        <shortcut>[shift+w]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestIgnoreWhitespace', this, 'shift+w');</operation>
+        <order>910</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-hide-comments" i18n-name="bitbucket.web.keyboardshortcut.commit.hidecomments" >
+        <description key="bitbucket.web.keyboardshortcut.commit.hidecomments.desc" />
+        <shortcut>[shift+c]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestHideComments', this, 'shift+c');</operation>
+        <order>915</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-hide-ediff" i18n-name="bitbucket.web.keyboardshortcut.commit.hideediff" >
+        <description key="bitbucket.web.keyboardshortcut.commit.hideediff.desc" />
+        <shortcut>[shift+e]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestHideEdiff', this, 'shift+e');</operation>
+        <order>917</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-toggle-side-by-side-diff" i18n-name="bitbucket.web.keyboardshortcut.commit.toggleSideBySideDiff" >
+        <description key="bitbucket.web.keyboardshortcut.commit.toggleSideBySideDiff.desc"/>
+        <shortcut>[shift+d]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('changeDiffTypeRequested', this, 'shift+d');</operation>
+        <order>920</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-move-to-next-hunk" i18n-name="bitbucket.web.keyboardshortcut.commit.next.hunk" >
+        <description key="bitbucket.web.keyboardshortcut.commit.next.hunk.desc"/>
+        <shortcut>n</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestSecondaryNext', this, 'n');</operation>
+        <order>930</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-move-to-prev-hunk" i18n-name="bitbucket.web.keyboardshortcut.commit.prev.hunk" >
+        <description key="bitbucket.web.keyboardshortcut.commit.prev.hunk.desc"/>
+        <shortcut>p</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestSecondaryPrevious', this, 'p');</operation>
+        <order>940</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-move-to-next-comment" i18n-name="bitbucket.web.keyboardshortcut.commit.next.comment" >
+        <description key="bitbucket.web.keyboardshortcut.commit.next.comment.desc"/>
+        <shortcut>[shift+n]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestTertiaryNext', this, 'shift+n');</operation>
+        <order>950</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-commit-move-to-prev-comment" i18n-name="bitbucket.web.keyboardshortcut.commit.prev.comment" >
+        <description key="bitbucket.web.keyboardshortcut.commit.prev.comment.desc"/>
+        <shortcut>[shift+p]</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestTertiaryPrevious', this, 'shift+p');</operation>
+        <order>960</order>
+        <context>diff-view</context>
+    </keyboard-shortcut>
+
+    <!-- Branch list 1000 -->
+
+    <keyboard-shortcut key="shortcut-branch-list-focus-filter" i18n-name="bitbucket.web.keyboardshortcut.branch.list.filter" >
+        <description key="bitbucket.web.keyboardshortcut.branch.list.filter.desc"/>
+        <shortcut>f</shortcut>
+        <operation type="moveToAndFocus">.paged-table-filter-input</operation>
+        <order>1010</order>
+        <context>branch-list</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-branch-list-next-item" i18n-name="bitbucket.web.keyboardshortcut.branch.list.next.item" >
+        <description key="bitbucket.web.keyboardshortcut.branch.list.next.item.desc"/>
+        <shortcut>j</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToNextHandler', this, 'j');</operation>
+        <order>1020</order>
+        <context>branch-list</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-branch-list-move-to-prev" i18n-name="bitbucket.web.keyboardshortcut.branch.list.prev.item" >
+        <description key="bitbucket.web.keyboardshortcut.branch.list.prev.item.desc"/>
+        <shortcut>k</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestMoveToPreviousHandler', this, 'k');</operation>
+        <order>1030</order>
+        <context>branch-list</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-branch-list-open-focused" i18n-name="bitbucket.web.keyboardshortcut.branch.list.open.focused" >
+        <description key="bitbucket.web.keyboardshortcut.branch.list.open.focused.desc"/>
+        <shortcut>o</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenItemHandler', this, 'o');</operation>
+        <order>1040</order>
+        <context>branch-list</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-branch-list-actions" i18n-name="bitbucket.web.keyboardshortcut.branch.list.actions.focused" >
+        <description key="bitbucket.web.keyboardshortcut.branch.list.actions.focused.desc"/>
+        <shortcut>a</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestOpenItemActionHandler', this, 'a');</operation>
+        <order>1050</order>
+        <context>branch-list</context>
+    </keyboard-shortcut>
+
+    <!-- Delete branch - 1060 -->
+
+    <!-- Compare branch - 1100 -->
+
+    <keyboard-shortcut key="shortcut-branch-compare-diff-tab" i18n-name="bitbucket.web.keyboardshortcut.branch.compare.tab.diff">
+        <description key="bitbucket.web.keyboardshortcut.branch.compare.tab.diff.desc"/>
+        <shortcut>1</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestBranchCompareSectionHandler', this, '1');</operation>
+        <order>1105</order>
+        <context>branch-compare</context>
+    </keyboard-shortcut>
+
+    <keyboard-shortcut key="shortcut-branch-compare-commits-tab" i18n-name="bitbucket.web.keyboardshortcut.branch.compare.tab.commits">
+        <description key="bitbucket.web.keyboardshortcut.branch.compare.tab.commits.desc"/>
+        <shortcut>2</shortcut>
+        <operation type="evaluate">require('bitbucket/internal/util/shortcuts').setup('requestBranchCompareSectionHandler', this, '2');</operation>
+        <order>1106</order>
+        <context>branch-compare</context>
+    </keyboard-shortcut>
+
+</atlassian-plugin>

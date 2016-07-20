@@ -1,0 +1,32 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param repository
+ */
+{template .repositoryItem}
+    <span class="repository-item" title="{$repository.project.name} / {$repository.name}" data-id="{$repository.id}" data-repository="{to_json($repository)}">
+        {call .repositoryItemContent}
+            {param avatarTagName: 'span'/}
+            {param repository: $repository/}
+        {/call}
+    </span>
+{/template}
+
+/**
+ * @param repository
+ * @param? projectNameContent
+ * @param? repositoryNameContent
+ * @param? avatarTagName
+ */
+{template .repositoryItemContent}
+    {call bitbucket.internal.feature.project.avatar}
+        {param size: 'xsmall' /}
+        {param project: $repository.project /}
+        {param tagName: $avatarTagName /}
+    {/call}
+    <span class="project-and-repository">
+        <span class="project-name">{if $projectNameContent}{$projectNameContent|noAutoescape}{else}{$repository.project.name}{/if}</span>
+        <span class="separator">/</span>
+        <span class="name">{if $repositoryNameContent}{$repositoryNameContent|noAutoescape}{else}{$repository.name}{/if}</span>
+    </span>
+{/template}

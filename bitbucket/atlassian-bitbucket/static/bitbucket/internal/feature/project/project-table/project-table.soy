@@ -1,0 +1,58 @@
+{namespace bitbucket.internal.feature.project}
+
+/**
+ * @param projectPage
+ * @param id
+ */
+{template .projectTable}
+    {call bitbucket.internal.widget.pagedTable}
+        {param id: $id /}
+        {param page: $projectPage /}
+        {param theadContent}
+            {if $projectPage.size > 0 or $projectPage.start > 0}
+                <tr>
+                    <th class="project-name" scope="col">{getText('bitbucket.web.project.col.project')}</th>
+                    <th class="project-key" scope="col">{getText('bitbucket.web.project.col.key')}</th>
+                    <th class="project-description" scope="col">{getText('bitbucket.web.project.col.description')}</th>
+                </tr>
+            {/if}
+        {/param}
+        {param content}
+            {call .projectRows}
+                {param projects: $projectPage.values /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param projects
+ */
+{template .projectRows}
+    {foreach $project in $projects}
+        {call .projectRow}
+            {param project: $project /}
+        {/call}
+    {/foreach}
+{/template}
+
+/**
+ * @param project
+ */
+{template .projectRow private="true"}
+<tr>
+    <td class="project-name">
+        {call bitbucket.internal.feature.project.avatar}
+            {param size: 'small' /}
+            {param project: $project /}
+        {/call}
+        <a href="{nav_project($project.key)}" title="{$project.name}" data-project-id="{$project.id}">{$project.name}</a>
+    </td>
+    <td class="project-key">{$project.key}</td>
+    {if $project.description}
+        <td class="project-description"><span title="{$project.description}">{$project.description}</span></td>
+    {else}
+        <td class="empty-field">{getText('bitbucket.web.project.nodescription')}</td>
+    {/if}
+</tr>
+{/template}

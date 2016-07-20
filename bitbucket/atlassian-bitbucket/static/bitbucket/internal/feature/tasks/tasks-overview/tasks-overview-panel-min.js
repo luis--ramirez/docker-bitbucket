@@ -1,0 +1,2 @@
+define("bitbucket/internal/feature/tasks/tasks-overview/tasks-overview-panel",["lodash","bitbucket/internal/widget/updating-section"],function(b,d){function a(a,c){this.init.apply(this,arguments)}a.prototype.init=function(a,c){var b=c.toEventStream(),e={isVisibleProperty:c.map(function(a){return 0<a.resolvedTaskCount||0<a.openTaskCount}).toProperty()};this._destroyCallbacks=[new d(a,b,bitbucket.internal.feature.tasks.tasksOverview.taskCount,e)]};a.prototype.destroy=function(){b.invoke(this._destroyCallbacks,
+"destroy")};return a});

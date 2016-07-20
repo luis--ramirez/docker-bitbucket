@@ -1,0 +1,37 @@
+@import "/static/global.less";
+
+.bitbucket-theme {
+    .aui-tabs > ul.tabs-menu.tabs-web-section {
+        overflow: visible;
+    }
+
+    .aui-tabs > ul.tabs-menu.tabs-web-section .menu-item {
+        cursor: pointer;
+    }
+
+    .aui-tabs > ul.tabs-menu.tabs-web-section .menu-item:hover {
+        color: black;
+    }
+
+    .aui-tabs > ul.tabs-menu.tabs-web-section:after {
+        clear: both;
+        content: ".";
+        display: block;
+        height: 0;
+        visibility: hidden;
+    }
+
+    #content > .aui-tabs.horizontal-tabs > ul.tabs-menu.tabs-web-section > li.menu-item .aui-dropdown a {
+        background: #ffffff;
+        border-color: transparent;
+        padding: 2px 2em 2px 0.5em;
+        line-height: 1.5;
+        .border-radius(0);
+    }
+
+    #content > .aui-tabs.horizontal-tabs > ul.tabs-menu.tabs-web-section > li.menu-item .aui-dropdown li:hover a {
+        color: #15518F;
+        background-color: #E2EFFA;
+        cursor: pointer;
+    }
+}

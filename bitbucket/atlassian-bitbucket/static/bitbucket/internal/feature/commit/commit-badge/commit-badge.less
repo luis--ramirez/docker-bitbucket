@@ -1,0 +1,68 @@
+@import "/static/global.less";
+
+.commit-badge-oneline {
+    align-items: center;
+    display: inline-flex;
+    flex-direction: row;
+    font-size: @font-size-default;
+    white-space: pre;
+
+    .user-avatar {
+        flex-shrink: 0;
+        margin-right: @baseSpacing;
+        vertical-align: bottom;
+    }
+
+    .commit-author {
+        flex-shrink: 1;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    span.commit-author {
+        color: @bodyTextColor;
+    }
+
+    time {
+        color: @secondaryTextColor;
+        flex-shrink: 0;
+        font-size: @font-size-small;
+        margin-left: @halfSpacing;
+    }
+
+    .comment-count {
+        @visualBump: 1px; // The comment count looks misaligned when center aligned. Bumping it up off the bottom.
+        margin-left: @halfSpacing;
+        margin-bottom: @visualBump;
+    }
+
+    .commitid {
+        color: @primaryLinkColor;
+        flex-shrink: 0;
+    }
+
+    .merge-lozenge {
+        flex-shrink: 0;
+        margin-left: @halfSpacing;
+    }
+}
+
+.commit-badge-detailed .commit-message {
+    font-size: @font-size-default;
+    margin-bottom: 0;
+    word-wrap: break-word;
+}
+
+.commit-message {
+    color: @descriptionTextColor;
+
+    .commit-message-body {
+        margin-left: @halfSpacing;
+    }
+
+    .commit-message-subject {
+        color: @bodyTextColor;
+    }
+}

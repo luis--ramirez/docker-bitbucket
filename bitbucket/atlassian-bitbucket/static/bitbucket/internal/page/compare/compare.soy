@@ -1,0 +1,49 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param activeTab
+ * @param sourceRepository
+ * @param? sourceBranch
+ * @param? sourceCommit
+ * @param targetRepository
+ * @param targetBranch
+ * @param? targetCommit
+ * @param maxChanges
+ **/
+{template .compare}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.compare')}
+    {webResourceManager_requireResourcesForContext('bitbucket.feature.files.fileHandlers')}
+    {call bitbucket.internal.layout.repository}
+        {{param windowTitle: getText('bitbucket.web.repository.compare.page.title', $sourceRepository.project.name, $sourceRepository.name) /}}
+        {param activeNav: 'bitbucket.repository.nav.branches' /}
+        {param repository: $sourceRepository /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{getText('bitbucket.web.repository.compare.header.title')}</h2>
+                {/param}
+                {param actionListContent}
+                    {call bitbucket.internal.widget.webFragmentButtons}
+                        {param location: 'bitbucket.repository.compare.action' /}
+                        {param context: [ 'sourceRepository' : $sourceRepository, 'targetRepository' : $targetRepository] /}
+                        {param isReverse: true /}
+                    {/call}
+                {/param}
+            {/call}
+            {call bitbucket.internal.feature.compare.panel data="all"}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/compare').onReady(
+                    {to_json($targetRepository)|noAutoescape},
+                    {to_json($sourceRepository)|noAutoescape},
+                    {call bitbucket.internal.feature.compare.tabDetailsJS}
+                            {param maxChanges: $maxChanges /}
+                            {param sourceRepository: $sourceRepository /}
+                        {/call}
+                );
+            </script>
+        {/param}
+    {/call}
+{/template}

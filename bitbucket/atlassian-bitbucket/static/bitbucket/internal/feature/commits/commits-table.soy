@@ -1,0 +1,31 @@
+{namespace bitbucket.internal.feature.commits}
+
+/**
+ */
+/**
+ * @param repository
+ * @param? commitPage
+ * @param? tableId
+ * @param? extraClasses
+ */
+{template .commitsTable}
+    {call bitbucket.internal.feature.commits.commitsTableImpl data="all"}
+        {param webSections : getWebSections('bitbucket.commits.extras', [ 'repository' : $repository ]) /}
+    {/call}
+{/template}
+
+/**
+ * @param webSections
+ * @param repository
+ * @param commit
+ */
+{template .commitsRowExtras private="true"}
+    {foreach $webSection in $webSections}
+        <td class="{$webSection.key}">
+            {foreach $webPanel in getWebPanels($webSection.key, [ 'repository' : $repository, 'commit' : $commit ])}
+                {$webPanel}
+            {/foreach}
+        </td>
+    {/foreach}
+{/template}
+

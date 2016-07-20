@@ -1,0 +1,89 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param form
+* @param? fieldErrors
+* @param? formErrors
+* @param? saved
+*/
+{template .authentication}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.authentication')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-security-authentication' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.authentication')}</h2>
+                </div>
+            </div>
+        </header>
+
+        {if $saved}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.authentication.saved')}
+                {/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param extraClasses: 'stash-authentication-form' /}
+            {param content}
+                <h3>{getText('bitbucket.web.config.auth.signup')}</h3>
+                {call aui.form.checkboxField}
+                    {param legendContent: getText('bitbucket.web.config.auth.publicaccess') /}
+                    {param fields: [
+                        [
+                            'isAutofocus': true,
+                            'id': 'publicSignUp',
+                            'labelText': getText('bitbucket.web.config.auth.publicsignup'),
+                            'isChecked': $form.publicSignUp,
+                            'errorTexts': $fieldErrors ? $fieldErrors.publicSignUp : null,
+                            'descriptionText': getText('bitbucket.web.config.auth.publicsignup.description')
+                        ],
+                        [
+                            'id': 'captchaOnSignUp',
+                            'labelText': getText('bitbucket.web.config.auth.captchasignup'),
+                            'isChecked': $form.captchaOnSignUp,
+                            'errorTexts': $fieldErrors ? $fieldErrors.captchaOnSignUp : null,
+                            'descriptionText': getText('bitbucket.web.config.auth.captchasignup.description')
+                        ]
+                    ] /}
+                {/call}
+                {if isFeatureEnabled('auth.captcha')}
+                    <h3>{getText('bitbucket.web.config.auth.captcha')}</h3>
+                    {call widget.aui.form.text}
+                        {param id: 'maxCaptchaAttempts' /}
+                        {param labelContent}{getText('bitbucket.web.config.auth.maxcaptcha')}{/param}
+                        {param initialValue: $form.maxCaptchaAttempts /}
+                        {param errors: $fieldErrors ? $fieldErrors.maxCaptchaAttempts : null /}
+                        {{param description: getText('bitbucket.web.config.auth.maxcaptcha.description') /}}
+                        {param required: true /}
+                        {param sizeClass: 'short' /}
+                    {/call}
+                {/if}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param accessKey: 's' /}
+                            {param label: getText('bitbucket.web.button.save') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/admin/authentication').onReady('#publicSignUp', '#captchaOnSignUp');
+        </script>
+    {/param}
+{/call}
+{/template}

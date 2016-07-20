@@ -1,0 +1,53 @@
+@import "syntax-highlight-colors";
+
+.cm-s-stash-default {
+    .cm-variable-2,
+    .cm-variable-3,
+    .cm-operator,
+    .cm-tag.cm-bracket {
+        color: inherit;
+    }
+
+    .cm-variable,
+    .cm-tag,
+    .cm-header { #syntax-highlight-colors.slate(); }
+
+    .cm-bracket,
+    .cm-keyword { #syntax-highlight-colors.brown(); }
+
+    .cm-string,
+    .cm-string-2,
+    .cm-atom,
+    .cm-quote { #syntax-highlight-colors.red(); }
+
+    .cm-attribute,
+    .cm-builtin,
+    .cm-def,
+    .cm-property,
+    .cm-qualifier,
+    .cm-link { #syntax-highlight-colors.blue(); }
+
+    .cm-number { #syntax-highlight-colors.green(); }
+
+
+    .cm-comment { #syntax-highlight-colors.medium-grey(); }
+
+    .cm-meta  { #syntax-highlight-colors.bright-pink(); }
+
+    .cm-header, .cm-strong {font-weight: bold;}
+    .cm-em {font-style: italic;}
+    .cm-link {text-decoration: underline;}
+    .cm-strikethrough {text-decoration: line-through;}
+    .cm-error {color: #f00;}
+    .cm-invalidchar {color: #f00;}
+    .cm-negative {color: #d44;}
+    .cm-positive {color: #292;}
+
+    // Don't gray out the text when syntax-highlighting is enabled.
+    // BrettF thinks the line number color and lack of icon is good enough.
+    .diff-view.text-view & .expanded pre {
+        color: inherit;
+    }
+}
+
+

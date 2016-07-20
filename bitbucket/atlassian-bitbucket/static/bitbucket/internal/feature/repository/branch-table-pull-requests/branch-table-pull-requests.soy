@@ -1,0 +1,79 @@
+{namespace bitbucket.internal.feature.repository.branch.table}
+
+/**
+ * @param branch
+ */
+{template .pullRequests}
+ {call .pullRequestsImpl}
+    {param branchId: $branch.id/}
+    {param pullRequestSummary: $branch.metadata['com.atlassian.bitbucket.server.bitbucket-ref-metadata:outgoing-pull-request-metadata']/}
+ {/call}
+{/template}
+
+/**
+ * @param branchId
+ * @param pullRequestSummary
+ */
+{template .pullRequestsImpl}
+    {if  $pullRequestSummary}
+        {if $pullRequestSummary.pullRequest}
+            {call .pullRequestsLink}
+                {param branchId: $branchId/}
+                {param state: $pullRequestSummary.pullRequest.state /}
+                {param href: nav_pull($pullRequestSummary.pullRequest.toRef.repository.project.key, $pullRequestSummary.pullRequest.toRef.repository.slug, $pullRequestSummary.pullRequest.id)/}
+                {param tooltip: getText('bitbucket.web.repository.branchlist.pullrequest.open.single') /}
+            {/call}
+        {else}
+            {let $total: $pullRequestSummary.open + $pullRequestSummary.merged + $pullRequestSummary.declined /}
+            {if $pullRequestSummary.open > 0}
+                {call .pullRequestsMultiple}
+                    {param branchId: $branchId/}
+                    {param total:  $total/}
+                    {param state: 'OPEN' /}
+                {/call}
+            {elseif  $pullRequestSummary.merged > 0}
+                {call .pullRequestsMultiple}
+                    {param branchId: $branchId/}
+                    {param total:  $total/}
+                    {param state: 'MERGED' /}
+                {/call}
+            {elseif  $pullRequestSummary.declined > 0}
+                {call .pullRequestsMultiple}
+                    {param branchId: $branchId/}
+                    {param total:  $total/}
+                    {param state: 'DECLINED' /}
+                {/call}
+            {/if}
+        {/if}
+    {/if}
+{/template}
+
+/**
+* @param branchId
+* @param total
+* @param state
+*/
+{template .pullRequestsMultiple}
+    {call .pullRequestsLink}
+        {param branchId: $branchId/}
+        {param state: $state /}
+        {{param tooltip: getText('bitbucket.web.repository.branchlist.pullrequest.open.multiple', $total) /}}
+    {/call}
+{/template}
+/**
+* @param tooltip
+* @param branchId
+* @param state
+* @param? href
+*/
+{template .pullRequestsLink}
+    <div class="branch-list-pull-requests" data-branch-id="{$branchId}">
+        {call bitbucket.internal.widget.lozenge.pullRequestState}
+            {param state: $state /}
+            {param clickable: true/}
+            {param tooltip: $tooltip/}
+            {param href: $href/}
+            {param extraClasses: ' aui-lozenge-subtle pull-request-list-trigger'/}
+        {/call}
+    </div>
+{/template}

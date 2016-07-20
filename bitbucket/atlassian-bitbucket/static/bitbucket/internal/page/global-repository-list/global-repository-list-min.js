@@ -1,0 +1,2 @@
+define("bitbucket/internal/page/global-repository-list",["jquery","bitbucket/util/navbuilder","bitbucket/internal/feature/repository/repository-table","exports"],function(c,f,e,g){function d(a,b){b=c.extend({showProject:!0,bufferPixels:c("#footer").height()},b);e.call(this,a,b)}c.extend(d.prototype,e.prototype);d.prototype.buildUrl=function(a,b){return f.allRepos().visibility("public").withParams({avatarSize:bitbucket.internal.widget.avatarSizeInPx({size:"small"}),start:a,limit:b}).build()};g.onReady=
+function(a){c(a).length&&(new d(a)).init()}});

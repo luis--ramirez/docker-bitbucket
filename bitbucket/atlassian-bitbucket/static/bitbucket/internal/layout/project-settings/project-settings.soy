@@ -1,0 +1,52 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param project
+ * @param content
+ * @param windowTitle
+ * @param activeNav
+ * @param? dataAttributes
+ * @param? pageBottomContent
+ */
+{template .projectSettings}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.projectSettings')}
+    {call bitbucket.internal.layout.project}
+        {param windowTitle: $windowTitle /}
+        {param project: $project /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeNav: 'projects-settings-tab' /}
+        {param content: $content /}
+        {param pageHeaderContent}
+            {call aui.page.pageHeaderMain}
+                {param content}
+                    <h1>{getText('bitbucket.web.project.tabs.settings')}</h1>
+                {/param}
+            {/call}
+        {/param}
+        {param pageType: 'sidebar' /}
+        {param panelNavContent}
+            {call .projectSettingsNav}
+                {param project: $project /}
+                {param webFragments: getWebFragments('bitbucket.project.settings.panel', [ 'project' : $project ]) /}
+                {param activeNavItem: $activeNav /}
+            {/call}
+        {/param}
+        {param pageBottomContent: $pageBottomContent /}
+    {/call}
+{/template}
+
+/**
+ * @param project
+ * @param webFragments
+ * @param activeNavItem
+ */
+{template .projectSettingsNav private="true"}
+    {if length($webFragments) > 1}
+        {call widget.aui.webFragmentNavigation}
+            {param webFragments: $webFragments /}
+            {param activeNavItem: $activeNavItem /}
+            {param context: [ 'project' : $project ] /}
+            {param isVertical: true /}
+        {/call}
+    {/if}
+{/template}

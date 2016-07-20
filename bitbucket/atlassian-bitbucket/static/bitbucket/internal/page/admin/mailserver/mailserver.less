@@ -1,0 +1,36 @@
+@import "/static/global.less";
+
+#testButtonContainer {
+    padding-bottom: @doubleSpacing;
+    border-top: 0;
+    padding-top: 0;
+
+    input {
+        margin-top: 0;
+    }
+
+    .buttons {
+        padding-top: 0;
+    }
+
+    .error, .success {
+        display: inline-block;
+        margin-left: @baseSpacing;
+    }
+
+    .error {
+    /* The error message shown next to the Test button */
+        color: @errorTextColor;
+    }
+
+    .success {
+    /* The success message shown next to the Test button */
+        color: @confirmationTextColor;
+    }
+
+    .spinner {
+        display: inline-block;
+        margin-left: @baseSpacing;
+        margin-bottom: @halfSpacing;
+    }
+}

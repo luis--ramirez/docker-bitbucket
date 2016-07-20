@@ -1,0 +1,78 @@
+{namespace bitbucket.internal.repository}
+
+/**
+ * @param repository
+ * @param permissionDataList
+ * @param projectPermissionUrl
+ */
+{template .repositoryPermissions}
+{webResourceManager_requireResourcesForContext('bitbucket.page.repository.permissions')}
+    {call bitbucket.internal.layout.repositorySettings}
+        {{param windowTitle: getText('bitbucket.web.repository.permissions.window.title', $repository.project.name, $repository.name) /}}
+        {param activeSettingsTab: 'repository-settings-repository-permissions' /}
+        {param repository: $repository /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{{getText('bitbucket.web.repository.edit.permissions') }}</h2>
+                {/param}
+                {param actionListContent}
+                    <a href="{bitbucket_help_url('bitbucket.help.repository.permissions.guide')}" target="_blank">{getText('bitbucket.web.repository.permissions.learn.more')}</a>
+                {/param}
+            {/call}
+            <p>
+            {if $repository.project.type == 'PERSONAL'}
+                {{getText('bitbucket.web.repository.personal.edit.permissions.description')}}
+            {else}
+                {{getText('bitbucket.web.repository.edit.permissions.description',
+                    $projectPermissionUrl ? '<a href="' + $projectPermissionUrl + '">' : '',
+                    $projectPermissionUrl ? '</a>' : '')|noAutoescape}}
+            {/if}
+            </p>
+            {if isFeatureEnabled('public.access')}
+                {call aui.form.form}
+                    {param action: '' /}
+                    {param isTopLabels: true /}
+                    {param extraAttributes: ['autocomplete': 'off'] /}
+                    {param content}
+                        <h3>{getText('bitbucket.web.repository.permission.public')}</h3>
+                        <p>
+                            {if $repository.project.public}
+                                {{getText('bitbucket.web.repository.permission.public.projectpublic.desc', productName())}}
+                            {else}
+                                {{getText('bitbucket.web.repository.permission.public.desc', productName())}}
+                            {/if}
+                        </p>
+                        {call aui.form.checkboxField}
+                            {param id: 'public-access-permission' /}
+                            {param legendContent: '' /}
+                            {param fields: [
+                                [
+                                    'id': 'public-access-allowed',
+                                    'labelText': getText('bitbucket.web.repository.permission.public.allow'),
+                                    'isChecked': $repository.public or $repository.project.public,
+                                    'isDisabled': $repository.project.public
+                                ]
+                            ] /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/if}
+            {call bitbucket.internal.feature.permission.userPermissionTable}
+                {param permissionDataList: $permissionDataList /}
+                {param noResultsText: getText('bitbucket.web.repository.permission.user.noresults') /}
+            {/call}
+            {call bitbucket.internal.feature.permission.groupPermissionTable}
+                {param permissionDataList: $permissionDataList /}
+                {param noResultsText: getText('bitbucket.web.repository.permission.group.noresults') /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/page/repository/permissions').onReady([
+            {foreach $permissionData in $permissionDataList}
+                {lb}name : "{$permissionData.permission|escapeJs}", i18nName: "{$permissionData.i18nName|escapeJs}"{rb}{if not isLast($permissionData)},{/if}
+            {/foreach}
+        ]);</script>
+        {/param}
+    {/call}
+{/template}

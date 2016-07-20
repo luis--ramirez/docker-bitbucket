@@ -1,0 +1,39 @@
+{namespace bitbucket.internal.widget.markupEditor}
+
+/**
+ * @param? textareaId
+ * @param? textareaName
+ * @param text
+ * @param? placeholderText
+ * @param previewButtonTitle
+ * @param attachmentButtonAccessibilityText
+ * @param attachmentButtonTitle
+ */
+{template .editor}
+    <div class="markup-editor">
+        {call bitbucket.internal.widget.markupPreview.preview/}
+        {call widget.aui.form.expandingTextarea}
+            {param id: $textareaId /}
+            {param name: $textareaName ? $textareaName : 'text'/}
+            {param extraClasses: 'text' /}
+            {param initialValue: $text /}
+            {param placeholderText: $placeholderText /}
+        {/call}
+        <div class="markup-toolbar">
+            <div class="secondary">
+                {call bitbucket.internal.widget.markupPreview.previewHelp/}
+                {call bitbucket.internal.widget.markupPreview.previewButton}
+                    {param title: $previewButtonTitle /}
+                {/call}
+            </div>
+            <div class="primary">
+                {call bitbucket.internal.widget.markupAttachments.uploadTrigger}
+                    {param title: $attachmentButtonTitle/}
+                    {param accessibilityText: $attachmentButtonAccessibilityText /}
+                {/call}
+            </div>
+            <div class="tertiary"></div>
+        </div>
+    </div>
+{/template}
+

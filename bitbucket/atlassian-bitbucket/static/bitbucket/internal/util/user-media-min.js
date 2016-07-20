@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/user-media",[],function(){var a=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia||navigator.msGetUserMedia;return a?a.bind(navigator):void 0});

@@ -1,0 +1,53 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * Server side template for the branch list page, on page load the list of branches will be rendered by the client
+ *
+ * @param baseRef
+ * @param repository
+ * @param? error
+ * @param? dataAttributes
+ */
+{template .branches}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.repository.branches')}
+    {requirePageData('bitbucket.branch.list.actions.dropdown', [ 'repository' : $repository])}
+    {requirePageData('bitbucket.branches.extras', [ 'repository' : $repository])}
+    {call bitbucket.internal.layout.branch}
+        {{param windowTitle: getText('bitbucket.web.repository.branches.title', $repository.project.name, $repository.name) /}}
+        {param activeNav: 'bitbucket.repository.nav.branches' /}
+        {param atRevisionRef: $baseRef /} // for the branch picker
+        {param dataAttributes: $dataAttributes /}
+        {param repository: $repository /}
+        {param panelContentHeader: getText('bitbucket.web.repository.nav.branches') /}
+        {param panelClass: 'branch-list-panel' /}
+        {param refQueryParam: 'base' /}
+        {param toolbarPrimaryExtraContent}
+            {call aui.group.item}
+                {param content}
+                    {call bitbucket.internal.widget.pagedTableFilterField}
+                        {param forId: 'branch-list' /}
+                        {param filterPlaceholder: getText('bitbucket.web.branch.table.search') /}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param toolbarSecondaryExtraContent}
+            <a href="{bitbucket_help_url('bitbucket.help.branches')}" target="_blank">{getText('bitbucket.web.branch.list.learn.more')}</a>
+        {/param}
+        {param error: $error /}
+        {param content}
+             <div class="notifications"></div>
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/branches').onReady(
+                    '.branch-list-panel .aui-page-panel-content',
+                    'branch-list',
+                    {to_json($repository)|noAutoescape},
+                    {to_json($baseRef)|noAutoescape}
+                );
+            </script>
+        {/param}
+    {/call}
+{/template}
+

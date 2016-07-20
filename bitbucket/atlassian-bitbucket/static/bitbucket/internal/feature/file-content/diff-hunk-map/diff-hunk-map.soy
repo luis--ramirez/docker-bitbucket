@@ -1,0 +1,21 @@
+{namespace bitbucket.internal.feature.fileContent}
+
+/**
+ */
+{template .diffHunkMap}
+    <div class="diff-hunk-map"></div>
+{/template}
+
+/**
+ * @param size
+ */
+{template .diffHunkMapCanvas}
+    <canvas width="{$size.width}" height="{$size.height}"></canvas>
+{/template}
+
+/**
+ * The viewport indicator
+ */
+{template .diffHunkMapViewportIndicator}
+    <div class="viewport-indicator hidden"></div>
+{/template}

@@ -1,0 +1,54 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+@hunkmapWidth: @baseSpacing;
+
+.diff-hunk-map {
+    .box-sizing();
+    width:@hunkmapWidth;
+    height:100%;
+    position: absolute;
+    top:0;
+    z-index: 2;
+    overflow: hidden;
+
+    canvas,
+    .viewport-indicator {
+        cursor: pointer;
+    }
+
+    .viewport-indicator {
+        .transform(translate; 0, 0);
+        width: 100%;
+        height: 0;
+        position: absolute;
+        background-color: fade(@primaryLinkColor, 7%);
+        box-sizing: border-box;
+        border: solid fade(@primaryLinkColor, 50%);
+        border-width: 2px 1px;
+    }
+}
+
+.diff-editor {
+    position: relative;
+}
+
+.side-by-side-diff-editor-from {
+
+    padding-left:@hunkmapWidth;
+
+    > .diff-hunk-map {
+        border-right: 1px solid @dividerColor;
+        left:0;
+    }
+
+}
+.side-by-side-diff-editor-to {
+
+    padding-right: @hunkmapWidth;
+
+    > .diff-hunk-map {
+        border-left: 1px solid @dividerColor;
+        right: 0;
+    }
+}

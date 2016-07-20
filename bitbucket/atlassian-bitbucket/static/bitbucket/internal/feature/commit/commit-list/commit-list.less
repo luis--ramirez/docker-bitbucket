@@ -1,0 +1,68 @@
+@import "/static/global.less";
+
+ul.commit-list {
+    margin: 0;
+    padding-left: 0;
+    width: 100%;
+    background: @contentBackgroundColor;
+
+    a {
+        align-items: center;
+        box-sizing: border-box;
+        color: @bodyTextColor;
+        display: inline-flex;
+        flex-direction: row;
+        padding: @baseSpacing;
+        width: 100%;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+        }
+    }
+}
+
+.commit-list-item {
+    border-bottom: 1px solid @dividerColor;
+    list-style-type: none;
+    position: relative;
+
+    .user-avatar {
+        align-self: flex-start;
+        display: inline-block;
+        margin-right: @baseSpacing;
+        vertical-align: top;
+    }
+
+    > :hover,
+    > :focus {
+        background-color: @primaryHighlightColor;
+        outline: 0;
+
+        .commit-badge-detailed {
+            time,
+            .commitid,
+            .commit-author,
+            .commit-badge-oneline,
+            .commit-message {
+                color: @invertedBodyTextColor;
+            }
+        }
+    }
+
+    &.selected {
+        background-color: @primaryActiveColor;
+        cursor: pointer;
+    }
+
+    .commit-badge-detailed {
+        display: inline-block;
+        width: 410px;
+
+        .commit-author {
+            color: @primaryLinkColor;
+            max-width: 125px;
+            .text-overflow();
+        }
+    }
+}

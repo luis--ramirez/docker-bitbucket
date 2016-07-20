@@ -1,0 +1,16 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param conflicted
+ * @param vetoes
+ */
+{template .mergeDisabledIcon}
+    <a class="merge-disabled" href="#" title="
+    {if $conflicted and length($vetoes) == 0}
+        {getText('bitbucket.web.pullrequest.merge.conflict.tooltip')}
+    {elseif length($vetoes) == 1 and not $conflicted}
+        {$vetoes[0].detailedMessage}
+    {else}
+        {getText('bitbucket.web.pullrequest.merge.issue.tooltip')}
+    {/if}"></a>
+{/template}

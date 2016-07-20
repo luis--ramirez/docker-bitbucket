@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/navigator",["internal/util/navigator"],function(a){return a});

@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/comments/comment-collection",["backbone","bitbucket/internal/feature/comments/comment-model"],function(b,c){return b.Collection.extend({initialize:function(b,a){a=a||{};this.urlBuilder=a.urlBuilder||function(){return a.anchor.urlBuilder()}},model:c,url:function(){return this.urlBuilder().build()}})});

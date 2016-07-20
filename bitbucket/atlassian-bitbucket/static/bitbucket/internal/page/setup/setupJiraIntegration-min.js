@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/setup/jiraIntegration",["jquery","exports"],function(b,c){c.onReady=function(){b("#submitSkip").click(function(a){a.preventDefault();a=b(this).parents("form.aui");a.find("#skip").val("true");a.submit()})}});

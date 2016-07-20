@@ -1,0 +1,30 @@
+{namespace bitbucket.internal.feature.fileContent.codemirror}
+
+/**
+**/
+{template .searchQuery}
+<div class="codemirror-search-query">
+    {getText('bitbucket.web.sourceview.find.title')}
+    <div class="search-box">
+        <input class="search-query" type="text" style="width: 10em"/>
+    </div>
+    {call aui.buttons.buttons}
+        {param content}
+            {call aui.buttons.button}
+                {param text: '' /}
+                {param iconType: 'aui' /}
+                {param iconClass: 'aui-icon-small aui-iconfont-up' /}
+                {param extraClasses: ['search-button'] /}
+                {param extraAttributes: ['type': 'button', 'data-rev': 'true', 'title': getText('bitbucket.web.sourceview.find.previous')] /}
+            {/call}
+            {call aui.buttons.button}
+                {param text: '' /}
+                {param iconType: 'aui' /}
+                {param iconClass: 'aui-icon-small aui-iconfont-down' /}
+                {param extraClasses: ['search-button'] /}
+                {param extraAttributes: ['type': 'button', 'title': getText('bitbucket.web.sourceview.find.next')] /}
+            {/call}
+        {/param}
+    {/call}
+</div>
+{/template}

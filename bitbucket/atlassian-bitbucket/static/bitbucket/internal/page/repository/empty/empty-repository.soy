@@ -1,0 +1,17 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param cloneUrl
+ * @param currentUser
+ */
+{template .emptyRepositoryInstructions}
+    {foreach $webPanel in getWebPanels('bitbucket.empty.repository.instructions', [
+        'project' : $repository.project,
+        'repository' : $repository,
+        'cloneUrl' : $cloneUrl,
+        'user' : $currentUser
+    ])}
+        {$webPanel}
+    {/foreach}
+{/template}

@@ -1,0 +1,31 @@
+@import "/static/global.less";
+
+.breadcrumbs .aui-icon {
+    margin-right: @halfSpacing;
+}
+
+.breadcrumbs {
+    white-space: normal;
+    color: #000;
+    vertical-align: bottom;
+    line-height: @auiToolbarLineHeight;
+
+    .sep {
+        color: #AAA;
+        padding: 0;
+
+        &:before,
+        &:after {
+            content: ' ';
+        }
+    }
+
+    .stub {
+        font-weight: bold;
+    }
+
+    span.stub {
+        color: #333;
+    }
+}
+

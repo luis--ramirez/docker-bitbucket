@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/codemirror",["codemirror"],function(b){var a=null;return{doInOperation:function(c){if(null===a){var d=document.createElement("div");a=b(d)}return a.operation(c)}}});

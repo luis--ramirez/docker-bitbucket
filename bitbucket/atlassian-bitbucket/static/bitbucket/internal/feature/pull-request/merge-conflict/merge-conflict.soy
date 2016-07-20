@@ -1,0 +1,16 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param extraClasses
+ */
+{template .mergeConflictBanner}
+    {call aui.message.warning}
+        {param extraClasses}
+            merge-conflicted-message{if $extraClasses} {$extraClasses}{/if}
+        {/param}
+        {param content}
+            <strong>{getText('bitbucket.web.pullrequest.merge.conflicts')}</strong>{sp}
+            {{getText('bitbucket.web.pullrequest.merge.conflicts.need.resolving', '<a href="#" class="manual-merge">', '</a>')|noAutoescape}}
+        {/param}
+    {/call}
+{/template}

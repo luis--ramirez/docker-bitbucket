@@ -1,0 +1,27 @@
+{namespace bitbucket.internal.feature.difftree}
+
+/**
+ * @param? placeholder
+ * @param? extraClasses
+ */
+{template .searchInput}
+    <form class="aui search">
+        {call aui.icons.icon}
+            {param icon: 'search-small' /}
+            {param useIconFont: true /}
+            {param size: 'small' /}
+            {param extraClasses: 'search-icon' /}
+        {/call}
+        {call aui.form.input}
+            {param type: 'text' /}
+            {param id: 'diff-search' /}
+            {param extraClasses: $extraClasses /}
+            {param extraAttributes}
+                {if $placeholder} placeholder="{$placeholder}"{/if}
+            {/param}
+        {/call}
+        {call bitbucket.internal.buttons.deleteButton}
+            {param title: getText('bitbucket.web.button.delete') /}
+        {/call}
+    </form>
+{/template}

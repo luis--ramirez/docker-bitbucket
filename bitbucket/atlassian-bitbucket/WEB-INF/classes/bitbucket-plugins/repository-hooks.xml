@@ -1,0 +1,14 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-repository-hooks" name="Bitbucket Repository Hooks">
+
+    <!-- TODO Should this be system?!? -->
+    <pre-receive-hook key="pre-receive-repository-hook" class="com.atlassian.stash.internal.hook.repository.PreReceiveRepositoryHookAdapter" >
+        <description>Convert PreReceiveHook into multiple PreReceiveRepositoryHooks</description>
+    </pre-receive-hook>
+
+    <merge-check key="configuredMergeCheck" class="com.atlassian.stash.internal.hook.repository.RepositoryMergeRequestCheckAdapter" />
+
+    <post-receive-hook key="post-receive-event-hook" class="com.atlassian.stash.internal.hook.PushPostReceiveHook" system="true">
+        <description>Publish RepositoryPushEvents into the event system based on the RefChange information received</description>
+    </post-receive-hook>
+
+</atlassian-plugin>

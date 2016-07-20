@@ -1,0 +1,57 @@
+@import "/static/global.less";
+
+.project-selector,
+.project-selector-trigger {
+
+    .aui-avatar {
+        position: absolute;
+        top: @halfSpacing;
+        left: @baseSpacing;
+        margin-right: @halfSpacing;
+    }
+
+    .name {
+        padding-left: @aui-avatar-size-xsmall + @halfSpacing;
+    }
+
+    .name,
+    .aui-avatar {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: @aui-avatar-size-xsmall; // Ensuring that vertical align middle keeps the text and avatar inline with each other.
+    }
+}
+
+.project-selector-trigger .name {
+    .box-sizing();
+    .text-overflow();
+    font-weight: bold;
+    max-width: @max-button-width -
+                        (@dropdown-arrow-width + @baseSpacing + @halfSpacing) -
+                        @baseSpacing;
+}
+
+.project-selector {
+
+    .project {
+        white-space: nowrap;
+    }
+
+    .result a {
+        &:hover,
+        &:active {
+            .name {
+                color: @invertedBodyTextColor;
+            }
+        }
+    }
+
+    .result.focused a .name {
+        color: @invertedBodyTextColor;
+    }
+
+    .results a .name {
+        max-width: none;
+        white-space: normal;
+    }
+}

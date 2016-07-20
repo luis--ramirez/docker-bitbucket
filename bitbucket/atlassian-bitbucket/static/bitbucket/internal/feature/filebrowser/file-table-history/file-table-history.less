@@ -1,0 +1,64 @@
+@import "/static/global.less";
+
+@fade-out-width: 32px; // same as Bitbucket Cloud
+
+.filebrowser-table {
+
+  .directory-file-history {
+    color: @secondaryTextColor;
+    opacity: 1;
+    transition: opacity 200ms ease-in;
+
+    &.timestamp {
+      text-align: right;
+    }
+
+    &.message {
+      overflow: hidden;
+      max-width: 450px;
+      position: relative;
+
+      a {
+        display:inline-block;
+        max-width: 100%;
+        white-space: nowrap;
+        color: @secondaryTextColor;
+      }
+
+      &::after {
+        .linear-gradient-horizontal(fade(@contentBackgroundColor, 0), @contentBackgroundColor);
+        width: @fade-out-width;
+        content: ' ';
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%
+      }
+    }
+  }
+
+  .hide {
+    opacity: 0;
+  }
+
+  tr.focused-file, tr:hover {
+    .directory-file-history.message::after {
+      .linear-gradient-horizontal(fade(@bodyBackgroundColor, 0), @bodyBackgroundColor);
+    }
+  }
+
+  .item-name, .timestamp {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+    max-width: 200px;
+  }
+
+  .item-name {
+    width: 25%;
+  }
+  .timestamp {
+    width: 1%;
+  }
+}

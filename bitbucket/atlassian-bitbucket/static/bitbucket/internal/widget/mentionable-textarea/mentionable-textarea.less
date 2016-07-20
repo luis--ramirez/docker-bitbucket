@@ -1,0 +1,51 @@
+@import "/static/global.less";
+
+#mention-autocomplete-dialog {
+    display: block;
+    max-width: 500px;
+    width: 500px;
+
+    li {
+        padding: 4px 5px 3px 0px;
+
+        &.result {
+            .text-overflow();
+            cursor: pointer;
+
+            &.active {
+                .email-address {
+                    color: @invertedBodyTextColor;
+                }
+            }
+
+            .user-avatar {
+                vertical-align: middle;
+                margin-right: @baseSpacing;
+            }
+
+            .email-address {
+                font-size: @font-size-small;
+                color: @secondaryTextColor;
+            }
+
+            .match {
+                font-weight: bold;
+            }
+
+            > div {
+                display: inline;
+                padding: @halfSpacing;
+            }
+        }
+
+        &.no-results {
+            color: @placeholderTextColor;
+        }
+
+    }
+
+    .spinContainer {
+        height: 24px;
+    }
+}
+

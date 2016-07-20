@@ -1,0 +1,102 @@
+{namespace bitbucket.component.branchSelector}
+
+/**
+ * Renders a full AUI form field with label, hidden input, and RevisionReferenceSelector. The hidden input is automatically
+ * populated when users interact with the paired RevisionReferenceSelector.
+ *
+ * @param id The id of the input. Will default to $name. At least one of $id and $name is required.
+ * @param? name The name of the input. Will default to $id. At least one of $id and $name is required.
+ * @param labelText The text to use as the label for this field
+ * @param? isRequired Whether this field is required
+ * @param? descriptionText Description string for the field
+ * @param? descriptionContent Description html for the field
+ * @param? errorTexts A list of strings for any errors that need to be displayed.
+ * @param? showTags Whether to allow the user to select tags, as well as branches. False by default
+ * @param? initialValue a branch name (full ref - including refs/heads/ prefix) that is initially selected (or null)
+ * @param? extraDialogClasses extra CSS classes to put on the selector dialog
+ * @param? preloadData A list of refs that have `id`, `displayId`, and `type` values. Type values must be 'branch', 'tag',
+ *                     or 'commit'. e.g.:
+ *
+ * ```
+ *      {param preloadData: [
+ *              [ 'id' :  'my-special-branch', 'displayId' : 'My Special Branch', type : 'branch' ],
+ *              [ 'id' :  'your-special-tag', 'displayId' : 'Your Special Tag', type : 'tag' ]
+ *          ]
+ *      }
+ * ```
+ */
+{template .field}
+    {call widget.aui.form.field}
+        {param id: $id ? $id : $name /}
+        {param labelContent}{$labelText}{/param}
+        {param required : $isRequired /}
+        {param input}
+            {call .input}
+                {param id: $id /}
+                {param name: $name /}
+                {param initialValue: $initialValue /}
+                {param showTags: $showTags /}
+                {param preloadData: $preloadData /}
+                {param isRequired: $isRequired /}
+                {param extraDialogClasses: $extraDialogClasses /}
+            {/call}
+        {/param}
+        {param errors: $errorTexts /}
+        {param description: $descriptionText /}
+        {param descriptionContent: $descriptionContent /}
+    {/call}
+{/template}
+
+/**
+ * Renders a hidden input and RevisionReferenceSelector. The input will be automatically populated when users interact
+ * with the paired RevisionReferenceSelector.
+ * <p/>
+ * Non repository-hook users of this field will need to add a plugin dependency to
+ * {@code com.atlassian.bitbucket.server.bitbucket-web-api:branch-selector-field} to ensure required components are loaded.
+ *
+ * @param? id The id of the input. Will default to $name. At least one of $id and $name is required.
+ * @param? name The name of the input. Will default to $id. At least one of $id and $name is required.
+ * @param? initialValue a branch name (full ref - including refs/heads/ prefix) that is initially selected (or null)
+ * @param? text the placeholder text for the input when no branch is selected.
+ * @param? showTags Whether to allow the user to select tags, as well as branches. False by default
+ * @param? isRequired Whether this field is required. This will affect the rendering of the 'Remove branch' link
+ * @param? preloadData A list of refs that have id, displayId, and type values. Type values must be 'branch', 'tag',
+ *                     or 'commit'.
+ * @param? extraDialogClasses extra CSS classes to put on the selector dialog
+ */
+{template .input}
+    <div class="branch-selector-input">
+        {call bitbucket.internal.feature.repository.revisionReferenceSelectorTriggerWithField}
+            {param id: ($id ? $id : $name) + '-trigger' /}
+            {param fieldId: $id ? $id : $name /}
+            {param fieldName: $name ? $name : $id /}
+            {param text: $text /}
+            {param extraClasses: 'branch-selector-field' /}
+        {/call}
+        {if not $isRequired}
+        <a class="remove-link{if not $initialValue} hidden{/if}" href="#">
+            {getText('bitbucket.web.branch.selector.remove.branch')}
+        </a>
+        {/if}
+        <script>eve('bitbucket.internal.widget.branchselector.inputAdded', null, '{$id ? $id : $name|escapeJs}', {lb}
+            "showTags" : {not not $showTags}{if $initialValue},
+            "revisionId": '{$initialValue|escapeJs}'{/if}{if $preloadData},
+            "preloadData": {to_json($preloadData)|noAutoescape}{/if}{if $extraDialogClasses},
+            "extraClasses": '{call .escapeJs}
+                    {param content}
+                        {call aui.renderExtraClasses}{param extraClasses: $extraDialogClasses /}{/call}
+                    {/param}
+                {/call}'{/if}{if $text},
+            "triggerPlaceholder": '{$text|escapeJs}'
+            {/if}
+        {rb});</script>
+    </div>
+{/template}
+
+
+/**
+ * @param? content
+ */
+{template .escapeJs private="true"}
+    {$content|escapeJs}
+{/template}

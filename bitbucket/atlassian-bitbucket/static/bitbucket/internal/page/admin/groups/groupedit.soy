@@ -1,0 +1,59 @@
+{namespace bitbucket.internal.admin.groups}
+
+/**
+* @param group
+* @param exists
+* @param canUpdateGroups
+* @param canDeleteGroups
+*/
+{template .edit}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.groups.edit')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-general-groups' /}
+    {param content}
+    {if $exists}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <ol class="aui-nav aui-nav-breadcrumbs">
+                        {call bitbucket.internal.widget.breadcrumbs.back}
+                            {param id: 'groups-link' /}
+                            {param href: nav_admin_groups() /}
+                            {param text: getText('bitbucket.web.group.back.link') /}
+                        {/call}
+                    </ol>
+                    <h2 id="group-name">{$group}</h2>
+                </div>
+                <div class="aui-page-header-actions">
+                    {if $canDeleteGroups}
+                        {call bitbucket.internal.buttons.button}
+                            {param buttonText: getText('bitbucket.web.group.delete.button') /}
+                            {param href: nav_admin_group_delete($group) /}
+                            {param id: 'delete-group' /}
+                        {/call}
+                    {/if}
+                </div>
+            </div>
+        </header>
+        <div class="user-picker">
+            {call bitbucket.internal.feature.user.groupUsersTable}
+                {param id: 'group-users-table' /}
+                {param group: $group /}
+                {param editable: $canUpdateGroups /}
+            {/call}
+        </div>
+    {else}
+        {call aui.message.error}
+            {param content}
+                {{getText('bitbucket.web.group.view.notfound', $group)}}
+            {/param}
+        {/call}
+    {/if}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/admin/groupEdit').onReady({$canUpdateGroups}, '#group-users-table', '#delete-group');
+        </script>
+    {/param}
+{/call}
+{/template}

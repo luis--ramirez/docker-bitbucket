@@ -1,0 +1,135 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param id
+ * @param title
+ * @param description
+ * @param descriptionLong
+ * @param page
+ */
+{template .hookList}
+    {call widget.aui.table}
+        {param id: $id /}
+        {param extraClasses: 'hook-list-table' /}
+        {param theadContent}
+            <tr class="hook-title">
+                 <td colspan="3"><h3 title="{$descriptionLong}">{$title}<span> - {$description}</span></h3></td>
+            </tr>
+        {/param}
+        {param content}
+            {if $page.size > 0}
+                {call .hookRows}
+                    {param values: $page.values /}
+                {/call}
+            {else}
+                <tr><td colspan="3"><em>{getText('bitbucket.web.repository.settings.hooks.no-hooks')}</em></td></tr>
+            {/if}
+        {/param}
+        {param tfootContent}
+            {if not $page.isLastPage}
+            <tr class="load-more-row">
+                <td colspan="3">
+                    <a href="#" class="load-more">{getText('bitbucket.web.repository.settings.hooks.load.more')}</a> <div class="spinner"/>
+                </td>
+            </tr>
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param values
+ */
+{template .hookRows}
+    {foreach $hook in $values}
+        {call .hookRow data="$hook"}{/call}
+    {/foreach}
+{/template}
+
+/**
+ * @param details
+ * @param enabled
+ */
+{template .hookRow}
+<tr data-key="{$details.key}">
+    <td class="cell-icon">
+        {call aui.avatar.avatar}
+            {param size: 'large' /}
+            {param avatarImageUrl: hookAvatarUrl($details.key, $details.version) /}
+        {/call}
+    </td>
+    <td class="cell-details">
+        {call .hookDetails data="$details" /}
+    </td>
+    <td class="cell-actions">
+        {call .hookActions}
+            {param enabled: $enabled /}
+        {/call}
+    </td>
+</tr>
+{/template}
+
+/**
+ * @param name
+ * @param? description
+ * @param configFormKey
+ */
+{template .hookDetails}
+    <h4 class="hook-name" title="{$name}">
+        {if $configFormKey}
+            <a href="#">{$name|truncate:128|escapeHtml}</a>
+        {else}
+            {$name|truncate:128|escapeHtml}
+        {/if}
+    </h4>
+    {if $configFormKey}
+        {call bitbucket.internal.buttons.editButton}
+            {param title: getText('bitbucket.web.repository.settings.hooks.action.configure.title') /}
+        {/call}
+    {/if}
+    <p class="hook-description">
+        {if $description}
+            {$description|truncate:512|escapeHtml}
+        {else}
+            <span class="empty-description">{getText('bitbucket.web.repository.settings.hooks.no-description')}</span>
+        {/if}
+    </p>
+</td>
+{/template}
+
+
+/**
+ * @param enabled
+ */
+{template .hookActions}
+    {call bitbucket.internal.buttons.switchButtons}
+        {param isOn: $enabled /}
+        {param extraClasses : 'mode-toggle' /}
+        {param offExtraClasses: 'mode-disabled' /}
+        {param offText: getText('bitbucket.web.repository.settings.hooks.toggle.disable.button') /}
+        {param offTitle: getText('bitbucket.web.repository.settings.hooks.toggle.disable.tooltip') /}
+        {param onExtraClasses: 'mode-enabled' /}
+        {param onText: getText('bitbucket.web.repository.settings.hooks.toggle.enable.button') /}
+        {param onTitle: getText('bitbucket.web.repository.settings.hooks.toggle.enable.tooltip') /}
+    {/call}
+{/template}
+
+/**
+ */
+{template .hookAddDialog}
+    <h2>{getText('bitbucket.web.repository.settings.hooks.find.more')}</h2>
+    <p>{{getText('bitbucket.web.repository.settings.hooks.add.body',
+    '<a href="' + nav_addon_requests('Repository Hooks') + '" target="_blank">', '</a>',
+    '<a href="https://developer.atlassian.com/stash/docs/latest/how-tos/repository-hooks.html" target="_blank">', '</a>')|noAutoescape}}
+    </p>
+    <br/>
+    {call aui.buttons.button}
+        {param text: getText('bitbucket.web.repository.settings.hooks.add.search')/}
+        {param tagName: 'a'/}
+        {{param extraAttributes: ['href' : nav_addon_requests('Repository Hooks')] /}}
+    {/call}
+    {call widget.aui.form.cancelButton}
+        {param id: 'add-dialog-cancel' /}
+        {param href: '#' /}
+    {/call}
+{/template}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/v2/feature/pull-request/store/pull-request-store",["bitbucket/internal/bbui/reducers/current-user","bitbucket/internal/bbui/reducers/pull-request","bitbucket/internal/util/redux"],function(a,b,c){return function(d){return c.createStore({pullRequest:b,currentUser:a},d)}});

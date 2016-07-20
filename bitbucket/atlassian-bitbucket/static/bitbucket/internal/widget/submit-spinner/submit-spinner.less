@@ -1,0 +1,18 @@
+@import "/static/global.less";
+
+.submit-spinner {
+    display: inline-block;
+    width: 16px;
+    margin:  10px 10px 0 -5px; /* match 10px on buttons, move closer to the submit button though (-5px)*/
+    vertical-align: top;
+}
+
+.dialog-button-panel .submit-spinner {
+    margin-top: @auiButtonHeight / 2;  // Vertically-align it to the middle of the button
+}
+
+// vertical alignment of the spinner inside the dialog2 footer
+.aui-dialog2-footer-actions .submit-spinner {
+    margin-top: 0;
+    vertical-align: middle;
+}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/project/overview",["jquery","bitbucket/internal/feature/repository/repository-table","bitbucket/internal/util/notifications","exports"],function(a,c,d,e){e.onReady=function(b){d.showFlashes();a(b).length&&(new c(b,{showPublicStatus:!0,bufferPixels:a("#footer").height(),pageSize:100})).init()}});

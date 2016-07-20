@@ -1,0 +1,48 @@
+{namespace bitbucket.internal.page.setup}
+
+/**
+ * @param? form
+ * @param? fieldErrors
+ * @param? formErrors
+ * @param? dataAttributes
+ */
+{template .adminUser}
+{webResourceManager_requireResourcesForContext('bitbucket.page.setup.adminUser')}
+{call bitbucket.internal.layout.setup}
+    {param step: getText('bitbucket.web.setup.title.admin.account.setup') /}
+    {param dataAttributes: $dataAttributes /}
+    {param content}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param autocomplete: 'off' /}
+            {param isLongLabels: true /}
+            {param content}
+                <input type='hidden' name='step' value='user'/>
+                {call bitbucket.internal.widget.userFormFields}
+                    {param form: $form /}
+                    {param fieldErrors: $fieldErrors /}
+                {/call}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'setupJira' /}
+                            {param isPrimary: true /}
+                            {param label: getText('bitbucket.web.setup.integrate.with.jira') /}
+                        {/call}
+                        {call widget.aui.form.submit}
+                            {param id: 'skipJira' /}
+                            {param label: getText('bitbucket.web.setup.go.to.product', productName()) /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/widget/setup-tracking').track('setup-admin-user');
+        </script>
+    {/param}
+{/call}
+{/template}

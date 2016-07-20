@@ -1,0 +1,31 @@
+{namespace bitbucket.internal.page.pullRequest}
+
+/**
+ * @param repository
+ * @param pullRequest
+ * @param? startingTabKey
+ * @param? maxChanges
+ * @param? mergeTimeout
+ * @param? relevantContextLines
+ * @param unwatched
+ * @param? dataAttributes
+ */
+{template .view}
+{webResourceManager_requireResourcesForContext('bitbucket.page.pullRequest.view')}
+{webResourceManager_requireResourcesForContext('bitbucket.feature.files.fileHandlers')}
+    {call bitbucket.internal.layout.pullRequest}
+        {param repository: $repository /}
+        {param pullRequest: $pullRequest /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeTab: $startingTabKey ? $startingTabKey : 'bitbucket.pull-request.nav.overview' /}
+        {param content}/* loaded client-side */{/param}
+        {param maxChanges: $maxChanges /}
+        {param mergeTimeout: $mergeTimeout /}
+        {param relevantContextLines: $relevantContextLines /}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/page/pull-request/pull-request-view').onReady({if $unwatched}{$unwatched}{else}false{/if});
+            </script>
+        {/param}
+    {/call}
+{/template}

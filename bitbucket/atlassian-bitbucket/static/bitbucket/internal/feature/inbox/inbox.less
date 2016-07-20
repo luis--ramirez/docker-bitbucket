@@ -1,0 +1,40 @@
+@import "/static/global.less";
+@spinnerPadding: 120px;
+
+#inbox-trigger {
+    position: relative;
+    .aui-badge {
+          .opacity(0);
+          .transition(opacity 0.5s ease-in-out);
+          background-color: @lozengeRemovedColor;
+          color: @lozengeTextColor;
+          padding: 3px 2px 2px 2px;
+          position: absolute;
+          right: 3px;
+          top: 4px;
+          &.visible {
+              .opacity(1.0);
+          }
+    }
+}
+
+#inline-dialog-inbox-pull-requests-content {
+    .loading-resource-spinner {
+        padding: @spinnerPadding;
+    }
+    .inbox-spinner-padding {
+      display: none;
+    }
+    .aui-inline-dialog-contents {
+        padding: 0;
+        min-height: @spinnerPadding * 2;
+        #inbox-wapper h2 {
+            padding: @baseSpacing @doubleSpacing;
+            border-bottom: 1px solid @dividerColor;
+        }
+    }
+    .spinner {
+        margin: auto;
+        top: 50%;
+    }
+}

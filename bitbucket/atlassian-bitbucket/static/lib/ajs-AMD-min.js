@@ -1,0 +1,1 @@
+define("aui",["bitbucket/internal/util/feature-enabled"],function(a){window.AJS.DarkFeatures={isEnabled:a.getFromProviderSync,enable:function(a){},disable:function(a){}};return window.AJS});

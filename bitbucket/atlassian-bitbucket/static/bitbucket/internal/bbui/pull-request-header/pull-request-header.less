@@ -1,0 +1,198 @@
+@import "../../../../global.less";
+
+@prTitleLineHeight: 16px;
+@prTitlePadding: 12px;
+
+@reviewerAnimationTime: 0.5s;
+@reviewerAnimationDelay: 0.3s;
+@reviewerAnimationEasing: ease;
+
+.flex-priority(@weight) {
+    .flex(~"0 @{weight} auto");
+    min-width: 5em;
+    max-width: 100%;
+}
+
+.pull-request-header {
+
+    .flexible {
+        white-space: nowrap;
+        .flex-container();
+        .justify-content(space-between);
+    }
+
+    .pull-request-actions,
+    .arrow-icon,
+    .status {
+        .flex-shrink(0);
+    }
+
+    .status {
+        padding: 4px 6px;
+    }
+
+    .divider {
+        border-right: 1px solid @tabDividerColor;
+        height: @doubleSpacing;
+        margin-right: @baseSpacing;
+    }
+
+    .pull-request-metadata,
+    .branch-from-to {
+        .flex-container();
+        .justify-content(flex-start);
+        .align-items(center);
+        .flex-priority(5);
+        margin-right: @baseSpacing;
+    }
+
+    .avatar-with-name {
+        margin-right: @baseSpacing;
+
+        .aui-avatar {
+            margin-right: @halfSpacing;
+        }
+    }
+
+    .author {
+        .flex-priority(1);
+        .aui-avatar, .aui-avatar-inner {
+            .square(@doubleSpacing)
+        }
+    }
+
+    .source,
+    .destination,
+    .author {
+        .text-overflow();
+    }
+
+    .pull-request-actions div {
+        display: inline-block;
+    }
+
+    .pull-request-actions {
+
+        &.pullRequestIsOpen .pull-request-more-trigger {
+            margin-left: @baseSpacing;
+        }
+
+        .merge-button,
+        .reopen-button {
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+            margin-left: @doubleSpacing;
+        }
+    }
+
+    .placeholder {
+        color: @bitbucket-admin-warning-color;
+        margin-left: 5px;
+        outline: 1px solid red;
+    }
+
+    h2 {
+        margin: @baseSpacing + @halfSpacing 0 0 0;
+    }
+
+    .reviewer-status-selector {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: all @reviewerAnimationTime @reviewerAnimationEasing @reviewerAnimationDelay;
+    }
+
+    .reviewer-status-selector.reviewing {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .reviewer-avatar-list {
+        background: #fff;
+        padding-right: @baseSpacing;
+        padding-top: @baseSpacing;
+    }
+}
+
+#pull-request-header-more.aui-dropdown2.aui-style-default [role="menuitem"] {
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+}
+
+#pull-request-header-more.aui-dropdown2.aui-style-default:hover [role="menuitem"]:not(.aui-dropdown2-disabled):hover {
+    background-color: @aui-link-inverted-bg-color;
+    color: #fff;
+}
+
+#merge-warning-inline-dialog {
+    .merge-warning-content {
+        width: 320px;
+    }
+
+    ul,
+    li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+    }
+
+    li {
+        @itemPadding: @baseSpacing;
+        padding: @itemPadding;
+        border-bottom: @divider-border-width solid @dividerColor;
+        display: flex;
+
+        &:first-child {
+            border-top: @divider-border-width solid @dividerColor;
+            margin-top: @baseSpacing + @halfSpacing;
+        }
+
+        .aui-icon {
+            display: inline-block;
+            margin-right: @baseSpacing;
+            color: @aui-iconfont-warning-color;
+            flex: none;
+        }
+
+        .message {
+            display: flex;
+        }
+
+        .more-info {
+            padding: 0 0 0 @baseSpacing;
+            height: auto;
+            line-height: 1;
+            margin-left: auto;
+            font-size: @aui-font-size-small;
+        }
+    }
+
+    &.aui-alignment-snap-right:before,
+    &.aui-alignment-snap-right:after {
+        left: ~"calc(100% - " @tripleSpacing ~")";
+    }
+}
+
+
+#extended-merge-help-dialog .merge-help {
+    h3 .aui-iconfont-warning {
+        color: @aui-iconfont-warning-color;
+        margin-right: @baseSpacing;
+    }
+
+    p.intro {
+        margin-bottom: @doubleSpacing;
+    }
+
+    .instruction-block {
+        word-wrap: break-word;
+    }
+
+    .instruction-block:last-child {
+        margin-bottom: 0;
+    }
+}

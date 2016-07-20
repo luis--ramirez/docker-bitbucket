@@ -1,0 +1,127 @@
+@import "/static/global.less";
+
+@fade-out-width: 32px; // same as Bitbucket Cloud
+
+.commits-table {
+    .author,
+    .commit,
+    .comment-count,
+    .timestamp {
+        .shrinkwrap();
+        white-space: nowrap;
+    }
+
+    .author,
+    .commit,
+    .timestamp,
+    .message,
+    .comment-count {
+        vertical-align: baseline;
+    }
+
+    th {
+        &.author,
+        &.commit,
+        &.timestamp,
+        &.message,
+        &.comment-count {
+            .text-overflow();
+        }
+    }
+
+    .author {
+        > div {
+            .text-overflow();
+            vertical-align: text-bottom;
+            max-width: 200px;
+        }
+    }
+
+    .message {
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 250px;
+        position: relative;
+
+        .message-subject {
+            color: @bodyTextColor;
+        }
+
+        .message-body {
+            color: @descriptionTextColor;
+
+            &:before {
+                content: " ";
+            }
+        }
+
+        &::after {
+            .linear-gradient-horizontal(fade(#fff, 0), #fff);
+            width: @fade-out-width;
+            content: ' ';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%
+        }
+    }
+
+    tbody tr:hover {
+        background-color: @bodyBackgroundColor;
+
+        .message::after {
+            .linear-gradient-horizontal(fade(@bodyBackgroundColor, 0), @bodyBackgroundColor);
+        }
+    }
+
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+
+    tr {
+        border-left: 2px solid @contentBackgroundColor;
+    }
+
+    tr.focused-commit {
+        background-color: @bodyBackgroundColor;
+        border-left: 2px solid @primaryLinkColor;
+
+        a:focus {
+            text-decoration: none;
+        }
+
+        .message::after {
+            .linear-gradient-horizontal(fade(@bodyBackgroundColor, 0), @bodyBackgroundColor);
+        }
+    }
+
+    /* Setting the opacity directly on the tr does funny things to the borders when transitioning in some browser, so just set it on the TD */
+    tr.merge td {
+        .transition(opacity 0.3s);
+        .filtered();
+    }
+
+    &.show-merges tr.merge td {
+        .shown();
+    }
+
+    + .commits-table-message {
+        margin-top: 10px;
+        text-align: center;
+        color: @placeholderTextColor;
+
+        &.no-results {
+            color: @lozengeRemovedColor;
+        }
+    }
+
+    .commitid + .merge-lozenge {
+        margin-left: @halfSpacing;
+    }
+}
+
+.commits-table-spinner {
+    .square(48px);
+    margin: 16px auto 0;
+}

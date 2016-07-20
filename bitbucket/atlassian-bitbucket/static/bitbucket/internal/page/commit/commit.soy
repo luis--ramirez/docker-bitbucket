@@ -1,0 +1,197 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param commit
+ * @param hasRepoWrite
+ * @param? commitDiscussion
+ * @param? parentId
+ * @param? dataAttributes
+ * @param? maxChanges
+ * @param? relevantContextLines
+ * @param? unwatched
+ */
+{template .commit}
+{webResourceManager_requireResourcesForContext('bitbucket.page.repository.commit')}
+{webResourceManager_requireResourcesForContext('bitbucket.feature.files.fileHandlers')}
+    {requirePageData('bitbucket.page.commit', [ 'commit' : $commit,
+                                               'watchable' : $commitDiscussion,
+                                               'repository' : $repository ])}
+    {call bitbucket.internal.layout.repository}
+        {{param windowTitle: getText('bitbucket.web.repository.commit', $repository.project.name, $repository.name, $commit.displayId) /}}
+        {param activeNav: 'bitbucket.repository.nav.commits' /}
+        {param dataAttributes: $dataAttributes /}
+        {param repository: $repository /}
+        {param content}
+            <header class="commit-metadata">
+                <h2>{getText('bitbucket.web.repository.nav.commits')}</h2>
+                {call widget.aui.group.split}
+                    {param content}
+                        {call widget.aui.group.item}
+                            {param extraClasses: 'commit-metadata-user-avatar' /}
+                            {param content}
+                                {call bitbucket.internal.widget.avatar}
+                                    {param person: $commit.author /}
+                                    {param size: 'large' /}
+                                {/call}
+                            {/param}
+                        {/call}
+                        {call widget.aui.group.item}
+                            {param extraClasses: 'commit-metadata-details' /}
+                            {param content}
+                                <div class="commit-extra summary-panel">
+                                    <div class="plugin-section-primary">
+                                        <div class="plugin-item commit-parents">
+                                            {call .parents}
+                                                {param commit: $commit /}
+                                                {param repository: $repository /}
+                                            {/call}
+                                        </div>
+                                    </div>
+                                    <div class="plugin-section-secondary">
+                                    </div>
+                                </div>
+                                {call bitbucket.internal.feature.commit.commitBadge.oneline}
+                                    {param commit : $commit /}
+                                    {param repository : $repository /}
+                                    {param withAvatar: false /}
+                                    {param abbreviatedMerge: true/}
+                                {/call}
+                                <div class="commit-message">
+                                    <pre>{$commit.message}</pre>
+                                </div>
+                            {/param}
+                        {/call}
+                    {/param}
+                {/call}
+
+                {if length($commit.parents) > 1}
+                    <div class="commit-metadata-diff-to">
+                        <strong>{getText('bitbucket.web.diff.showing.diff.to')}</strong>
+                        {call aui.dropdown2.trigger}
+                            {param menu: ['id': 'diff-to-parent-dropdown'] /}
+                            {param text}
+                                {foreach $parent in $commit.parents}
+                                   {if $parentId ? $parent.id == $parentId : isFirst($parent)}
+                                        {$parent.displayId}
+                                   {/if}
+                                {/foreach}
+                            {/param}
+                            {param extraClasses: 'aui-button' /}
+                        {/call}
+                        {call aui.dropdown2.contents}
+                            {param id: 'diff-to-parent-dropdown' /}
+                            {param extraClasses: 'aui-box-shadow' /}
+                            {param content}
+                                {call bitbucket.internal.widget.commit.commitList}
+                                    {param content}
+                                        {foreach $parent in $commit.parents}
+                                            {call bitbucket.internal.widget.commit.commitListItem}
+                                                {param commit: $parent /}
+                                                {param title: getText('bitbucket.web.commit.show.relative.to.parent') /}
+                                                {param isSelected: $parentId ? $parent.id == $parentId : isFirst($parent) /}
+                                                {param content}
+                                                    {call bitbucket.internal.feature.fileContent.commitSelectorItemAuthor}
+                                                        {param commit: $parent /}
+                                                        {param href: nav_commit($repository.project, $repository, $commit.id, [ 'queryParams' : [ 'to' : $parent.id ] ]) /}
+                                                    {/call}
+                                                {/param}
+                                            {/call}
+                                        {/foreach}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                    <div>
+                {/if}
+
+            </header>
+        {/param}
+        {param pageBottomContent}
+            {let $toolbarItems: getDeprecatedServerFragments('bitbucket.repository.difftree.header', ['ITEM'], [:]) /}
+            {renderServerFragmentsForClient('bitbucket.internal.repository.difftree.header.deprecated', $toolbarItems)}
+            <script>
+                require('bitbucket/internal/page/commit/commit').onReady(
+                    {to_json($commit)|noAutoescape},
+                    [{foreach $parent in $commit.parents}
+                        {if not isFirst($parent)},{/if}
+                        {to_json($parent)|noAutoescape}
+                    {/foreach}],
+                    {$maxChanges ? $maxChanges : 'null'},
+                    {$relevantContextLines ? $relevantContextLines : 'null'},
+                    '.commit-extra', {to_json($repository)|noAutoescape},
+                    {to_json($commit)|noAutoescape},
+                    [{if $ij.principal and $commitDiscussion}
+                        {foreach $participant in $commitDiscussion.participants}
+                            {if not isFirst($participant)},{/if}
+                            {to_json($participant, ['avatarSize' : avatarSize('small')])|noAutoescape}
+                        {/foreach}
+                    {/if}],
+                    {if $unwatched}{$unwatched}{else}false{/if},
+                    {$hasRepoWrite}
+                );
+            </script>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param commit
+ * @param repository
+ */
+{template .parents private="true"}
+    {call aui.icons.icon}
+        {param extraAttributes: 'title="Parent commits"'/}
+        {param useIconFont: true /}
+        {param iconFontSet: 'devtools' /}
+        {param icon: 'commit' /}
+    {/call}
+    {if length($commit.parents) == 0}
+        {getText('bitbucket.web.commit.parent.zero')}
+    {/if}
+    {if (length($commit.parents) > 0)}
+        {if (length($commit.parents) > 2)}
+            {call bitbucket.internal.feature.commit.link}
+                {param commit: $commit.parents[0] /}
+                {param repository: $repository /}
+            {/call}
+            &nbsp;+&nbsp;
+            {call widget.aui.dropdownParent}
+                {param content}
+                    {call widget.aui.dropdown}
+                        {{param triggerText: getText('bitbucket.web.commit.parent.more', length($commit.parents) - 1) /}}
+                        {param showIcon: true /}
+                        {param rightAligned: true /}
+                        {param content}
+                            {foreach $parent in $commit.parents}
+                                {if not isFirst($parent)}
+                                <li class="dropdown-item">
+                                    {call bitbucket.internal.feature.commit.link}
+                                        {param commit: $parent /}
+                                        {param repository: $repository /}
+                                    {/call}
+                                </li>
+                                {/if}
+                            {/foreach}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {elseif (length($commit.parents) == 2)}
+            {foreach $parent in $commit.parents}
+                {call bitbucket.internal.feature.commit.link}
+                    {param commit: $parent /}
+                    {param repository: $repository /}
+                {/call}
+                {if not isLast($parent)}
+                &nbsp;+&nbsp;
+                {/if}
+            {/foreach}
+        {else}
+            {call bitbucket.internal.feature.commit.link}
+                {param commit: $commit.parents[0] /}
+                {param repository: $repository /}
+            {/call}
+        {/if}
+    {/if}
+{/template}

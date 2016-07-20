@@ -1,0 +1,64 @@
+{namespace widget.aui}
+
+/**
+ * @deprecated in 3.0 for removal in 4.0. Use Dropdown2
+ * @param? dropdownText
+ * @param? dropdownContent
+ * @param? extraClasses
+ */
+{template .dropdownItem}
+    <li class='dropdown-item{if $extraClasses} {$extraClasses}{/if}'>
+        {if $dropdownText}
+            {$dropdownText}
+        {elseif $dropdownContent}
+            {$dropdownContent|noAutoescape}
+        {/if}
+    </li>
+{/template}
+
+/**
+ * @deprecated in 3.0 for removal in 4.0. Use Dropdown2
+ * @param? triggerClass
+ * @param? id
+ * @param? dropdownClass
+ * @param? ajax
+ * @param? showIcon
+ * @param? rightAligned
+ * @param? tagName
+ * @param? title
+ * @param? triggerText
+ * @param? triggerContent
+ * @param content
+ **/
+{template .dropdown}
+<a class="aui-dd-trigger{if $triggerClass} {$triggerClass}{/if}" {if $id}id="{$id}"{/if} {if $title}title="{$title}"{/if}>
+    {if $triggerText}
+        <span class="dropdown-text">
+            {$triggerText}
+        </span>
+    {/if}
+    {if $triggerContent}
+        {$triggerContent|noAutoescape}
+    {/if}
+    {if $showIcon}
+        <span class="icon icon-dropdown"></span>
+    {/if}
+</a>
+<{$tagName ? $tagName : 'ul'} class="aui-dropdown hidden {$rightAligned ? 'aui-dropdown-right' : 'aui-dropdown-left'} {if $dropdownClass}{$dropdownClass}{/if} {$ajax ? 'aui-dropdown-ajax' : ''}">
+    {$content|noAutoescape}
+</{$tagName ? $tagName : 'ul'}>
+{/template}
+
+/**
+ * @deprecated in 3.0 for removal in 4.0. Use Dropdown2
+ * @param? id
+ * @param? tagName
+ * @param? extraClasses
+ * @param? content
+ **/
+{template .dropdownParent}
+<{$tagName ? $tagName : 'div'} {if $id}id="{$id}"{/if} class="aui-dd-parent{if $extraClasses} {$extraClasses}{/if}">
+    {$content|noAutoescape}
+</{$tagName ? $tagName : 'div'}>
+{/template}
+

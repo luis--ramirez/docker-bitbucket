@@ -1,0 +1,219 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param serverId
+* @param license
+* @param usersRemainingMessage
+* @param overLimitMessage
+* @param canEdit
+* @param? saved
+* @param? standaloneToClustered
+*/
+{template .license}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.license')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-settings-licensing' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.license.title')}</h2>
+                </div>
+            </div>
+        </header>
+        {if $saved}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.license.saved')}
+                {/param}
+            {/call}
+        {/if}
+        {if $standaloneToClustered}
+            {call aui.message.warning}
+                {param content}
+                    {getText('bitbucket.web.license.restart.required.clustering', productName())}
+                {/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.form}
+            {param action: ''/}
+            {param isLongLabels: true /}
+            {param content}
+                <input type='hidden' name='edit' value='true'/>
+
+                {if $overLimitMessage}
+                    {call aui.message.error}
+                        {param extraClasses: 'over-limit'/}
+                        {param content}
+                            {$overLimitMessage}<br/>
+                            {{getText('bitbucket.web.license.over.limit.resolve',
+                                nav_admin_global_perms(), 'https://www.atlassian.com/purchase/upgrade')|noAutoescape}}
+                        {/param}
+                    {/call}
+                {/if}
+
+                {if $license == null}
+                    {call aui.message.error}
+                        {param extraClasses: 'no-license'/}
+                        {param content}
+                            {{getTextAsHtml('bitbucket.web.license.nolicense', bitbucket_help_url('bitbucket.wac.purchase'))}}
+                        {/param}
+                    {/call}
+                {elseif $license.evaluation}
+                    {if $license.expired}
+                        {call aui.message.error}
+                            {param extraClasses: 'eval-expired'/}
+                            {param content}
+                                {{getTextAsHtml('bitbucket.web.license.evaluation.expired',
+                                  format_date($license.expiryDate, 'short'),
+                                  bitbucket_help_url('bitbucket.wac.purchase'))}}
+                            {/param}
+                        {/call}
+                    {else}
+                        {call aui.message.warning}
+                            {param extraClasses: 'eval-notexpired'/}
+                            {param content}
+                                {{getTextAsHtml('bitbucket.web.license.evaluation',
+                                  format_date($license.expiryDate, 'short'),
+                                  bitbucket_help_url('bitbucket.wac.purchase'))}}
+                            {/param}
+                        {/call}
+                    {/if}
+                {else}
+                    {if $license.maintenanceExpired}
+                        {call aui.message.error}
+                            {param extraClasses: 'commercial-expired'/}
+                            {param content}
+                                {{getText('bitbucket.web.license.maintenance.expired',
+                                    format_date($license.maintenanceExpiryDate, 'short'),
+                                    'https://www.atlassian.com/purchase/renew',
+                                    productFullName())|noAutoescape}}
+                            {/param}
+                        {/call}
+                    {elseif $license.expired}
+                        {call aui.message.error}
+                            {param extraClasses: 'commercial-expired'/}
+                            {param content}
+                                {{getText('bitbucket.web.license.expired',
+                                    format_date($license.expiryDate, 'short'), 'https://www.atlassian.com/purchase/renew')|noAutoescape}}
+                            {/param}
+                        {/call}
+                    {else}
+                        <p class="description">
+                            {{getText('bitbucket.web.license.maintenance',
+                                format_date($license.maintenanceExpiryDate, 'short'),
+                                'https://www.atlassian.com/purchase/renew',
+                                productFullName())|noAutoescape}}
+                        </p>
+                    {/if}
+                {/if}
+
+                {call widget.aui.form.fieldValue}
+                    {param id: 'serverid' /}
+                    {param labelContent}{getText('bitbucket.web.config.serverid')}{/param}
+                    {param valueContent}{$serverId}{/param}
+                {/call}
+
+                {if $license != null}
+                    <h3>{getText('bitbucket.web.license')}</h3>
+                    {if $license.description != null}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'license-description' /}
+                            {param labelContent}{getText('bitbucket.web.config.license')}{/param}
+                            {param valueContent}{$license.description}{/param}
+                        {/call}
+                    {/if}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'license-owner' /}
+                        {param labelContent}{getText('bitbucket.web.config.licensee')}{/param}
+                        {param valueContent}{$license.organisation.name ? $license.organisation.name : ''}{/param}
+                    {/call}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'license-sen' /}
+                        {param labelContent}{getText('bitbucket.web.config.sen')}{/param}
+                        {param valueContent}{$license.supportEntitlementNumber ? $license.supportEntitlementNumber : 'Unknown'}{/param}
+                    {/call}
+                    {if $license.expiryDate != null}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'license-expiry' /}
+                            {param labelContent}{getText('bitbucket.web.config.license.expires')}{/param}
+                            {param valueContent}
+                                {call bitbucket.internal.widget.date.short}
+                                    {param date: $license.expiryDate/}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {else}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'license-maintenance-expiry' /}
+                            {param labelContent}{getText('bitbucket.web.config.license.maintexpires')}{/param}
+                            {param valueContent}
+                                {call bitbucket.internal.widget.date.short}
+                                    {param date: $license.maintenanceExpiryDate/}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/if}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'license-users' /}
+                        {param labelContent}{getText('bitbucket.web.config.licence.userlimit')}{/param}
+                        {param valueContent}
+                            {if $license.unlimitedNumberOfUsers}
+                                {{getText('bitbucket.web.license.unlimited')}}
+                            {else}
+                                {$license.maximumNumberOfUsers} {if $usersRemainingMessage}({$usersRemainingMessage}){/if}
+                            {/if}
+                        {/param}
+                    {/call}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'license-clustered' /}
+                        {param labelContent}{getText('bitbucket.web.config.license.clustered')}{/param}
+                        {param valueContent}
+                            {if $license.clusteringEnabled}
+                                {{getText('bitbucket.web.config.license.clustered.available')}}
+                            {else}
+                                {{getText('bitbucket.web.config.license.clustered.unavailable')}}
+                            {/if}
+                        {/param}
+                    {/call}
+                    {call bitbucket.internal.admin.licenseEditButton}
+                        {param id: 'license-edit'/}
+                        {param label: getText('bitbucket.web.config.license.edit')/}
+                        {param canEdit: $canEdit/}
+                    {/call}
+                {else}
+                    {call bitbucket.internal.admin.licenseEditButton}
+                        {param id: 'license-add'/}
+                        {param label: getText('bitbucket.web.config.license.add')/}
+                        {param canEdit: $canEdit/}
+                    {/call}
+                {/if}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}
+
+/**
+* @param id
+* @param canEdit
+* @param label
+*/
+{template .licenseEditButton}
+    {call widget.aui.form.buttons}
+        {param content}
+            {if $canEdit}
+                {call bitbucket.internal.buttons.button}
+                    {param id: $id /}
+                    {param isPrimary: true /}
+                    {param buttonText: $label /}
+                    {param href: nav_admin_license_edit() /}
+                {/call}
+            {else}
+                <span class="disabled">
+                    {{getText('bitbucket.web.license.sysadminonly')}}
+                <span>
+            {/if}
+        {/param}
+    {/call}
+{/template}

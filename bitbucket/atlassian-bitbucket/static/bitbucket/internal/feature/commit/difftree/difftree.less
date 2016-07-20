@@ -1,0 +1,214 @@
+@import "/static/global.less";
+
+
+
+.jstree.file-tree {
+    > ul {
+        margin: @baseSpacing 0;
+        padding-left: @doubleSpacing;
+
+        a {
+            color: black;
+            cursor: pointer;
+        }
+    }
+}
+
+/*
+ * jsTree default theme 1.0
+ * Supported features: dots/no-dots, icons/no-icons, focused, loading
+ * Supported plugins: ui (hovered, clicked), checkbox, contextmenu, search
+ */
+
+//Plugin styles
+.jstree {
+    li,
+    ins {
+        background-image:url("images/d.png");
+        background-repeat:no-repeat;
+        background-color:transparent;
+    }
+
+    li {
+        background-position:-90px 0;
+        background-repeat:repeat-y;
+    }
+
+    li.jstree-last {
+        background:transparent;
+    }
+
+    .jstree-open > ins {
+        background-position:-72px 0;
+    }
+
+    .jstree-closed > ins {
+        background-position:-54px 0;
+    }
+
+    .jstree-leaf > ins {
+        background-position:-36px 0;
+        display: none;
+    }
+
+    .jstree-leaf > ins + a {
+        margin-left: 8px; //adjust indent to align file icons with folder icons
+    }
+
+    .jstree-hovered {
+        background:#f9f9f9;
+    }
+
+    .jstree-clicked {
+        background:@primaryActiveColor;
+    }
+
+    a > .jstree-icon.aui-icon {
+        background-image: none;
+        color: @secondaryTextColor;
+        margin-right: 5px;
+
+        &.aui-iconfont-devtools-folder-open:before,
+        &.aui-iconfont-devtools-folder-closed:before {
+            color: @primaryLinkColor;
+        }
+    }
+
+    a.conflict {
+
+        .jstree-icon.aui-icon {
+            .square(@icon-size-xxsmall);
+            background: transparent no-repeat 0 0;
+            background-size: @icon-size-xxsmall;
+            background-image: url(../com.atlassian.bitbucket.server.bitbucket-web:icons/icon-warning.svg) !important; //overwrite !important from stash-new-icons-plugin
+        }
+
+        .jstree-icon.aui-iconfont-devtools-file:before,
+        .jstree-icon.aui-iconfont-devtools-submodule:before,
+        .jstree-icon.aui-iconfont-devtools-file-commented:before {
+            content: none;
+        }
+    }
+
+    a.jstree-loading .jstree-icon {
+        background: url(images/throbber.gif) center center no-repeat !important;
+    }
+
+    li,
+    .jstree-leaf > ins {
+        background:transparent;
+    }
+
+    .jstree-open > ins,
+    .jstree-closed > ins {
+        background:transparent;
+        width: 0;
+        height: 0;
+        border: 4px solid transparent;
+        margin-bottom: 5px;
+        vertical-align: middle;
+        display: inline-block;
+    }
+    .jstree-open > ins {
+        border-bottom: none;
+        border-top-color: @placeholderTextColor;
+        margin-right: 0px;
+    }
+
+    .jstree-closed > ins {
+        border-right: none;
+        border-left-color: @placeholderTextColor;
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+    .jstree-closed > a .aui-icon {
+        margin-left: -1px; //Nudge closed folder left 1px so it lines up with open folder left edge
+        margin-right: 6px; //Increase right margin 1px to account for above and stabilise text position
+    }
+
+    .jstree-no-icons a .jstree-icon {
+        display:none;
+    }
+
+    .jstree-search {
+        font-style:italic;
+    }
+
+    .jstree-no-icons .jstree-checkbox {
+        display:inline-block;
+    }
+
+    .jstree-no-checkboxes .jstree-checkbox {
+        display:none !important;
+    }
+
+    .jstree-checked > a > .jstree-checkbox {
+        background-position:-38px -19px;
+    }
+
+    .jstree-unchecked > a > .jstree-checkbox {
+        background-position:-2px -19px;
+    }
+
+    .jstree-undetermined > a > .jstree-checkbox {
+        background-position:-20px -19px;
+    }
+
+    .jstree-checked > a > .jstree-checkbox:hover {
+        background-position:-38px -37px;
+    }
+
+    .jstree-unchecked > a > .jstree-checkbox:hover {
+        background-position:-2px -37px;
+    }
+
+    .jstree-undetermined > a > .jstree-checkbox:hover {
+        background-position:-20px -37px;
+    }
+
+    a.jstree-search {
+        color:aqua;
+    }
+
+    .jstree-locked a {
+        color:silver; cursor:default;
+    }
+
+    &#jstree-marker {
+        background:url("images/d.png") -41px -57px no-repeat !important;
+        text-indent:-100px;
+    }
+}
+
+// Bitbucket overrides and theming
+.bitbucket-theme {
+    .jstree {
+        .change-type-ADD {
+            color: @lozengeNewColor;
+        }
+        .change-type-DELETE {
+            color: @lozengeRemovedColor;
+            text-decoration: line-through;
+        }
+        .change-type-MODIFY {
+            color: @lozengeModifiedColor;
+        }
+        .change-type-MOVE,
+        .change-type-COPY {
+            color: @lozengeMovedColor;
+        }
+
+        a {
+            padding: @halfSpacing;
+            margin-right: 1em;
+            .border-radius(3px);
+            .transition(background-color 0.2s);
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+    }
+}

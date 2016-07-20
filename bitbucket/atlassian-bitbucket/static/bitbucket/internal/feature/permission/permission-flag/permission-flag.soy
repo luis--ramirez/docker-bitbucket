@@ -1,0 +1,35 @@
+{namespace bitbucket.internal.feature.permission.flag}
+
+/**
+ * @param name
+ * @param entityType
+ * @param count
+ */
+{template .added}
+    {switch $entityType}
+        {case 'user'}
+            {if $count == 1}
+                {getTextAsHtml('bitbucket.web.permission.user.message.added.single.html', $name)}
+            {else}
+                {getTextAsHtml('bitbucket.web.permission.user.message.added.multiple.html', $count)}
+            {/if}
+        {case 'group'}
+            {if $count == 1}
+                {getTextAsHtml('bitbucket.web.permission.group.message.added.single.html', $name)}
+            {else}
+                {getTextAsHtml('bitbucket.web.permission.group.message.added.multiple.html', $count)}
+            {/if}
+    {/switch}
+{/template}
+
+/**
+ * @param name
+ * @param entityType
+ */
+{template .deleted}
+    {if $entityType == 'user'}
+        {getTextAsHtml('bitbucket.web.permission.user.message.removed.html', $name)}
+    {elseif $entityType == 'group'}
+        {getTextAsHtml('bitbucket.web.permission.group.message.removed.html', $name)}
+    {/if}
+{/template}

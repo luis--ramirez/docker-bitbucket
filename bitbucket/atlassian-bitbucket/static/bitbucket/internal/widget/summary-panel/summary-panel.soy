@@ -1,0 +1,95 @@
+{namespace bitbucket.internal.widget.summaryPanel}
+
+/**
+ * @api private
+ *
+ * @param linkContent
+ * @param? linkHref
+ * @param? linkClass
+ * @param? linkTooltip
+ * @param? linkExtraAttributes
+ * @param? iconClass
+ * @param? iconText
+ * @param? iconTooltip
+ * @param? iconUrl
+ * @param? extraContent
+ * @param? extraClasses
+ */
+{template .overviewWebPanel private="true"}
+    <div class="plugin-item{if $extraClasses} {$extraClasses}{/if}">
+
+        {if length($linkContent) > 0}
+            <a href="{$linkHref ? $linkHref : '#'}"
+                    {if $linkClass} class="{$linkClass}"{/if}
+                    {if $linkTooltip} title="{$linkTooltip}"{/if}
+                    {if $linkExtraAttributes}
+                        {call aui.renderExtraAttributes}
+                            {param extraAttributes: $linkExtraAttributes /}
+                        {/call}
+                    {/if}>
+                {call .overviewWebPanelIcon data="all" /}
+                {$linkContent|noAutoescape}
+            </a>
+        {elseif $iconClass and length($iconClass) > 0}
+            {call .overviewWebPanelIcon data="all" /}
+        {/if}
+        {if $extraContent}
+            <div class="item-extra-content">
+                {$extraContent|noAutoescape}
+            </div>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @api private
+ *
+ * @param? iconClass
+ * @param? iconText
+ * @param? iconTooltip
+ * @param? iconUrl
+ */
+{template .overviewWebPanelIcon private="true"}
+    <span class="aui-icon{if $iconClass} {$iconClass}{/if}" {if $iconTooltip}title="{$iconTooltip}"{/if} >
+        {if $iconUrl}<img src="{$iconUrl}" alt="" />{/if}{if $iconText}{$iconText}{/if} // empty alt because icon is optional, and is a decorative image in addition to the link text
+    </span>
+{/template}
+
+/**
+ * @api public
+ *
+ * @param? linkText
+ * @param? linkHref
+ * @param? linkClass
+ * @param? linkTooltip
+ * @param? linkExtraAttributes
+ * @param? iconClass
+ * @param? iconUrl
+ * @param? count
+ * @param? extraContent
+ * @param? extraClasses
+ */
+{template .relatedEntitiesWebPanel}
+    {call .overviewWebPanel data="all"}
+        {param linkContent}
+            {if $count}<strong class="count">{$count}</strong>{sp}{/if}{if $linkText}<span class="label">{$linkText}</span>{/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param linkContent
+ * @param? linkHref
+ * @param? linkExtraAttributes
+ * @param? linkClass
+ * @param? iconClass
+ * @param? iconTooltip
+ * @param? iconUrl
+ * @param? extraContent
+ * @param? extraClasses
+ */
+{template .linkWebPanel}
+    {call .overviewWebPanel data="all"}
+        {param iconClass: 'aui-icon-small' + ($iconClass ? ' ' + $iconClass : '') /}
+    {/call}
+{/template}

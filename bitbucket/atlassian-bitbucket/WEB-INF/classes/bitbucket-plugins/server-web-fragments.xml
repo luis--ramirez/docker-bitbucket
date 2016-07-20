@@ -1,0 +1,1013 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-server-web-fragments" name="System Server Side Web Fragments">
+
+    <!-- Logo -->
+    <!-- This web panel is referenced by key in the mirror layout (mirror.soy) -->
+    <web-panel key="home-link" name="Bitbucket SVG Logo WebPanel" weight="10" location="header.global.primary">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/header.global.primary.homeLink"/>
+    </web-panel>
+
+    <!-- Global Primary Navigation -->
+
+    <web-item key="projects-menu" name="Projects Global web item" weight="20" section="header.global.primary">
+        <label key="bitbucket.web.menu.projects"/>
+        <link>${navBuilder.allProjects().buildRelNoContext()}</link>
+        <styleClass>projects-link</styleClass>
+        <conditions type="AND">
+            <conditions type="OR">
+                <conditions type="AND">
+                    <condition class="com.atlassian.bitbucket.web.conditions.IsFeatureEnabledCondition">
+                        <param name="key" value="public.access"/>
+                    </condition>
+                    <condition class="com.atlassian.bitbucket.web.conditions.IsAuthenticationOrMaintenancePageCondition" invert="true" />
+                </conditions>
+                <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+            </conditions>
+        </conditions>
+    </web-item>
+
+    <web-item key="repositories-menu" name="Repositories Global web item" weight="30" section="header.global.primary">
+        <label key="bitbucket.web.menu.repositories"/>
+        <link linkId="repositories-menu-trigger">/</link>
+        <styleClass>recent-repositories</styleClass>
+        <conditions type="AND">
+            <conditions type="OR">
+                <conditions type="AND">
+                    <condition class="com.atlassian.bitbucket.web.conditions.IsFeatureEnabledCondition">
+                        <param name="key" value="public.access"/>
+                    </condition>
+                    <condition class="com.atlassian.bitbucket.web.conditions.IsAuthenticationOrMaintenancePageCondition" invert="true" />
+                </conditions>
+                <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+            </conditions>
+        </conditions>
+    </web-item>
+
+    <web-item key="help-menu" name="Help Global web item" weight="5" section="header.global.secondary">
+        <label key="bitbucket.web.menu.help"/>
+        <tooltip key="bitbucket.web.menu.help"/>
+        <styleClass>help-link</styleClass>
+        <param name="iconClass">aui-icon-small aui-iconfont-help</param>
+        <link>${helpPathService.getPageUrl('bitbucket.help.default')}</link>
+    </web-item>
+
+    <web-item key="administration-menu" name="Administration Global web item" weight="10" section="header.global.secondary">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">ADMIN</param>
+        </condition>
+        <styleClass>admin-link</styleClass>
+        <param name="iconClass">aui-icon-small aui-iconfont-configure</param>
+        <label key="bitbucket.web.menu.administration"/>
+        <tooltip key="bitbucket.web.menu.administration"/>
+        <link>${navBuilder.admin().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="global-pr-inbox-menu-item" name="Header dropdown my prs web item" weight="15" section="header.global.secondary">
+        <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+        <label key="bitbucket.web.header.inbox.pullrequests">Inbox</label>
+        <tooltip key="bitbucket.web.header.inbox.menu.tooltip"/>
+        <styleClass>inbox-menu</styleClass>
+        <link absolute="true" linkId="inbox-trigger">#inbox</link>
+    </web-item>
+
+    <!-- Repository sidebar actions -->
+
+    <web-item key="repository-clone" name="Repository clone button" section="bitbucket.web.repository.header.buttons" weight="110">
+        <label key="bitbucket.web.repository.clone"/>
+        <!-- A link doesn't make much sense in this context, the clone URL is provided in the dialog -->
+        <link linkId="clone-repo-button" absolute="true">#set( $H = '#' )$H</link>
+        <tooltip key="bitbucket.web.repository.clone.button.title"/>
+        <styleClass>clone-repo</styleClass>
+        <param name="iconClass" value="icon-clone"/>
+    </web-item>
+
+    <!-- Create Branch = 120 -->
+
+    <web-item key="repository-pull-request" name="Pull request create button" section="bitbucket.web.repository.header.buttons" weight="130">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+                <param name="feature">PULL_REQUESTS</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+                <param name="permission">REPO_READ</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.RepositoryNotEmptyCondition"/>
+        </conditions>
+        <label key="bitbucket.web.repository.create.pull-request"/>
+        <link>#set($builder = $navBuilder.repo($repository).createPullRequest())#if( $atRevisionRef &amp;&amp; !$atRevisionRef.isDefault &amp;&amp; $atRevisionRef.type.id == "branch" )#set($builder = $builder.sourceBranch($atRevisionRef.id))#end#set($urlAsHtml = $builder.buildRelNoContext())$urlAsHtml</link>
+        <tooltip key="bitbucket.web.repository.create.pull-request.title"/>
+        <styleClass>create-pull-request</styleClass>
+        <param name="iconClass" value="icon-create-pull-request"/>
+    </web-item>
+
+    <web-item key="repository-fork" name="Repository fork button" section="bitbucket.web.repository.header.buttons" weight="140">
+        <label key="bitbucket.web.repository.fork"/>
+        <link>${navBuilder.repo($repository).fork().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.repository.fork.button.title"/>
+        <styleClass>fork-repo</styleClass>
+        <param name="iconClass" value="icon-fork"/>
+
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+                <param name="feature">FORK</param>
+            </condition>
+            <condition class="com.atlassian.stash.internal.web.conditions.IsForkingEnabledCondition"/>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+                <param name="permission">REPO_READ</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.RepositoryNotEmptyCondition"/>
+            <condition class="com.atlassian.bitbucket.web.conditions.IsRepositoryForkableCondition"/>
+            <condition class="com.atlassian.bitbucket.web.conditions.IsPersonalRepositoryCondition" invert="true">
+                <param name="onlyMine">true</param>
+            </condition>
+        </conditions>
+    </web-item>
+
+    <!-- Download (stash-archive plugin) = 150-->
+
+    <!-- Repository clone URL -->
+
+    <web-item key="http-clone-url" name="HTTP clone URL" weight="100" section="bitbucket.web.repository.clone">
+        <!-- Protocol acronyms don't need to be i18n'd -->
+        <label>HTTP</label>
+        <link absolute="true" linkId="http-clone-url">${cloneUrl}</link>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsHttpScmHostingEnabledCondition"/>
+        <context-provider class="com.atlassian.stash.internal.web.http.HttpCloneUrlContextProvider"/>
+    </web-item>
+
+    <web-panel key="repository-clone-dialog-content" name="Repository clone inline dialog content" location="bitbucket.web.repository.header" weight="10">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.layout.repositoryCloneDialog"/>
+    </web-panel>
+
+    <!-- This section is deprecated for removal in 4.0 -->
+    <!-- Put web items directly in bitbucket.web.repository.header.buttons -->
+    <web-section key="repository-branch-actions" name="Repository branch and pull request" location="bitbucket.web.repository.header.buttons" weight="90">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <!-- This section is deprecated for removal in 4.0 -->
+    <!-- Put web items directly in bitbucket.web.repository.header.buttons -->
+    <web-section key="repository-actions" name="Repository clone and fork button group" location="bitbucket.web.repository.header.buttons" weight="100">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <!-- Repositories dropdown -->
+
+    <web-section key="recent-repositories-section" name="Recent Repositories menu Section" weight="110" location="repositories-menu">
+        <label key="bitbucket.web.menu.repositories.recentlyviewed"/>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+    </web-section>
+
+    <web-panel key="repositories-menu-contents" weight="10" location="bitbucket.web.pageBottom">
+        <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+        <resource name="view" type="static">
+            <![CDATA[
+                <script type="text/javascript">require('bitbucket/internal/layout/base/menu/recent-repos').initMenu('repositories-menu-trigger');</script>
+            ]]>
+        </resource>
+    </web-panel>
+
+    <web-section key="public-repo-list-link-section" name="Public repositories list menu section" weight="210" location="repositories-menu">
+        <label/> <!-- no label so this section on the menu has no title -->
+        <condition class="com.atlassian.bitbucket.web.conditions.IsFeatureEnabledCondition">
+            <param name="key" value="public.access"/>
+        </condition>
+    </web-section>
+
+    <web-item key="public-repo-list-link" name="Public repositories list menu item" weight="10" section="repositories-menu/public-repo-list-link-section">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.menu.public.repo.list"/>
+        <tooltip key="bitbucket.web.menu.public.repo.list.tooltip">
+            <param name="param0">$productName</param>
+        </tooltip>
+        <link>${navBuilder.allRepos().publicVisibility().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Help dropdown -->
+
+    <web-section key="help-items-section" name="General help items" weight="110" location="help-menu" />
+
+    <web-item key="general-help" name="General Bitbucket Help" weight="10" section="help-menu/help-items-section">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.menu.onlinehelp"/>
+        <tooltip key="bitbucket.web.menu.onlinehelp.tooltip">
+            <param name="param0">$productName</param>
+        </tooltip>
+        <link>${helpPathService.getPageUrl('bitbucket.help.default')}</link>
+    </web-item>
+
+    <web-item key="learn-git" name="Learn Git" weight="15" section="help-menu/help-items-section">
+        <label key="bitbucket.web.menu.learngit"/>
+        <tooltip key="bitbucket.web.menu.learngit.tooltip"/>
+        <!-- need to do this nonsense to avoid double escaping via velocity -->
+        <link>#set( $urlHtml = ${helpPathService.getPageUrl('bitbucket.wac.git')} )${urlHtml}</link>
+    </web-item>
+
+    <web-item key="getting-started-page-help-link" name="Getting Started page link" weight="17" section="help-menu/help-items-section">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.gettingstarted.help.item.title">
+            <param name="param0">$productName</param>
+        </label>
+        <tooltip key="bitbucket.web.gettingstarted.help.item.description">
+            <param name="param0">$productName</param>
+        </tooltip>
+        <styleClass>getting-started-page-link</styleClass>
+        <link>/getting-started</link>
+    </web-item>
+
+    <web-item key="keyboard-shortcuts-help-link" name="Keyboard Shortcuts" weight="20" section="help-menu/help-items-section">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.keyboardshortcut.header"/>
+        <tooltip key="bitbucket.web.keyboardshortcut.tooltip">
+            <param name="param0">$productName</param>
+        </tooltip>
+        <styleClass>keyboard-shortcut-link</styleClass>
+        <link>/#set( $H = '#' )$H</link>
+    </web-item>
+
+    <!-- User dropdown -->
+
+    <web-section key="user-settings-section" name="User Settings Web Section" weight="110" location="header.global.secondary.user">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <web-item key="profile-menu-item" name="User profile web item" weight="10" section="user-settings-section">
+        <label key="bitbucket.web.menu.profile"/>
+        <link>${navBuilder.profile().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="account-menu-item" name="User account web item" weight="11" section="user-settings-section">
+        <label key="bitbucket.web.menu.account"/>
+        <link>${navBuilder.account().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-section key="user-logout-section" name="User Logout Web Section" weight="210" location="header.global.secondary.user">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <web-item key="logout-menu-item" name="Logout web item" weight="10" section="user-logout-section">
+        <label key="bitbucket.web.menu.logout"/>
+        <styleClass>logout-link</styleClass>
+        <link>${navBuilder.logout().buildRelNoContext()}</link>
+    </web-item>
+
+
+    <!-- Project tabs -->
+
+    <web-item key="projects-repositories-tab" name="Project repositories tab web item" weight="10" section="atl.project.nav">
+        <label key="bitbucket.web.project.tabs.repositories"/>
+        <link>${navBuilder.project($project).buildRelNoContext()}</link>
+        <param name="iconClass" value="aui-icon-small aui-iconfont-devtools-repository" />
+        <styleClass>repositories-nav</styleClass>
+    </web-item>
+
+    <!--weight is set to 5000 to make it trivial to keep the settings tab at the back-->
+    <web-item key="projects-settings-tab" name="Project settings tab web item" weight="0" section="internal.project.sidebar.footer">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition">
+            <param name="permission">PROJECT_ADMIN</param>
+        </condition>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsPersonalProjectCondition" invert="true"/>
+        <label key="bitbucket.web.project.tabs.settings"/>
+        <link>${navBuilder.project($project).settings().buildRelNoContext()}</link>
+        <param name="iconClass" value="icon-settings" />
+        <styleClass>aui-sidebar-settings-button</styleClass>
+    </web-item>
+
+    <!-- Project settings -->
+    <web-section key="project-settings-section" name="Project settings section" weight="10" location="bitbucket.project.settings.panel">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <web-item key="project-general-settings" name="Project settings item" weight="10" section="bitbucket.project.settings.panel/project-settings-section">
+        <label key="bitbucket.web.project.settings.tab.settings"/>
+        <tooltip key="bitbucket.web.project.settings.tab.settings.tooltip"/>
+        <link>${navBuilder.project($project).settings().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="projects-settings-permissions-tab" name="Project tab permissions section web item" weight="30" section="bitbucket.project.settings.panel/project-settings-section">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition">
+            <param name="permission">PROJECT_ADMIN</param>
+        </condition>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsPersonalProjectCondition" invert="true"/>
+        <label key="bitbucket.web.project.settings.tab.permissions"/>
+        <tooltip key="bitbucket.web.project.settings.tab.permissions.tooltip"/>
+        <link>${navBuilder.project($project).permissions().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-section key="project-settings-addons-section" name="Project addons section" weight="30" location="bitbucket.project.settings.panel">
+        <label key="bitbucket.web.project.settings.tab.addons.section"/>
+    </web-section>
+
+    <!-- Repository settings -->
+    <web-section key="repository-settings-section" name="Repository settings section" weight="10" location="bitbucket.repository.settings.panel">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <web-item key="repository-settings-general" name="Repository details tab" weight="10" section="bitbucket.repository.settings.panel/repository-settings-section">
+        <label key="bitbucket.web.repository.settings.tab.settings"/>
+        <tooltip key="bitbucket.web.repository.settings.tab.settings.tooltip"/>
+        <link>${navBuilder.repo($repository).settings().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-section key="repository-permissions-section" name="Repository permissions section" weight="20" location="bitbucket.repository.settings.panel">
+        <label key="bitbucket.web.repository.settings.tab.permissions.section"/>
+    </web-section>
+
+    <web-item key="repository-settings-repository-permissions" name="Repository permissions tab" weight="10" section="bitbucket.repository.settings.panel/repository-permissions-section">
+        <label key="bitbucket.web.repository.settings.tab.permissions"/>
+        <tooltip key="bitbucket.web.repository.settings.tab.permissions.tooltip"/>
+        <link>${navBuilder.repo($repository).permissions().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- 20 = Branch Permissions -->
+    <!-- 30 = Access keys -->
+    <!-- 40 = Audit log -->
+
+    <web-section key="repository-workflow-section" name="Repository workflow section" weight="30" location="bitbucket.repository.settings.panel">
+        <label key="bitbucket.web.repository.settings.tab.workflow.section"/>
+    </web-section>
+
+    <web-item key="repository-settings-hooks" name="Repository hook settings tab" weight="10" section="bitbucket.repository.settings.panel/repository-workflow-section">
+        <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+            <param name="feature">HOOKS</param>
+        </condition>
+        <label key="bitbucket.web.repository.settings.tab.hooks"/>
+        <tooltip key="bitbucket.web.repository.settings.tab.hooks.tooltip"/>
+        <link>${navBuilder.repo($repository).hooks().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="repository-settings-pull-requests" name="Pull Request settings tab" weight="20" section="bitbucket.repository.settings.panel/repository-workflow-section">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+                <param name="feature">PULL_REQUESTS</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasFormFragments">
+                <param name="formKey">bitbucket.page.repository.settings.pullRequests</param>
+            </condition>
+        </conditions>
+        <label key="bitbucket.web.repository.settings.tab.pullRequests"/>
+        <tooltip key="bitbucket.web.repository.settings.tab.pullRequests.tooltip"/>
+        <link>${navBuilder.repo($repository).settings().pullRequests().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- 30 = Branching model -->
+    <!-- 40 = Ref syncing -->
+    <!-- 50 = JIRA workflow triggers -->
+
+    <web-section key="repository-settings-addons-section" name="Repository addons section" weight="40" location="bitbucket.repository.settings.panel">
+        <label key="bitbucket.web.repository.settings.tab.addons.section"/>
+    </web-section>
+
+    <!-- Project details action buttons -->
+
+    <web-item key="projects-settings-delete-button" name="Project delete button web item" weight="10" section="bitbucket.project.settings.action">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition">
+            <param name="permission">PROJECT_ADMIN</param>
+        </condition>
+        <label key="bitbucket.web.project.delete"/>
+        <link linkId="projects-settings-delete-button">${navBuilder.project($project).delete().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Project list actions -->
+    <web-item key="projects-actions-create-button" name="Create project button" weight="10" section="bitbucket.project.list.actions">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">PROJECT_CREATE</param>
+        </condition>
+        <label key="bitbucket.web.project.list.createproject.link"/>
+        <styleClass>aui-button-light create-project-link</styleClass>
+        <link>${navBuilder.createProject().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Project overview actions -->
+    <web-item key="project-overview-actions-create-repo" name="Create repository button" weight="10" section="bitbucket.project.overview.actions">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition">
+            <param name="permission">PROJECT_ADMIN</param>
+        </condition>
+        <label key="bitbucket.web.project.overview.createrepo.link"/>
+        <styleClass>create-repository-link</styleClass>
+        <link>${navBuilder.project($project).createRepo().buildRelNoContext()}</link>
+        <param name="iconClass" value="aui-icon-small aui-iconfont-add" />
+    </web-item>
+
+    <!-- Project List sidebar -->
+
+    <web-item key="project-list-sidebar-getting-started-help" name="Project List Getting Started Web Item" section="bitbucket.project.list.sidebar.items" weight="10">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.project.help.getting.started.title"/>
+        <link>${helpPathService.getPageUrl('bitbucket.help.default')}</link>
+        <styleClass>getting-started</styleClass>
+        <tooltip key="bitbucket.web.project.help.getting.started.desc">
+            <param name="param0">$productName</param>
+        </tooltip>
+    </web-item>
+
+    <web-item key="project-list-sidebar-workflows-help" name="Project List Workflows Web Item" section="bitbucket.project.list.sidebar.items" weight="20">
+        <label key="bitbucket.web.project.help.workflows.title"/>
+        <link>${helpPathService.getPageUrl('bitbucket.help.workflow.strategies')}</link>
+        <styleClass>workflows</styleClass>
+        <tooltip key="bitbucket.web.project.help.workflows.desc"/>
+    </web-item>
+
+    <web-item key="project-list-sidebar-development-help" name="Project List Development Web Item" section="bitbucket.project.list.sidebar.items" weight="30">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.project.help.development.title"/>
+        <link>${helpPathService.getPageUrl('bitbucket.dac.default')}</link>
+        <styleClass>development</styleClass>
+        <tooltip key="bitbucket.web.project.help.development.desc">
+            <param name="param0">$productName</param>
+        </tooltip>
+    </web-item>
+
+    <web-item key="project-list-sidebar-administration-help" name="Project List Administration Web Item" section="bitbucket.project.list.sidebar.items" weight="40">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.ProductNameContextProvider"/>
+        <label key="bitbucket.web.project.help.administration.title">
+            <param name="param0">$productName</param>
+        </label>
+        <link>${helpPathService.getPageUrl('bitbucket.help.admin.guide')}</link>
+        <styleClass>administration</styleClass>
+        <tooltip key="bitbucket.web.project.help.administration.desc">
+            <param name="param0">$productName</param>
+        </tooltip>
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">ADMIN</param>
+        </condition>
+    </web-item>
+
+    <!-- User Account Tabs -->
+
+    <web-item key="account-settings-section" name="Account Settings tab web item" weight="10" section="bitbucket.user.account.nav">
+        <label key="bitbucket.web.user.account.tabs.settings"/>
+        <link>${navBuilder.account().settings().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="account-password-section" name="Change Password tab web item" weight="20" section="bitbucket.user.account.nav">
+        <label key="bitbucket.web.user.account.tabs.changepassword"/>
+        <link>${navBuilder.account().password().buildRelNoContext()}</link>
+    </web-item>
+
+
+    <!-- Administration -->
+
+    <web-item key="atl.admin.nav.overview" name="Administration Tabs Overview web item" weight="10" section="atl.admin.nav">
+        <label key="bitbucket.web.admin.nav.overview"/>
+        <link>${navBuilder.admin().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Accounts -->
+
+    <web-section key="admin-general-section" name="Administration Web Section" weight="110" location="atl.admin">
+        <label key="bitbucket.web.admin.general"/>
+    </web-section>
+
+    <web-item key="admin-general-users" name="Bitbucket Admin Users web item" weight="10" section="atl.admin/admin-general-section">
+        <label key="bitbucket.web.admin.general.users"/>
+        <link>${navBuilder.admin().users().buildRelNoContext()}</link>
+        <styleClass>icon-admin-users</styleClass>
+        <tooltip key="bitbucket.web.admin.general.users.description"/>
+    </web-item>
+
+    <web-item key="admin-general-groups" name="Bitbucket Admin Groups web item" weight="20" section="atl.admin/admin-general-section">
+        <label key="bitbucket.web.admin.general.groups"/>
+        <styleClass>icon-admin-groups</styleClass>
+        <link>${navBuilder.admin().groups().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.general.groups.description"/>
+    </web-item>
+
+    <web-item key="admin-general-permissions" name="Admin Permissions web item" weight="30" section="atl.admin/admin-general-section">
+        <label key="bitbucket.web.admin.general.permissions"/>
+        <styleClass>icon-admin-permissions</styleClass>
+        <link>${navBuilder.admin().permissions().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.general.permissions.description"/>
+    </web-item>
+
+    <web-item key="admin-security-authentication" name="Security Authentication web item" weight="35" section="atl.admin/admin-general-section">
+        <label key="bitbucket.web.admin.security.authentication"/>
+        <styleClass>icon-admin-authentication</styleClass>
+        <link>${navBuilder.admin().authentication().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.security.authentication.description"/>
+    </web-item>
+
+    <web-item key="admin-general-avatars" name="Admin Avatars web item" weight="40" section="atl.admin/admin-general-section">
+        <label key="bitbucket.web.admin.general.avatars"/>
+        <styleClass>icon-admin-avatars</styleClass>
+        <link>${navBuilder.admin().avatars().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.general.avatars.description"/>
+    </web-item>
+
+    <!-- Settings -->
+
+    <web-section key="admin-settings-section" name="Settings Web Section" weight="120" location="atl.admin">
+        <label key="bitbucket.web.admin.settings"/>
+    </web-section>
+
+    <web-item key="admin-settings-server-settings" name="Settings Server settings web item" weight="10" section="atl.admin/admin-settings-section">
+        <label key="bitbucket.web.admin.settings.serversettings"/>
+        <styleClass>icon-admin-serversettings</styleClass>
+        <link>${navBuilder.admin().serverSettings().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.serversettings.sysadmin.description"/>
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">SYS_ADMIN</param>
+        </condition>
+    </web-item>
+
+    <web-item key="admin-settings-database" name="External database settings web item" weight="20" section="atl.admin/admin-settings-section">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasDatabaseOfTypeCondition" invert="true">
+                <param name="type">H2,HSQLDB</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+        </conditions>
+        <label key="bitbucket.web.admin.settings.database"/>
+        <styleClass>icon-admin-database</styleClass>
+        <link>${navBuilder.admin().database().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.database.description"/>
+    </web-item>
+
+    <web-item key="admin-settings-database-internal" name="Internal database settings web item" weight="20" section="atl.admin/admin-settings-section">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasDatabaseOfTypeCondition">
+                <param name="type">H2,HSQLDB</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+        </conditions>
+        <label key="bitbucket.web.admin.settings.database"/>
+        <styleClass>icon-admin-database admin-database-internal</styleClass>
+        <link>${navBuilder.admin().database().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.database.internal.description"/>
+    </web-item>
+
+    <web-item key="admin-settings-mail-server" name="Settings Mail server web item" weight="30" section="atl.admin/admin-settings-section">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.IsMailServerConfiguredCondition" />
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+        </conditions>
+        <label key="bitbucket.web.admin.settings.mailserver"/>
+        <styleClass>icon-admin-mailserver</styleClass>
+        <link>${navBuilder.admin().mailServer().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.mailserver.description"/>
+    </web-item>
+
+    <web-item key="admin-settings-mail-server-unconfigured" name="Settings Mail server web item" weight="30" section="atl.admin/admin-settings-section">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.IsMailServerConfiguredCondition" invert="true"/>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+        </conditions>
+        <label key="bitbucket.web.admin.settings.mailserver"/>
+        <styleClass>icon-admin-mailserver admin-mailserver-unconfigured</styleClass>
+        <link>${navBuilder.admin().mailServer().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.mailserver.unconfigured.description"/>
+    </web-item>
+
+    <web-item key="admin-settings-licensing" name="Settings licensing web item" weight="40" section="atl.admin/admin-settings-section">
+        <label key="bitbucket.web.admin.settings.licensing"/>
+        <styleClass>icon-admin-licensing</styleClass>
+        <link>${navBuilder.admin().licensing().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.licensing.description"/>
+    </web-item>
+
+    <web-item key="admin-settings-clustering" name="Cluster Settings" weight="50" section="atl.admin/admin-settings-section">
+        <label key="bitbucket.web.admin.settings.clustering"/>
+        <styleClass>icon-admin-clustering</styleClass>
+        <link>${navBuilder.admin().clustering().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.settings.clustering.description"/>
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+        </conditions>
+    </web-item>
+
+    <!-- Add-ons -->
+
+    <web-section key="admin-plugins-section" name="Add-ons Web Section" weight="130" location="atl.admin">
+        <label key="bitbucket.web.admin.addons"/>
+    </web-section>
+
+    <!-- Support -->
+
+    <web-section key="admin-support-section" name="Support Section" weight="140" location="atl.admin">
+        <label key="bitbucket.web.admin.support"/>
+    </web-section>
+
+    <web-item key="admin-support-logging" name="Support logging web item" weight="30" section="atl.admin/admin-support-section">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+            <param name="permission">SYS_ADMIN</param>
+        </condition>
+        <label key="bitbucket.web.admin.support.profiling"/>
+        <link>${navBuilder.admin().logging().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.admin.support.logging.description"/>
+    </web-item>
+
+    <!-- User list actions -->
+
+    <web-item key="users-actions-create-button" name="Create user button" weight="10" section="bitbucket.user.list.actions">
+        <condition class="com.atlassian.bitbucket.web.conditions.CanCreateUsersCondition"/>
+        <label key="bitbucket.web.user.create"/>
+        <styleClass>create-user-link</styleClass>
+        <link>${navBuilder.admin().users().create().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Group list actions -->
+
+    <web-item key="groups-actions-create-button" name="Create group button" weight="10" section="bitbucket.group.list.actions">
+        <condition class="com.atlassian.bitbucket.web.conditions.CanCreateGroupsCondition"/>
+        <label key="bitbucket.web.group.create"/>
+        <styleClass>create-group-link</styleClass>
+        <link>${navBuilder.admin().groups().create().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Repository clone help info -->
+
+    <web-panel key="stash.repository.panel.gettingstarted" name="Repository getting started panel" weight="10" location="bitbucket.web.repository.clone.dialog.help.info">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.repository.gettingStartedInfo"/>
+    </web-panel>
+
+    <web-panel key="stash.repository.panel.readonly" name="Repository readonly panel" weight="20" location="bitbucket.web.repository.clone.dialog.help.info">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition" invert="true">
+            <param name="permission">REPO_WRITE</param>
+        </condition>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.repository.readOnlyInfo"/>
+    </web-panel>
+
+    <!-- Repository Navigation Tabs -->
+
+    <web-item key="bitbucket.repository.nav.files" name="Repository files web item" weight="10" section="bitbucket.repository.nav">
+        <label key="bitbucket.web.repository.nav.files"/>
+        <link linkId="repository-nav-files">${navBuilder.repo($repository).browse().buildRelNoContext()}</link>
+        <param name="iconClass" value="icon-source" />
+    </web-item>
+
+    <web-item key="bitbucket.repository.nav.commits" name="Repository commits web item" weight="20" section="bitbucket.repository.nav">
+        <condition class="com.atlassian.bitbucket.web.conditions.RepositoryNotEmptyCondition"/>
+        <label key="bitbucket.web.repository.nav.commits"/>
+        <link linkId="repository-nav-commits">${navBuilder.repo($repository).commits().buildRelNoContext()}</link>
+        <param name="iconClass" value="icon-commits" />
+        <styleClass>commits-nav</styleClass>
+    </web-item>
+
+    <web-item key="bitbucket.repository.nav.branches" name="Repository branches web item" weight="30"
+              section="bitbucket.repository.nav">
+        <condition class="com.atlassian.bitbucket.web.conditions.RepositoryNotEmptyCondition"/>
+        <label key="bitbucket.web.repository.nav.branches"/>
+        <link linkId="repository-nav-branches">${navBuilder.repo($repository).branches().buildRelNoContext()}</link>
+        <param name="iconClass" value="icon-branches" />
+    </web-item>
+
+    <web-item key="bitbucket.repository.nav.pull-requests" name="Repository pull requests web item" weight="40" section="bitbucket.repository.nav">
+        <conditions type="AND">
+            <!-- Pull requests are only visible if the backing SCM supports them -->
+            <condition class="com.atlassian.bitbucket.web.conditions.IsScmFeatureSupportedCondition">
+                <param name="feature">PULL_REQUESTS</param>
+            </condition>
+            <!-- Pull requests are only visible to logged-in users -->
+            <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+                <param name="permission">REPO_READ</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.RepositoryNotEmptyCondition"/>
+        </conditions>
+        <label key="bitbucket.web.repository.nav.pull-requests"/>
+        <link linkId="repository-nav-pull-requests">${navBuilder.repo($repository).pullRequests().buildRelNoContext()}</link>
+        <param name="iconClass" value="icon-pull-requests" />
+    </web-item>
+
+    <!-- Count lozenge within the Open tab web-item -->
+    <web-panel key="bitbucket.repository.nav.pull-requests.count" name="Pull Requests List Open Count web panel" weight="10" location="bitbucket.repository.nav.pull-requests.badge">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.PullRequestCountContextProvider">
+            <param name="state">OPEN</param>
+        </context-provider>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.widget.badges.openPullRequestCount"/>
+    </web-panel>
+
+    <!--weight is set to 5000 to make it trivial to keep the settings tab at the back-->
+    <web-item key="bitbucket.repository.nav.settings" name="Repository settings web item" weight="0" section="internal.repository.sidebar.footer">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+            <param name="permission">REPO_ADMIN</param>
+        </condition>
+        <styleClass>aui-sidebar-settings-button</styleClass>
+        <label key="bitbucket.web.repository.nav.settings"/>
+        <link>${navBuilder.repo($repository).settings().buildRelNoContext()}</link>
+        <param name="iconClass" value="icon-settings" />
+    </web-item>
+
+    <!-- Repository Settings Actions -->
+
+    <web-item key="repository-settings-move-button" name="Move Repository web item" weight="10" section="bitbucket.repository.settings.action">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+            <param name="permission">REPO_ADMIN</param>
+        </condition>
+        <styleClass>move-repository-link</styleClass>
+        <label key="bitbucket.web.repository.move.repository"/>
+        <tooltip key="bitbucket.web.repository.move.repository.tooltip"/>
+        <link linkId="repository-settings-move-button">#set( $H = '#' )$H</link>
+    </web-item>
+
+    <web-item key="repository-settings-delete-button" name="Delete Repository web item" weight="20" section="bitbucket.repository.settings.action">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasRepositoryPermissionCondition">
+            <param name="permission">REPO_ADMIN</param>
+        </condition>
+        <styleClass>delete-repository-link</styleClass>
+        <label key="bitbucket.web.repository.delete.repository"/>
+        <tooltip key="bitbucket.web.repository.delete.repository.tooltip"/>
+        <link linkId="repository-settings-delete-button">${navBuilder.repo($repository).delete().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Pull Requests Tabs-->
+
+    <web-item key="bitbucket.pull-request.nav.overview" name="Pull Request Overview web item" weight="10" section="bitbucket.pull-request.nav">
+        <label key="bitbucket.web.pullrequest.nav.overview"/>
+        <link>${navBuilder.repo($repository).pullRequest($pullRequest.id).overview().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="bitbucket.pull-request.nav.diff" name="Pull Request Diff web item" weight="20" section="bitbucket.pull-request.nav">
+        <label key="bitbucket.web.pullrequest.nav.diff"/>
+        <link>${navBuilder.repo($repository).pullRequest($pullRequest.id).diff().buildRelNoContext()}</link>
+    </web-item>
+
+    <web-item key="bitbucket.pull-request.nav.commits" name="Pull Request Commits web item" weight="30" section="bitbucket.pull-request.nav">
+        <label key="bitbucket.web.pullrequest.nav.commits"/>
+        <link>${navBuilder.repo($repository).pullRequest($pullRequest.id).commits().buildRelNoContext()}</link>
+    </web-item>
+
+    <!-- Pull Requests List Tabs-->
+
+    <web-item key="bitbucket.pull-requests.list.nav.open" name="Pull Requests List Open web item" weight="10" section="bitbucket.pull-requests.list.nav">
+        <label key="bitbucket.web.pullrequest.list.nav.open"/>
+        <link linkId="open-pull-requests-tab-link">${navBuilder.repo($repository).pullRequests().open().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.pullrequest.list.open"/>
+    </web-item>
+
+    <web-item key="bitbucket.pull-requests.list.nav.merged" name="Pull Requests List Merged web item" weight="20" section="bitbucket.pull-requests.list.nav">
+        <label key="bitbucket.web.pullrequest.list.nav.merged"/>
+        <link>${navBuilder.repo($repository).pullRequests().merged().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.pullrequest.list.merged"/>
+    </web-item>
+
+    <web-item key="bitbucket.pull-requests.list.nav.declined" name="Pull Request List Declined web item" weight="30" section="bitbucket.pull-requests.list.nav">
+        <label key="bitbucket.web.pullrequest.list.nav.declined"/>
+        <link>${navBuilder.repo($repository).pullRequests().declined().buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.pullrequest.list.declined"/>
+    </web-item>
+
+    <!-- Pull Request Toolbar Deprecated for removal in 5.0 -->
+
+    <web-section key="bitbucket.pull-request.toolbar.actions" name="Pull Request Actions Toolbar" weight="110" location="bitbucket.pull-request.toolbar">
+        <label/> <!-- no label so this section on the menu has no title -->
+    </web-section>
+
+    <web-section key="bitbucket.pull-request.toolbar.section.user-actions" name="Pull Request User Actions Toolbar" weight="210" location="bitbucket.pull-request.toolbar">
+        <label/> <!-- no label so this section on the menu has no title -->
+        <condition class="com.atlassian.bitbucket.web.conditions.CanApprovePullRequestCondition"/>
+    </web-section>
+
+    <!-- - - - - - - - - -
+        Web Panels
+     - - - - - - - - - - -->
+
+    <web-panel key="bitbucket-welcome-mat-no-projects" weight="10" location="bitbucket.web.project.list.banner">
+        <condition class="com.atlassian.bitbucket.web.conditions.NoProjectsExistCondition" />
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.project.list.banner.bitbucketWelcomeMatNoProjects"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-welcome-mat-create-project" weight="20" location="bitbucket.web.project.list.banner">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">PROJECT_CREATE</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.NoProjectsExistCondition" />
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.project.list.banner.bitbucketWelcomeMatCreateProject"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-welcome-mat-no-permission-to-create-project" weight="20" location="bitbucket.web.project.list.banner">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition" invert="true">
+                <param name="permission">PROJECT_CREATE</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.NoProjectsExistCondition" />
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.project.list.banner.bitbucketWelcomeMatNoPermissionToCreateProject"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-welcome-mat-admin" weight="30" location="bitbucket.web.project.list.banner">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">ADMIN</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.NoProjectsExistCondition" />
+            <condition class="com.atlassian.bitbucket.web.conditions.CanCreateUsersCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.project.list.banner.bitbucketWelcomeMatAdmin"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-welcome-mat-no-repositories" weight="10" location="bitbucket.web.project.overview.banner">
+        <condition class="com.atlassian.bitbucket.web.conditions.NoRepositoriesExistForProjectCondition"/>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.project.overview.banner.bitbucketWelcomeMatNoRepositories"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-welcome-mat-create-repository" weight="20" location="bitbucket.web.project.overview.banner">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition">
+                <param name="permission">PROJECT_ADMIN</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.NoRepositoriesExistForProjectCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.project.overview.banner.bitbucketWelcomeMatCreateRepository"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-welcome-mat-no-permission-to-create-repository" weight="20" location="bitbucket.web.project.overview.banner">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition" invert="true">
+                <param name="permission">PROJECT_ADMIN</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.NoRepositoriesExistForProjectCondition" />
+        </conditions>
+        <resource name="view" type="static">
+            <![CDATA[
+                <p class="entity-empty-desc"></p>
+            ]]>
+        </resource>
+    </web-panel>
+
+    <web-panel key="bitbucket-notification-baseurl-mismatch" weight="10" location="bitbucket.notification.banner.header">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.BaseUrlMismatchContextProvider"/>
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+            <condition class="com.atlassian.bitbucket.web.conditions.BaseUrlMismatchCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketBaseUrlMismatch"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-notification-integrity-checks" weight="10" location="bitbucket.notification.banner.header">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.IntegrityChecksContextProvider"/>
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:integrity-check-banner/bitbucket.notification.banner.header.bitbucketIntegrityCheckRunning"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-notification-license-exceeded" weight="10" location="bitbucket.notification.banner.header">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.LicenseExceededContextProvider"/>
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+            <condition class="com.atlassian.bitbucket.web.conditions.HasLicenseStatusCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketNotificationLicenseExceeded"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-notification-unsupported-database" weight="10" location="bitbucket.notification.banner.header">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.DatabaseContextProvider"/>
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">SYS_ADMIN</param>
+            </condition>
+            <condition class="com.atlassian.stash.internal.web.conditions.IsUnsupportedDatabaseCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketNotificationUnsupportedDatabase"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-scm-service-resource-exhausted" weight="10" location="bitbucket.notification.banner.header">
+        <condition class="com.atlassian.bitbucket.web.conditions.ResourceExhaustedCondition"/>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketScmServiceResourceExhausted"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-scm-service-resource-queueing" weight="10" location="bitbucket.notification.banner.header">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.ResourceQueueingCondition"/>
+            <condition class="com.atlassian.bitbucket.web.conditions.ResourceExhaustedCondition" invert="true"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketScmServiceResourceQueueing"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-notification-recovery-mode-on" weight="50" location="bitbucket.notification.banner.header">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.RecoveryModeContextProvider"/>
+        <condition class="com.atlassian.stash.internal.web.conditions.RecoveryModeOnCondition"/>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketRecoveryModeOn"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-notification-plugins-disabled" weight="10" location="bitbucket.notification.banner.header">
+        <conditions type="AND">
+            <condition class="com.atlassian.bitbucket.web.conditions.HasGlobalPermissionCondition">
+                <param name="permission">ADMIN</param>
+            </condition>
+            <condition class="com.atlassian.stash.internal.web.conditions.PluginDisabledOnUpgradeCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.notification.banner.header.bitbucketNotificationPluginsDisabled"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-projects-settings-delete-panel" name="Project delete button web panel" weight="10" location="bitbucket.project.settings">
+        <condition class="com.atlassian.bitbucket.web.conditions.HasProjectPermissionCondition">
+            <param name="permission">PROJECT_ADMIN</param>
+        </condition>
+        <resource name="view" type="static"><![CDATA[
+            <script type="text/javascript">require('bitbucket/internal/page/project/settings').initDeleteButton('#projects-settings-delete-button');</script>
+        ]]></resource>
+    </web-panel>
+
+    <web-panel key="bitbucket-userdetails-avatar-from-gravatar-panel" weight="10" location="bitbucket.web.userdetails.avatar.caption">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.userdetails.avatar.caption.bitbucketAvatarFromGravatarPanel"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-account-avatar-from-gravatar-panel" weight="10" location="bitbucket.web.user.account.avatar.caption">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.userdetails.avatar.caption.bitbucketAvatarFromGravatarPanel"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-gravatar-disabled-panel" weight="10" location="bitbucket.web.userdetails.avatar.caption">
+        <condition class="com.atlassian.stash.internal.web.conditions.HasAvatarServiceEnabledCondition" invert="true"/>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.userdetails.avatar.caption.bitbucketGravatarDisabledPanel"/>
+    </web-panel>
+
+    <web-panel key="bitbucket-global-footer" weight="10" location="bitbucket.web.footer">
+        <context-provider class="com.atlassian.stash.internal.web.fragments.GlobalFooterContextProvider"/>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.footer.globalFooter"/>
+    </web-panel>
+
+    <web-item key="userprofile-repositories-tab" name="Repositories tab for user profile" section="bitbucket.user.profile.secondary.tabs" weight="10">
+        <label key="bitbucket.web.profile.repositories.tab"/>
+        <link>${navBuilder.user($profileUser).buildRelNoContext()}</link>
+        <tooltip key="bitbucket.web.profile.repositories.tab.description"/>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsUserOfTypeCondition">
+            <param name="userKey">profileUser</param>
+            <param name="userType">NORMAL</param>
+        </condition>
+    </web-item>
+
+    <web-panel key="userprofile-details-username" name="Profile username details" location="bitbucket.user.profile.header.details" weight="10">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.layout.users.userDetailsUsername"/>
+    </web-panel>
+
+    <web-panel key="userprofile-details-email" name="Profile email details" location="bitbucket.user.profile.header.details" weight="20">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.layout.users.userDetailsEmail"/>
+        <condition class="com.atlassian.bitbucket.web.conditions.IsLoggedInCondition"/>
+    </web-panel>
+
+    <web-panel key="userprofile-repositories-tab-pane" name="Repositories tab pane for user profile" location="userprofile-repositories-tab" weight="10">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.users.profile.repositoriesTabPane"/>
+    </web-panel>
+
+    <web-panel key="userprofile-create-repo-button" name="Create repository button" location="bitbucket.user.profile.header" weight="10">
+        <conditions type="AND">
+            <condition class="com.atlassian.stash.internal.web.conditions.IsPersonalRepositoryEnabledCondition" />
+            <condition class="com.atlassian.bitbucket.web.conditions.IsCurrentUsersProfileCondition"/>
+        </conditions>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.users.profile.createRepositoryButton"/>
+    </web-panel>
+
+    <web-panel key="userprofile-manage-account-button" name="Manage account button" location="bitbucket.user.profile.header" weight="20">
+        <condition class="com.atlassian.bitbucket.web.conditions.IsCurrentUsersProfileCondition"/>
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.users.profile.manageAccountButton"/>
+    </web-panel>
+
+    <web-panel key="account-view-profile-button" name="View profile button" location="bitbucket.user.account.header" weight="10">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.internal.users.account.viewProfileButton"/>
+    </web-panel>
+
+
+    <!-- Getting Started page content panels-->
+
+    <web-panel key="getting-started-panel-hero" name="Getting Started page hero panel" weight="10" location="bitbucket.web.gettingstarted.header">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.gettingstarted.panel.getstarted" />
+    </web-panel>
+
+    <web-panel key="getting-started-panel-repositories" name="Getting Started page repositories panel" weight="10" location="bitbucket.web.gettingstarted.content">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.gettingstarted.panel.birdsEyeView" />
+    </web-panel>
+
+    <web-panel key="getting-started-panel-collaborate" name="Getting Started page collaborate panel" weight="20" location="bitbucket.web.gettingstarted.content">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.gettingstarted.panel.developFreely" />
+    </web-panel>
+
+    <web-panel key="getting-started-panel-codereview" name="Getting Started page codereview panel" weight="30" location="bitbucket.web.gettingstarted.content">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.gettingstarted.panel.feedbackInContext" />
+    </web-panel>
+
+    <web-panel key="getting-started-panel-integration" name="Getting Started page integration panel" weight="40" location="bitbucket.web.gettingstarted.content">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.gettingstarted.panel.linkToJira" />
+    </web-panel>
+
+    <web-panel key="getting-started-panel-call-to-action" name="Getting Started page call-to-action panel" weight="10" location="bitbucket.web.gettingstarted.footer">
+        <resource name="view" type="soy" location="com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates/bitbucket.web.gettingstarted.panel.accountIsReady" />
+    </web-panel>
+
+    <!-- Comment actions -->
+    <web-item key="comment-reply-actions" name="Comment Reply Actions" section="bitbucket.notification.comment.actions" weight="50">
+        <label key="bitbucket.web.comment.reply">Reply</label>
+        <tooltip key="bitbucket.web.comment.reply.tooltip">Click here to reply to this comment.</tooltip>
+        <link absolute="true">
+            #set($outHtml=${navBuilder.repo($pullRequest.toRef.repository).pullRequest($pullRequest.id).comment($comment.id).reply().buildConfigured()})
+            $outHtml
+        </link>
+
+    </web-item>
+
+</atlassian-plugin>

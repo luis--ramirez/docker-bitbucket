@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/history/history",["module","exports","./HistoryManager"],function(c,a,b){Object.defineProperty(a,"__esModule",{value:!0});b=babelHelpers.interopRequireDefault(b);a.default=new b.default;c.exports=a["default"]});

@@ -1,0 +1,236 @@
+@import "/static/global.less";
+
+.pull-request-activity {
+    padding: 0;
+    list-style: none;
+
+    > li {
+        list-style: none;
+        border-top: 1px solid @dividerColor;
+
+        &:first-child {
+            border-top: none;
+        }
+    }
+
+    .diff-comment-activity .file-content,
+    .file-comment-activity .detail .file-comment-container {
+        .border-radius(4px);
+        overflow: hidden;
+        position: relative;
+        border: 1px solid @dividerColor;
+        margin: @baseSpacing 0;
+    }
+
+    .diff-comment-activity .file-content .content-view {
+        margin-bottom: 0;
+        overflow: auto;
+    }
+
+    .diff-comment-activity .file-content .skipped-container {
+        cursor: default;
+    }
+
+    .diff-comment-activity,
+    .activity-item {
+        padding: @baseSpacing 0;
+
+        .CodeMirror {
+            .CodeMirror-sizer {
+                padding-bottom: 0;
+            }
+        }
+
+        .action {
+            margin-left: @baseSpacing;
+        }
+
+        .summary > .user-name {
+            font-weight: bold;
+        }
+
+        .summary > .removed-lozenge-container {
+            float: right;
+        }
+
+        .aui-item.avatar {
+            width: @aui-avatar-size-medium;
+        }
+
+        .user-avatar {
+            vertical-align: middle;
+            margin-right: @baseSpacing;
+        }
+
+        .action,
+        time {
+            vertical-align: baseline;
+        }
+
+        time,
+        .comment-commit-or-diff-link {
+            margin-left: 1em;
+            font-size: @font-size-small;
+            color: @secondaryTextColor;
+        }
+
+        .comment-container time,
+        .comment-commit-or-diff-link {
+            margin-left: 0;
+        }
+    }
+
+    .reviewers-updated-activity {
+
+        // There is no aui iconfont item for a "minus";
+        .removed-symbol {
+            display:inline-block;
+            .square(16px);
+            text-align: center;
+            text-indent: -999em;
+            margin:0 @baseSpacing 0 0;
+            background: url('minus.svg') center no-repeat;
+            background-size: 8px 2px;
+            vertical-align: middle;
+        }
+
+        .aui-iconfont-add-small {
+            margin:0 @baseSpacing 0 0;
+            color: @bitbucket-text-status-added-color;
+        }
+
+        .reviewers + .reviewers {
+            border-top: @divider-border-width solid @dividerColor;
+            border-bottom: @divider-border-width solid @dividerColor;
+            padding: @baseSpacing;
+        }
+
+        .reviewers:first-child {
+            border-top: @divider-border-width solid @dividerColor;
+            padding: @baseSpacing;
+        }
+
+        .reviewers:only-child {
+            border-top: 0 none;
+            padding: 0 @baseSpacing;
+        }
+
+    }
+
+    .activity-item {
+        padding: @baseSpacing 0;
+        transition: background-color 1s ease-out;
+
+        &.new {
+            background-color: #fffde2;
+        }
+
+        &.focused {
+            background-color: @primaryActiveColor;
+        }
+
+        .activity-item-content {
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+
+            > .pull-request-state-lozenge,
+            > .avatar {
+                display: table-cell;
+                width: @aui-avatar-size-medium + @baseSpacing;
+                line-height: @aui-avatar-size-medium;
+            }
+
+            > * + .avatar {
+                padding-left: @baseSpacing;
+            }
+
+            > .action {
+                display: table-cell;
+                padding-left: 0;
+
+                .summary {
+                    line-height: @aui-avatar-size-medium;
+
+                    .pull-request-state-lozenge {
+                        margin: 0 @halfSpacing;
+                    }
+
+                    .user-name {
+                        .text-overflow();
+                        max-width: 500px;
+                    }
+                }
+
+                .detail {
+                    padding-bottom: @baseSpacing;
+                }
+            }
+        }
+    }
+
+    .general-comment-form {
+        padding-bottom: @baseSpacing;
+    }
+
+    + .spinner {
+        .square(@spinner-size-large);
+        margin: 16px auto 0;
+    }
+
+    .rescope {
+
+        .commits-table {
+            margin: @baseSpacing 0 0;
+
+            tbody > tr {
+                &:first-child {
+                    border-top: 1px solid @dividerColor;
+
+                    > td {
+                        border-top: none;
+                    }
+                }
+            }
+
+            .status {
+                width: 70px;
+                vertical-align: inherit;
+            }
+        }
+        .more-commits {
+            @aui-table-row-left-spacing: 2px;
+            margin-top: 0;
+            margin-left: @aui-table-row-left-spacing;
+            padding-top: 10px;
+
+            text-align: center;
+        }
+    }
+
+    .activity-load-new {
+        border-top: @dividerColor;
+        border-top: none;
+        border-bottom: none;
+        height: 50px;
+        text-align: center;
+
+        a {
+            font-size: @font-size-default;
+        }
+    }
+
+    // Match the activity stream branch lozenges to the header branch lozenges
+    // Remove when the activity stream gets updated to use react
+    .activity-item-content .ref-lozenge {
+        border: none;
+
+        .aui-icon {
+            display: none;
+        }
+
+        .name {
+            margin-left: 0;
+        }
+    }
+}

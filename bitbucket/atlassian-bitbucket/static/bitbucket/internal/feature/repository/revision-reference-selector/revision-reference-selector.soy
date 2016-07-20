@@ -1,0 +1,184 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param values
+ * @param isLastPage
+ * @param size
+ * @param? isPreload
+ */
+{template .revisionReferenceSelectorBranchResults}
+    {call .revisionReferenceSelectorResults}
+        {param values: $values/}
+        {param isLastPage: $isLastPage/}
+        {param size: $size/}
+        {param isPreload: $isPreload/}
+        {param noResultsText: getText('bitbucket.web.revisionref.selector.no.branches')/}
+        {param noMoreResultsText: getText('bitbucket.web.revisionref.selector.no.more.branches')/}
+    {/call}
+{/template}
+
+/**
+ * @param values
+ * @param isLastPage
+ * @param size
+ * @param? isPreload
+ */
+{template .revisionReferenceSelectorTagResults}
+    {call .revisionReferenceSelectorResults}
+        {param values: $values/}
+        {param isLastPage: $isLastPage/}
+        {param size: $size/}
+        {param isPreload: $isPreload/}
+        {param noResultsText: getText('bitbucket.web.revisionref.selector.no.tags')/}
+        {param noMoreResultsText: getText('bitbucket.web.revisionref.selector.no.more.tags')/}
+    {/call}
+{/template}
+
+/**
+ * @param values
+ * @param isLastPage
+ * @param size
+ * @param? isPreload
+ */
+{template .revisionReferenceSelectorCommitResults}
+    {call .revisionReferenceSelectorResults}
+        {param values: $values/}
+        {param isLastPage: $isLastPage/}
+        {param size: $size/}
+        {param isPreload: $isPreload/}
+        {param noResultsText: getText('bitbucket.web.revisionref.selector.no.commits')/}
+        {param noMoreResultsText: getText('bitbucket.web.revisionref.selector.no.more.commits')/}
+    {/call}
+{/template}
+
+/**
+ * @param values
+ * @param isLastPage
+ * @param size
+ * @param? isPreload
+ * @param? noResultsText
+ * @param? noMoreResultsText
+ */
+{template .revisionReferenceSelectorResults}
+    {foreach $ref in $values}
+        <li class="result {if $isPreload}preload{/if}">
+            <a href="{$ref.url ? $ref.url : '#'}" data-id="{$ref.id}" tabindex="-1">
+                {call .revisionReferenceSelectorRef}
+                    {param ref: $ref/}
+                {/call}
+            </a>
+        </li>
+    {/foreach}
+    {if $isLastPage}
+        {if $size > 0}
+        //values.length is unreliable because some values may have been removed by the deduping process.
+        //As long as we are on the last page and the size is greater than 0, it means we've displayed at least 1 result, preload or regular.
+        <li class="no-results">
+            {$noMoreResultsText ? $noMoreResultsText : getText('bitbucket.web.revisionref.selector.no.more.results')}
+        </li>
+        {else}
+        <li class="no-results">
+            {$noResultsText ? $noResultsText : getText('bitbucket.web.revisionref.selector.no.results')}
+        </li>
+        {/if}
+    {/if}
+{/template}
+
+/**
+ * @param? id
+ * @param? ref  //Either `ref` (object) or plain `text`
+ * @param? text
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .revisionReferenceSelectorTrigger}
+    {call bitbucket.internal.widget.searchableSelectorTriggerGeneric}
+        {param id: $id/}
+        {param content}
+            {call .revisionReferenceSelectorTriggerContent}
+                {param ref: $ref/}
+                {param text: $text/}
+            {/call}
+        {/param}
+        {param autofocus: $autofocus /}
+        {param extraClasses: 'revision-reference-selector-trigger' + ($extraClasses ? ' ' + $extraClasses : '')/}
+        {param extraAttributes: $extraAttributes/}
+        {param titleContent}
+            {call .revisionReferenceSelectorTitle}
+                {param text: $text /}
+                {param ref: $ref /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param? id
+ * @param? ref  //Either `ref` (object) or plain `text`
+ * @param? text
+ * @param? fieldName     //Name for form field
+ * @param? fieldId     //ID for form field
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .revisionReferenceSelectorTriggerWithField}
+    {call .revisionReferenceSelectorTrigger}
+        {param id: $id/}
+        {param ref: $ref/}
+        {param text: $text/}
+        {param autofocus: $autofocus/}
+        {param extraClasses: $extraClasses/}
+        {param extraAttributes: $extraAttributes/}
+    {/call}
+    {call widget.aui.form.input}
+        {param id: $fieldId ? $fieldId : ($id ? $id + '-field' : $id) /}
+        {param name:  $fieldName ? $fieldName : $id + '-field' /}
+        {param initialValue: $ref ? $ref.id : null /}
+        {param type: 'hidden'/}
+    {/call}
+{/template}
+
+/**
+ * @param? ref      //This takes either an ref object or a plain text placeholder
+ * @param? text
+ */
+{template .revisionReferenceSelectorTriggerContent}
+    {if $ref}
+        {call .revisionReferenceSelectorRef}
+            {param ref: $ref/}
+        {/call}
+    {else}
+         <span class="placeholder">{$text ? $text : getText('bitbucket.web.revisionref.selector.default')}</span>
+    {/if}
+{/template}
+
+
+
+/**
+ * @param ref
+ */
+{template .revisionReferenceSelectorRef}
+    {if $ref.type}
+        {call aui.icons.icon}
+            {param size: 'small' /}
+            {param useIconFont: true /}
+            {param iconFontSet: 'devtools' /}
+            {param icon: $ref.type.id /}
+            {param accessibilityText: $ref.type.name/}
+        {/call}
+    {/if}
+    <span class="name" title="{$ref.displayId}" data-id="{$ref.id}" data-revision-ref="{to_json($ref)}">
+        {$ref.displayId ? $ref.displayId : $ref.id}
+    </span>
+{/template}
+
+/**
+ * @param? ref
+ * @param? text
+ */
+{template .revisionReferenceSelectorTitle}
+{$ref ? ($ref.displayId ? $ref.displayId : $ref.id) :
+        ($text ? $text : getText('bitbucket.web.revisionref.selector.default'))}
+{/template}

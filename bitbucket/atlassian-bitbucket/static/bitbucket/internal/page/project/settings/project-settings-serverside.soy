@@ -1,0 +1,55 @@
+{namespace bitbucket.internal.project}
+
+/**
+* @param project
+* @param? projectForm
+* @param? fieldErrors
+* @param? formErrors
+* @param? isEditSuccess
+* @param? dataAttributes
+* @param? detailedErrors
+*/
+{template .projectSettings}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.project.generalSettings')}
+    {call bitbucket.internal.layout.projectSettings}
+        {{param windowTitle: getText('bitbucket.web.project.settings.window.title', $project.name) /}}
+        {param project: $project /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeNav: 'project-general-settings' /}
+        {param content}
+            <header class="aui-page-header">
+                <div class="aui-page-header-inner">
+                    <div class="aui-page-header-main">
+                        <h2>{getText('bitbucket.web.project.edit.settings')}</h2>
+                    </div>
+                    <div class="aui-page-header-actions">
+                        {foreach $webItem in getWebItems('bitbucket.project.settings.action',  [ 'project' : $project ])}
+                            {call bitbucket.internal.widget.webItemButton data="$webItem" /}
+                        {/foreach}
+                    </div>
+                </div>
+            </header>
+
+            {if $isEditSuccess}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.changes.saved')}
+                    {/param}
+                {/call}
+            {/if}
+            {call bitbucket.internal.feature.project.settingsForm}
+                {param project: $project /}
+                {param projectForm: $projectForm /}
+                {param fieldErrors: $fieldErrors /}
+                {param formErrors: $formErrors /}
+                {param detailedErrors: $detailedErrors /}
+            {/call}
+            {foreach $webPanel in getWebPanels('bitbucket.project.settings', [ 'project' : $project ])}
+                {$webPanel}
+            {/foreach}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/page/project/settings').onReady();</script>
+        {/param}
+    {/call}
+{/template}

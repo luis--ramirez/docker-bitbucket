@@ -1,0 +1,108 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.diff-view.text-view {
+
+    .add-comment-trigger {
+        .box-sizing(content-box);
+        .user-select(none);
+        display: inline-block;
+        width: @gutterWidth;
+        height: @codeLineHeight;
+        padding: 0 @columnPadding;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        line-height: @codeLineHeight;
+        position: relative;
+        vertical-align: top;
+
+        &.CodeMirror-gutter {
+            height: 0; /* The gutter filler for this column causes an extra vertical scrollbar to appear. */
+        }
+
+        &:before {
+            display: block;
+            position: relative;
+            left: 0;
+            width: @icon-size-xxsmall;
+            height: @codeLineHeight;
+        }
+
+        .aui-icon {
+            .transition(opacity 0.1s ease-in-out);
+            opacity: 0;
+            color: @secondaryTextColor;
+            position: absolute;
+            top: 2px;
+            left: 5px;
+        }
+    }
+
+    .dummy-comment-trigger {
+        .box-sizing(content-box);
+        .user-select(none);
+        background-color: @contentBackgroundColor;
+        display: inline-block;
+        height: @codeLineHeight;
+        width: @gutterWidth;
+        padding: 0 @columnPadding;
+    }
+
+    &.commentable {
+        .add-comment-trigger:focus {
+            outline:0;
+            .aui-iconfont-add-comment {
+                opacity: 1;
+            }
+        }
+
+        .line.commented .add-comment-trigger .aui-iconfont-comment {
+            opacity: 0;
+        }
+
+        &.hide-comments .line.commented .add-comment-trigger .aui-iconfont-comment {
+            opacity: 1;
+        }
+
+        .line:hover {
+            background-color: @commentLineBackgroundColor;
+            .CodeMirror-gutter-elt > * {
+                background-color: @commentLineBackgroundColor;
+            }
+            .add-comment-trigger .aui-iconfont-add-comment {
+                opacity: 1;
+            }
+            .add-comment-trigger:before {
+                width: 0;
+                content: none;
+            }
+        }
+        .line.conflict-marker:hover {
+            background-color: @conflictMarkerColor;
+            .CodeMirror-gutter-elt > * {
+                background-color: @conflictMarkerColor;
+            }
+            .add-comment-trigger {
+                cursor: default;
+                .aui-icon {
+                    display: none;
+                }
+                &:before {
+                    content: '';
+                }
+            }
+        }
+        .source {
+            padding-left: @columnPadding;
+        }
+    }
+
+    .context.line .add-comment-trigger {
+        background-color: @contentBackgroundColor;
+    }
+    &.hide-comments .file-comments {
+        height: 0;
+        display: none;
+    }
+}

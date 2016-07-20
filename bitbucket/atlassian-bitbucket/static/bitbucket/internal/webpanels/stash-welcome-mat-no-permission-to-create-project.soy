@@ -1,0 +1,10 @@
+{namespace bitbucket.web.project.list.banner}
+
+/**
+ *
+ */
+{template .bitbucketWelcomeMatNoPermissionToCreateProject}
+<p class="entity-empty-desc">
+    {{getText('bitbucket.web.welcomemat.no.projects.description', '<a href="' + nav_profile() + '">', '</a>')|noAutoescape}}
+</p>
+{/template}

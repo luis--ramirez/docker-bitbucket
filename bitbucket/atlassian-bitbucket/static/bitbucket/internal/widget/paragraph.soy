@@ -1,0 +1,9 @@
+{namespace bitbucket.internal.widget}
+    
+/**
+ * @param text
+ * @param? extraClasses
+ */
+{template .paragraph}
+    <p{if $extraClasses}{sp}class="{$extraClasses}"{/if}>{$text}</p>
+{/template}

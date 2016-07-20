@@ -1,0 +1,345 @@
+{namespace bitbucket.internal.feature}
+
+/**
+ * @param? line
+ * @param? lineType
+ * @param? comments
+ * @param commitRange
+ * @param? customMapping
+ * @param? extraClasses
+ */
+{template .comments}
+    <div class="comment-container{if $extraClasses} {$extraClasses}{/if}"
+        {if $line} data-line-number="{$line}"{/if}
+        {if $lineType} data-line-type="{$lineType}"{/if}
+        >
+        <div class="panel">
+            <ol class="comment-list">
+                {if $comments}
+                    {foreach $comment in $comments}
+                        {call .comment}
+                            {param comment: $comment /}
+                            {param customMapping: $customMapping /}
+                            {param numOfAncestors: 0 /}
+                            {param pullRequest: $commitRange.pullRequest /}
+                        {/call}
+                    {/foreach}
+                {/if}
+            </ol>
+        </div>
+    </div>
+{/template}
+
+/**
+ * @param comment
+ * @param? pullRequest
+ * @param? numOfAncestors
+ * @param? extraClasses
+ * @param? customMapping
+ */
+{template .comment}
+    <li class="comment{if $comment.isNew} new{/if}{if $comment.isUnread} unread{/if}{if $comment.isFocused} focused{/if}{if $extraClasses} {$extraClasses}{/if}" data-id="{$comment.id}" data-version="{$comment.version}">
+        {call bitbucket.internal.widget.avatar}
+            {param size: 'medium' /}
+            {param person: $comment.author /}
+        {/call}
+        {call .commentContent}
+            {param comment: $comment /}
+            {param customMapping: $customMapping /}
+            {param pullRequest: $pullRequest /}
+        {/call}
+        <ol class="replies{if $numOfAncestors >= 7} no-indent{/if}">
+            {if $comment.comments}
+                {foreach $reply in $comment.comments}
+                    {call .comment}
+                        {param comment: $reply /}
+                        {param customMapping: $customMapping /}
+                        {param pullRequest: $pullRequest /}
+                        {param numOfAncestors: ($numOfAncestors + 1) /}
+                    {/call}
+                {/foreach}
+            {/if}
+        </ol>
+    </li>
+{/template}
+
+
+/**
+ * @param comment
+ * @param pullRequest
+ * @param? hideDelete
+ * @param? customMapping
+ */
+{template .commentContent private="true"}
+    <div class="content">
+        {if $comment.deleted}
+            {getText('bitbucket.web.comment.deleted.detail')}
+        {else}
+                {call bitbucket.internal.widget.userLink}
+                    {param user: $comment.author /}
+                    {param extraClasses: 'user-name' /}
+                {/call}
+            <div class="message {$comment.html ? 'markup' : 'plaintext'}" data-text="{$comment.text}">
+                {if $comment.html}
+                    {$comment.html|noAutoescape}
+                {else}
+                    <p>{$comment.text}</p>
+                {/if}
+            </div>
+            <ul class="actions">
+                <li>
+                    {call bitbucket.internal.buttons.linkButton}
+                        {param content}{getText('bitbucket.web.comment.reply')}{/param}
+                        {param extraClasses: 'reply' /}
+                    {/call}
+                </li>
+                {if $comment.permittedOperations.editable}
+                    <li>
+                        {call bitbucket.internal.buttons.linkButton}
+                          {param content}{getText('bitbucket.web.comment.edit')}{/param}
+                            {param extraClasses: 'edit' /}
+                        {/call}
+                    </li>
+                {/if}
+                {if $comment.permittedOperations.deletable}
+                    <li{if $hideDelete or
+                        (($comment.comments and length($comment.comments)) or ($comment.tasks and length($comment.tasks)))}
+                         {sp}class="hidden"{/if}>
+                        {call bitbucket.internal.buttons.linkButton}
+                            {param content}{getText('bitbucket.web.comment.delete')}{/param}
+                            {param extraClasses: 'delete' /}
+                        {/call}
+                    </li>
+                {/if}
+                {foreach $item in getWebItems('bitbucket.comments.actions', [
+                    'comment': $comment,
+                    'pullRequest': $pullRequest
+                ])}
+                    <li>
+                        {call bitbucket.internal.widget.webItem data="$item" /}
+                    </li>
+                {/foreach}
+            </ul>
+            <ul class="info">
+                {foreach $panelHtml in getWebPanels('bitbucket.comments.info', [
+                    'comment': $comment,
+                    'pullRequest': $pullRequest
+                ])}
+                    <li>
+                        {$panelHtml}
+                    </li>
+                {/foreach}
+                <li>
+                    {if $pullRequest}
+                        {let $pullRequestCommentLink: nav_pull_comment($pullRequest.toRef.repository.project.key,
+                            $pullRequest.toRef.repository.slug,
+                            $pullRequest.id,
+                            $comment.id) /}
+                        <a class="times" href="{$pullRequestCommentLink}">
+                            {call .commentDate}
+                                {param comment: $comment /}
+                                {param customMapping: $customMapping /}
+                            {/call}
+                        </a>
+                    {else}
+                        <span class="times">
+                            {call .commentDate}
+                                {param comment: $comment /}
+                                {param customMapping: $customMapping /}
+                            {/call}
+                        </span>
+                    {/if}
+                </li>
+            </ul>
+            <div class="extras">
+                {foreach $panelHtml in getWebPanels('bitbucket.comments.extra', [
+                    'comment': $comment,
+                    'pullRequest': $pullRequest
+                ])}
+                    {$panelHtml}
+                {/foreach}
+            </div>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param comment
+ * @param? customMapping
+ */
+{template .commentDate private="true"}
+    {if compare_date($comment.updatedDate, $comment.createdDate) > 0} // is edited
+        // it'll look dumb to say "created yesterday, last edited yesterday". Don't show both if they're the same, just tooltip the full date.
+        {if format_date($comment.createdDate, 'shortAge') != format_date($comment.updatedDate, 'shortAge')}
+            {call .commentEditTimes}
+                {param createdDateContent}
+                    {call bitbucket.internal.widget.date.shortAge}{param date: $comment.createdDate /}{/call}
+                {/param}
+                {param updatedDateContent}
+                    {call bitbucket.internal.widget.date.customAge}
+                        {param date: $comment.updatedDate /}
+                        {param customMapping: $customMapping /}
+                    {/call}
+                {/param}
+            {/call}
+        {else}
+            {call bitbucket.internal.widget.date.shortAge}
+                {param date: $comment.createdDate /}
+                {{param title: getText('bitbucket.web.comment.createddate.then.updateddate',
+                                    format_date($comment.createdDate, 'full'), format_date($comment.updatedDate, 'full')) /}}
+            {/call}
+        {/if}
+    {else} // just show created date
+        {call bitbucket.internal.widget.date.shortAge}{param date: $comment.createdDate /}{/call}
+    {/if}
+{/template}
+
+
+/**
+ * @param createdDateContent
+ * @param? updatedDateContent
+ */
+{template .commentEditTimes private="true"}
+    {$createdDateContent|noAutoescape} ({$updatedDateContent|noAutoescape})
+{/template}
+
+/**
+ * @param? id
+ * @param? version
+ * @param? text
+ * @param? isHidden
+ * @param currentUser
+ * @param? extraFormClasses
+ * @param tips
+ */
+{template .commentFormListItem}
+    <li class="comment-form-container{if $isHidden} hidden{/if}">
+        {call .commentForm}
+            {param id : $id /}
+            {param version : $version /}
+            {param text : $text /}
+            {param tips: $tips /}
+            {param currentUser: $currentUser /}
+            {param extraClasses: $extraFormClasses /}
+        {/call}
+    </li>
+{/template}
+
+/**
+ * @param? id
+ * @param? version
+ * @param? text
+ * @param currentUser
+ * @param? extraClasses
+ * @param tips
+ */
+{template .commentForm}
+
+    <form{if $id} data-id="{$id}" data-version="{$version}"{/if} class="new-comment-form{if $extraClasses} {$extraClasses}{/if}">
+    {call bitbucket.internal.widget.avatar}
+        {param size: 'medium' /}
+        {param person: $currentUser /}
+    {/call}
+    <div class="content">
+        {if $text}<input name="old_text" type="hidden" value="{$text}" />{/if}
+        {call bitbucket.internal.widget.markupEditor.editor}
+            {param text: $text/}
+            {param placeholderText: getText('bitbucket.web.diffview.comments.form.placeholder') /}
+            {param previewButtonTitle: getText('bitbucket.web.diffview.comments.button.preview') /}
+            {param attachmentButtonTitle: getText('bitbucket.web.diffview.comments.button.attach') /}
+            {param attachmentButtonAccessibilityText: getText('bitbucket.web.diffview.comments.button.attach.label') /}
+        {/call}
+        <div class="comment-form-footer">
+            <div class="buttons">
+                {call bitbucket.internal.buttons.button}
+                    {param buttonText: $id ? getText('bitbucket.web.diffview.comments.button.save') : getText('bitbucket.web.diffview.comments.button.comment') /}
+                {/call}
+                {call widget.aui.form.cancelButton}
+                    {param href: '#' /}
+                {/call}
+            </div>
+            {if length($tips)}
+                {call .commentFormTip}{param tips: $tips /}{/call}
+            {/if}
+        </div>
+    </div>
+    </form>
+{/template}
+
+/**
+ * @param tips
+ */
+{template .commentFormTip}
+    <div class="tip">
+        <span class="tip-label">{getText('bitbucket.web.tip')}{sp}</span>
+
+        {$tips[randomInt(length($tips))]|noAutoescape}
+    </div>
+{/template}
+
+/**
+ */
+{template .addCommentTrigger}
+    <button class="add-comment-trigger"
+        title="{getText('bitbucket.web.comment.addline')}">
+        {call aui.icons.icon}
+            {param useIconFont: true /}
+            {param icon: 'comment' /}
+            {param accessibilityText: getText('bitbucket.web.comment.presentline') /}
+        {/call}
+        {call aui.icons.icon}
+           {param useIconFont: true /}
+            {param icon: 'add-comment' /}
+            {param accessibilityText: getText('bitbucket.web.comment.addline') /}
+        {/call}
+    </button>
+{/template}
+
+/**
+ * The dummy is necessary for CodeMirror to correctly render the gutters
+ * when scrolling horizontally and when highlighting the current line
+ * (which happens when hovering or when expanding context).
+ *
+ * @param? relevantContextLines
+ */
+{template .dummyCommentTrigger}
+
+    /*
+     TODO: we need to fix the translatability of this string using Choice Format
+    */
+    {{let $changeLocation:
+        (hasData() and $relevantContextLines) ?
+            getText('bitbucket.web.comment.disabled.location.specific', $relevantContextLines) :
+            getText('bitbucket.web.comment.disabled.location.vague')
+    /}}
+    <div
+        class="dummy-comment-trigger"
+        title="{$changeLocation}"
+     ></div>
+{/template}
+
+
+/**
+ * @param? comments
+ * @param? commitRange
+ * @param? customMapping
+ */
+{template .fileComments}
+    <div class="file-comments">
+        {if $comments and length($comments) > 0}
+            {call bitbucket.internal.feature.comments}
+                {param comments: $comments /}
+                {param commitRange: $commitRange /}
+                {param customMapping: $customMapping /}
+            {/call}
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param webPanelId
+ */
+{template .commentAsyncWebPanelPlaceholder}
+    <div id="async-web-panel-{$webPanelId}"></div>
+{/template}
+

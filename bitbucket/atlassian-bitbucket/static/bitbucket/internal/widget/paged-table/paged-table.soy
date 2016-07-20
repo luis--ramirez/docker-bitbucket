@@ -1,0 +1,97 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param id
+ * @param? page
+ * @param theadContent
+ * @param content
+ * @param? filterable
+ * @param? filter
+ * @param? filterPlaceholder
+ * @param? extraClasses
+ * @param? extraDataAttributes
+ * @param? noneMatchingMessageContent
+ * @param? noneFoundMessageContent
+ */
+{template .pagedTable}
+    {if $filterable}
+        {call .pagedTableFilter}
+            {param forId: $id /}
+            {param filter: $filter /}
+            {param filterPlaceholder: $filterPlaceholder /}
+        {/call}
+    {/if}
+    {let $pageAttributes: $page ? concat([
+           'start' : $page.start,
+           'size' : $page.size,
+           'lastpage' : $page.isLastPage
+        ], $page.nextPageRequest ? [
+           'nextpagestart' : $page.nextPageRequest.start
+        ] : [:]) : [:] /}
+    {call widget.aui.table}
+        {param id: $id /}
+        {param dataAttributes: concat($pageAttributes, $extraDataAttributes ? $extraDataAttributes : [:]) /}
+        {param extraClasses}
+            paged-table
+            {if $extraClasses}{sp}{$extraClasses}{/if}
+            {if not $page or $page.size == 0}{sp}no-rows{/if}
+        {/param}
+        {param theadContent: $theadContent /}
+        {param content: $content /}
+    {/call}
+    {if $page and $page.size == 0}
+        {call .pagedTableMessage}
+            {param content: $filterable and $filter ?
+                ($noneMatchingMessageContent ? $noneMatchingMessageContent : '') :
+                ($noneFoundMessageContent ? $noneFoundMessageContent : '') /}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param content
+ */
+{template .pagedTableMessage}
+<div class="paged-table-message">
+    {$content|noAutoescape}
+</div>
+{/template}
+
+
+/**
+ * @param forId
+ * @param? filter
+ * @param? filterPlaceholder
+ */
+{template .pagedTableFilter}
+    {call aui.group.group}
+        {param extraClasses: 'paged-table-filter' /}
+        {param content}
+            {call aui.group.item}
+                {param content}
+                    {call .pagedTableFilterField}
+                        {param forId: $forId /}
+                        {param filter: $filter /}
+                        {param filterPlaceholder: $filterPlaceholder /}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param forId
+ * @param? filter
+ * @param? filterPlaceholder
+ */
+{template .pagedTableFilterField}
+    <label class="assistive" for="paged-table-input-for-{$forId}">{$filterPlaceholder ? $filterPlaceholder : getText('bitbucket.web.search')}</label>
+    <input type="text"
+           id="paged-table-input-for-{$forId}"
+           class="paged-table-filter-input"
+           data-for="{$forId}"
+           autocomplete="off"
+           placeholder="{$filterPlaceholder ? $filterPlaceholder : getText('bitbucket.web.search')}"
+           value="{$filter ? $filter : ''}">
+{/template}

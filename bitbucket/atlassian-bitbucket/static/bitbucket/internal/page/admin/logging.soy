@@ -1,0 +1,67 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param logFileName
+* @param profilerLogFileName
+* @param settings
+* @param? formErrors
+* @param? saved
+*/
+{template .logging}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.logging')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-support-logging' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.loggingprofiling')}</h2>
+                </div>
+            </div>
+        </header>
+
+        {if $saved}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.profiling.saved')}
+                {/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param content}
+                {call widget.aui.form.checkbox}
+                    {param id: 'enableDebugLogging' /}
+                    {param labelContent}{getText('bitbucket.web.config.logging.enabledebuglogging')}{/param}
+                    {param checked: $settings.enableDebugLogging /}
+                    {param disabled: $settings.debugLoggingNotConfigurable /}
+                    {param autofocus: true /}
+                    {param descriptionContent}
+                        {getText('bitbucket.web.config.logging.enabled.description', $logFileName, productName())}
+                     {/param}
+                {/call}
+                {call widget.aui.form.checkbox}
+                    {param id: 'enableProfiling' /}
+                    {param labelContent}{getText('bitbucket.web.config.profiling.enableprofiling')}{/param}
+                    {param checked: $settings.enableProfiling /}
+                    {param description: getText('bitbucket.web.config.profiling.enabled.description', $profilerLogFileName)/}
+                {/call}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param accessKey: 's' /}
+                            {param label: getText('bitbucket.web.button.save') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

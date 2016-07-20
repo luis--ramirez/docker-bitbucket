@@ -1,0 +1,81 @@
+@import "/static/global.less";
+
+@fileFinderWidth: 300px;
+@fileFinderInputPadding: 4px;
+@fileFinderInputIconPadding: 20px;
+
+/* TODO: Extract out a filtered-table widget */
+
+#content .file-finder {
+    float: none;
+    white-space: normal;
+    display: block;
+    padding: 0;
+    vertical-align: bottom;
+
+    .file-finder-input {
+        .box-sizing();
+        width: @fileFinderWidth;
+        height: 30px;
+        display: none;
+
+        &.visible {
+            display: inline-block;
+        }
+
+        input[type=text] {
+            .box-sizing();
+            .border-radius(4px);
+            border: 1px solid #BBB;
+            line-height: 26px;
+            padding-left: @fileFinderInputPadding;
+            padding-right: @fileFinderInputIconPadding;
+            margin: 0;
+            vertical-align: middle;
+            font-size: @font-size-default;
+            font-family: sans-serif;
+            width: @fileFinderWidth;
+            display: none;
+        }
+
+        .file-finder-search-icon {
+            color: @aui-iconfont-secondary-color;
+            margin-left: -@fileFinderInputIconPadding;
+            vertical-align: middle;
+        }
+    }
+}
+
+.file-finder-warning {
+    color: @secondaryTextColor;
+    text-align: center;
+}
+
+#browse-table.file-finder-table {
+    mark {
+        background-color: inherit;
+        color: inherit;
+        font-weight: bold;
+    }
+}
+
+.aui-buttons.find-files {
+    right: @doubleSpacing;
+    display: inline-block;
+}
+
+.file-finder-tip {
+    color: @secondaryTextColor;
+    margin-left: @baseSpacing;
+    display: none;
+    vertical-align: middle;
+
+    &.visible {
+        display: inline-block;
+    }
+}
+
+// Prevent wrapping of seperator in narrow res when in file finder mode
+.aui-toolbar2 .breadcrumbs.file-finder-mode {
+    display: none;
+}

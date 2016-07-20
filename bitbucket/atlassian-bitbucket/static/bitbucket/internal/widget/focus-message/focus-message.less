@@ -1,0 +1,30 @@
+@import "/static/global.less";
+
+.focus-message {
+    margin: 0 auto @baseSpacing;
+    text-align: center;
+
+    h2 {
+        margin-top: @doubleSpacing;
+    }
+
+    p {
+        white-space: pre-line;
+    }
+}
+
+.focus-message-icon {
+    .square(@icon-size-xlarge);
+    background: transparent no-repeat 0 0;
+    background-size: @icon-size-xlarge;
+    margin: @doubleSpacing auto 0;
+    display: block;
+
+    &.icon-lock {
+        background-image: url(icons/icon-lock.svg);
+    }
+
+    &.icon-skull {
+        background-image: url(icons/icon-skull.svg);
+    }
+}

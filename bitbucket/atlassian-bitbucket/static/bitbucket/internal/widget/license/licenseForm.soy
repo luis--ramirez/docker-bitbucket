@@ -1,0 +1,39 @@
+{namespace widget.form}
+
+/**
+ * @param license
+ * @param serverId
+ * @param labelContent
+ * @param tooltipContent
+ * @param required
+ * @param licenseFieldId
+ * @param serverIdFieldId
+ * @param? fieldErrors
+ * @param? content
+ * @param? evalLicenseUrl
+ */
+{template .licenseForm}
+    {call widget.aui.form.fieldValue}
+        {param id: $serverIdFieldId /}
+        {param labelContent}{getText('bitbucket.web.config.serverid')}{/param}
+        {param valueContent}{$serverId}{/param}
+    {/call}
+    {call widget.aui.form.largetext}
+        {param id: $licenseFieldId /}
+        {param required: $required /}
+        {param labelContent: $labelContent /}
+        {param tooltip: $tooltipContent /}
+        {param initialValue: $license /}
+        {param rows: 7 /}
+        {param errors: $fieldErrors ? $fieldErrors.license : null /}
+        {param sizeClass: 'long' /}
+        {param monospace: true /}
+        {param autofocus: true /}
+        {param descriptionContent}
+            {if $evalLicenseUrl}
+                <a id="eval-license" href="{$evalLicenseUrl}">{getText('bitbucket.web.setup.settings.license.eval.needed') + ' »'}</a>
+            {/if}
+        {/param}
+    {/call}
+    {$content ? $content : '' |noAutoescape}
+{/template}

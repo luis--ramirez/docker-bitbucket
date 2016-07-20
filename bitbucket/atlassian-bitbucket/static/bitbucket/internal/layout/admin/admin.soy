@@ -1,0 +1,41 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? activeTab
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? windowTitle Text for the TITLE element.
+ *
+ * data passed through to stash.layout.entity
+ * @param? headContent
+ * @param content Main page content inserted inside the #content section
+ */
+{template .admin}
+{webResourceManager_requireResourcesForContext('bitbucket.layout.admin')}
+{call bitbucket.internal.layout.entity}
+    {param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.admin.window.title') /}
+    {param entityName: getText('bitbucket.web.admin.heading') /}
+    {param bodyClass: 'admin' /}
+    {param useAdminContext: true /}
+    {param isVerticalNav: true /}
+    {param headContent: $headContent /}
+    {param entityNav: getWebFragments('atl.admin.nav', 'atl.admin') /}
+    {param activeHeaderNav: 'administration-menu' /}
+    {param activeNav: $activeTab ? $activeTab : 'admin-plugins-section' /}
+    {param actionWebItems: getWebItems('bitbucket.admin.header.actions') /}
+    {param entityHeaderRightItemsContent}
+        {foreach $webItem in getWebItems('bitbucket.admin.header.actions.right')}
+            {call bitbucket.internal.widget.webItemButton data="$webItem" /}
+        {/foreach}
+        {foreach $webPanel in getWebPanels('bitbucket.admin.header.actions.right')}
+            {$webPanel}
+        {/foreach}
+    {/param}
+    {param content: $content /}
+    {param pageBottomContent}
+        <script>require('bitbucket/internal/layout/admin').onReady();</script>
+        {if $pageBottomContent}
+            {$pageBottomContent|noAutoescape}
+        {/if}
+    {/param}
+{/call}
+{/template}

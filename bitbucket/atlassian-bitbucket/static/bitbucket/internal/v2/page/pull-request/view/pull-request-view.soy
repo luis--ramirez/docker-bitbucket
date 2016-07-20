@@ -1,0 +1,39 @@
+{namespace bitbucket.internal.page.pullRequest.v2}
+
+/**
+ * @param? commit
+ * @param repository
+ * @param pullRequest
+ * @param? startingTabKey
+ * @param? maxChanges
+ * @param? mergeTimeout
+ * @param? relevantContextLines
+ * @param unwatched
+ * @param hasRepoWrite
+ * @param? dataAttributes
+ * @param? seenNeedsWork
+ * @param? seenCommitReview
+ */
+{template .view}
+{webResourceManager_requireResourcesForContext('bitbucket.page.pullRequest.view')}
+{webResourceManager_requireResourcesForContext('bitbucket.feature.files.fileHandlers')}
+    {call bitbucket.internal.v2.layout.pullRequest}
+        {param commit: $commit /}
+        {param repository: $repository /}
+        {param pullRequest: $pullRequest /}
+        {param hasRepoWrite: $hasRepoWrite /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeTab: $startingTabKey ? $startingTabKey : 'bitbucket.pull-request.nav.overview' /}
+        {param content}/* loaded client-side */{/param}
+        {param maxChanges: $maxChanges /}
+        {param mergeTimeout: $mergeTimeout /}
+        {param relevantContextLines: $relevantContextLines /}
+        {param seenNeedsWork: $seenNeedsWork /}
+        {param seenCommitReview: $seenCommitReview /}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/v2/page/pull-request/pull-request-view').onReady({if $unwatched}{$unwatched}{else}false{/if});
+            </script>
+        {/param}
+    {/call}
+{/template}

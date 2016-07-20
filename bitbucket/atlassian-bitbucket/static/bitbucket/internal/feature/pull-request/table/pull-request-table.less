@@ -1,0 +1,166 @@
+@import "/static/global.less";
+
+.pull-requests-table.legacy {
+
+    tr.pull-request-row > td {
+        vertical-align: middle;
+    }
+
+    > thead > tr,
+    > tbody > tr {
+        > .id {
+            min-width: 32px;
+        }
+
+        > .project,
+        > .repository,
+        > .id,
+        > .status,
+        > .updated,
+        > .author,
+        > .reviewers,
+        > .build-status,
+        > .count-column,
+        > .count-column-value {
+            .shrinkwrap();
+            white-space: nowrap;
+
+            // Collapsing the empty column cells completely,
+            // this helps us with columns that have no things in them
+            // so they don't take up unnecessary space (e.g. a plugin column
+            // empty comment/task count columns in the PR inbox)
+            &:empty {
+                padding:0;
+                width:0;
+            }
+        }
+
+        > .repository {
+            > .aui-avatar {
+                vertical-align: middle;
+                margin-right: 10px;
+            }
+        }
+
+        > .author {
+            > div {
+                .bounded-cell-contents(175px);
+                vertical-align: middle;
+                line-height: @aui-avatar-size-small;
+            }
+        }
+
+        > .reviewers {
+            > a {
+                vertical-align: middle;
+                line-height: @aui-avatar-size-small;
+                display: inline-block;
+            }
+        }
+
+        > .reviewers {
+            .user-avatar {
+                vertical-align: middle;
+                margin-right: @baseSpacing;
+            }
+        }
+
+        > .title {
+            max-width: 150px;
+            min-width: 125px;
+
+            > a {
+                .bounded-cell-contents(100%);
+                vertical-align: middle;
+            }
+        }
+
+        > .source,
+        > .destination {
+            margin-bottom: 0;
+            padding-right: @baseSpacing;
+            max-width: 80px;
+
+            .ref-lozenge {
+                .text-overflow();
+                .box-sizing();
+                vertical-align: middle;
+                display: inline-block;
+                max-width: 100%;
+            }
+        }
+
+        > .updated {
+            .text-overflow();
+            max-width: 100px;
+        }
+
+        > .count-column,
+        > .count-column-value {
+            color: @secondaryTextColor;
+        }
+    }
+
+    ~ .pull-request-table-message {
+        margin-top: @baseSpacing;
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+
+        .no-more-results {
+            color: @placeholderTextColor;
+        }
+
+        .entity-empty {
+            margin-top: 105px;
+
+            a {
+                font-size: @font-size-default;
+            }
+        }
+    }
+
+    ~ .spinner {
+        .square(48px);
+        margin: 16px auto 0;
+    }
+
+    /* Setting the opacity directly on the tr does funny things to the borders when transitioning in some browser, so just set it on the TD */
+    tr td {
+        .transition(opacity 0.3s);
+        .shown();
+    }
+
+    &.filter-current-user tr td {
+        .filtered();
+    }
+
+    &.filter-current-user tr.current-user td {
+        .shown();
+    }
+
+    &.filter-current-user-unactioned tr td {
+        .filtered();
+    }
+
+    &.filter-current-user-unactioned tr.current-user td {
+        .shown();
+    }
+
+    &.filter-current-user-unactioned tr.current-user.current-user-actioned td {
+        .filtered();
+    }
+}
+
+.aui-dropdown2.pull-request-table-reviewers {
+    // not @doubleSpacing because this is nudging the menu so that it aligns with the badge for 'overflow' reviewers
+    margin-left: 20px;
+}
+
+
+@media screen and (max-width: 1280px) {
+ .pull-requests-table .author > div {
+     width: @aui-avatar-size-small;
+     overflow: hidden;
+ }
+}

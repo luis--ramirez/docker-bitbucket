@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="http://atlassian.com/schema/spring/plugin
+                           http://atlassian.com/schema/spring/plugin.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+         These represent "critical" components. Components which are used heavily throughout the rest of the system
+         and whose initialisation needs to be rigidly controlled to enforce ordering.
+
+         DO NOT USE AUTOWIRING OR COMPONENT SCANNING FOR ANY BEANS IN THIS SECTION. All dependencies must be explicitly
+         written in XML to ensure Spring doesn't perform initialisation out of order. Beans in this file should not use
+         dependencies which are not declared in this file.
+
+         Component scanning and autowiring have undocumented (and largely unexpected) behaviours, especially in how they
+         interact with FactoryBeans in the context. When a property is @Autowired into a bean, Spring searches through
+         the entire ApplicationContext for candidates suitable to be wired in. When it encounters any singleton factory
+         beans, _it eagerly initialises them_ so it can get their beans to determine their types. That initialisation
+         may trigger the initialisation of other beans. For example, the FactoryBean for our plugin configuration will
+         trigger the initialisation of the PluginStateDao, which triggers Hibernate, which triggers Liquibase, which
+         triggers the DataSource. As this clearly illustrates, dependency hoisting can result in sweeping (and difficult
+         to debug!) changes in the overall initialisation order for the web application. This also manifests around AOP
+         interceptors, which are also very eagerly instantiated and can hoist any dependencies they have.
+
+         It appears that, when eagerly initialising these hoisted dependencies, component scanned and autowired beans
+         which throw exceptions may end up being instantiated and initialised multiple times. This causes problems for
+         the HomeLockAcquirer, which is intended to be strictly a singleton.
+
+         So, in summation: No component scanning; No autowiring. Explicit XML only. You have been warned!
+    -->
+
+    <!-- These must always be the first two bean definitions, and they must exist before any imports to ensure they are
+         fully processed before any beans contained in other XML files, and they may not have any hard dependencies.
+
+         Specifically, for future reference, there is code in PluginBeanDefinitionRegistry, which is part of the plugin
+         framework, which inspects the Spring context for the presence of a bean named "hostComponentProvider" and, if
+         one is not found, adds one automatically. That code is triggered while processing bean definitions which are
+         marked as <plugin:available>true</plugin:available>. As a result, these definitions must exist before those of
+         any bean which will be available to the plugin system or the registry will add a conflicting provider.
+
+         To prevent initialisation ordering issues, the accessor (which is really the plugin framework itself) and the
+         event manager are injected as names only. They are not actually needed by the provider until the framework is
+         being initialised, which happens after the ApplicationContext is started and refreshed, so there is no danger
+         in injecting them by name and looking them up from the ApplicationContext later. -->
+    <bean id="hostComponentProviderConfig" class="com.atlassian.plugin.spring.SpringHostComponentProviderConfig">
+        <property name="useAnnotation" value="true"/>
+    </bean>
+    <bean id="hostComponentProvider" class="com.atlassian.stash.internal.plugin.EnhancedHostComponentProviderFactoryBean">
+        <constructor-arg index="0">
+            <idref bean="pluginAccessor"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <idref bean="pluginEventManager"/>
+        </constructor-arg>
+        <property name="springHostComponentProviderConfig" ref="hostComponentProviderConfig"/>
+    </bean>
+
+    <!-- Parse and log build properties prior to performing any other operation. This ensures the product and JVM
+         versions are logged before any other startup operations (which could fail) are performed. -->
+    <bean id="buildProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:build.properties"/>
+    </bean>
+    <bean id="buildInfo" class="com.atlassian.stash.internal.BuildInfo">
+        <constructor-arg index="0" ref="buildProperties"/>
+    </bean>
+    <bean id="buildInfoLogger" class="com.atlassian.stash.internal.server.BuildInfoLogger"
+          init-method="start" destroy-method="stop">
+        <constructor-arg index="0" ref="buildInfo"/>
+    </bean>
+
+    <!-- Resolve the home directory and define a property with its location. The property itself is not particularly
+         important; the important thing is the call to resolve(), which sets the "stash.home" system property when the
+         home directory location is set using an environment variable. -->
+    <bean id="homeDirectoryResolver" class="com.atlassian.stash.internal.home.HomeDirectoryResolver"
+          depends-on="buildInfoLogger"/>
+    <bean id="homeDirectoryDetails" factory-bean="homeDirectoryResolver" factory-method="resolveAndValidate"/>
+
+    <bean id="homeLockAcquirer" class="com.atlassian.stash.internal.home.HomeLockAcquirer"
+          init-method="lock" destroy-method="unlock">
+        <constructor-arg index="0" value="#{homeDirectoryDetails.home}"/>
+    </bean>
+    <bean id="homeDirectoryMigration" class="com.atlassian.stash.internal.home.HomeDirectoryMigration"
+          depends-on="homeLockAcquirer" init-method="perform">
+        <constructor-arg index="0" ref="homeDirectoryDetails"/>
+    </bean>
+
+    <bean id="configurationMigration" class="com.atlassian.stash.internal.config.ConfigurationMigration"
+          depends-on="homeDirectoryMigration" init-method="perform">
+        <constructor-arg index="0" ref="homeDirectoryDetails"/>
+    </bean>
+
+    <!-- Note: This depends-on the configurationMigration to ensure that:
+            - the "stash.home" system property has been set prior to building this factory bean
+            - stash-config.properties been migrated to bitbucket.properties
+        If any of these is not satisfied, bitbucket.properties will not be loaded correctly. -->
+    <bean id="applicationProperties" class="com.atlassian.stash.internal.spring.SystemOverridePropertiesFactoryBean"
+          depends-on="configurationMigration">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:application-internal.properties</value>
+                <value>classpath:application-default.properties</value>
+                <value>file:${bitbucket.shared.home}/bitbucket.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="applicationSettings" class="com.atlassian.stash.internal.ApplicationSettings"
+          depends-on="homeDirectoryMigration" init-method="cleanup">
+        <constructor-arg index="0" ref="homeDirectoryDetails"/>
+        <constructor-arg index="1">
+            <bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+                <!--suppress SpringIncorrectResourceTypeInspection -->
+                <property name="location" value="classpath:/com/atlassian/plugin/metadata/application-required-plugins.txt"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+                <property name="location" value="file:${bitbucket.home}/.version"/>
+                <property name="ignoreResourceNotFound" value="true"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="3" value="#{buildInfo.buildVersion}"/>
+    </bean>
+
+    <bean id="servletContextFactory" class="com.atlassian.stash.internal.plugin.SimpleServletContextFactory"
+          plugin:available="true">
+        <plugin:interface>com.atlassian.plugin.servlet.ServletContextFactory</plugin:interface>
+        <constructor-arg index="0" ref="servletContext"/>
+    </bean>
+    <bean id="pluginPathScannerFactory" class="com.atlassian.stash.internal.plugin.PluginPathScannerFactory">
+        <constructor-arg index="0" ref="servletContextFactory"/>
+    </bean>
+    <bean id="i18nClasspathScanner" class="com.atlassian.stash.internal.i18n.I18nClasspathScanner">
+        <constructor-arg index="0" ref="pluginPathScannerFactory"/>
+    </bean>
+    <bean id="i18nService" class="com.atlassian.stash.internal.i18n.PluginI18nService" plugin:available="true">
+        <plugin:interface>com.atlassian.bitbucket.i18n.I18nService</plugin:interface>
+        <constructor-arg index="0" ref="i18nClasspathScanner"/>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.stash.internal.i18n.CriticalLocaleHolder"/>
+        </constructor-arg>
+    </bean>
+
+    <!-- Note: Spring will look up this bean explicitly and eagerly instantiate it during a special part of startup,
+         because it makes use of the MessageSource as a core component in the overall ApplicationContext. Be very
+         careful with the dependencies for this bean, as it is instantiated _very_ early. -->
+    <bean id="messageSource" class="com.atlassian.stash.internal.web.i18n.I18nMessageSource">
+        <constructor-arg index="0" ref="i18nService"/>
+    </bean>
+
+    <!-- Note: Spring will detect all BeanDefinitionPostProcessors, of which this bean is one, and instantiate them
+         prior to any other beans. Be very careful with the dependencies of this bean, as it is instantiated _very_
+         early. -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="applicationProperties"/>
+    </bean>
+
+</beans>

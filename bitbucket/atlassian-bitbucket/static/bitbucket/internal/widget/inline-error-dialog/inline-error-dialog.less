@@ -1,0 +1,29 @@
+@import "/static/global.less";
+
+.aui-inline-dialog-contents.inline-error-contents {
+    h4 {
+        padding-left: @icon-size-small;
+        position: relative;
+
+        .aui-iconfont-error {
+            color: @errorTextColor;
+            position: absolute;
+            top: 3px; //HACKS icon alignment
+            left: 0;
+        }
+    }
+
+    h6 {
+        font-weight: normal;
+        margin-top: @baseSpacing;
+        margin-left: @icon-size-small;
+    }
+
+    ul li {
+        word-wrap: break-word;
+    }
+
+    .dismiss-button {
+        margin-top: @doubleSpacing;
+    }
+}

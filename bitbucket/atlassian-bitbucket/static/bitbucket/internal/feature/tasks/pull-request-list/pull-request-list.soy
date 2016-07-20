@@ -1,0 +1,40 @@
+{namespace bitbucket.internal.feature.tasks.pullRequestList}
+
+/**
+ * Contents of the Pull Request list table cell that contains the open task count
+ * for the PR if there is one
+ *
+ * @param pullRequest the PR to display the count of open tasks for
+ */
+{template .rowItem}
+    {if $pullRequest.properties and $pullRequest.properties.openTaskCount}
+        <span class="replacement-placeholder"
+            data-pull-request-id="{$pullRequest.id}"
+            data-repository-id="{$pullRequest.toRef.repository.id}">
+        {call .openTaskCount}
+            {param openTaskCount: $pullRequest.properties.openTaskCount /}
+            {param pullRequest: $pullRequest /}
+        {/call}
+        </span>
+    {/if}
+{/template}
+
+/**
+ * For showing number of open tasks in the PR list
+ *
+ * @param openTaskCount the intial open task count to display
+ * @param pullRequest the pull request context that task count is being displayed for
+ */
+{template .openTaskCount}
+    {if $openTaskCount > 0}
+        <span class="pr-list-open-task-count" title="{getText('bitbucket.web.tasks.openTaskCount', to_int($openTaskCount))}">
+            {call aui.icons.icon}
+                {param useIconFont: true /}
+                {param icon: 'editor-task' /}
+                {param accessibilityText: getText('bitbucket.web.tasks.openTask.label') + ' ' /}
+                {param extraAttributes: ['data-pull-request-id': $pullRequest.id] /}
+            {/call}
+            <span class="task-count">{cap_int($openTaskCount, 99)}<span>
+        </span>
+    {/if}
+{/template}

@@ -1,0 +1,45 @@
+{namespace bitbucket.internal.feature.discussion}
+
+/**
+ * @param participants
+ */
+{template .participants}
+    {call bitbucket.internal.widget.summaryPanel.relatedEntitiesWebPanel}
+        {param iconClass: 'aui-icon-small aui-iconfont-user' /}
+        {param linkText}
+            {getText('bitbucket.web.pullrequest.participants.label', length($participants))}
+        {/param}
+        {param linkClass: 'participants-trigger aui-dropdown2-trigger' /}
+        {param linkExtraAttributes: 'aria-owns=participants-dropdown aria-haspopup=true' /}
+        {param count: length($participants) /}
+        {param extraClasses}
+            participants{if not length($participants)} hidden{/if}
+        {/param}
+        {param extraContent}
+            {call aui.dropdown2.contents}
+                {param id: 'participants-dropdown' /}
+                {param extraClasses: 'aui-style-default aui-dropdown2-tailed avatar-dropdown participants-dropdown' /}
+                {param content}
+                    <ul class="aui-list-truncate">
+                        {foreach $participant in $participants}
+                            <li>
+                                {call bitbucket.internal.widget.avatarList.participantAvatar}
+                                    {param participant: $participant /}
+                                    {param extraClasses : 'participant-item' /}
+                                    {param withName : true /}
+                                {/call}
+                            </li>
+                        {/foreach}
+                    </ul>
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param count
+ */
+{template .participantCount}
+    <strong class="count">{$count}</strong>{sp}
+{/template}

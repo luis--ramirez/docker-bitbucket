@@ -1,0 +1,43 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param id
+ * @param? ref  //Either `ref` (object) or plain `text`
+ * @param? text
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .branchSelectorTrigger}
+    {call .revisionReferenceSelectorTrigger}
+        {param id: $id/}
+        {param ref: $ref/}
+        {param text: $text ? $text : getText('bitbucket.web.branch.selector.default')/}
+        {param autofocus: $autofocus/}
+        {param extraClasses: $extraClasses/}
+        {param extraAttributes: $extraAttributes/}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? ref  //Either `ref` (object) or plain `text`
+ * @param? text
+ * @param? fieldName     //Name for form field
+ * @param? fieldId       //ID for form field
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .branchSelectorTriggerWithField}
+    {call .revisionReferenceSelectorTriggerWithField}
+        {param id: $id/}
+        {param ref: $ref/}
+        {param text: $text ? $text : getText('bitbucket.web.branch.selector.default')/}
+        {param fieldName: $fieldName/}
+        {param fieldId: $fieldId/}
+        {param autofocus: $autofocus/}
+        {param extraClasses: $extraClasses/}
+        {param extraAttributes: $extraAttributes/}
+    {/call}
+{/template}

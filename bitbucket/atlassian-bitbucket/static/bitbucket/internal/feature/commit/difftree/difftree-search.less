@@ -1,0 +1,43 @@
+@import "/static/global.less";
+
+.diff-tree-search-wrapper {
+    .search {
+        position: relative;
+
+        .difftree-search-spinner {
+            position: absolute;
+            left: @halfSpacing;
+            top: @auiTextFieldHeight - @icon-size-xxsmall;
+            width: @spinner-size-small;
+        }
+    }
+}
+
+.file-tree-wrapper {
+    .jstree-search-leaf {
+        font-family: monospace;
+        font-size: @font-size-small;
+
+        ins {
+            display: none;
+        }
+    }
+}
+
+.bitbucket-theme {
+    .jstree {
+        .change-type {
+            font-weight: bold;
+            // Use normal spacing in the soy template, to avoid escaping issues, but respect them for layout
+            white-space: pre;
+        }
+
+        .change-type-ADDED {
+            color: @lozengeNewColor;
+        }
+
+        .change-type-REMOVED {
+            color: @lozengeRemovedColor;
+        }
+    }
+}

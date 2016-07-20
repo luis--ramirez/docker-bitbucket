@@ -1,0 +1,127 @@
+@import "/static/global.less";
+
+.comment-text-lozenge() {
+    .border-radius(3px);
+    border: 1px solid @lozengeGenericColor;
+    background-color: @feintGreyColor;
+    display: inline-block;
+    margin: 0 2px -1px; // -1px to align the baseline
+    padding: 0px 3px;
+    text-decoration: inherit;
+}
+
+.markup {
+    pre code {
+        display: block;
+        font-size: @font-size-small;
+        line-height: 18px;
+        overflow: auto;
+        padding: 6px 10px;
+    }
+
+    code {
+        .comment-text-lozenge();
+        vertical-align: baseline;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        display: block; /* Stash default is inline block */
+    }
+
+    h3,
+    h4,
+    h5,
+    h6 { font-weight: bold; }
+
+    h1,
+    h2 { margin: @baseSpacing 0 @doubleSpacing 0; }
+    h3,
+    h4,
+    h5,
+    h6 { margin: @baseSpacing 0; }
+
+    ul,
+    ol {
+        margin: @baseSpacing @tripleSpacing;
+        padding: 0;
+    }
+
+    img {
+        margin: @baseSpacing 0;
+        max-width: 100%;
+        padding: @halfSpacing;
+        .box-sizing();
+    }
+
+    // cherry-picked from AUI's tables.css;
+    // this aims to make <table> tags in markup descriptions look
+    // like AUI tables, for consistency with the rest of Stash UI.
+    table {
+        border-collapse: collapse;
+        margin: @doubleSpacing 0;
+        width: auto;
+
+        > tbody, > tfoot {
+            > tr {
+                background: @contentBackgroundColor;
+                border-bottom: 1px solid @dividerColor;
+
+                > td {
+                    padding: 7px 10px;
+                    text-align: left;
+                    vertical-align: top;
+                }
+
+                &:first-child {
+                    border-top: 1px solid @dividerColor;
+                }
+            }
+        }
+
+        > thead {
+            > tr {
+                border-bottom: 1px solid @dividerColor;
+
+                > td, > th {
+                    padding: 7px 10px;
+                    text-align: left;
+                    vertical-align: top;
+                }
+            }
+        }
+    }
+
+    table table {
+        margin: 0;
+    }
+
+    .commitid {
+        font-family: monospace;
+    }
+
+    .user-mention {
+        .comment-text-lozenge();
+        .text-overflow();
+        max-width: 100%;
+        vertical-align: bottom;
+
+        // IE 10 wouldn't elide long names because it was still applying word-wrap: break-word; inherited from .description
+        word-wrap: normal;
+
+        &.current-user {
+            background-color: @lozengeModifiedColor;
+            color: @lozengeTextColor;
+            border: 1px solid @lozengeModifiedColor;
+        }
+    }
+
+    > ul {
+        list-style-type: disc;
+        > li > ul {
+            list-style-type: circle;
+            > li > ul {
+                list-style-type: square;
+            }
+        }
+    }
+}

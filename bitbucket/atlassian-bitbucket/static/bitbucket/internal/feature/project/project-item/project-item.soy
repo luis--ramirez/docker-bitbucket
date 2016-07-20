@@ -1,0 +1,27 @@
+{namespace bitbucket.internal.feature.project}
+
+/**
+ * @param project
+ */
+{template .projectItem}
+    <span class="project-item" title="{$project.name}" data-id="{$project.id}" data-project="{to_json($project)}">
+        {call .projectItemContent}
+            {param avatarTagName: 'span'/}
+            {param project: $project/}
+        {/call}
+    </span>
+{/template}
+
+/**
+ * @param project
+ * @param? nameContent
+ * @param? avatarTagName
+ */
+{template .projectItemContent}
+    {call bitbucket.internal.feature.project.avatar}
+        {param size: 'xsmall' /}
+        {param project: $project /}
+        {param tagName: $avatarTagName /}
+    {/call}
+    <span class="name">{if $nameContent}{$nameContent|noAutoescape}{else}{$project.name}{/if}</span>
+{/template}

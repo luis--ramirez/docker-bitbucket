@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/image-differ/image-differ-modes",["module","exports"],function(b,a){Object.defineProperty(a,"__esModule",{value:!0});a.default={TWO_UP:"two-up",BLEND:"blend",SPLIT:"split",PIXEL_DIFF:"pixeldiff"};b.exports=a["default"]});

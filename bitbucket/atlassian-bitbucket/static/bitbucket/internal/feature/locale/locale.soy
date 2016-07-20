@@ -1,0 +1,33 @@
+{namespace bitbucket.internal.feature.locale}
+
+/**
+ * @param languages
+ * @param? errors
+ * @param? hideMore
+ */
+{template .field}
+    {call widget.aui.form.field}
+        {param id: 'locale' /}
+        {param labelContent}
+            {getText('bitbucket.web.user.account.settings.locale')}
+        {/param}
+        {param input}
+            <select name="locale" id="locale">
+                {foreach $language in $languages}
+                    <option value="{$language.locale}" {$language.selected ? 'selected' : ''}>{$language.name}</option>
+                {/foreach}
+            </select>
+        {/param}
+        {param descriptionContent}
+            {if not $hideMore}
+                {{getText('bitbucket.web.user.account.settings.locale.more',
+                    '<a href=' + nav_addon_requests('Language Packs') + '>','</a>')|noAutoescape}}
+            {/if}
+        {/param}
+        {param errors: $errors ? $errors.locale : null /}
+    {/call}
+    <script>
+        // Unfortunately this isn't detected. We should add a live-selector to make this obsolete...
+        jQuery('#locale').auiSelect2({lb}minimumResultsForSearch: 20{rb})
+    </script>
+{/template}

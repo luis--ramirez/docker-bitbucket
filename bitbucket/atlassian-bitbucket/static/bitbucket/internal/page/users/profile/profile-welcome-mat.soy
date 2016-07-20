@@ -1,0 +1,53 @@
+{namespace bitbucket.internal.users.profile}
+
+/**
+ * @param projectKey
+ */
+{template .noRepositoriesSelf}
+    {call bitbucket.internal.widget.welcomeMat}
+        {param title: getText('bitbucket.web.user.profile.no.repositories.self.heading') /}
+        {param extraClasses: 'no-results repository-list' /}
+        {param content}
+            {{getText('bitbucket.web.user.profile.no.repositories.self.description', '<p>', '</p>', productName())|noAutoescape}}
+
+            {call bitbucket.internal.buttons.button}
+                {param isPrimary: true /}
+                {param buttonText: getText('bitbucket.web.user.profile.create.first.repository.button.text') /}
+                {param href: nav_repo_create($projectKey) /}
+                {param extraClasses: 'create-repository-button' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param userDisplayName
+ */
+{template .noRepositories}
+    {call bitbucket.internal.widget.welcomeMat}
+        {{param title: getText('bitbucket.web.user.profile.no.repositories.heading') /}}
+        {param extraClasses: 'no-results repository-list' /}
+        {param backgroundClass: 'private-repository' /}
+        {param content}
+            <p>
+            {{getText('bitbucket.web.user.profile.no.repositories.description', $userDisplayName)}}
+            </p>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * No parameters
+ */
+{template .personalRepositoryDisabled}
+    {call bitbucket.internal.widget.welcomeMat}
+        {{param title: getText('bitbucket.web.user.profile.no.repositories.heading') /}}
+        {param extraClasses: 'no-results repository-list' /}
+        {param backgroundClass: 'private-repository' /}
+        {param content}
+            <p>
+            {{getText('bitbucket.web.user.profile.personal.repository.disabled.description')}}
+            </p>
+        {/param}
+    {/call}
+{/template}

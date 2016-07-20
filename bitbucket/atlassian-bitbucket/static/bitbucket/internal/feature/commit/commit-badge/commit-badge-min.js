@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/commit/commit-badge",["jquery","exports"],function(b,a){a.create=function(a,c){return b(bitbucket.internal.feature.commit.commitBadge.oneline({commit:a,repository:c,withAvatar:!0}))}});

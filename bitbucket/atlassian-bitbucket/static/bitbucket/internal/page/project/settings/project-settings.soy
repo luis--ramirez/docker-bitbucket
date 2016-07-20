@@ -1,0 +1,19 @@
+{namespace bitbucket.internal.project}
+
+/**
+ * @param project
+ **/
+{template .deleteDialog}
+    {let $escapedProjectName}{$project.name}{/let}
+    <p>{getText('bitbucket.web.project.delete.confirm', '<b>', $escapedProjectName, '</b>')|noAutoescape}</p>
+    <p>{getText('bitbucket.web.project.delete.confirm.detail')}</p>
+{/template}
+
+/**
+ * @param project
+ **/
+{template .deleteDisabledDialog}
+    {let $escapedProjectName}{$project.name}{/let}
+    <p>{getText('bitbucket.web.project.delete.unable', '<b>', $escapedProjectName, '</b>')|noAutoescape}</p>
+    <p>{getText('bitbucket.web.project.delete.unable.detail')}</p>
+{/template}

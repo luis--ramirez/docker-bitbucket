@@ -1,0 +1,1 @@
+define("bitbucket/internal/model/file-content-modes",function(){return{SOURCE:"source",DIFF:"diff"}});

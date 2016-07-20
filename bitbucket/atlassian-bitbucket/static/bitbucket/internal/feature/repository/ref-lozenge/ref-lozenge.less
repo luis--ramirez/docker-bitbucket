@@ -1,0 +1,52 @@
+@import "/static/global.less";
+
+.ref-lozenge {
+    .text-overflow();
+    background-color: @feintGreyColor;
+    color: @secondaryTextColor;
+    font-size: 13px;
+    font-weight: normal;
+    text-transform: none;
+    border: 1px solid @lozengeGenericColor;
+    padding: 3px 5px;
+    margin: 0 3px 3px;
+    vertical-align: middle;
+    line-height: 16px;
+    text-align: left;
+
+    .repository {
+        .text-overflow();
+        display: inline-block;
+        vertical-align: middle;
+        // arbitrary. `.pull-request-branches .ref-lozenge` has a min-width of 190px, so that must be considered when changing this
+        max-width: 100px;
+    }
+
+    .aui-avatar {
+        vertical-align: middle;
+    }
+
+    .aui-avatar,
+    .repository {
+        // Can't use padding for avatar - causes circle border to deform.
+        margin-right: @halfSpacing;
+    }
+
+    .ref {
+        vertical-align: middle;
+        position: relative;
+    }
+    .ref > .aui-icon {
+        vertical-align: text-bottom;
+        // This is necessary to make triple-click selection of the branch name work
+        position: absolute;
+    }
+    .ref > .name {
+        // Adjust for absolute position of icon
+        margin-left: @icon-size-xxsmall + @halfSpacing;
+    }
+}
+
+.ref-lozenge-tooltip > .tipsy-inner {
+    max-width: 500px;
+}

@@ -1,0 +1,86 @@
+@import "/static/global.less";
+
+.colored-button(@borderColor, @borderBottomColor, @backgroundColor) {
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border-color: @borderColor @borderColor @borderBottomColor;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: @invertedBodyTextColor;
+    background-color: @backgroundColor;
+    .linear-gradient-vertical(@backgroundColor,@borderColor);
+}
+
+.bitbucket-theme {
+
+    /* Round delete button (x) */
+
+    table.aui tbody > tr {
+        &:hover {
+            .delete-button,
+            .edit-button {
+                color: @aui-button-default-disabled-icon-color;
+                text-decoration: none;
+                opacity: 1;
+            }
+        }
+
+        .delete-button,
+        .edit-button {
+            opacity: 0;
+
+            &:hover, &:focus {
+                opacity: 1;
+                color: @aui-button-default-active-icon-color;
+            }
+        }
+    }
+
+    .aui-button {
+
+        &.green {
+            .colored-button(#57a957, #3d773d, #62c462);
+        }
+
+        &.red {
+            .colored-button(#c43c35, #882a25, #ee5f5b);
+        }
+    }
+
+    .switch .aui-button {
+        display: inline-block;
+
+        &.switch-mode-on[aria-pressed=true] {
+
+            .box-shadow(inset 0 3px 6px darken(@confirmationTextColor, 7%));
+
+            border-color: darken(@confirmationTextColor, 12%);
+            text-shadow: 0 1px 0 darken(@confirmationTextColor, 7%);
+            background: @confirmationTextColor;
+            color: @invertedBodyTextColor;
+
+        }
+    }
+
+    // @aui-override https://ecosystem.atlassian.net/browse/AUI-1687
+    // because :first-child and :last-child border-radius don't hit the button elements if there's
+    // anything else (eg spinners, icons) inside the .aui-buttons container before the buttons
+
+    .aui-buttons .aui-button:first-child,
+    .aui-buttons :not(.aui-button) + .aui-button {
+        border-top-left-radius: 3.01px;
+        border-bottom-left-radius: 3.01px;
+    }
+
+    .stash-link-button {
+        background: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+}

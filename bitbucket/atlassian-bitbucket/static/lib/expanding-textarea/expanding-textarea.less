@@ -1,0 +1,12 @@
+@import "/static/global.less";
+
+textarea.expanding,
+.textareaClone {
+    min-height: @textareaStartHeight;
+    overflow: hidden!important; //https://github.com/bgrins/ExpandingTextareas/issues/8
+    font-family: sans-serif;   // textareaClone does not copy over font-family causing STASHDEV-2224 in IE
+    width: auto;
+    resize: none;
+}
+
+//TODO: Once we move to AUI5 forms, we can put form element size specific rules here to automatically match the width for the .textareaClone

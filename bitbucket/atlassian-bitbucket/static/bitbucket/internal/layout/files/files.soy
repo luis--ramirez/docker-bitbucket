@@ -1,0 +1,115 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? actionWebItems
+ * @param atRevisionRef
+ * @param? bodyClass
+ * @param content
+ * @param? dataAttributes
+ * @param? error
+ * @param? entityUrl
+ * @param? entityNotificationsContent
+ * @param? entitySecondaryActionsContent
+ * @param? extraAttributes
+ * @param? fileFinder
+ * @param? focusedPageSize
+ * @param? headContent
+ * @param? hideLoginLink
+ * @param? hideProfile
+ * @param? isDirectory
+ * @param? isVerticalNav
+ * @param? navClass
+ * @param? pageType
+ * @param? pageBottomContent
+ * @param? panelClass
+ * @param? panelNavContent
+ * @param? panelSidebarContent
+ * @param pathComponents
+ * @param repository
+ * @param? secondaryActionWebItems
+ * @param? theme
+ * @param? toolbarExtraContent
+ * @param? useAdminContext
+ * @param windowTitle
+ */
+{template .files}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.files')}
+    {call bitbucket.internal.layout.branch}
+        {param actionWebItems: $actionWebItems /}
+        {param activeNav: 'bitbucket.repository.nav.files' /}
+        {param atRevisionRef: $atRevisionRef /}
+        {param bodyClass: $bodyClass /}
+        {param dataAttributes: $dataAttributes /}
+        {param error: $error /}
+        {param entityUrl: $entityUrl /}
+        {param entityNotificationsContent: $entityNotificationsContent /}
+        {param entitySecondaryActionsContent: $entitySecondaryActionsContent /}
+        {param extraAttributes: $extraAttributes /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param headContent: $headContent /}
+        {param hideLoginLink: $hideLoginLink /}
+        {param hideProfile: $hideProfile /}
+        {param isVerticalNav: $isVerticalNav /}
+        {param navClass: $navClass /}
+        {param panelContentHeader: getText('bitbucket.web.repository.nav.files') /}
+        {param pageType: $pageType /}
+        {param panelClass: $panelClass /}
+        {param panelNavContent: $panelNavContent /}
+        {param panelSidebarContent: $panelSidebarContent /}
+        {param repository: $repository /}
+        {param secondaryActionWebItems: $secondaryActionWebItems /}
+        {param theme: $theme /}
+        {param toolbarSecondaryExtraContent : $toolbarExtraContent /}
+        {param useAdminContext: $useAdminContext /}
+        {param windowTitle: $windowTitle /}
+        {param content}
+            {$content |noAutoescape}
+        {/param}
+        {param toolbarPrimaryExtraContent}
+            {call widget.aui.group.item}
+                {param content}
+                    {call bitbucket.internal.widget.breadcrumbs.breadcrumbs}
+                        {param pathComponents: $pathComponents /}
+                        {param trailingSlash: $isDirectory /}
+                    {/call}
+                {/param}
+            {/call}
+            // TODO
+            // when the source view supports the file finder the $fileFinder parameter
+            // should be removed and the file finder become an implementation detail of the files layout
+            {if $fileFinder}
+                {call widget.aui.group.item}
+                    {param content}
+                        <div class="file-finder">
+                            {$fileFinder|noAutoescape}
+                        </div>
+                    {/param}
+                {/call}
+            {/if}
+        {/param}
+        {param pageBottomContent}
+            <script>
+            require('bitbucket/internal/layout/files').onReady(
+                {call .pathComponentsArray}{param pathComponents: $pathComponents /}{/call},
+                {to_json($atRevisionRef)|noAutoescape},
+                '.branch-selector-toolbar .breadcrumbs',
+                {not not $isDirectory});
+            </script>
+            {$pageBottomContent|noAutoescape}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param pathComponents
+ */
+{template .pathComponentsArray private="true"}
+    [
+    {foreach $pathComponent in $pathComponents}
+        {if not isFirst($pathComponent)} // HACK: skip the repo
+            {if index($pathComponent) > 1},{/if}
+            "{$pathComponent.text|escapeJs}"
+        {/if}
+    {/foreach}
+    ]
+{/template}

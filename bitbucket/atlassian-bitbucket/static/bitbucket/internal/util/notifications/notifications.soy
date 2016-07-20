@@ -1,0 +1,45 @@
+{namespace bitbucket.internal.util.notifications}
+
+/**
+ * @param notificationName
+ * @param? type defaults to info
+ * @param? close same defaults as auiFlag
+ * @param? content same defaults as auiFlag
+ * @param? title same defaults as auiFlag
+ */
+{template .pollingFlag}
+    <script>require('bitbucket/internal/util/notifications').polling(
+       '{$notificationName}',
+       {lb}
+           type: '{$type ? $type : 'info'}'
+           {if $close}, close: '{$close}' {/if}
+           {if $title}, title: '{$title}'{/if}
+           {if $content}, body: '{$content|noAutoescape}'{/if}
+       {rb});</script>
+{/template}
+
+/**
+ *
+ */
+{template .closePollingFlag}
+    <ul class="aui-nav-actions-list">
+        <li>
+            <button class="aui-button aui-button-link close">{{getText('bitbucket.web.dialog.polling.close.link')}}</button>
+        </li>
+    </ul>
+{/template}
+
+/**
+ * @param? type
+ * @param? close
+ * @param? content
+ * @param? title
+ */
+{template .flag}
+    <script>require('bitbucket/internal/util/notifications').showOnReady({lb}
+        type: '{$type ? $type : 'info'}'
+        {if $close}, close: '{$close}' {/if}
+        {if $title}, title: '{$title}'{/if}
+        {if $content}, body: '{$content|noAutoescape}'{/if}
+    {rb});</script>
+{/template}

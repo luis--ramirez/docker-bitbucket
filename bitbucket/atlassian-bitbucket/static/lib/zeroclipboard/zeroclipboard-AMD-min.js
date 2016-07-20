@@ -1,0 +1,1 @@
+define("zero-clipboard",["aui"],function(b){var a=window.ZeroClipboard;a.config({swfPath:b.contextPath()+"/s/"+a.version+"/_/download/resources/com.atlassian.bitbucket.server.bitbucket-bower-components:zeroclipboard/ZeroClipboard.swf",cacheBust:!1});return a});

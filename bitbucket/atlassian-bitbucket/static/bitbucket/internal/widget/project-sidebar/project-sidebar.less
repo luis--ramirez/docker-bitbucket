@@ -1,0 +1,54 @@
+@import "/static/global.less";
+
+.fixed-right {
+
+    @sidebarWidth: 340px;
+    @sidebarIconWidth: @doubleSpacing + @icon-size-large;
+
+    .aui-page-panel-sidebar {
+        width: @sidebarWidth;
+
+        ul {
+            margin-top: 0.5em;
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        > p {
+            margin-top: 1em;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+
+        .welcome-mat {
+            background-size: @icon-size-large @icon-size-large;
+            background-position: (@sidebarWidth - @sidebarIconWidth - (2 * @doubleSpacing)) 50px;
+            border: 0;
+            margin: 0;
+            padding-left: 0;
+            padding-right: @sidebarIconWidth;
+
+
+            &.getting-started {
+                background-image: url(icon-help-getting-started.svg);
+            }
+            &.workflows {
+                background-image: url(icon-help-forks.svg);
+            }
+            &.development {
+                background-image: url(icon-help-api.svg);
+            }
+            &.administration {
+                background-image: url(icon-help-admin.svg);
+            }
+
+            + .welcome-mat {
+                border-top: 1px solid @dividerColor;
+            }
+        }
+
+    }
+}

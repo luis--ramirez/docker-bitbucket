@@ -1,0 +1,79 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param path
+ * @param atRevisionRef
+ * @param files
+ * @param isTruncated
+ * @param? isError
+ * @param? errorMessage
+ * @param? parentDirectoryUrl
+ * @param? pathComponents
+ * @param? dataAttributes
+ * @param? maxDirectoryChildren
+ */
+{template .filebrowser}
+{webResourceManager_requireResourcesForContext('bitbucket.page.repository.filebrowser')}
+{call bitbucket.internal.layout.files}
+    {{param windowTitle: getText('bitbucket.web.repository.browse', $repository.project.name, $repository.name) /}}
+    {param dataAttributes: $dataAttributes /}
+    {param repository: $repository /}
+    {param pathComponents: $pathComponents /}
+    {param atRevisionRef : $atRevisionRef /}
+    {param isDirectory: true /}
+    {param content}
+        {call bitbucket.internal.feature.filebrowser.warnings}
+            {param isTruncated: $isTruncated /}
+            {{param message: getText('bitbucket.web.file.browser.toomanyfiles', length($files)) /}}
+        {/call}
+        {foreach $webPanel in getWebPanels('bitbucket.web.repository.browse.filebrowser.before', [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ])}
+            {$webPanel}
+        {/foreach}
+        <div class='filebrowser-content'>
+            {call bitbucket.internal.feature.filebrowser.fileTable}
+                {param parentDirectoryUrl: $parentDirectoryUrl /}
+                {param isError: $isError /}
+                {param errorMessage: $errorMessage /}
+                {param files: $files /}
+            {/call}
+        </div>
+        {foreach $webPanel in getWebPanels('bitbucket.web.repository.browse.filebrowser.after', [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ])}
+            {$webPanel}
+        {/foreach}
+        {call bitbucket.internal.feature.filebrowser.warnings}
+            {param isTruncated: $isTruncated /}
+            {{param message: getText('bitbucket.web.file.browser.toomanyfiles', length($files)) /}}
+        {/call}
+    {/param}
+    {param fileFinder}
+        {call bitbucket.internal.feature.filefinder.fileFinderInput /}
+    {/param}
+    {param toolbarExtraContent}
+        {call bitbucket.internal.widget.webFragmentButtons}
+            {param location: 'bitbucket.web.repository.browse.toolbar' /}
+            {param context: [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ] /}
+            {param isReverse: true /}
+        {/call}
+        {call bitbucket.internal.buttons.buttons}
+            {param extraClasses: 'find-files' /}
+            {param content}
+                {call bitbucket.internal.buttons.button}
+                    {param buttonText: getText('bitbucket.web.file.finder.browsefiles') /}
+                    {param extraClasses: 'browse-files-button' /}
+                    {param isPressed: true /}
+                {/call}
+                {call bitbucket.internal.buttons.button}
+                    {param buttonText: getText('bitbucket.web.file.finder.findfiles') /}
+                    {param extraClasses: 'find-files-button' /}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+           require('bitbucket/internal/page/filebrowser').onReady("{$path|escapeJs}", {to_json($atRevisionRef)|noAutoescape}, "#browse-table", {$maxDirectoryChildren});
+        </script>
+    {/param}
+{/call}
+{/template}

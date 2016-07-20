@@ -1,0 +1,21 @@
+{namespace bitbucket.internal.feature.timezone.onboarding}
+
+/**
+ */
+{template .flagBody}
+    <div>
+        <p>{getText('bitbucket.web.timezone.onboarding.mismatch')}</p>
+        <ul class="aui-nav-actions-list">
+            <li>
+                <button id="time-zone-onboarding-change" class="aui-button aui-button-link">
+                    {getText('bitbucket.web.timezone.onboarding.change')}
+                </button>
+            </li>
+            <li>
+                <button id="time-zone-onboarding-dismiss" class="aui-button aui-button-link">
+                    {getText('bitbucket.web.timezone.onboarding.dismiss')}
+                </button>
+            </li>
+        </ul>
+    </div>
+{/template}

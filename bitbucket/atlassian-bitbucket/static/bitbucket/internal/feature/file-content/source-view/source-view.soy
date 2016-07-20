@@ -1,0 +1,27 @@
+{namespace bitbucket.internal.feature.fileContent.sourceView}
+
+/**
+ */
+{template .lineNumber}
+    <a class="line-number line-locator" data-line-number=""></a>
+{/template}
+
+/**
+ * @param rawUrl
+ */
+{template .capacityReachedLineWidget}
+    {let $escapedRawUrl}{$rawUrl}{/let}
+    {call bitbucket.internal.feature.fileContent.skippedContainer}
+        {param extraClasses: 'capacity-reached-message' /}
+        {param hasContentAbove: true /}
+        {param hasContentBelow: false /}
+        {param canShowMore: false /}
+        {param content}
+            {call aui.message.warning}
+                {param content}
+                    {getText('bitbucket.web.source.overcapacity', '<a href="' + $escapedRawUrl + '">', '</a>')|noAutoescape}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}

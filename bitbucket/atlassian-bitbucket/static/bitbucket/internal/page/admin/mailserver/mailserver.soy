@@ -1,0 +1,192 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param isUnconfigured
+* @param config
+* @param availableProtocols
+* @param? fieldErrors
+* @param? formErrors
+* @param? saved
+* @param? tested
+* @param? testFailureMessage
+*/
+{template .mailserverconfig}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.mailServer')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-settings-mail-server' + ($isUnconfigured ? '-unconfigured' : '') /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.config.mail')}</h2>
+                </div>
+            </div>
+        </header>
+        {if $saved}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.config.mail.saved')}
+                {/param}
+            {/call}
+        {/if}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param extraClasses: 'stash-mailserver-form' /}
+            {param autocomplete: 'off' /}
+            {param content}
+                <input type='hidden' id='passwordChanged' name='passwordChanged' value='false'/>
+                <h3>{getText('bitbucket.web.config.mail.settings')}</h3>
+                {call widget.aui.form.text}
+                    {param id: 'hostname' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.hostname')}{/param}
+                    {param initialValue: $config.hostname /}
+                    {param required: true /}
+                    {param errors: $fieldErrors ? $fieldErrors.hostname : null /}
+                    {param autofocus: true /}
+                    {param description: getText('bitbucket.web.config.mail.hostname.description') /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'port' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.port')}{/param}
+                    {param initialValue: $config.port /}
+                    {param errors: $fieldErrors ? $fieldErrors.port : null /}
+                    {param description: getText('bitbucket.web.config.mail.port.description')/}
+                    {param sizeClass: 'short' /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'username' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.username')}{/param}
+                    {param initialValue: $config.username /}
+                    {param errors: $fieldErrors ? $fieldErrors.username : null /}
+                    {param autocomplete: 'off' /}
+                    {{param description: getText('bitbucket.web.config.mail.username.description') /}}
+                {/call}
+                {call widget.aui.form.password}
+                    {param id: 'password' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.password')}{/param}
+                    {param initialValue: $config.passwordChanged ?
+                        getText('bitbucket.web.config.mail.password.set') :
+                        getText('bitbucket.web.config.mail.password.empty') /}
+                    {param errors: $fieldErrors ? $fieldErrors.password : null /}
+                    {param autocomplete: 'off' /}
+                    {{param description: getText('bitbucket.web.config.mail.password.description') /}}
+                {/call}
+                {call widget.aui.form.field}
+                    {param id: 'protocol' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.protocol')}{/param}
+                    {param legendContent}{getText('bitbucket.web.config.mail.protocol')}{/param}
+                    {param input}
+                        {call .mailProtocolCombo}
+                            {param availableProtocols: $availableProtocols /}
+                            {param selectedProtocol: $config.protocol /}
+                        {/call}
+                    {/param}
+                    {param descriptionContent: getText('bitbucket.web.config.mail.protocol.description') /}
+                    {param errors: $fieldErrors ? $fieldErrors.protocol : null /}
+                {/call}
+                {call widget.aui.form.checkbox}
+                    {param id: 'useTls' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.useTls')}{/param}
+                    {param legendContent}{getText('bitbucket.web.config.mail.useTls')}{/param}
+                    {param isAssistive: true /}
+                    {param checked: $config.useTls or $config.protocol == 'SMTPS' or $isUnconfigured /}
+                    {param disabled: $config.protocol == 'SMTPS' /}
+                    {param descriptionContent: getText('bitbucket.web.config.mail.useTls.description') /}
+                {/call}
+                {call widget.aui.form.checkbox}
+                    {param id: 'requireTls' /}
+                    {param labelContent}{getText('bitbucket.web.config.mail.requireTls')}{/param}
+                    {param legendContent}{getText('bitbucket.web.config.mail.requireTls')}{/param}
+                    {param isAssistive: true /}
+                    {param checked: $config.requireTls or $config.protocol == 'SMTPS' /}
+                    {param disabled: $config.protocol == 'SMTPS' /}
+                    {param descriptionContent: getText('bitbucket.web.config.mail.requireTls.description') /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'serverEmail' /}
+                    {param labelContent}{getText('bitbucket.web.config.server.email')}{/param}
+                    {param initialValue: $config.serverEmail /}
+                    {param required: true /}
+                    {param errors: $fieldErrors ? $fieldErrors.serverEmail : null /}
+                    {{param description: getText('bitbucket.web.config.server.email.description') /}}
+                {/call}
+
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'save' /}
+                            {param isPrimary: true /}
+                            {param accessKey: 's' /}
+                            {param label: getText('bitbucket.web.button.save') /}
+                        {/call}
+                        {call bitbucket.internal.buttons.button}
+                            {param id: 'delete' /}
+                            {param href: nav_admin_mail_server()/}
+                            {param buttonText: getText('bitbucket.web.button.delete') /}
+                        {/call}
+                    {/param}
+                {/call}
+
+                <h3>{getText('bitbucket.web.config.mail.test')}</h3>
+                {call widget.aui.form.fieldset}
+                    {param legendContent}{getText('bitbucket.web.config.mail.test')}{/param}
+                    {param isInline: true /}
+                    {param content}
+                        {call widget.aui.form.text}
+                            {param id: 'testAddress' /}
+                            {param labelContent}{getText('bitbucket.web.config.mail.test.recipient')}{/param}
+                            {param initialValue: $config.testAddress ? $config.testAddress : null /}
+                            {param errors: $fieldErrors ? $fieldErrors.testAddress : null /}
+                            {{param description: getText('bitbucket.web.config.mail.test.address.description') /}}
+                        {/call}
+                        {call widget.aui.form.buttons}
+                            {param id: 'testButtonContainer' /}
+                            {param content}
+                                {call widget.aui.form.submit}
+                                    {param id: 'test' /}
+                                    {param accessKey: 't' /}
+                                    {param label: getText('bitbucket.web.button.test') /}
+                                {/call}
+                                {if $tested}
+                                    {if $testFailureMessage}
+                                        {call widget.aui.form.fieldError}
+                                            {param message}{$testFailureMessage}{/param}
+                                        {/call}
+                                    {else}
+                                        <div class="success">{getText('bitbucket.web.config.mail.test.success')}</div>
+                                    {/if}
+                                {/if}
+                            {/param}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/admin/mailServer').onReady('#protocol', '#useTls', '#requireTls', '#delete', '#test', '#testAddress');
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * @param availableProtocols
+ * @param selectedProtocol
+ */
+{template .mailProtocolCombo private="true"}
+<select name="protocol" id="protocol" class="select">
+      {foreach $protocol in $availableProtocols}
+         <option value="{$protocol}" {$protocol == $selectedProtocol ? 'selected ' : ''}
+           {switch $protocol}
+           {case 'SMTP'}
+                      title="{getText('bitbucket.web.config.mail.protocol.smtp.description')}">{getText('bitbucket.web.config.mail.protocol.smtp')}
+           {case 'SMTPS'}
+                      title="{getText('bitbucket.web.config.mail.protocol.smtps.description')}">{getText('bitbucket.web.config.mail.protocol.smtps')}
+           {/switch}
+        </option>
+      {/foreach}
+</select>
+{/template}

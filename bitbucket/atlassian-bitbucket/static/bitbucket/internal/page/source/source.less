@@ -1,0 +1,15 @@
+@import "/static/global.less";
+
+.file-content {
+    .border-top-left-radius(@baseBorderRadius);
+    .border-top-right-radius(@baseBorderRadius);
+    border: 1px solid @lightDividerColor;
+
+    > .file-toolbar {
+        .border-top-left-radius(@baseBorderRadius - 1); // -1 so that the background 'fits' better inside of the 1px border on the parent container
+        .border-top-right-radius(@baseBorderRadius - 1);
+        border-bottom: 1px solid @lightDividerColor;
+        padding-left: @doubleSpacing;
+        padding-right: @doubleSpacing;
+    }
+}

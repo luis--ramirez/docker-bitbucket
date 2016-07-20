@@ -1,0 +1,41 @@
+{namespace bitbucket.internal.widget.oauth}
+
+/**
+ * @param authUrl
+ * @param? extraClasses
+ * @param? type // standard AUI Button types, eg 'link' or 'primary'
+ */
+{template .trigger}
+    {call bitbucket.internal.buttons.button}
+        {param buttonText: getText('bitbucket.web.oauth.authenticate') /}
+        {param href: $authUrl /}
+        {param type: $type /}
+        {param extraClasses: 'ual-authenticate' + ($extraClasses ? ' ' + $extraClasses : '')  /}
+        {param extraAttributes: 'target="_blank"' /}
+    {/call}
+{/template}
+
+/**
+ * @param authUrl
+ * @param text
+ * @param? applicationName
+ * @param? extraClasses
+ */
+{template .dialogMessage}
+    {call bitbucket.internal.widget.focusMessage.message}
+        {param title}
+            {{$applicationName ? getText('bitbucket.web.focus.message.title.authenticate.application', $applicationName) :
+                                getText('bitbucket.web.focus.message.title.authenticate.unknown')}}
+        {/param}
+        {param text: $text/}
+        {param content}
+            {call .trigger}
+                {param authUrl: $authUrl /}
+                {param extraClasses: $extraClasses /}
+                {param type: 'primary' /}
+            {/call}
+        {/param}
+        {param extraClasses: $extraClasses /}
+        {param iconClass: 'icon-lock' /}
+    {/call}
+{/template}

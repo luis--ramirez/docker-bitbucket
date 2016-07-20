@@ -1,0 +1,6 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-pull-request-properties" name="Pull Request Property Providers">
+
+    <pull-request-property-provider key="comment-count-property-provider" class="bean:commentCountProvider"/>
+    <pull-request-property-provider key="task-count-property-provider" class="bean:taskCountProvider"/>
+
+</atlassian-plugin>

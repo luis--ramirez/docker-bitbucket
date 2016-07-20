@@ -1,0 +1,49 @@
+@import "/static/global.less";
+
+.markup-attachments {
+    &.active-drop-target {
+        textarea, .markup-preview {
+            border-top: 1px dashed @confirmationTextColor;
+            border-left: 1px dashed @confirmationTextColor;
+            border-right: 1px dashed @confirmationTextColor;
+        }
+
+        .markup-toolbar {
+            border-bottom: 1px dashed @confirmationTextColor;
+            border-left: 1px dashed @confirmationTextColor;
+            border-right: 1px dashed @confirmationTextColor;
+        }
+
+        .markup-attachments-button {
+            .aui-icon {
+                display: none;
+
+                &.aui-iconfont-success {
+                    display: inline-block;
+                    color: @confirmationTextColor;
+                }
+            }
+        }
+    }
+
+    .markup-attachments-button {
+        .aui-icon {
+            display: inline-block;
+
+            &.aui-iconfont-success {
+                display: none;
+            }
+        }
+    }
+
+    .markup-attachments-button.spinning {
+        .aui-icon {
+            visibility: hidden;
+        }
+    }
+}
+
+//This is for when attachments have been disabled, so the .markup-attachments class won't be on the editor
+.markup-attachments-button.disabled .aui-icon {
+    color: @aui-iconfont-secondary-color;
+}

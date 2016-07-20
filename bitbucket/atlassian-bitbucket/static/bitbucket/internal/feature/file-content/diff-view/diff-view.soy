@@ -1,0 +1,26 @@
+{namespace bitbucket.internal.feature.fileContent.diffView}
+
+/**
+ * @param? editorClass
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .editor private="true"}
+    <div class="diff-editor
+        {if hasData() and $editorClass} {$editorClass}{/if}
+        {call aui.renderExtraClasses data="all" /}"
+        {call aui.renderExtraAttributes data="all" /}>
+    </div>
+{/template}
+
+/**
+ */
+{template .lineNumber}
+    <div class="line-number"></div>
+{/template}
+
+/**
+ */
+{template .lineNumberMarker}
+    <div class="line-number-marker line-locator" data-file-type="" data-line-type="" data-line-number=""></div>
+{/template}

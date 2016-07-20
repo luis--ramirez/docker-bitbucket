@@ -1,0 +1,165 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param id
+ * @param? tabs
+ * @param? searchable
+ * @param? searchPlaceholder
+ * @param? extraClasses
+ */
+{template .searchableSelector}
+    <div class="searchable-selector {if $extraClasses}{$extraClasses}{/if}" id="{$id}">
+        {if $searchable}
+        <header>
+            <label class="assistive" for="{$id}-search-input">{$searchPlaceholder ? $searchPlaceholder : getText('bitbucket.web.searchable.selector.placeholder')}</label>
+            <input id="{$id}-search-input" type="text" name="filter" class="filter" placeholder="{$searchPlaceholder ? $searchPlaceholder : getText('bitbucket.web.searchable.selector.placeholder')}"/>
+        </header>
+        {/if}
+        {if $tabs and length($tabs) > 1}
+            <div class="aui-tabs horizontal-tabs">
+                <ul class="tabs-menu">
+                    {foreach $tab in $tabs}
+                        {call aui.tabMenuItem}
+                            {param url}#{$id}-tab-pane-{index($tab)}{/param}
+                            {param text: $tab.label/}
+                            {param isActive: isFirst($tab) /}
+                            {param extraAttributes: ['data-tab-id': index($tab)] /}
+                        {/call}
+                    {/foreach}
+                </ul>
+                {foreach $tab in $tabs}
+                    {call aui.tabPane}
+                        {param content}
+                            <ul class="results-list"></ul>
+                            <div class="spinner"></div>
+                        {/param}
+                        {param id: $id + '-tab-pane-' + index($tab)/}
+                        {param isActive: isFirst($tab)/}
+                        {param extraClasses: 'results'/}
+                        {param extraAttributes: ['data-tab-id': index($tab)] /}
+                    {/call}
+                {/foreach}
+            </div>
+        {else}
+        <div class="results">
+            <ul class="results-list"></ul>
+            <div class="spinner"></div>
+        </div>
+        {/if}
+    </div>
+{/template}
+
+
+/**
+ * @param values
+ * @param isLastPage
+ * @param size
+ * @param? isPreload
+ * @param? noResultsText
+ * @param? noMoreResultsText
+ */
+{template .searchableSelectorResults}
+    {foreach $result in $values}
+        <li class="result {if $isPreload}preload{/if}">
+            <a href="{$result.url ? $result.url : '#'}" tabindex="-1" data-id="{$result.id}" data-item="{to_json($result)}">
+                {$result.name}
+            </a>
+        </li>
+    {/foreach}
+    {if $isLastPage}
+        {if $size > 0}
+        //values.length is unreliable because some values may have been removed by the deduping process.
+        //As long as we are on the last page and the size is greater than 0, it means we've displayed at least 1 result, preload or regular.
+        <li class="no-results">{$noMoreResultsText ? $noMoreResultsText : getText('bitbucket.web.searchable.selector.no.more.results')}</li>
+        {else}
+        <li class="no-results">{$noResultsText ? $noResultsText : getText('bitbucket.web.searchable.selector.no.results')}</li>
+        {/if}
+    {/if}
+{/template}
+
+/**
+ * @param id
+ * @param? item     //This takes either an item object (of the same shape as a result) or a plain text placeholder
+ * @param? text
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .searchableSelectorTrigger}
+    {call .searchableSelectorTriggerGeneric}
+        {param id: $id/}
+        {param content}
+            {call .searchableSelectorTriggerContent}
+                {param item: $item/}
+                {param text: $text/}
+            {/call}
+        {/param}
+        {param autofocus: $autofocus /}
+        {param extraClasses: $extraClasses/}
+        {param extraAttributes: $extraAttributes/}
+    {/call}
+{/template}
+
+/**
+ * This is meant to be used in specific trigger implementations, not on it's own
+ * @param? id
+ * @param content
+ * @param? autofocus
+ * @param? titleContent
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .searchableSelectorTriggerGeneric}
+    <button {if $id}id="{$id}" {/if}type="button" class="aui-button searchable-selector-trigger
+            {call aui.renderExtraClasses}
+                {param extraClasses: $extraClasses/}
+            {/call}"
+            {if $autofocus} autofocus{/if}
+            {if $titleContent} title="{$titleContent|noAutoescape}"{/if}
+            {call aui.renderExtraAttributes}
+                {param extraAttributes: $extraAttributes /}
+             {/call}>
+        {$content|noAutoescape} // Can't use button template because aui's button template only accepts text
+    </button>
+{/template}
+
+/**
+ * @param id
+ * @param? item     //This takes either an item object (of the same shape as a result) or a plain text placeholder
+ * @param? text
+ * @param? fieldName     //Name for form field
+ * @param? fieldId      //ID for form field
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .searchableSelectorTriggerWithField}
+    {call .searchableSelectorTrigger}
+        {param id: $id/}
+        {param item: $item/}
+        {param text: $text/}
+        {param autofocus: $autofocus /}
+        {param extraClasses: $extraClasses/}
+        {param extraAttributes: $extraAttributes/}
+    {/call}
+    {call widget.aui.form.input}
+        {param id: $fieldId ? $fieldId : $id + '-field' /}
+        {param name:  $fieldName ? $fieldName : $id + '-field' /}
+        {param initialValue: $item ? $item.id : null /}
+        {param type: 'hidden'/}
+    {/call}
+{/template}
+
+
+/**
+ * @param? item     //This takes either an item object (of the same shape as a result) or a plain text placeholder
+ * @param? text
+ */
+{template .searchableSelectorTriggerContent}
+    {if $item}
+        <span class="name" data-id="{$item.id}" data-item="{to_json($item)}">{$item.name}</span>
+    {else}
+        <span class="placeholder">{$text ? $text : getText('bitbucket.web.searchable.selector.trigger.placeholder')}</span>
+    {/if}
+{/template}
+

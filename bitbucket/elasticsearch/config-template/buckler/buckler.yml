@@ -1,0 +1,4 @@
+auth.basic.http.enabled: true
+auth.basic.tcp.enabled: true
+auth.basic.username: bitbucket
+auth.basic.password: bitbucket-changeit

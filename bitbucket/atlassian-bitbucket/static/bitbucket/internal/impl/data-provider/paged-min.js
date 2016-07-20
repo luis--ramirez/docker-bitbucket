@@ -1,0 +1,2 @@
+define("bitbucket/internal/impl/data-provider/paged",["bitbucket/internal/bbui/data-provider/paged","bitbucket/internal/util/object"],function(c,d){function b(a){a=a||{};c.apply(this,arguments);a.builder&&(this._baseBuilder=a.builder)}d.inherits(b,c);b.prototype._getBuilder=function(){return this._baseBuilder};b.prototype._fetchNext=function(a){var b=this._getBuilder();if(!b)throw Error("A base builder must be provided.");a=b.withParams({start:a?a.nextPageStart:0});return this._fetch(a.build())};
+b.prototype._reachedEnd=function(a){return a&&a.isLastPage};return b});

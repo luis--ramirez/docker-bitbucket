@@ -1,0 +1,18 @@
+{namespace bitbucket.internal.widget.markupAttachments}
+
+/**
+ * @param? title
+ * @param? buttonText
+ * @param? accessibilityText
+ */
+{template .uploadTrigger}
+    {call bitbucket.internal.buttons.button}
+        {param tagName: 'label' /}
+        {param extraClasses: 'aui-button-subtle aui-button-compact markup-attachments-button' /}
+        {param title: $title /}
+        {param iconType: 'aui' /}
+        {param iconClass: 'aui-icon-small aui-iconfont-attachment' /}
+        {param iconText: $accessibilityText /}
+        {param buttonText: $buttonText ? $buttonText : '' /}
+    {/call}
+{/template}

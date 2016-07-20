@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/admin/applinks-spi-impl",[],function(){AppLinks=window.AppLinks||{};AppLinks.SPI=jQuery.extend(AppLinks.SPI||{},{showCreateEntityLinkSuggestion:function(){return!1}})});

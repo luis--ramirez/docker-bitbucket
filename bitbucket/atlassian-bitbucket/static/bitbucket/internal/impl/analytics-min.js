@@ -1,0 +1,1 @@
+define("bitbucket/internal/impl/analytics",["aui","bitbucket/internal/bbui/analytics/analytics","bitbucket/internal/util/object"],function(c,b,d){function a(){b.call(this)}d.inherits(a,b);a.prototype.trigger=function(a,b){c.trigger("analytics",{name:a,data:b})};return new a});

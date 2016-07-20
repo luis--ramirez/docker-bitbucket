@@ -1,0 +1,1 @@
+define("bitbucket/internal/page/admin/clustering",["jquery","exports"],function(c,b){b.onReady=function(a){a=c(a);var b=a.height()/-4;a.tooltip({gravity:"s",offset:b})}});

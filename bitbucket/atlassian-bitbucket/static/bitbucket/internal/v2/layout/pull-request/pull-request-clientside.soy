@@ -1,0 +1,20 @@
+{namespace bitbucket.internal.v2.layout.pullRequest}
+
+/**
+ * @param? extraClasses
+ * @param participantRoles
+ * @param participantRoleHeading
+ * @param participantMenuId
+ */
+{template .participantsSection private="true"}
+    <div{if $extraClasses} class="{$extraClasses}"{/if} data-overflow-menu-id="{$participantMenuId}">
+        <span class="reviewers-label"><strong>{length($participantRoles)}</strong>{sp}{$participantRoleHeading}</span>
+        {call bitbucket.internal.widget.avatarList.participantList}
+            {param participants: $participantRoles /}
+            {param triggerClass: 'overflow-reviewers-trigger' /}
+            {param menuId: $participantMenuId /}
+            {param menuClass: 'overflow-reviewers' /}
+            {param maxOpen: 5 /}
+        {/call}
+    </div>
+{/template}

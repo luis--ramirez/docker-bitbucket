@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/pull-request-header/actions",["exports"],function(a){Object.defineProperty(a,"__esModule",{value:!0});a.PR_HIDE_MERGE_ERRORS="PR_HIDE_MERGE_ERRORS";a.PR_SHOW_MERGE_ERRORS="PR_SHOW_MERGE_ERRORS"});

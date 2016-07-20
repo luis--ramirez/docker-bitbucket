@@ -1,0 +1,75 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param settings
+* @param? fieldErrors
+* @param? formErrors
+* @param? saved
+* @param? pluginFieldsContent
+*/
+{template .serversettings}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.server')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-settings-server-settings' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.serversettings.title')}</h2>
+                </div>
+            </div>
+        </header>
+
+        {if $saved}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.serversettings.saved')}
+                {/param}
+            {/call}
+        {/if}
+        {foreach $webPanel in getWebPanels('bitbucket.web.serversettings.messages')}
+            {$webPanel}
+        {/foreach}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param errors: $formErrors /}
+            {param extraClasses: 'stash-server-settings-form' /}
+            {param content}
+                {call widget.aui.form.text}
+                    {param id: 'appTitle' /}
+                    {param labelContent}{getText('bitbucket.web.config.app.title')}{/param}
+                    {param initialValue: $settings.appTitle /}
+                    {param errors: $fieldErrors ? $fieldErrors.appTitle : null /}
+                    {param required: true /}
+                    {param autofocus: true /}
+                    {param description: getText('bitbucket.web.config.app.title.description') /}
+                    {param sizeClass: 'long' /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'baseUrl' /}
+                    {param labelContent}{getText('bitbucket.web.config.base.url')}{/param}
+                    {param initialValue: $settings.baseUrl /}
+                    {param required: true /}
+                    {param errors: $fieldErrors ? $fieldErrors.baseUrl : null /}
+                    {param description: getText('bitbucket.web.config.base.url.description')/}
+                    {param sizeClass: 'long' /}
+                {/call}
+                {$pluginFieldsContent |noAutoescape}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param accessKey: 's' /}
+                            {param label: getText('bitbucket.web.button.save') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

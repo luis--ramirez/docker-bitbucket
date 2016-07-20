@@ -1,0 +1,43 @@
+{namespace bitbucket.internal.admin.groups}
+
+/**
+* @param? groupForm
+* @param? fieldErrors
+* @param? formErrors
+*/
+{template .create}
+{call bitbucket.internal.layout.focused}
+    {param windowTitle: getText('bitbucket.web.group.create.header') /}
+    {param contentTitle: getText('bitbucket.web.group.create.header') /}
+    {param focusedPageSize: 'medium' /}
+    {param content}
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: nav_admin_group_create() /}
+            {param errors: $formErrors /}
+            {param content}
+                {call widget.aui.form.text}
+                    {param id: 'name' /}
+                    {param autofocus: true /}
+                    {param required: true /}
+                    {param labelContent}{getText('bitbucket.web.group.name.html')}{/param}
+                    {param initialValue: $groupForm ? $groupForm.name : null /}
+                    {param maxLength: 255 /}
+                    {param errors: $fieldErrors ? $fieldErrors.name : null /}
+                {/call}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param label: getText('bitbucket.web.button.create.group') /}
+                            {param isPrimary: true /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin_groups() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

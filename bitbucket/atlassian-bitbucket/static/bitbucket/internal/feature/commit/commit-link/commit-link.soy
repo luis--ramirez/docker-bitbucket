@@ -1,0 +1,20 @@
+{namespace bitbucket.internal.feature.commit}
+
+/**
+ * @param commit
+ * @param? repository
+ * @param? filePath
+ * @param? pullRequest
+ */
+{template .link}
+        <{$repository ? 'a' : 'span'}{sp}class="commitid"
+            {if $pullRequest and $repository}
+                {sp}href="{nav_pull_commit($repository.project, $repository, $pullRequest, $commit.id)}"
+            {elseif $repository}
+                {sp}href="{nav_commit($repository.project, $repository, $commit.id, null, $filePath)}"
+            {/if}
+            {if $commit.message}{sp}data-commit-message="{$commit.message}"{/if}
+            {sp}data-commitid="{$commit.id}">
+            {$commit.displayId}
+        </{$repository ? 'a' : 'span'}>
+{/template}

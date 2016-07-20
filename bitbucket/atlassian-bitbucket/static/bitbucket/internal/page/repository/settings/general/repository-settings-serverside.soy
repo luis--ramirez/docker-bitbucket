@@ -1,0 +1,126 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param? repositoryLocation
+ * @param? repositoryForm
+ * @param? isEditSuccess
+ * @param? formErrors
+ * @param? fieldErrors
+ * @param? dataAttributes
+ * @param? detailedErrors
+ * @param? pluginFieldsContent
+ * @param? repoNameMaxSize
+ */
+{template .repositoryGeneralSettings}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.repository.generalSettings')}
+    {call bitbucket.internal.layout.repositorySettings}
+        {{param windowTitle: getText('bitbucket.web.repository.settings', $repository.project.name, $repository.name) /}}
+        {param repository: $repository /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeSettingsTab: 'repository-settings-general' /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{getText('bitbucket.web.repository.settings.title')}</h2>
+                {/param}
+                {param actionListContent}
+                    {foreach $webItem in getWebItems('bitbucket.repository.settings.action',  [ 'repository' : $repository ])}
+                        {call bitbucket.internal.widget.webItemButton data="$webItem" /}
+                    {/foreach}
+                {/param}
+            {/call}
+            {if $isEditSuccess}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.changes.saved')}
+                    {/param}
+                {/call}
+            {/if}
+            {call bitbucket.internal.widget.xsrfProtectedForm}
+                {param action: '' /}
+                {param errors: $formErrors /}
+                {param detailedErrors: $detailedErrors /}
+                {param extraClasses: 'stash-repository-edit-settings-form' /}
+                {param content}
+                    {call widget.aui.form.text}
+                        {param id: 'name' /}
+                        {param initialValue: $repositoryForm ? $repositoryForm.name : $repository.name /}
+                        {param labelContent}{getText('bitbucket.web.repository.name.update.html')}{/param}
+                        {param tooltip: getText('bitbucket.web.repository.name.update') /}
+                        {param errors: $fieldErrors ? $fieldErrors['name'] : null /}
+                        {param maxLength: $repoNameMaxSize /}
+                        {param autocomplete: 'off' /}
+                        {param descriptionContent}
+                            {getText('bitbucket.web.repository.name.update.description')}
+                            {call bitbucket.internal.feature.repository.cloneUrlGen /}
+                        {/param}
+                        {param required: true /}
+                        {param autofocus: true /}
+                    {/call}
+                    // The location is _only_ provided for sys admins so only show the fieldValue when it is provided
+                    {if $repositoryLocation}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'location' /}
+                            {param labelContent}{getText('bitbucket.web.repository.location.update.html')}{/param}
+                            {param valueContent}{$repositoryLocation}{/param}
+                        {/call}
+                    {/if}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'size' /}
+                        {param labelContent}{getText('bitbucket.web.repository.size.label')}{/param}
+                        {param valueContent}
+                            {call aui.buttons.button}
+                                {param text: getText('bitbucket.web.repository.size.button') /}
+                                {param type: 'link' /}
+                                {param extraAttributes: ['type': 'button'] /}
+                                {param extraClasses: 'size-load-button' /}
+                            {/call}
+                            <div class="spinner"></div>
+                        {/param}
+                    {/call}
+                    {if isScmFeatureSupported($repository, 'UPDATE_DEFAULT_BRANCH')}
+                        {call widget.aui.form.field}
+                            {param id: 'default-branch' /}
+                            {param labelContent}{getText('bitbucket.web.repository.defaultbranch.update.html')}{/param}
+                            {param errors: $fieldErrors ? $fieldErrors['defaultBranchId'] : null /}
+                            {{param description: getText('bitbucket.web.repository.defaultbranch.description', 'master') /}}
+                            {param input}
+                                {call bitbucket.internal.feature.repository.branchSelectorTriggerWithField}
+                                    {param id: 'default-branch' /}
+                                    {param fieldName: 'defaultBranchId' /}
+                                    {param ref: $repositoryForm ? $repositoryForm.defaultBranch : null /}
+                                    {param text: getText('bitbucket.web.repository.update.defaultbranch.nospecified')/}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/if}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'forkable' /}
+                        {param labelContent}{getText('bitbucket.web.repository.forks.enable.label.html')}{/param}
+                        {param checked: $repositoryForm ? $repositoryForm.forkable : $repository.forkable /}
+                        {param errors: $fieldErrors ? $fieldErrors.forkable : null /}
+                        {param description: getText('bitbucket.web.repository.forks.enable.description') /}
+                    {/call}
+                    {$pluginFieldsContent |noAutoescape}
+                    {call widget.aui.form.buttons}
+                        {param content}
+                            {call widget.aui.form.submit}
+                                {param id: 'submit' /}
+                                {param isPrimary: true /}
+                                {param accessKey: 's' /}
+                                {param label: getText('bitbucket.web.button.save') /}
+                            {/call}
+                            {call widget.aui.form.cancelButton}
+                                {param href: nav_repo_browse($repository.project, $repository) /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/page/repositoryGeneralSettings').onReady('.stash-repository-edit-settings-form', '.move-repository-link', '.delete-repository-link');</script>
+        {/param}
+    {/call}
+{/template}

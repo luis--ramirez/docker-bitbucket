@@ -1,0 +1,88 @@
+{namespace bitbucket.internal.v2.layout}
+
+/**
+ * @param? commit
+ * @param repository
+ * @param pullRequest
+ * @param activeTab
+ * @param content
+ * @param hasRepoWrite
+ * @param? mergeTimeout
+ * @param? dataAttributes
+ * @param? pageBottomContent
+ * @param? windowTitle
+ * @param maxChanges max changes to show in the diff tree
+ * @param? relevantContextLines
+ * @param? seenNeedsWork
+ * @param? seenCommitReview
+ */
+{template .pullRequest}
+    {webResourceManager_requireResourcesForContext('internal.layout.pullRequest')}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.pullRequest')}
+    {webResourceManager_requireResourcesForContext('dark.bitbucket.layout.pullRequest')}
+    // These calls to requirePageData allow us to give some better context to the server-side conditions and context-providers
+    // of client-web-fragments at these locations.
+    {let $webFragmentContext : ['repository' : $repository, 'pullRequest' : $pullRequest] /}
+    {requirePageData('bitbucket.layout.pullRequest', $webFragmentContext)}
+    {requirePageData('bitbucket.pull-request.related-entities', $webFragmentContext)}
+    {requirePageData('bitbucket.pull-request.links', $webFragmentContext)}
+    {requirePageData('bitbucket.pull-request.overview.sections', $webFragmentContext)}
+
+    {call bitbucket.internal.layout.repository}
+        {{param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.pullrequest.windowtitle', '' + $pullRequest.id, $pullRequest.title) /}}
+        {param dataAttributes: $dataAttributes /}
+        {param panelContentHeaderExcludeBreadcrumbs: true /}
+        {param content}
+            <header id="pull-request-header"></header>
+            {call bitbucket.internal.widget.webItemTabs}
+                {param webItems: getWebItems('bitbucket.pull-request.nav', $webFragmentContext) /}
+                {param context: [ 'repository' : $repository, 'pullRequest' : $pullRequest ] /}
+                {param activeTab: $activeTab /}
+                {param isDisabled: true /}
+                {param tabPanesContent}
+                    {call widget.aui.tabPane}
+                        {param isActive: true /}
+                        {param extraClasses: 'pull-request-content' /}
+                        {param content}
+                            {$content|noAutoescape}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param repository: $repository /}
+        {param activeNav: 'bitbucket.repository.nav.pull-requests' /}
+        {param pageBottomContent}
+            // Deprecated since 2.4 for removal in 3.0 - We still appear to be relying on this.
+            {requirePageData('bitbucket.internal.pull-request.view', [
+                'pullRequest' : $pullRequest,
+                'watchable' : $pullRequest
+            ])}
+
+            // Deprecated for removal in 5.0
+            {let $toolbarSections: getDeprecatedServerFragments('bitbucket.pull-request.toolbar', ['SECTION'], $webFragmentContext) /}
+            {let $toolbarItems: getDeprecatedServerFragments($toolbarSections, '$(key)', ['ITEM'], $webFragmentContext) /}
+            {renderServerFragmentsForClient('bitbucket.internal.pullrequest.toolbar.deprecated', $toolbarSections)}
+            {renderServerFragmentsForClient('bitbucket.internal.pullrequest.toolbar.deprecated/$(key)', $toolbarItems)}
+
+            {let $diffTreeHeaderItems: getDeprecatedServerFragments('bitbucket.repository.difftree.header', ['ITEM'], [:]) /}
+            {renderServerFragmentsForClient('bitbucket.internal.repository.difftree.header.deprecated', $diffTreeHeaderItems)}
+
+            <script>require('bitbucket/internal/v2/layout/pull-request').onReady({lb}
+                {if $commit}'commitJSON': {to_json($commit, ['markup' : 'description'])|noAutoescape},{/if}
+                'pullRequestJSON': {to_json($pullRequest, ['markup' : 'description'])|noAutoescape},
+                'hasRepoWrite': {$hasRepoWrite},
+                'contentSelector': '.pull-request-content',
+                'commitsTableWebSections': {to_json(getWebSections('bitbucket.commits.extras', [ 'repository' : $repository ]))|noAutoescape},
+                'maxChanges': {$maxChanges ? $maxChanges : 'null'},
+                'mergeTimeout': {$mergeTimeout ? $mergeTimeout : 'null'},
+                'relevantContextLines': {$relevantContextLines ? $relevantContextLines : 'null'},
+                'seenNeedsWork': {firstNonNull($seenNeedsWork, true)},
+                'seenCommitReview': {firstNonNull($seenCommitReview, false)}
+            {rb});</script>
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {{/param}}
+    {/call}
+{/template}

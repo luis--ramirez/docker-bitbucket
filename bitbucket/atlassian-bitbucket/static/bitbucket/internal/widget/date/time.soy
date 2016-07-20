@@ -1,0 +1,65 @@
+{namespace bitbucket.internal.widget.date}
+
+/**
+ * @param date
+ * @param customMapping
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .customAge}
+    {call .time}
+        {param date: $date /}
+        {param title: $title /}
+        {param customMapping : $customMapping /}
+        {param extraClasses : $extraClasses /}
+        {param type: 'shortAge' /}
+    {/call}
+{/template}
+
+/**
+ * @param date
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .shortAge}
+    {call .time}
+        {param date: $date /}
+        {param title: $title /}
+        {param extraClasses : $extraClasses /}
+        {param type: 'shortAge' /}
+    {/call}
+{/template}
+
+/**
+ * @param date
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .short}
+    {call .time}
+        {param date: $date /}
+        {param title: $title /}
+        {param extraClasses : $extraClasses /}
+        {param type: 'short' /}
+    {/call}
+{/template}
+
+/**
+ * @param date
+ * @param type
+ * @param? customMapping
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .time}
+    {if $date}
+        <time title="{$title ? $title : format_date($date, 'full')}" datetime="{format_date($date, 'timestamp')}"
+            {if $extraClasses} class="{$extraClasses}"{/if}>
+            {format_date($date, $type, $customMapping)}
+        </time>
+    {else}
+        <time{if $extraClasses} class="{$extraClasses}"{/if}>
+            {getText('bitbucket.web.date.unknown')}
+        </time>
+    {/if}
+{/template}

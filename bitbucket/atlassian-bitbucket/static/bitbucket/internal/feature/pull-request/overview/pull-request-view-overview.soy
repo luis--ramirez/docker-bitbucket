@@ -1,0 +1,128 @@
+{namespace bitbucket.internal.page.pullRequest}
+
+/**
+ * @param pullRequest
+ * @param author
+ * @param createdDate
+ * @param description
+ * @param? descriptionAsHtml
+ * @param? currentUser
+ * @param? commentTips
+ */
+{template .viewOverview}
+    {call .overviewMetadata data="all" /}
+    <h3>{getText('bitbucket.web.pullrequest.activity.heading')}</h3>
+    {call bitbucket.internal.feature.pullRequest.activity}
+        {param id: 'pull-request-activity' /}
+        {param currentUser: $currentUser /}
+        {param commentTips: $commentTips /}
+    {/call}
+{/template}
+
+
+/**
+ * @param authorNameContent
+ */
+{template .pullRequestSummary private="true"}
+    {{getText('bitbucket.web.pullrequest.summary',
+        $authorNameContent)|noAutoescape}}
+{/template}
+
+
+/**
+ * @param pullRequest
+ * @param author
+ * @param createdDate
+ * @param description
+ * @param? descriptionAsHtml
+ */
+{template .overviewMetadata}
+    {call widget.aui.group.group}
+        {param content}
+            {call widget.aui.group.item}
+                {param content}
+                    <h3>{getText('bitbucket.web.pullrequest.details.heading')}</h3>
+                    {call widget.aui.group.group}
+                        {param extraClasses : 'details' /}
+                        {param content}
+                            {call widget.aui.group.item}
+                                {param extraClasses : 'author-avatar-item' /}
+                                {param content}
+                                    {call bitbucket.internal.widget.avatar}
+                                        {param person: $author /}
+                                        {param size: 'medium' /}
+                                    {/call}
+                                {/param}
+                            {/call}
+                            {call widget.aui.group.item}
+                                {param content}
+                                    <p>
+                                        {call .pullRequestSummary}
+                                            {param authorNameContent}
+                                                {call bitbucket.internal.widget.userLink}
+                                                    {param user: $author /}
+                                                    {param extraClasses: 'author' /}
+                                                {/call}
+                                            {/param}
+                                        {/call}
+                                        {call bitbucket.internal.widget.date.shortAge}
+                                            {param extraClasses : 'creation-date' /}
+                                            {param date: $createdDate /}
+                                        {/call}
+                                    </p>
+                                    {if $descriptionAsHtml}
+                                        <div class="description markup">{$descriptionAsHtml|noAutoescape}</div>
+                                    {elseif $description}
+                                        <p class="description">{$description}</p>
+                                    {else}
+                                        <p class="description no-description">
+                                            {getText('bitbucket.web.pullrequest.no.description')}{sp}
+                                            <a class="add-description">{getText('bitbucket.web.pullrequest.add.description')}</a>
+                                        </p>
+                                    {/if}
+                                {/param}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+            {call widget.aui.group.item}
+                {param extraClasses: 'summary-panel' /}
+                {param content}
+                    <div class="plugin-section-primary">
+                        {foreach $panelHtml in getWebPanels('bitbucket.pull-request.related-entities', [
+                            'pullRequest' : $pullRequest
+                        ])}
+                            {$panelHtml}
+                        {/foreach}
+                        <div class="plugin-section-separator"></div>
+                    </div>
+                    <div class="plugin-section-secondary">
+                        {foreach $panelHtml in getWebPanels('bitbucket.pull-request.links', [
+                            'pullRequest' : $pullRequest
+                        ])}
+                            {$panelHtml}
+                        {/foreach}
+                    </div>
+                    {foreach $section in getWebSections('bitbucket.pull-request.overview.sections', [
+                        'pullRequest' : $pullRequest
+                    ])}
+                        <div class="{$section.key}">
+                            {if $section.labelText}
+                                <h4>{$section.labelText}</h4>
+                            {/if}
+                            {foreach $panelHtml in getWebPanels($section.location + '/' + $section.key, [
+                                'pullRequest' : $pullRequest
+                            ])}
+                                {$panelHtml}
+                            {/foreach}
+                        </div>
+                    {/foreach}
+
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+

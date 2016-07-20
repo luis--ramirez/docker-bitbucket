@@ -1,0 +1,127 @@
+{namespace bitbucket.web.gettingstarted.panel}
+
+/**
+ * @param nextUrl
+ * @param wasRedirected
+ */
+{template .getstarted}
+    {call .marketingPanel}
+        {param extraClasses: 'marketing-page-header' /}
+        {param isSwapped: true /}
+        {param imageClass: 'marketing-panel-get-started' /}
+        {param textContent}
+            <h1>
+                {getText('bitbucket.web.gettingstarted.page.header.welcome', productName())}
+                <br />
+                <strong>{getTextAsHtml('bitbucket.web.gettingstarted.page.header.getstarted.html')}</strong>
+            </h1>
+            <p class="skip-welcome">
+            {getText('bitbucket.web.gettingstarted.page.header.skipwelcome', productName())}
+            {sp}<a href="{$wasRedirected ? $nextUrl : '#'}" id="getting-started-header-cta-link">
+                {getText($wasRedirected ? 'bitbucket.web.gettingstarted.page.calltoaction.gitonwithit' : 'bitbucket.web.gettingstarted.page.calltoaction.gitbacktoit')}
+                </a>.
+            </p>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ */
+{template .birdsEyeView}
+    {call .marketingPanel}
+        {param isSingleColumn: true /}
+        {param content}
+            <h2>{getTextAsHtml('bitbucket.web.gettingstarted.page.panel.repositories.heading.html')}</h2>
+            {getTextAsHtml('bitbucket.web.gettingstarted.page.panel.repositories.text.html')}
+            <div class="marketing-panel-image marketing-panel-birds-eye-view" role="img" aria-label="Screenshot"></div>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ */
+{template .developFreely}
+    {call .marketingPanel}
+        {param isSwapped: true /}
+        {param imageClass: 'marketing-panel-develop-freely' /}
+        {param textContent}
+            <h2>{getTextAsHtml('bitbucket.web.gettingstarted.page.panel.workflows.heading.html')}</h2>
+            {getTextAsHtml('bitbucket.web.gettingstarted.page.panel.workflows.text.html', productName())}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ */
+{template .feedbackInContext}
+    {call .marketingPanel}
+        {param imageClass: 'marketing-panel-feedback-in-context' /}
+        {param textContent}
+            <h2>{getTextAsHtml('bitbucket.web.gettingstarted.page.panel.pullrequests.heading.html')}</h2>
+            {getTextAsHtml('bitbucket.web.gettingstarted.page.panel.pullrequests.text.html', productName())}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ */
+{template .linkToJira}
+    {call .marketingPanel}
+        {param isSwapped: true /}
+        {param imageClass: 'marketing-panel-link-to-jira' /}
+        {param textContent}
+            <h2>{getText('bitbucket.web.gettingstarted.page.panel.linktojira.heading')}</h2>
+            {getTextAsHtml('bitbucket.web.gettingstarted.page.panel.linktojira.text.html', productName())}
+        {/param}
+    {/call}
+{/template}
+
+
+/**
+ * @param nextUrl
+ * @param wasRedirected
+ */
+{template .accountIsReady}
+    <div class="marketing-page-footer">
+        {if $wasRedirected}
+            <h2>{getText('bitbucket.web.gettingstarted.page.footer.accountisready', productName())}</h2>
+        {/if}
+        {call aui.buttons.button}
+            {param id: 'getting-started-footer-cta-button' /}
+            {param type: 'subtle' /}
+            {param text: getText($wasRedirected ? 'bitbucket.web.gettingstarted.page.calltoaction.gitonwithit' : 'bitbucket.web.gettingstarted.page.calltoaction.gitbacktoit') /}
+            {param href: $wasRedirected ? $nextUrl : null /}
+        {/call}
+
+        {getTextAsHtml('bitbucket.web.gettingstarted.page.footer.learnmore.html','https://www.atlassian.com/git')}
+        {getTextAsHtml('bitbucket.web.gettingstarted.page.footer.sourcetree.html','http://www.sourcetreeapp.com')}
+    </div>
+{/template}
+
+/**
+ * @param? content
+ * @param? isSingleColumn
+ * @param? imageClass
+ * @param? textContent
+ * @param? isSwapped swaps the image and text content
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .marketingPanel private="true"}
+    <div class="marketing-panel
+        {if $isSwapped}{sp}marketing-panel-swapped{/if}
+        {if $isSingleColumn}{sp}marketing-panel-wide{/if}
+        {call aui.renderExtraClasses data="all" /}"
+        {call aui.renderExtraAttributes data="all" /}>
+        <div class="marketing-panel-inner">
+            {if $isSingleColumn}
+                {$content|noAutoescape}
+            {else}
+                <div class="marketing-panel-image{if $imageClass}{sp}{$imageClass}{/if}" role="img" aria-label="Screenshot"></div>
+                <div class="marketing-panel-text">
+                    {if $textContent}{$textContent|noAutoescape}{/if}
+                </div>
+            {/if}
+        </div>
+    </div>
+{/template}

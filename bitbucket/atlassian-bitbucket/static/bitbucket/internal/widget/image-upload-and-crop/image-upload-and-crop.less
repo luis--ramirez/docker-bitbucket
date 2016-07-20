@@ -1,0 +1,51 @@
+@import "/static/global.less";
+
+.image-upload-and-crop-container {
+
+    &.filereader-unsupported {
+        .description.fallback {
+            display: block;
+        }
+    }
+
+    .description.fallback {
+        display: none;
+    }
+
+    @image-explorer-container-width: 320px;
+    @image-explorer-container-border-width: 2px;
+    form.aui {
+        width: @image-explorer-container-width + (2 * @image-explorer-container-border-width);
+        margin: @doubleSpacing auto @baseSpacing;
+        text-align: center;
+
+        .spinner {
+            .square(@auiButtonHeight);
+            margin-left: @baseSpacing;
+            position: absolute;
+        }
+    }
+
+    .image-explorer-container {
+        margin: 0 auto;
+    }
+
+    .image-select-button {
+        color: @bodyTextColor; // @aui-override
+    }
+
+    .webcam-capture {
+        display: none;
+    }
+
+    &.webcam-mode {
+
+        form.aui, .image-explorer-container {
+            display: none;
+        }
+
+        .webcam-capture {
+            display: block;
+        }
+    }
+}

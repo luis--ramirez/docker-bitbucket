@@ -1,0 +1,147 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param atRevisionRef
+ * @param? actionWebItems
+ * @param? activeNav
+ * @param? bodyClass
+ * @param content
+ * @param? dataAttributes
+ * @param? error
+ * @param? entityUrl
+ * @param? entityNotificationsContent
+ * @param? entitySecondaryActionsContent
+ * @param? extraAttributes
+ * @param? focusedPageSize
+ * @param? headContent
+ * @param? hideLoginLink
+ * @param? hideProfile
+ * @param? isVerticalNav
+ * @param? navClass
+ * @param? pageBottomContent
+ * @param? panelContentHeader
+ * @param? pageType
+ * @param? panelClass
+ * @param? panelNavContent
+ * @param? panelSidebarContent
+ * @param repository
+ * @param? secondaryActionWebItems
+ * @param? theme
+ * @param? toolbarPrimaryExtraContent
+ * @param? toolbarSecondaryExtraContent
+ * @param? useAdminContext
+ * @param? windowTitle
+ * @param? refQueryParam
+ */
+{template .branch}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.branch')}
+    {requirePageData('bitbucket.branch.layout.actions.dropdown', [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ])}
+    {let $revisionSelectorId: 'repository-layout-revision-selector' /}
+    {call bitbucket.internal.layout.repository}
+        {param atRevisionRef: $atRevisionRef /}
+        {param actionWebItems: $actionWebItems /}
+        {param activeNav: $activeNav /}
+        {param bannerContent}
+            {foreach $webPanel in getWebPanels('bitbucket.web.repository.branch.banner', ['repository' : $repository])}
+                {$webPanel}
+            {/foreach}
+        {/param}
+        {param bodyClass: $bodyClass /}
+        {param dataAttributes: $dataAttributes /}
+        {param entityUrl: $entityUrl /}
+        {param entityNotificationsContent: $entityNotificationsContent /}
+        {param entitySecondaryActionsContent: $entitySecondaryActionsContent /}
+        {param extraAttributes: $extraAttributes /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param headContent: $headContent /}
+        {param hideLoginLink: $hideLoginLink /}
+        {param hideProfile: $hideProfile /}
+        {param isVerticalNav: $isVerticalNav /}
+        {param navClass: $navClass /}
+        {param panelContentHeader: $panelContentHeader /}
+        {param pageType: $pageType /}
+        {param panelClass: $panelClass /}
+        {param panelNavContent: $panelNavContent /}
+        {param panelSidebarContent: $panelSidebarContent /}
+        {param repository: $repository /}
+        {param secondaryActionWebItems: $secondaryActionWebItems /}
+        {param theme: $theme /}
+        {param useAdminContext: $useAdminContext /}
+        {param windowTitle: $windowTitle /}
+        {param content}
+            {if $error}
+                {call aui.message.warning}
+                    {param content}{$error}{/param}
+                    {param isCloseable: true /}
+                    {param extraClasses: 'branch-layout-error' /}
+                {/call}
+            {/if}
+            {call aui.toolbar2.toolbar2}
+                {param extraClasses: 'branch-selector-toolbar' /}
+                {param content}
+                    {call aui.toolbar2.item}
+                        {param item: 'primary' /}
+                        {param content}
+                            {call widget.aui.group.group}
+                                {param content}
+                                    {call widget.aui.group.item}
+                                        {param content}
+                                            {call bitbucket.internal.buttons.buttons}
+                                                {param content}
+                                                    {call bitbucket.internal.feature.repository.revisionReferenceSelectorTrigger}
+                                                        {param id: $revisionSelectorId /}
+                                                        {param ref: $atRevisionRef /}
+                                                    {/call}
+                                                    {call aui.dropdown2.trigger}
+                                                        {param id: 'branch-actions' /}
+                                                        {param tagName: 'button' /}
+                                                        {param content}
+                                                            {call aui.icons.icon}
+                                                                {param useIconFont: true /}
+                                                                {param icon: 'more' /}
+                                                                {param accessibilityText: getText('bitbucket.web.branch.actions.menu.label') /}
+                                                            {/call}
+                                                        {/param}
+                                                        {param extraClasses: 'aui-button aui-dropdown2-trigger-arrowless' /}
+                                                        {param extraAttributes: [ 'type': 'button' , 'autocomplete' : 'off' ] /}
+                                                        {param menu: [ 'id' : 'branch-actions-menu' ] /}
+                                                    {/call}
+                                                {/param}
+                                            {/call}
+                                        {/param}
+                                    {/call}
+                                    {if $toolbarPrimaryExtraContent}
+                                        {$toolbarPrimaryExtraContent|noAutoescape}
+                                    {/if}
+                                {/param}
+                            {/call}
+
+                        {/param}
+                    {/call}
+                    {call aui.toolbar2.item}
+                        {param item: 'secondary' /}
+                        {param extraClasses: 'commit-badge-container' /}
+                        {param content}
+                            {if $toolbarSecondaryExtraContent}
+                                {$toolbarSecondaryExtraContent|noAutoescape}
+                            {/if}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+            {$content |noAutoescape}
+        {/param}
+        {param pageBottomContent}
+            {call aui.dropdown2.contents}
+                {param id: 'branch-actions-menu' /}
+                {param extraClasses: 'aui-style-default' /}
+            {/call}
+            <script>
+            require('bitbucket/internal/layout/branch').onReady('#{$revisionSelectorId}'{if $refQueryParam}, '{$refQueryParam|escapeJs}'{/if});
+            </script>
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}

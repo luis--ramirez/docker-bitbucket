@@ -1,0 +1,471 @@
+@import "../../../../global.less";
+@import "../search-common/search-common.less";
+
+@search-highlight-color: #e6f3fb;
+@lineNumberWidth: 50px;
+@maxLinesShown: 10; // this should match up with MAX_LINES_SHOWN in search-results-table.js
+@noResultsImageSize: 100px;
+@secondarySearchWidth: 300px;
+
+.separator() {
+    &::before {
+        content: '/';
+        padding-right: @halfSpacing;
+        text-decoration: none;
+    }
+}
+
+.search {
+    background-color: @contentBackgroundColor;
+    min-height: @minPagePanelHeight;
+
+    .search-form {
+        background-color: @primaryHighlight;
+        padding: @doubleSpacing;
+        position: relative;
+
+        .query-substituted {
+            border: 1px solid @adg-color-pale-blue-derivative;
+            border-top: none;
+            color: @secondaryTextColor;
+            font-size: @font-size-small;
+            line-height: @icon-size-xsmall + @baseSpacing;
+            background: @adg-color-pale-blue url(images/search-warning-small.svg) @baseSpacing center no-repeat;
+            background-size: @icon-size-xxsmall @icon-size-xxsmall;
+            padding-left: @icon-size-xxsmall + @doubleSpacing;
+            margin: 0 @aui-border-radius-small;
+        }
+    }
+
+    form.aui .field-group.search-query-container {
+        border: 1px solid @dividerColor;
+        border-radius: @aui-border-radius-small;
+        background-color: @contentBackgroundColor;
+        padding-left: @tripleSpacing;
+        position: relative;
+        margin-bottom: 0;
+
+        .aui-icon {
+            position: absolute;
+            left: @baseSpacing;
+            top: @baseSpacing + 3px;
+            color: @secondaryTextColor;
+            &:before {
+                font-size: @aui-font-size-medium;
+            }
+        }
+
+        .search-query {
+            border: none;
+            font-size: @font-size-xlarge;
+            padding: 0;
+            line-height: 1.5;
+            height: auto;
+
+            &:focus {
+                outline: none;
+            }
+
+            &::-webkit-input-placeholder {
+                line-height: 1.5;
+            }
+        }
+    }
+
+
+    .error-text {
+        color: @errorTextColor;
+    }
+
+    .code-search-error {
+        text-align: center;
+    }
+
+    .code-search-bad-query {
+        text-align: center;
+        background: url(images/magnifying-glass.svg) 50% top no-repeat;
+        background-size: @noResultsImageSize @noResultsImageSize;
+        padding-top: @noResultsImageSize + @baseSpacing;
+        margin-top: @noResultsImageSize;
+    }
+
+    .code-search-no-results {
+        width: 500px;
+        margin: 50px auto 0 auto;
+        text-align: left;
+        color: @bodyTextColor;
+
+        .main {
+            padding-left: @noResultsImageSize + @doubleSpacing;
+            background: url(images/magnifying-glass.svg) left top no-repeat;
+            background-size: @noResultsImageSize @noResultsImageSize;
+            min-height: @noResultsImageSize;
+
+            h2 {
+                font-size: @aui-font-size-xlarge;
+                line-height: @aui-heading-xlarge-line-height * 1.25;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .advanced {
+            background-color: @adg-color-pale-blue;
+            margin: @tripleSpacing @halfSpacing 0 @halfSpacing;
+            border: 1px dashed @adg-color-pale-blue-derivative;
+            border-radius: @aui-border-radius-medium;
+            padding: @doubleSpacing;
+
+            h2 {
+                font-size: @aui-font-size-medium;
+                font-weight: bold;
+                margin-bottom: @baseSpacing;
+            }
+
+            .aui-icon {
+                color: @secondaryTextColor;
+                margin-right: @baseSpacing;
+            }
+
+            p {
+                margin-top: 0;
+            }
+
+        }
+
+    }
+
+    .code-search-server-error {
+        background: url(images/search-warning.svg) center top no-repeat;
+        background-size: @icon-size-xlarge @icon-size-xlarge;
+        padding-top: @icon-size-xlarge + @baseSpacing;
+        margin-top: @tripleSpacing;
+    }
+
+    .code-search-searching {
+        position: relative;
+        padding-left: @doubleSpacing;
+
+        .spin-container {
+            position: absolute;
+            left: @baseSpacing;
+            top: 50%;
+        }
+    }
+
+    .search-results {
+        padding: @halfSpacing @doubleSpacing 0 @doubleSpacing;
+        margin: 0 0 @baseSpacing 0;
+        position: relative;
+
+        .primary-results {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .primary-results-container {
+            transition: margin-right 0.2s ease-out;
+
+            &.with-secondary-results {
+                padding-right: @doubleSpacing;
+                margin-right: @secondarySearchWidth;
+                border-right: 1px solid @secondaryHighlight;
+                min-height: 80vh;
+            }
+
+            &.no-results {
+                margin-top: @doubleSpacing;
+            }
+        }
+
+        .result-summary {
+            color: @secondaryTextColor;
+            font-size: @font-size-small;
+            font-weight: bold;
+            margin: @doubleSpacing 0 @baseSpacing 0;
+            text-transform: uppercase;
+
+            strong {
+                color: @bodyTextColor;
+            }
+        }
+
+        .results-scope {
+
+            padding-bottom: @doubleSpacing;
+
+            .code-search-scope-avatar {
+                vertical-align: middle;
+            }
+
+            .search-scope-text {
+                display: inline-block;
+                vertical-align: middle;
+
+                .code-search-scope-title {
+                    display: inline;
+                    padding: 0;
+                    padding-left: @baseSpacing;
+                }
+
+                .code-search-everwhere-link {
+                    margin-left: @quadSpacing;
+                }
+            }
+        }
+
+        .repository-results {
+            .result-summary {
+                margin-bottom: @baseSpacing;
+            }
+
+            .result {
+                a {
+                    color: @bodyTextColor;
+                }
+            }
+
+            .result:hover {
+                background-color: @primaryHighlight;
+            }
+
+            .repository {
+                .project-name {
+                    .repoResultProjectWidth(@secondarySearchWidth);
+                }
+            }
+        }
+
+        .code-search-result {
+            padding: @doubleSpacing 0;
+            border-bottom: @divider-border-width solid @dividerColor;
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            header {
+                background-color: @primaryHighlight;
+                border-radius: @baseBorderRadius;
+                padding: @baseSpacing;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+
+                &.not-first-line {
+                    padding-bottom: (@baseSpacing + @halfSpacing);
+                    background: @primaryHighlight url(images/search-header-tear@2x.png) 0 100% repeat-x;
+                    background-size: 6px 6px; // Half of background PNG size for retina sharpness
+                }
+            }
+
+            .code-search-header-link {
+                .text-overflow();
+                color: @adg-color-black;
+                display: inline-block;
+            }
+
+            .collapsible {
+                .text-overflow();
+                display: block;
+                flex: 1 100000 auto;
+                min-width: 25px;
+            }
+
+            .non-collapsible {
+                flex: 0 0 auto;
+            }
+
+            .code-search-result-avatar {
+                margin-right: @baseSpacing;
+            }
+
+
+            .code-search-repo-link {
+                display: inline-flex;
+                justify-content: flex-start;
+                align-items: center;
+                min-width: @aui-avatar-size-medium + @halfSpacing;
+            }
+
+            .code-search-owner {
+                .text-overflow();
+                flex: 0 1000 auto;
+            }
+
+            .code-search-project {
+                .text-overflow();
+                flex: 0 100 auto;
+                &.with-owner {
+                    padding-left: @halfSpacing;
+                    .separator();
+                }
+            }
+
+            .code-search-repository {
+                .text-overflow();
+                flex: 0 2 auto;
+                padding-left: @halfSpacing;
+                .separator();
+            }
+
+            .code-search-header-separator {
+                display: inline-block;
+                margin: 0 @halfSpacing;
+            }
+
+            .code-search-initial-filepath {
+                min-width: 25px;
+                flex: 0 500 auto;
+            }
+
+            .code-search-file-separator {
+                color: @secondaryTextColor;
+                margin: 0 @halfSpacing;
+            }
+
+            .code-search-filepart {
+                color: @secondaryTextColor;
+            }
+
+            .code-search-filename {
+                margin-right: @doubleSpacing;
+                font-weight: bold;
+                flex-grow: 10000;
+            }
+
+            .hit-contexts {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            &.truncated .hit-contexts {
+                max-height: 19px * @maxLinesShown; // 19px is a magic number that corresponds to the height of a line
+                overflow: hidden;
+            }
+
+            .context-toggler {
+                display: block;
+                position: relative;
+                border-bottom: 1px solid @dividerColor;
+                padding-bottom: @baseSpacing;
+                margin-top: @doubleSpacing;
+                font-size: @aui-font-size-medium;
+
+                .inner {
+                    display: none;
+                    background-color: @contentBackgroundColor;
+                    padding: 0 @baseSpacing;
+                    position: absolute;
+                    top: 0;
+                    left: @lineNumberWidth + 3px; // 3px to get the icon aligned correctly
+
+                    .text {
+                        margin-left: @baseSpacing + @aui-icon-size-small;
+                        line-height: @baseSpacing;
+                    }
+
+                    .aui-icon {
+                        top: 2px; // 2px needed to get the icon aligned correctly
+                        left: @baseSpacing;
+                        position: absolute;
+                        display: inline-block;
+                    }
+                }
+            }
+
+            &.truncated,
+            &.expanded {
+                padding-bottom: @baseSpacing;
+                border-bottom: none;
+            }
+
+            &.expanded .contracter {
+                display: block;
+            }
+
+            &.truncated .expander {
+                display: block;
+            }
+
+            .hit-context {
+                font-family: monospace;
+                position: relative;
+                padding: @baseSpacing 0 (@baseSpacing + @halfSpacing) 0;
+                background: url(images/search-tear@2x.png) 0 100% repeat-x;
+                background-size: 6px 4px; // Half of background PNG size for retina sharpness
+
+                &:last-child {
+                    background: none;
+                    padding-bottom: @baseSpacing;
+                }
+
+                code {
+                    display: block;
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    padding-left: @lineNumberWidth + @tripleSpacing;
+                    white-space: pre;
+                }
+            }
+
+            .hit-context-lines {
+                padding: 0;
+                list-style-type: none;
+                position: absolute;
+                top: @baseSpacing;
+                left: 0;
+                width: @lineNumberWidth;
+
+                li {
+                    background-color: @contentBackgroundColor;
+                    border-right: 1px solid @dividerColor;
+                    color: @secondaryTextColor;
+                    display: block;
+                    margin-left: 0;
+                    margin-right: @baseSpacing;
+                    padding-left: @doubleSpacing;
+                    width: @lineNumberWidth;
+                }
+            }
+
+            .repository {
+                vertical-align: middle;
+                display: inline-block;
+                margin-right: @halfSpacing;
+            }
+
+            em {
+                font-style: normal;
+                font-weight: bold;
+                background-color: @search-highlight-color;
+                padding: 2px;
+            }
+        }
+
+        .primary-results + .spinner {
+            padding-top: @spinner-size-medium + @doubleSpacing;
+        }
+    }
+
+    .secondary-results-container {
+        position: absolute;
+        top: @halfSpacing;
+        right: 0;
+        width: @secondarySearchWidth;
+        opacity: 1;
+        transition: opacity 0.2s ease-out 0.3s;
+        background-color: @contentBackgroundColor;
+
+        &.loaded {
+            opacity: 0;
+        }
+    }
+
+    .result-load-progress {
+        text-align: center;
+        font-size: @font-size-small;
+        color: @secondaryTextColor;
+    }
+}

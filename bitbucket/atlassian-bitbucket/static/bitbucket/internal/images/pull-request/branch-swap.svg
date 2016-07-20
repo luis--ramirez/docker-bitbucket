@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="776.6 0 414 828"
+	 width="414" height="828" enable-background="new 776.6 0 414 828" xml:space="preserve">
+<g>
+	<g transform="translate(-95.000000, -215.000000)">
+	</g>
+	<g transform="translate(6.000000, -43.000000)">
+		<g id="Arrow" transform="translate(0.000000, 6.000000)"></g>
+	</g>
+	<polygon fill="#707070" points="1121.6,276 1121.6,69 1052.6,69 1052.6,276 983.5,276 1087.1,414 1190.6,276 	"/>
+	<polygon fill="#707070" points="880.1,0 776.6,138 845.6,138 845.6,345 914.6,345 914.6,138 983.5,138 	"/>
+</g>
+<g>
+	<polygon fill="#8C8C8C" points="1121.6,689.9 1121.6,483 1052.6,483 1052.6,689.9 983.5,689.9 1087.1,828 1190.6,689.9 	"/>
+	<polygon fill="#8C8C8C" points="880.1,414 776.6,552 845.6,552 845.6,758.9 914.6,758.9 914.6,552 983.5,552 	"/>
+</g>
+</svg>

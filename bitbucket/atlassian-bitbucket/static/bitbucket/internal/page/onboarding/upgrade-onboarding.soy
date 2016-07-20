@@ -1,0 +1,35 @@
+{namespace bitbucket.internal.onboarding}
+
+/**
+ * @param nextUrl
+ */
+{template .upgradeonboarding}
+{webResourceManager_requireResourcesForContext('bitbucket.page.gettingstarted')}
+    {call bitbucket.internal.layout.base}
+        {param bodyClass: 'upgrade-onboarding-page'/}
+        {param pageType: 'hybrid' /}
+        {param windowTitle: getText('bitbucket.web.upgrade.onboarding.page.title') /}
+        {param content}
+            <div class="content-body">
+                <div class="left-pane"></div>
+                <div class="right-pane">
+                    <div class="upgrade-announcement">
+                        <h1>{getText('bitbucket.web.upgrade.onboarding.page.header')}</h1>
+                        <p>{getText('bitbucket.web.upgrade.onboarding.page.line1')}</p>
+                        <p>{getTextAsHtml('bitbucket.web.upgrade.onboarding.page.line2.html', bitbucket_help_url('bitbucket.go.bitbucket.server.4.0'))}</p>
+                        {call bitbucket.internal.buttons.button}
+                            {param buttonText: getText('bitbucket.web.upgrade.onboarding.page.button.accept') /}
+                            {param href: $nextUrl/}
+                            {param isPrimary: true /}
+                        {/call}
+                    </div>
+                </div>
+            </div>
+        {/param}
+        {param pageBottomContent}
+            <script type="text/javascript">
+                require('bitbucket/internal/page/upgrade-onboarding').onReady();
+            </script>
+        {/param}
+    {/call}
+{/template}

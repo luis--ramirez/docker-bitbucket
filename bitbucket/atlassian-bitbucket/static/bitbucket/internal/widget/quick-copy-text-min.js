@@ -1,0 +1,1 @@
+define("bitbucket/internal/widget/quick-copy-text",["jquery","exports"],function(b,c){var a=!0;c.onReady=function(){a&&(a=!1,b(document).on("click",".quick-copy-text",function(a){this.focus();this.select()}))}});

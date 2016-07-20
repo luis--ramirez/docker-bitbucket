@@ -1,0 +1,55 @@
+{namespace bitbucket.internal.admin}
+
+/**
+* @param settings
+* @param? saved
+*/
+{template .avatarsettings}
+{webResourceManager_requireResourcesForContext('bitbucket.page.admin.avatars')}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'admin-general-avatars' /}
+    {param content}
+        <header class="aui-page-header">
+            <div class="aui-page-header-inner">
+                <div class="aui-page-header-main">
+                    <h2>{getText('bitbucket.web.config.avatar')}</h2>
+                </div>
+            </div>
+        </header>
+
+        {if $saved}
+            {call aui.message.success}
+                {param content}
+                    {getText('bitbucket.web.config.avatar.saved')}
+                {/param}
+            {/call}
+        {/if}
+
+        {call bitbucket.internal.widget.xsrfProtectedForm}
+            {param action: '' /}
+            {param content}
+                {call widget.aui.form.checkbox}
+                    {param id: 'enableGravatar' /}
+                    {param labelContent}{getText('bitbucket.web.config.avatar.enablegravatar')}{/param}
+                    {param checked: $settings.enableGravatar /}
+                    {param autofocus: true /}
+                    {param descriptionContent}{getText('bitbucket.web.config.avatar.enablegravatar.description', '<a href="http://gravatar.com">', '</a>')|noAutoescape}{/param}
+                {/call}
+                {call widget.aui.form.buttons}
+                    {param content}
+                        {call widget.aui.form.submit}
+                            {param id: 'submit' /}
+                            {param isPrimary: true /}
+                            {param accessKey: 's' /}
+                            {param label: getText('bitbucket.web.button.save') /}
+                        {/call}
+                        {call widget.aui.form.cancelButton}
+                            {param href: nav_admin() /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}

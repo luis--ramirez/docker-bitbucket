@@ -1,0 +1,52 @@
+@import "/static/global.less";
+
+#content {
+    form {
+        padding-left: 0;
+    }
+
+    .section {
+        background-color: @feintGreyColor;
+        min-width: 415px;
+        padding: 16px;
+        text-align: left;
+        border: 1px solid @dividerColor;
+        .border-radius(3px);
+        .box-shadow(inset 0 0 5px rgba(0,0,0,0.1));
+    }
+
+    .field-group {
+        padding-left: 0;
+
+        > .submit-spinner {
+            margin: 10px 10px 0;
+        }
+    }
+
+    .explanations {
+        p {
+            margin: .25em 0;
+        }
+
+        em {
+            font-style: normal;
+            font-weight: bold;
+        }
+    }
+
+    #registered-user-access {
+        margin-left: 0.75em;
+    }
+}
+
+form.project-permission-form .group {
+    padding-left: @baseSpacing;
+
+    .submit-spinner {
+        margin-left: @halfSpacing;
+    }
+}
+
+.bitbucket-theme #content .aui-group.default-permissions {
+    padding: 0;
+}

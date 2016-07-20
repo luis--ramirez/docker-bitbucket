@@ -1,0 +1,2 @@
+define("bitbucket/internal/util/css",["bitbucket/internal/util/function"],function(d){var b=[],e=function(){var a=document.createElement("style");a.appendChild(document.createTextNode(""));document.head.appendChild(a);return a.sheet}(),c={chain:function(){var a=[];return{appendRule:function(b){a.push(c.appendRule(b));return this},destroy:function(){d.applyAll(a);a=[]}}},appendRule:function(a){var c={},d=b.length;b.push(c);e.insertRule(a,d);return function(){var a=b.indexOf(c);-1!==a&&(e.deleteRule(a),
+b.splice(a,1))}},__sheet:e};return c});

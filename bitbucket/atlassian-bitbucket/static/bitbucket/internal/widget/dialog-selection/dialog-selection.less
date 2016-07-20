@@ -1,0 +1,58 @@
+@import "/static/global.less";
+
+@defaultDialogSelectionHeight: 290px;  // Can be overridden depending on other elements in the dialog
+.dialog-selection {
+    .box-sizing();
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    list-style: none;
+    width: 100%;
+    height: @defaultDialogSelectionHeight;
+
+    li.selected {
+        .border-radius(3px);
+        background-color: @primaryActiveColor;
+        border: 1px solid @primaryActiveBorderColor;
+    }
+
+    @iconBorderSize: 1px;
+    @optionHeight: 80px;
+    .option {
+        .user-select();
+        .box-sizing();
+        .border-radius(3px);
+        float: left;
+        vertical-align: top;
+        margin: 0;
+        padding: @baseSpacing;
+        border: 1px solid @contentBackgroundColor;
+        cursor: pointer;
+        width: 50%;
+        height: @optionHeight;
+
+        .option-meta {
+            padding-left: @icon-size-large + (2 * @iconBorderSize) + @baseSpacing;
+        }
+
+        .option-name {
+            .text-overflow();
+            font-weight: bold;
+            margin-top: 0;
+        }
+
+        .option-description {
+            margin-top: 0;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .option-icon {
+            .circle(@icon-size-large);
+            background-color: @contentBackgroundColor;
+            border: @iconBorderSize solid @dividerColor;
+            vertical-align: text-bottom;
+            float: left;
+        }
+    }
+}

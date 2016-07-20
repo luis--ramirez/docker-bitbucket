@@ -1,0 +1,147 @@
+{namespace bitbucket.internal.widget.lozenge}
+
+/**
+ * @param text
+ * @param? monospace
+ * @param? htmlElement
+ * @param? href
+ * @param? maxLength
+ * @param? extraClasses
+ * @param? tooltip
+ * @param? clickable
+ */
+{template .lozenge}
+    {let $tag: $href? 'a' : ($htmlElement ? $htmlElement : ($clickable?  'button' : 'span')) /}
+    <{$tag} class="aui-lozenge{if $extraClasses} {$extraClasses}{/if}{if $monospace} monospace-lozenge{/if}"
+        {if $href} href="{$href}"{/if}{if $tooltip} title="{$tooltip}"{/if}>{if $maxLength}{$text|truncate:$maxLength|escapeHtml}{else}{$text}{/if}</{$tag}>
+{/template}
+
+/**
+ * @param content
+ * @param? monospace
+ * @param? htmlElement
+ * @param? href
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? tooltip
+ */
+{template .htmlLozenge}
+    <{if $htmlElement}{$htmlElement}{else}a{/if} class="aui-lozenge{if $extraClasses} {$extraClasses}{/if}{if $monospace} monospace-lozenge{/if}"
+        {if $href} href="{$href}"{/if}{if $tooltip} title="{$tooltip}"{/if}
+        {if $extraAttributes}{call aui.renderExtraAttributes}{param extraAttributes: $extraAttributes /}{/call}{/if}>
+        {$content|noAutoescape}</{if $htmlElement}{$htmlElement}{else}a{/if}>
+{/template}
+
+/**
+ * @param? abbreviated
+ * @param? extraClasses
+ */
+{template .merge}
+    {call .lozenge}
+        {param extraClasses: 'merge-lozenge' + ($extraClasses ? ' ' + $extraClasses : '') + ($abbreviated ? ' abbreviated' : '') /}
+        {param text}
+            {$abbreviated ? getText('bitbucket.web.commit.lozenge.merge.abbreviated') : getText('bitbucket.web.commit.lozenge.merge')}
+        {/param}
+        {param tooltip}
+            {getText('bitbucket.web.commit.lozenge.merge.abbreviated.tooltip')}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param state
+ * @param? href
+ * @param? clickable
+ * @param? extraClasses
+ * @param? tooltip
+ * @param? isActivityContext
+ */
+{template .pullRequestState}
+    {let $commonClasses: $extraClasses ? ' ' + $extraClasses + ' pull-request-state-lozenge' : ' pull-request-state-lozenge' /}
+    {switch $state}
+        {case 'OPEN'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-complete open' + $commonClasses  /}
+                {param text: getText('bitbucket.web.pullrequest.state.open') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.open') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'OPENED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-complete opened' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.opened.verb') : getText('bitbucket.web.pullrequest.state.opened') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.opened') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'MERGED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-success merged' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.merged.verb') : getText('bitbucket.web.pullrequest.state.merged') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.merged') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'DECLINED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-error declined' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.declined.verb') : getText('bitbucket.web.pullrequest.state.declined') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.declined') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'REOPENED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-complete reopened' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.reopened.verb') : getText('bitbucket.web.pullrequest.state.reopened') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.reopened') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'UPDATED', 'RESCOPED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-current updated' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.updated.verb') : getText('bitbucket.web.pullrequest.state.updated') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.updated') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'APPROVED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-success approved' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.approved.verb') : getText('bitbucket.web.pullrequest.state.approved') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.approved') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'UNAPPROVED'}
+            {call .lozenge}
+                {param extraClasses: 'aui-lozenge-error unapproved' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.unapproved.verb') : getText('bitbucket.web.pullrequest.state.unapproved') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.unapproved') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+        {case 'REVIEWED'}
+            {call .lozenge}
+                {param extraClasses: 'needs-work' + $commonClasses /}
+                {param text: $isActivityContext ? getText('bitbucket.web.pullrequest.activity.needs.work.verb') : getText('bitbucket.web.pullrequest.state.needs.work') /}
+                {param tooltip: $tooltip ? $tooltip : getText('bitbucket.web.pullrequest.needs.work') /}
+                {param clickable: $clickable/}
+                {param href: $href/}
+            {/call}
+    {/switch}
+{/template}
+
+/**
+ * @param isEnabled
+ * @param? tooltip
+ */
+{template .enabled}
+    {call bitbucket.internal.widget.lozenge.lozenge}
+        {param extraClasses: $isEnabled ? 'lozenge-enabled' : 'lozenge-disabled' /}
+        {param text: $isEnabled ? getText('bitbucket.web.lozenge.enabled.title') : getText('bitbucket.web.lozenge.disabled.title') /}
+        {param tooltip: $tooltip /}
+    {/call}
+{/template}

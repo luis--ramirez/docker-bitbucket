@@ -1,0 +1,9 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-web-resource-transformers" name="System Web Resource Transformers">
+
+    <url-reading-web-resource-transformer key="stashJsHelp" name="Stash JavaScript Help Transformer"
+                              class="com.atlassian.stash.internal.web.help.JavascriptHelpUrlWebResourceTransformer"/>
+
+    <url-reading-web-resource-transformer key="dateFormat" name="Stash JavaScript Date Format Transformer"
+                              class="com.atlassian.stash.internal.web.StashDateFormatWebResourceTransformer"/>
+
+</atlassian-plugin>

@@ -1,0 +1,305 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? activeNav
+ * @param? actionWebItems
+ * @param? actionWebFragmentsLocation
+ * @param? actionWebFragmentsContext
+ * @param? bannerContent
+ * @param content Main page content inserted inside the #content section
+ * @param? entityContext
+ * @param? entityHeaderRightItemsContent
+ * @param entityName
+ * @param? entityNameExtraContent
+ * @param? entityNav
+ * @param? entityNotificationsContent
+ * @param? entityParentName
+ * @param? entityParentUrl
+ * @param? entitySecondaryActionsContent
+ * @param? entityUrl
+ * @param? headerClasses
+ * @param? headerImageContent
+ * @param? isVerticalNav
+ * @param? navClass
+ * @param? panelContentHeader Heading to put inside a aui.page.pageHeader at the top of the page panel content area
+ * @param? panelContentHeaderActions Actions to put inside a aui.page.pageHeader at the top of the page panel content area
+ * @param? panelContentHeaderBreadcrumbs Breadcrumbs to put inside a aui.page.pageHeader at the top of the page panel content area
+ * @param? panelContentHeaderBreadcrumbsClasses
+ * @param? panelNavContent
+ * @param? panelSidebarContent
+ * @param? panelClass
+ * @param? pageHeaderContent Content to put inside a aui.page.pageHeader at the top of the page
+ * @param? secondaryActionWebItems
+ *
+ * data passed through to stash.layout.base
+ * @param? activeHeaderNav
+ * @param? bodyClass String. Additional classes to be added to the BODY
+ * @param? dataAttributes Data attributes for main content section
+ * @param? extraAttributes String or Object. Additional Extra attributes to apply to BODY
+ * @param? focusedPageSize Default: xlarge. Options: small, medium, large, xlarge.
+ * @param? headContent Content inserted inside HEAD after TITLE.
+ * @param? hideLoginLink Boolean. Hides the "Login" link in global app header. Primarily used on the login page itself
+ * @param? hideProfile Boolean. Hides the "User Profile" in global app header, including the Login link if not authenticated
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? pageType Default: default (full width). Options: default, focused, fixed, hybrid, sidebar, generic (no class applied).
+ * @param? sidebarState String. 'collapsed', 'expanded' or left undefined. Used by AUI Sidebar to render the sidebar's initial state.
+ * @param? sidebarSettingsWebItems items to put in the footer of the sidebar, should only be one or no items
+ * @param? theme String. Theme class name added to the BODY. Default is 'bitbucket-theme'
+ * @param? useAdminContext Boolean. Loads resources for Admin page context (atl.admin instead of atl.general). Default false.
+ * @param? windowTitle Text for the TITLE element.
+ */
+{template .entity}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.entity')}
+    {call bitbucket.internal.layout.base}
+        {param activeHeaderNav: $activeHeaderNav /}
+        {param bodyClass: $bodyClass /}
+        {param dataAttributes: $dataAttributes /}
+        {param extraAttributes: $extraAttributes /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param headContent: $headContent /}
+        {param hideLoginLink: $hideLoginLink /}
+        {param hideProfile: $hideProfile /}
+        {param pageType: $pageType /}
+        {param sidebarState: $sidebarState /}
+        {param theme: $theme /}
+        {param useAdminContext: $useAdminContext /}
+        {param windowTitle: $windowTitle /}
+        {param content}
+            {if $pageType == 'sidebar'}
+                <section class="notifications">
+                    {if $entityNotificationsContent}
+                        {$entityNotificationsContent|noAutoescape}
+                    {/if}
+                </section>
+
+                {call aui.sidebar.sidebar}
+                    {param id: 'aui-sidebar-content'/}
+                    {param extraAttributes: ['tabindex': '-1'] /}
+                    {param headerContent}
+                        // This is here because we need it to run after the sidebar <div> is on the page but before
+                        // the majority of the sidebar has been rendered to stop flicker.
+                        <script>require('bitbucket/internal/widget/sidebar').preload();</script>
+                        {call aui.page.pageHeader}
+                            {param extraClasses: $headerClasses /}
+                            {param content}
+                                {if $headerImageContent}
+                                    {call aui.page.pageHeaderImage}
+                                        {param content: $headerImageContent /}
+                                    {/call}
+                                {/if}
+                                {call aui.page.pageHeaderMain}
+                                    {param extraClasses: 'entity-item' /}
+                                    {param content}
+                                        {if $entityParentName}
+                                            <ol class="aui-nav aui-nav-breadcrumbs">
+                                                <li>
+                                                    {if $entityParentUrl}<a href="{$entityParentUrl}" title="{$entityParentName}">{/if}
+                                                    {$entityParentName}
+                                                    {if $entityParentUrl}</a>{/if}
+                                                </li>
+                                            </ol>
+                                        {/if}
+                                        <h1>
+                                            {if $entityUrl}
+                                                <a href="{$entityUrl}" class="entity-name" title="{$entityName}">
+                                            {else}
+                                                <span class="entity-name" title="{$entityName}">
+                                            {/if}
+                                                {$entityName}
+                                            {if $entityUrl}</a>{else}</span>{/if}
+                                        </h1>
+                                        {if $entityNameExtraContent}
+                                            {$entityNameExtraContent|noAutoescape}
+                                        {/if}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/param}
+                    {param content}
+                        {call widget.aui.navGroup}
+                            {param isVertical: true /}
+                            {param primaryNavContent}
+                                {if $actionWebFragmentsLocation}
+                                    {call bitbucket.internal.widget.sidebarWebFragmentNavigation}
+                                        {param isTierOne: true /}
+                                        {param context: $actionWebFragmentsContext /}
+                                        {param isActions: true /}
+                                        {param title: getText('bitbucket.web.sidebar.header.actions') /}
+                                        {param webFragments: getWebFragments($actionWebFragmentsLocation, $actionWebFragmentsContext) /}
+                                    {/call}
+                                {/if}
+                                {if $entityHeaderRightItemsContent}
+                                    {$entityHeaderRightItemsContent|noAutoescape}
+                                {/if}
+                                {call bitbucket.internal.widget.sidebarWebFragmentNavigation}
+                                    {param isTierOne: true /}
+                                    {param extraClasses: 'sidebar-navigation' /}
+                                    {param webFragments: $entityNav /}
+                                    {param activeNavItem: $activeNav /}
+                                    {param title: getText('bitbucket.web.sidebar.header.navigation') /}
+                                    {param context: $entityContext /}
+                                    {param secondaryNavContent}
+                                        {if $secondaryActionWebItems}
+                                            {foreach $webItem in $secondaryActionWebItems}
+                                                {call widget.aui.navWebItem data="$webItem" /}
+                                            {/foreach}
+                                        {/if}
+                                        {if $entitySecondaryActionsContent}
+                                            {$entitySecondaryActionsContent|noAutoescape}
+                                        {/if}
+                                    {/param}
+                                {/call}
+                                {call bitbucket.internal.widget.sidebarWebFragmentNavigation}
+                                    {param extraClasses: 'sidebar-settings-group' /}
+                                    {param isTierOne: true /}
+                                    {param title: ' ' /} // Hack to draw a divider line above the Settings link until https://ecosystem.atlassian.net/browse/AUI-2809 is done
+                                    {param webFragments: $sidebarSettingsWebItems /}
+                                    {param activeNavItem: $activeNav /}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/param}
+                {/call}
+            {else}
+                <header class="aui-page-header">
+                    <section class="notifications">
+                        {if $entityNotificationsContent}
+                            {$entityNotificationsContent|noAutoescape}
+                        {/if}
+                    </section>
+                    <div class="aui-page-header-inner">
+                        {if $headerImageContent}
+                            <div class="aui-page-header-image">
+                                {$headerImageContent|noAutoescape}
+                            </div>
+                        {/if}
+                        <div class="aui-page-header-main entity-item">
+                            {if $entityParentName}
+                                <ol class="aui-nav aui-nav-breadcrumbs">
+                                    <li>
+                                        {if $entityParentUrl}<a href="{$entityParentUrl}">{/if}
+                                        {$entityParentName}
+                                        {if $entityParentUrl}</a>{/if}
+                                    </li>
+                                </ol>
+                            {/if}
+                            <h1>
+                                {if $entityUrl}
+                                    <a href="{$entityUrl}" class="entity-name">
+                                {else}
+                                    <span class="entity-name">
+                                {/if}
+                                    {$entityName}
+                                {if $entityUrl}</a>{else}</span>{/if}
+                            </h1>
+                            {if $entityNameExtraContent}
+                                {$entityNameExtraContent|noAutoescape}
+                            {/if}
+                            {if $actionWebItems}
+                                {foreach $webItem in $actionWebItems}
+                                    {call bitbucket.internal.widget.webItemButton data="$webItem" /}
+                                {/foreach}
+                            {/if}
+                        </div>
+                        <div class="aui-page-header-actions">
+                            {if $entityHeaderRightItemsContent}
+                                {$entityHeaderRightItemsContent|noAutoescape}
+                            {/if}
+                        </div>
+                    </div>
+                </header>
+            {/if}
+
+            {if $pageHeaderContent}
+                {call aui.page.pageHeader}
+                    {param content: $pageHeaderContent /}
+                {/call}
+            {/if}
+
+            {if $entityNav and not ($isVerticalNav or $pageType == 'sidebar')} // horizontal nav
+                {call widget.aui.webFragmentNavigation}
+                    {param webFragments: $entityNav /}
+                    {param activeNavItem: $activeNav /}
+                    {param extraClasses: $navClass /}
+                    {param context: $entityContext /}
+                    {param secondaryNavContent}
+                        {if $secondaryActionWebItems}
+                            {foreach $webItem in $secondaryActionWebItems}
+                                {call widget.aui.navWebItem data="$webItem" /}
+                            {/foreach}
+                        {/if}
+                        {if $entitySecondaryActionsContent}
+                            {$entitySecondaryActionsContent|noAutoescape}
+                        {/if}
+                    {/param}
+                {/call}
+            {/if}
+
+            {call aui.page.pagePanel}
+                {param extraClasses: 'content-body' + ($panelClass ? ' ' + $panelClass : '' ) /}
+                {param id: 'aui-page-panel-content-body' /}
+                {param extraAttributes: ['tabindex': '-1'] /}
+                {param content}
+                    {if $isVerticalNav} // vertical nav
+                        {call aui.page.pagePanelNav}
+                            {param content}
+                                {call widget.aui.webFragmentNavigation}
+                                    {param webFragments: $entityNav /}
+                                    {param activeNavItem: $activeNav /}
+                                    {param extraClasses: $navClass /}
+                                    {param context: $entityContext /}
+                                    {param isVertical: true /}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {elseif $panelNavContent}
+                        {call aui.page.pagePanelNav}
+                            {param content: $panelNavContent /}
+                        {/call}
+                    {/if}
+                    {call aui.page.pagePanelContent}
+                        {param content}
+                            {if $bannerContent}
+                                {$bannerContent|noAutoescape}
+                            {/if}
+                            {if $panelContentHeader}
+                                {call aui.page.pageHeader}
+                                    {param extraClasses: 'page-header-flex' /}
+                                    {param content}
+                                        {call aui.page.pageHeaderMain}
+                                            {param content}
+                                                {if $panelContentHeaderBreadcrumbs}
+                                                    <ol class="aui-nav aui-nav-breadcrumbs{if $panelContentHeaderBreadcrumbsClasses}{sp}{$panelContentHeaderBreadcrumbsClasses}{/if}">
+                                                        {$panelContentHeaderBreadcrumbs|noAutoescape}
+                                                    </ol>
+                                                {/if}
+                                                <h2 class="page-panel-content-header">{$panelContentHeader}</h2>
+                                            {/param}
+                                        {/call}
+                                        {if $panelContentHeaderActions}
+                                            {call aui.page.pageHeaderActions}
+                                                {param content: $panelContentHeaderActions /}
+                                            {/call}
+                                        {/if}
+                                    {/param}
+                                {/call}
+                            {/if}
+                            {$content|noAutoescape}
+                        {/param}
+                    {/call}
+                    {if $panelSidebarContent}
+                        {call aui.page.pagePanelSidebar}
+                            {param content: $panelSidebarContent /}
+                        {/call}
+                    {/if}
+                {/param}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}

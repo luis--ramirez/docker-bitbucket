@@ -1,0 +1,99 @@
+{namespace bitbucket.internal.users.profile}
+
+/**
+ * Used when showing the profile of some user other than the currently logged in one
+ * @param user
+ * @param project $user's personal project
+ */
+{template .othersProfile}
+{webResourceManager_requireResourcesForContext('bitbucket.page.user.profile.others')}
+{webResourceManager_requireResourcesForContext('bitbucket.page.user.profile')}
+{call bitbucket.internal.layout.users.profile}
+    {{param windowTitle: getText('bitbucket.web.user.profile.others.window.title', $user.displayName) /}}
+    {param activeNav: 'userprofile-repositories-tab' /}
+    {param user: $user /}
+    {param project: $project /}
+    {param content}
+        {call .repositoriesTabPane /}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/users/profile').onReady('#repositories-table', {to_json($project)|noAutoescape}, false, '{$user.displayName|escapeJs}', {isFeatureEnabled('personal.repos')});
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * Used when showing a user their own profile. For the moment it retains the edit buttons shown in the user edit screen.
+ * @param user
+ * @param project $user's personal project
+ */
+{template .ownProfile}
+{webResourceManager_requireResourcesForContext('bitbucket.page.user.profile.self')}
+{webResourceManager_requireResourcesForContext('bitbucket.page.user.profile')}
+{call bitbucket.internal.layout.users.profile}
+    {param windowTitle: getText('bitbucket.web.user.profile.own.window.title') /}
+    {param activeNav: 'userprofile-repositories-tab' /}
+    {param user: $user /}
+    {param project: $project /}
+    {param content}
+        {call .repositoriesTabPane /}
+    {/param}
+    {param pageBottomContent}
+        <script>
+            require('bitbucket/internal/page/users/profile').onReady('#repositories-table', {to_json($project)|noAutoescape}, true, '', {isFeatureEnabled('personal.repos')});
+        </script>
+    {/param}
+{/call}
+{/template}
+
+/**
+ * Used when showing the profile of a service user
+ * @param user
+ */
+{template .serviceUserProfile}
+{webResourceManager_requireResourcesForContext('bitbucket.page.user.profile')}
+{call bitbucket.internal.layout.users.profile}
+    {{param windowTitle: getText('bitbucket.web.user.profile.others.window.title', $user.displayName) /}}
+    {param activeNav: 'userprofile-repositories-tab' /}
+    {param user: $user /}
+    {param content}
+    {/param}
+{/call}
+{/template}
+
+/**
+ *
+ */
+{template .repositoriesTabPane}
+    {call bitbucket.internal.feature.repository.repositoryTable}
+        {param id: 'repositories-table' /}
+        {param showPublicStatus: true /}
+    {/call}
+{/template}
+
+/**
+ * Used by the com.atlassian.bitbucket.server.bitbucket-web:userprofile-manage-account-button web panel
+ */
+{template .manageAccountButton}
+    {call bitbucket.internal.buttons.button}
+        {param buttonText: getText('bitbucket.web.user.profile.manage.account.button.text') /}
+        {param href: nav_account() /}
+        {param title: getText('bitbucket.web.user.profile.manage.account.button.title') /}
+    {/call}
+{/template}
+
+/**
+ * Used by the com.atlassian.bitbucket.server.bitbucket-web:userprofile-create-repository-button web panel
+ *
+ * @param project
+ */
+{template .createRepositoryButton}
+    {call bitbucket.internal.buttons.button}
+        {param buttonText: getText('bitbucket.web.user.profile.create.repository.button.text') /}
+        {param href: nav_repo_create($project) /}
+        {param title: getText('bitbucket.web.user.profile.create.repository.button.title') /}
+    {/call}
+{/template}
+

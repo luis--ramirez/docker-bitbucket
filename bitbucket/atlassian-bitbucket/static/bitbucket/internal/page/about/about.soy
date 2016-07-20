@@ -1,0 +1,86 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param copyrightStartYear
+ * @param copyrightEndYear
+ * @param showLicenses
+ * @param? authors
+ * @param hideProfile
+ */
+{template .about}
+{webResourceManager_requireResourcesForContext('bitbucket.page.about')}
+    {call bitbucket.internal.layout.entity}
+        {param windowTitle: getText('bitbucket.web.about', productFullName()) /}
+        {param entityName: getText('bitbucket.web.about', productFullName()) /}
+        {param hideProfile: $hideProfile /}
+        {param content}
+            <div class="copyright">
+                <p>
+                    {call .copyrightLine}
+                        {param copyrightYearRange}
+                            {if $copyrightStartYear == $copyrightEndYear}{$copyrightEndYear}{else}{$copyrightStartYear} - {$copyrightEndYear}{/if}
+                        {/param}
+                    {/call}
+                </p>
+            </div>
+            <div class="licenses">
+                <p>{getText('bitbucket.web.about.license.line1')|noAutoescape}</p>
+                <p>{getText('bitbucket.web.about.license.line2')|noAutoescape}</p>
+                <p>
+                {getText('bitbucket.web.about.license.line3')}
+                // Ignore the licenses for development builds
+                {if $showLicenses}
+                    //This function is in an auto-generated soy file derived from third-party-licensing/bom.csv
+                    {call bitbucket.internal.page.about.lgplLibraries/}
+                {/if}
+                </p>
+                <p>{getText('bitbucket.web.about.license.line4')}</p>
+                <p>{getText('bitbucket.web.about.license.line5', productFullName())}</p>
+            </div>
+            <div class="authors">
+                <p>{getText('bitbucket.web.about.authors.design')}</p>
+                <ul>
+                    <li>Brett Flower, 2014-2015</li>
+                    <li>John Paz, 2015-2016</li>
+                    <li>Raphael Riegger, 2015-2016</li>
+                    <li>Sam Roberts, 2015-2016</li>
+                    <li>Steven Bai, 2016</li>
+                </ul>
+                <p>{getText('bitbucket.web.about.authors.dev.ops')}</p>
+                <ul>
+                    <li>Sebastian Cole, 2015-2016</li>
+                </ul>
+                <p>{getText('bitbucket.web.about.authors.security')}</p>
+                <ul>
+                    <li>Matt Hart, 2016</li>
+                </ul>
+                <p>{getText('bitbucket.web.about.authors.product.management')}</p>
+                <ul>
+                    <li>Roger Barnes, 2013-2016</li>
+                    <li>Steve King, 2015-2016</li>
+                </ul>
+                <p>{getText('bitbucket.web.about.authors.quality.assistance')}</p>
+                <ul>
+                    <li>Adam Brokes, 2015-2016</li>
+                    <li>David Piper, 2016</li>
+                    <li>Susana Guio, 2014-2016</li>
+                </ul>
+                {if $authors and length($authors) > 0}
+                    <p>{getText('bitbucket.web.about.authors.development')}</p>
+                    <ul>
+                        {foreach $author in $authors}
+                            <li>{$author}</li>
+                        {/foreach}
+                    </ul>
+                {/if}
+            </div>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param copyrightYearRange
+ */
+{template .copyrightLine}
+    {{getText('bitbucket.web.about.copyright', $copyrightYearRange)}}
+{/template}

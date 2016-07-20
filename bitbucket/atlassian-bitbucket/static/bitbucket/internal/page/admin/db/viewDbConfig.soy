@@ -1,0 +1,107 @@
+{namespace bitbucket.internal.page.admin.db}
+
+/**
+ * @param isInternal
+ * @param displayNameKey
+ * @param jdbcUrl
+ * @param jdbcUsername
+ * @param isJdbcPasswordSet
+ * @param? isClustered
+ * @param? formErrors
+ * @param? lastMigrationSuccessful
+ * @param? cancelMigrationSuccessful
+ * @param? migrationException
+ */
+{template .viewConfig}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.db')}
+    {call bitbucket.internal.layout.admin}
+        {param activeTab: 'admin-settings-database' + ($isInternal ? '-internal' : '') /}
+        {param content}
+            <h2>{getText('bitbucket.web.admin.db.view.title')}</h2>
+            {if $lastMigrationSuccessful}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.admin.db.migrate.passed')}
+                    {/param}
+                {/call}
+            {/if}
+            {if $cancelMigrationSuccessful}
+                {call aui.message.warning}
+                    {param content}
+                        {getText('bitbucket.web.admin.db.migrate.cancelled')}
+                    {/param}
+                {/call}
+            {elseif $cancelMigrationSuccessful == false}
+                {call aui.message.warning}
+                    {param content}
+                        {getText('bitbucket.web.admin.db.migrate.cancel.failed')}
+                    {/param}
+                {/call}
+            {/if}
+            {call bitbucket.internal.widget.xsrfProtectedForm}
+                {param action: '' /}
+                {param errors: $formErrors /}
+                {param content}
+                    {if $migrationException}
+                        {call bitbucket.internal.widget.exception}
+                            {param messageContent}
+                                {$migrationException.message}
+                            {/param}
+                            {param throwable: $migrationException /}
+                        {/call}
+                    {/if}
+                    {call widget.aui.form.fieldValue}
+                        {param id: 'type' /}
+                        {param fieldGroupClass: 'type' /}
+                        {param labelContent}{getText('bitbucket.web.admin.db.type.label')}{/param}
+                        {param valueContent}{getText($displayNameKey)}{/param}
+                        {param description: $isInternal ? getText('bitbucket.web.admin.settings.database.internal.description') : null /}
+                    {/call}
+                    {if not $isInternal}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'url' /}
+                            {param labelContent}{getText('bitbucket.web.admin.db.url.label')}{/param}
+                            {param valueContent}{$jdbcUrl}{/param}
+                        {/call}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'username' /}
+                            {param labelContent}{getText('bitbucket.web.admin.db.username.label')}{/param}
+                            {param valueContent}{$jdbcUsername}{/param}
+                        {/call}
+                        {call widget.aui.form.fieldValue}
+                            {param id: 'password' /}
+                            {param labelContent}{getText('bitbucket.web.admin.db.password.label')}{/param}
+                            {param valueContent}
+                                {if $isJdbcPasswordSet}
+                                    {getText('bitbucket.web.admin.db.password.set')}
+                                {else}
+                                    {getText('bitbucket.web.admin.db.password.notset')}
+                                {/if}
+                            {/param}
+                            {param descriptionContent}
+                                {{getText('bitbucket.web.database.change.password.help',
+                                           '<a href="' + bitbucket_help_url('bitbucket.help.db.change.password') + '">', '</a>')|noAutoescape}}
+                            {/param}
+                        {/call}
+                    {/if}
+                    {call widget.aui.form.buttons}
+                        {param content}
+                            {call bitbucket.internal.buttons.button}
+                                {param isPrimary: true /}
+                                {param isDisabled: $isClustered /}
+                                {param href: nav_admin_db_migrate() /}
+                                {param buttonText: getText('bitbucket.web.admin.db.changedb') /}
+                                {param title: $isClustered ? getText('bitbucket.web.admin.db.changedb.clustered') : null /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>
+                require('bitbucket/internal/widget/exception').onReady();
+            </script>
+        {/param}
+    {/call}
+{/template}

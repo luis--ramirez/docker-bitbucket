@@ -1,0 +1,13 @@
+{namespace bitbucket.internal.feature.fileContent.sideBySideDiffView}
+
+/**
+ */
+{template .layout}
+    {call bitbucket.internal.feature.fileContent.diffView.editor}
+        {param editorClass: 'side-by-side-diff-editor-from' /}
+    {/call}
+    <div class="segment-connector-column" ></div>
+    {call bitbucket.internal.feature.fileContent.diffView.editor}
+        {param editorClass: 'side-by-side-diff-editor-to' /}
+    {/call}
+{/template}

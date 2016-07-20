@@ -1,0 +1,35 @@
+{namespace bitbucket.decorators.repository}
+
+/**
+ * @param title The window title
+ * @param repository repository object
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param? dataAttributes
+ */
+{template .general}
+    {call bitbucket.internal.layout.repository}
+        {param windowTitle: $title /}
+        {param repository: $repository /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeNav: $properties['meta.activeTab'] /}
+        {param content: $body /}
+    {/call}
+{/template}
+
+/**
+ * @param title The window title
+ * @param repository repository object
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param? dataAttributes
+ */
+{template .settings}
+    {call bitbucket.internal.layout.repositorySettings}
+        {param windowTitle: $title /}
+        {param repository: $repository /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeSettingsTab: $properties['meta.activeTab'] /}
+        {param content: $body /}
+    {/call}
+{/template}

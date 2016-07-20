@@ -1,0 +1,30 @@
+@import "/static/global.less";
+
+.branch-layout-error {
+    margin-bottom: 15px;
+}
+
+.branch-selector-toolbar {
+    margin: 0 0 @baseSpacing 0;
+
+    .aui-toolbar2-primary  .aui-group {
+        table-layout: auto;
+    }
+
+    .aui-group > .aui-item + .aui-item {
+        padding-left: 0;  // over aui-page-layouts
+    }
+
+    .aui-button {
+        margin-top: 0;
+    }
+
+    .aui-item:first-child {
+        padding-right: @baseSpacing;
+    }
+
+
+    #branch-actions > .aui-icon {
+        color: @secondaryTextColor;
+    }
+}

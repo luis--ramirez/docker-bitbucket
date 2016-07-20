@@ -1,0 +1,92 @@
+{namespace bitbucket.internal.feature.commit.commitBadge}
+
+/**
+ * @param commit
+ * @param? repository if the repo is not provided the commit becomes a span instead of a link
+ * @param? withAvatar defaults to false
+ * @param? linkAuthor - link the author's name to their profile if they're a user. Default is 'true'
+ * @param? abbreviatedMerge
+ * @param? includeCommentCount
+ */
+{template .oneline}
+    <div class="commit-badge-oneline">
+        {if $withAvatar}
+            {call bitbucket.internal.widget.avatar}
+                {param person: $commit.author /}
+                {param size: 'small' /}
+            {/call}
+        {/if}
+        {call .commitSummary}
+            {param authorNameContent}
+                {if $linkAuthor == false}
+                    <span class="commit-author" title="{personDisplayName($commit.author)}">
+                        {personDisplayName($commit.author)|truncate:100|escapeHtml}
+                    </span>
+                {else}
+                    {call bitbucket.internal.widget.userLink}
+                        {param user: $commit.author /}
+                        {param extraClasses: 'commit-author' /}
+                    {/call}
+                {/if}
+            {/param}
+            {param commitLinkContent}
+                {call bitbucket.internal.feature.commit.link}
+                    {param commit: $commit /}
+                    {param repository: $repository /}
+                {/call}
+                {if length($commit.parents) > 1}
+                    {call bitbucket.internal.widget.lozenge.merge}
+                        {param abbreviated: $abbreviatedMerge /}
+                    {/call}
+                {/if}
+            {/param}
+        {/call}
+        {call bitbucket.internal.widget.date.shortAge}
+            {param date: $commit.authorTimestamp /}
+        {/call}
+        {if $includeCommentCount and $commit.properties and $commit.properties.commentCount}
+            {call bitbucket.internal.feature.commentCount}
+                {param count: $commit.properties.commentCount /}
+                {param size: 'tiny' /}
+            {/call}
+        {/if}
+    </div>
+{/template}
+
+
+/**
+ * @param authorNameContent
+ * @param commitLinkContent
+ */
+{template .commitSummary private="true"}
+    {{getText('bitbucket.web.commit.summary', $authorNameContent, $commitLinkContent)|noAutoescape}}
+{/template}
+
+/**
+ * @param commit
+ * @param? repository
+ * @param? maxMessageLength
+ * @param? linkAuthor - link the author's name to their profile if they're a user. Default is 'true'
+ */
+{template .detailed}
+    <div class="commit-badge-detailed">
+        {call .oneline}
+            {param commit: $commit /}
+            {param repository: $repository /}
+            {param linkAuthor: $linkAuthor /}
+            {param abbreviatedMerge: true /}
+        {/call}
+        <div class="commit-message">{$commit.message|truncate:$maxMessageLength ? $maxMessageLength : 150|escapeHtml}</div>
+    </div>
+{/template}
+
+/**
+ * @param commit
+ */
+{template .message}
+    {let $parsedCommitMessage: parseCommitMessage($commit.message) /}
+    <div class="commit-message">
+        <span class="commit-message-subject">{$parsedCommitMessage.subject|truncate:400|escapeHtml}</span>
+        <span class="commit-message-body">{$parsedCommitMessage.body|truncate:400|escapeHtml}</span>
+    </div>
+{/template}

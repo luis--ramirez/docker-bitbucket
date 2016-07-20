@@ -1,0 +1,207 @@
+{namespace bitbucket.internal.component.search}
+
+
+/**
+ */
+{template .quickCodeResult}
+    <li class="code result navigable">
+        <a id="code-result"
+            class="code-link"
+            role="option"
+            title="">
+            <div class="code-search-hint" aria-hidden="true">
+                <span class="aui-icon aui-icon-small aui-iconfont-search"></span>
+                {getTextAsHtml('bitbucket.component.quick-search.terms.html')}
+            </div>
+        </a>
+    </li>
+{/template}
+
+/**
+ * @param repositories
+ */
+{template .repositoryResults}
+    <section class="repository-results">
+        <h3 class="result-summary">{getText('bitbucket.search.summary.repositories')}</h3>
+        <ul class="search-result-list">
+        {foreach $repo in $repositories}
+            {call .repositoryResult}
+                {param repo: $repo /}
+                {param id}repository-result-{index($repo)}{/param}
+            {/call}
+        {/foreach}
+        </ul>
+    </section>
+{/template}
+
+/**
+ * @param repo
+ * @param id
+ * @param? extraClasses
+ */
+{template .repositoryResult}
+    <li class="repository result navigable{if $extraClasses} {$extraClasses}{/if}">
+        <a id="{$id}"
+            href="{nav_repo_browse($repo.project, $repo)}"
+            class="repository-link"
+            data-proj-key="{$repo.project.key}"
+            data-project-id="{$repo.project.id}"
+            data-repo-slug="{$repo.slug}"
+            data-repo-id="{$repo.id}"
+            role="option"
+            title="{{getText('bitbucket.component.quick-search.tooltip', $repo.project.name, $repo.name)}}">
+                {call .repositoryItemContent}
+                    {param repository: $repo /}
+                {/call}
+        </a>
+    </li>
+{/template}
+
+/**
+ * @param repository
+ */
+{template .repositoryItemContent}
+    {call bitbucket.internal.component.avatars.projectAvatar}
+        {param size: 'small' /}
+        {param project: $repository.project /}
+        {param extraAttributes}aria-hidden="true"{/param}
+    {/call}
+    <span class="project-and-repository" aria-hidden="true">
+        <span class="project-name">{$repository.project.name}</span>
+        <span class="separator">/</span>
+        <span class="name">{$repository.name}</span>
+    </span>
+{/template}
+
+/**
+ * @param result
+ * @param isTruncated
+ */
+{template .codeResult}
+    <li class="search-result code-search-result new-result{if $isTruncated} truncated{/if}">
+        <section>
+            <header {if $result.firstLineNumber > 1}class="code-search-result-header not-first-line"{/if}>
+                {let $url: nav_repo_browse($result.repository.project, $result.repository) /}
+                <a href="{$url}" class="code-search-repo-link code-search-header-link">
+                    {if $result.repository.owner}
+                       {call bitbucket.internal.component.avatars.avatar}
+                           {param size: 'small' /}
+                           {param person: $result.repository.owner /}
+                           {param extraClasses: 'code-search-result-avatar' /}
+                           {param title}
+                               {if $result.repository.owner}
+                                   {$result.repository.owner.name}
+                                   {call .fileSeparator /}
+                               {/if}
+                               {if $result.repository.project}
+                                   {$result.repository.project.name}
+                                   {call .fileSeparator /}
+                               {/if}
+                               {$result.repository.name}
+                           {/param}
+                       {/call}
+                    {elseif $result.repository.project}
+                        {call bitbucket.internal.component.avatars.projectAvatar}
+                            {param size: 'small' /}
+                            {param project: $result.repository.project /}
+                            {param extraClasses: 'code-search-result-avatar' /}
+                            {param title}
+                                {if $result.repository.owner}
+                                    {$result.repository.owner.name}
+                                    {call .fileSeparator /}
+                                {/if}
+                                {if $result.repository.project}
+                                    {$result.repository.project.name}
+                                    {call .fileSeparator /}
+                                {/if}
+                                {$result.repository.name}
+                            {/param}
+                        {/call}
+                    {/if}
+                    {if $result.repository.owner}
+                        <div class="code-search-owner">{$result.repository.owner.name}</div>
+                    {/if}
+                    {if $result.repository.project}
+                        <div class="code-search-project{if $result.repository.owner} with-owner{/if}">
+                            {$result.repository.project.name}
+                        </div>
+                    {/if}
+                    <div class="code-search-repository">{$result.repository.name}</div>
+                </a>
+
+                <div class="code-search-header-separator non-collapsible">&mdash;</div>
+
+                /* Render out a file path split into parts such that it's collapsible via flexbox'ing. The first two
+                 * parts should collapse last, the middle part of the path first, and the filename should never collapse.
+                 * Each of these parts is wrapped in it's own div, so we need to go through some gymnastics to make sure
+                 * they're written out correctly.
+                 */
+                {foreach $filePart in $result.fileParts}
+                    {if not isLast($filePart)}
+                        {if index($filePart) == 0}
+                            <div class="code-search-initial-filepath collapsible">
+                        {elseif index($filePart) == 2}
+                            </div>
+                            <div class="collapsible">
+                        {/if}
+                        {if not isFirst($filePart)}
+                            {call .fileSeparator /}
+                        {/if}
+                        <span class="code-search-filepart">{$filePart}</span>
+                    {else}
+                        {if index($filePart) > 0}</div>{/if}
+                        {call .fileSeparator /}
+                        <a href="{$result.fileUrl}"
+                            class="{if isLast($filePart)}non-collapsible code-search-filename{/if}">
+                                {$filePart}
+                        </a>
+                    {/if}
+                {/foreach}
+            </header>
+            <ul class="hit-contexts">
+                {if $result.hitContexts.length > 0}
+                    {foreach $hitContext in $result.hitContexts}
+                        <li class="hit-context">
+                            <ol class="hit-context-lines">
+                            {foreach $line in $hitContext}
+                                {if $line.line > 0}
+                                    <li class="numbered-line">{$line.line}</li>
+                                {else}
+                                    <li>&nbsp;</li>
+                                {/if}
+                            {/foreach}
+                            </ol>
+                            <code>
+                                {foreach $line in $hitContext}
+                                    {if $line.text.length > 0}{$line.text|noAutoescape}{else}&nbsp;{/if}{\n}
+                                {/foreach}
+                            </code>
+                        </li>
+                    {/foreach}
+                {else}
+                    <div class="aui-message aui-message-warning warning">
+                        {getText('bitbucket.search.result.none')}
+                    </div>
+                {/if}
+            </ul>
+            {if $isTruncated}
+                <a href="#" class="context-toggler">
+                    <span class="inner expander">
+                        <span class="aui-icon aui-icon-small aui-iconfont-arrow-down"></span>
+                        <span class="text">{getText('bitbucket.search.result.expand', $result.hitCount)}</span>
+                    </span>
+                    <span class="inner contracter">
+                        <span class="aui-icon aui-icon-small aui-iconfont-arrow-up"></span>
+                        <span class="text">{getText('bitbucket.search.result.contract')}</span>
+                    </span>
+                </a>
+            {/if}
+        </section>
+    </li>
+{/template}
+
+/**
+ */
+{template .fileSeparator private="true"}
+<span class="code-search-file-separator">/</span>
+{/template}

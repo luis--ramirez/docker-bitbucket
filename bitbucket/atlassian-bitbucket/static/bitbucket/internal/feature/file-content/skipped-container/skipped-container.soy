@@ -1,0 +1,25 @@
+{namespace bitbucket.internal.feature.fileContent}
+
+/**
+ * @param? hasContentAbove
+ * @param? hasContentBelow
+ * @param? content
+ * @param? canShowMore
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? showMoreTooltip
+ */
+{template .skippedContainer}
+    <div class="skipped-container{call aui.renderExtraClasses data="all"/}"{call aui.renderExtraAttributes data="all" /}>
+        {if $hasContentAbove}<div class="content-above"></div>{/if}
+        {if $content}
+            {$content|noAutoescape}
+        {/if}
+        {if $canShowMore}
+            <div class="showmore" title="{$showMoreTooltip}">
+                {if $hasContentAbove and $hasContentBelow}<span>{getText('bitbucket.web.diffview.showmore')}</span>{/if}
+            </div>
+        {/if}
+        {if $hasContentBelow}<div class="content-below"></div>{/if}
+    </div>
+{/template}

@@ -1,0 +1,41 @@
+@import "/static/global.less";
+
+@fileContentToolbarBottomBorderWidth: 1px;
+
+// Diff view variables
+
+@spaceBetweenColumns : 10px;
+@columnPadding: @spaceBetweenColumns / 2; // we center the columns within padding on either side.
+
+@gutterWidth: 16px;
+@gutterBorderWidth: 1px;
+@gutterOuterWidth: @gutterWidth + (2 * @columnPadding) + @gutterBorderWidth;
+@lineNumberWidth: 37px;
+@lineNumberOuterWidth: @lineNumberWidth + (2 * @columnPadding);
+@lineNumberMarkerWidth: @doubleSpacing;
+@codeLineHeight: 17px;
+@codeLineBorderWidth: 1px;
+@contextExpanderHeight: 6px;
+
+@blameColumnWidth : 324px;
+@sourceLineNumberColumnWidth: 55px; /* avoid jumping around when pages are loaded: this fits 5 digits. min-width
+                                       and max-width not supported when element is display: table-cell */
+
+@commentLineBackgroundColor: #ebf2f9;
+
+@textContentBackgroundColor: #ddd;
+
+@addedLineTextColor: #14972b; // green for added lines
+@addedLineBackgroundColor: #ddffdd;
+@addedLineColorEdiff: #97f295;
+
+@deletedLineTextColor: #cc0000; // red for deleted lines
+@deletedLineBackgroundColor: #fee8e9;
+@deletedLineColorEdiff: #ffb6ba;
+
+@conflictLineTextColor: #000;
+@conflictLineBackgroundColor: #ffffdf; // yellow for conflict lines
+@conflictMarkerColor: #fff4c9;
+@conflictLineColorHighlight: #fff986;
+
+@cmSearchingColor: rgba(255, 255, 0, .4); // taken from codemirror.css

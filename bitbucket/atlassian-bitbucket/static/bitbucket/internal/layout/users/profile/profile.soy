@@ -1,0 +1,78 @@
+{namespace bitbucket.internal.layout.users}
+
+/**
+ * Used when showing a user their own profile. For the moment it retains the edit buttons shown in the user edit screen.
+ * @param windowTitle
+ * @param user
+ * @param activeNav
+ * @param content
+ * @param? project
+ * @param? dataAttributes
+ * @param? headContent
+ * @param? pageBottomContent
+ */
+{template .profile}
+{webResourceManager_requireResourcesForContext('bitbucket.layout.user.profile')}
+{call bitbucket.internal.layout.entity}
+    {param windowTitle: $windowTitle /}
+    {param pageType: 'hybrid' /}
+    {param dataAttributes: $dataAttributes /}
+    {param headContent: $headContent /}
+    {param headerImageContent}
+        {call bitbucket.internal.widget.avatar}
+            {param person: $user /}
+            {param size: 'xxlarge' /}
+         {/call}
+    {/param}
+    {param entityName: $user.displayName /}
+    {param entityNameExtraContent}
+        {foreach $webPanel in getWebPanels('bitbucket.user.profile.header.details', [ 'profileUser' : $user, 'project': $project ])}
+            {$webPanel}
+        {/foreach}
+    {/param}
+    {param actionWebItems: getWebItems('bitbucket.profile.overview.actions', [ 'profileUser' : $user, 'project': $project ] ) /}
+    {param entityHeaderRightItemsContent}
+        {foreach $webPanel in getWebPanels('bitbucket.user.profile.header', [ 'profileUser' : $user, 'project': $project ])}
+            {$webPanel}
+        {/foreach}
+    {/param}
+    {param entityNav: getWebItems('bitbucket.user.profile.secondary.tabs', [ 'profileUser' : $user, 'project': $project ]) /}
+    {param activeNav: $activeNav /}
+    {param content}
+        {$content|noAutoescape}
+    {/param}
+    {param pageBottomContent}
+        {if $pageBottomContent}{$pageBottomContent|noAutoescape}{/if}
+    {/param}
+{/call}
+{/template}
+
+/**
+ * @param profileUser
+ * Used by the com.atlassian.bitbucket.server.bitbucket-web:userprofile-manage-account-button web panel
+ */
+{template .userDetailsUsername}
+    <div class="user-detail username">
+        {call aui.icons.icon}
+            {param useIconFont: true /}
+            {param icon: 'user' /}
+        {/call}
+        {$profileUser.username}
+    </div>
+{/template}
+
+/**
+ * @param profileUser
+ * Used by the com.atlassian.bitbucket.server.bitbucket-web:userprofile-manage-account-button web panel
+ */
+{template .userDetailsEmail}
+    {if $profileUser.emailAddress}
+        <div class="user-detail email">
+            {call aui.icons.icon}
+                {param useIconFont: true /}
+                {param icon: 'email' /}
+            {/call}
+            {$profileUser.emailAddress}
+        </div>
+    {/if}
+{/template}

@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/comment-count",["exports"],function(b){b.pullRequestRowItem=function(a){a=a.pullRequest;return a.properties&&a.properties.commentCount?bitbucket.internal.feature.commentCount({count:a.properties.commentCount}):""}});

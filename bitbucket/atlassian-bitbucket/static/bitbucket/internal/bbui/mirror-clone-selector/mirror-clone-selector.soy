@@ -1,0 +1,38 @@
+{namespace bitbucket.internal.component.mirroringCloneSelector}
+
+/**
+ * @param primary
+ */
+{template .main}
+    <form class="aui mirroring-clone-selector">
+        <label id="clone-from-label" for="available-mirrors-trigger">{getText('bitbucket.component.mirroring.clone.selector.label')}</label>
+        <button id="available-mirrors-trigger" href="#available-mirrors" aria-owns="available-mirrors" aria-haspopup="true"
+         class="aui-style-default aui-dropdown2-trigger aui-button aui-button-link" disabled>
+            {$primary.mirrorName}
+        </button>
+
+        <div id="available-mirrors" class="aui-style-default aui-dropdown2">
+            <ul id="available-mirror-list" class="aui-list-truncate"> // Despite the weird naming, this truncates the list item names, not the list itself
+                {call .mirrorItem}
+                    {param item: $primary /}
+                    {param extraClasses: 'primary' /}
+                {/call}
+            </ul>
+        </div>
+        <div id="update-push-url-container" class="hidden">
+            <div class="aui-message aui-message-info message-subtle">
+                <p>{getTextAsHtml('bitbucket.component.mirroring.clone.selector.update.push.html', bitbucket_help_url('bitbucket.help.mirroring.clone.dialog'))}</p>
+            </div>
+            <input id="update-push-url-input" type="text" class="text quick-copy-text" readonly="readonly" spellcheck="false" />
+        </div>
+    </form>
+{/template}
+
+
+/**
+ * @param item
+ * @param? extraClasses
+ */
+{template .mirrorItem}
+    <li class="mirror-item {$extraClasses ? $extraClasses : ''}" data-id="{$item.id ? $item.id : ''}"><a href="#">{$item.mirrorName}</a></li>
+{/template}

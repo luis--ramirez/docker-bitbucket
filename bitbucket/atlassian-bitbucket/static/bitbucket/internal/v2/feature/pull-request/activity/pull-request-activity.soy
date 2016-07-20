@@ -1,0 +1,603 @@
+{namespace bitbucket.internal.v2.feature.pullRequest}
+
+/**
+ * @param id
+ * @param currentUser
+ * @param? commentTips
+ * @param? extraClasses
+ */
+{template .activity}
+    <div class="pull-request-activity-content">
+        <ol {if $id} id="{$id}"{/if} class="pull-request-activity comment-container{if $extraClasses} {$extraClasses}{/if}">
+            {call bitbucket.internal.feature.commentFormListItem}
+                 {param tips: $commentTips /}
+                 {param extraFormClasses: 'general-comment-form collapsed' /}
+                 {param currentUser: $currentUser /}
+            {/call}
+        </ol>
+    </div>
+{/template}
+
+
+/**
+ * @param user
+ * @param activityDate
+ * @param summaryContent a sentence describing the action being taken, marked up in HTML
+ * @param? detailContent the HTML details of the action
+ * @param? isNew
+ * @param? isFocused
+ * @param? extraClasses
+ * @param? id
+ * @param? commitId
+ * @param? diffType
+ * @param? commentLink
+ * @param? isCurrent
+ */
+{template .activityListItemContainer private="true"}
+<li class="activity-item{if $extraClasses} {$extraClasses}{/if}{if $isNew} new{/if}{if $isFocused} focused{/if}"{if $id} data-activityid="{$id}"{/if}>
+    <div class="activity-item-content">
+        <div class="avatar">
+            {call bitbucket.internal.widget.avatar}
+                {param size: 'medium' /}
+                {param person: $user /}
+            {/call}
+        </div>
+        <div class="action">
+            <p class="summary">
+                {$summaryContent|noAutoescape}
+                {call bitbucket.internal.widget.date.shortAge}{param date: $activityDate /}{/call}
+                {if $diffType == 'COMMIT'}
+                    {call .commentCommitOrDiffLink}
+                        {param commitId: $commitId /}
+                        {param commentLink: $commentLink /}
+                        {param current: $isCurrent /}
+                    {/call}
+                {/if}
+                {if not $isCurrent and $diffType == 'COMMIT'}
+                    <span class="removed-lozenge-container">
+                        {call bitbucket.internal.widget.lozenge.lozenge}
+                            {param text: getText('bitbucket.web.pullrequest.activity.status.commitremoved') /}
+                            {param htmlElement: 'span' /}
+                            {param extraClasses: 'aui-lozenge aui-lozenge-subtle aui-lozenge-error ' /}
+                            {param tooltip: getText('bitbucket.web.pullrequest.activity.status.commitremoved.tooltip') /}
+                        {/call}
+                    </span>
+                {/if}
+            </p>
+            <div class="detail">
+                {if $detailContent}
+                    {$detailContent|noAutoescape}
+                {/if}
+            </div>
+        </div>
+    </div>
+</li>
+{/template}
+
+/**
+ * @param activity
+ * @param pullRequest
+ * @param commitRange
+ * @param currentUser
+ * @param? isNew
+ * @param? commitId
+ * @param? commentLink
+ * @param? customMapping
+ */
+{template .activityListItem}
+{if $activity.action == 'COMMENTED'}
+    {call .activityCommentListItem data="$activity"}
+        {param currentUser: $currentUser /}
+        {param commitRange: $commitRange /}
+        {param pullRequest: $pullRequest /}
+        {param commitId: $commitId /}
+        {param commentLink: $commentLink /}
+        {param customMapping: $customMapping /}
+    {/call}
+{elseif $activity.action == 'APPROVED' or $activity.action == 'UNAPPROVED' or $activity.action == 'REVIEWED'}
+    {call .activityReviewerStatusChangeListItem}
+        {param user: $activity.user /}
+        {param isFocused: $activity.isFocused /}
+        {param action: $activity.action /}
+        {param activityDate: $activity.createdDate /}
+    {/call}
+{elseif $activity.action == 'RESCOPED'}
+    {if ($activity.added and $activity.added.total) or ($activity.removed and $activity.removed.total)}
+        {call .activityRescopeListItem}
+            {param user: $activity.user /}
+            {param isFocused: $activity.isFocused /}
+            {param action : $activity.action /}
+            {param activityDate: $activity.createdDate /}
+            {param activityRepository : $pullRequest.toRef.repository /}
+            {param added: $activity.added /}
+            {param removed: $activity.removed /}
+            {param pullRequest: $pullRequest /}
+        {/call}
+    {/if}
+{elseif $activity.action == 'UPDATED' and ($activity.addedReviewers or $activity.removedReviewers)}
+    {call .activityReviewersUpdatedListItem}
+        {param isNew: $isNew /}
+        {param user: $activity.user /}
+        {param isFocused: $activity.isFocused /}
+        {param activityDate: $activity.createdDate /}
+        {param addedReviewers: $activity.addedReviewers /}
+        {param removedReviewers: $activity.removedReviewers /}
+    {/call}
+{else}
+    {call .activityListItemContainer}
+        {param isNew: $isNew /}
+        {param isFocused: $activity.isFocused /}
+        {param user: $activity.user /}
+        {param activityDate: $activity.createdDate /}
+        {param summaryContent}
+            {call .activityActionString}
+                {param activityAction: $activity.action /}
+                {param user: $activity.user /}
+                {param sourceBranchContent}
+                    {if $activity.action == 'MERGED'}
+                        {call bitbucket.internal.feature.repository.refLozenge}
+                            {param repository: $pullRequest.fromRef.repository.id == $pullRequest.toRef.repository.id ?
+                                null :
+                                $pullRequest.fromRef.repository /}
+                            {param ref: $pullRequest.fromRef /}
+                        {/call}
+                    {/if}
+                {/param}
+                {param targetBranchContent}
+                    {if $activity.action == 'MERGED'}
+                        {call bitbucket.internal.feature.repository.refLozenge}
+                            {param ref: $pullRequest.toRef /}
+                        {/call}
+                    {/if}
+                {/param}
+                {param mergeCommitContent}
+                    {if $activity.action == 'MERGED' and $activity.commit}
+                        {call bitbucket.internal.feature.commit.link}
+                            {param repository: $pullRequest.toRef.repository /}
+                            {param commit: $activity.commit /}
+                        {/call}
+                    {/if}
+                {/param}
+                {param isSimpleMerge: $activity.simpleMerge /}
+            {/call}
+        {/param}
+    {/call}
+    </li>
+{/if}
+{/template}
+
+/**
+ * @param user
+ * @param action
+ * @param activityDate
+ * @param? isFocused
+ */
+{template .activityReviewerStatusChangeListItem}
+    {call .activityListItemContainer}
+        {param user: $user /}
+        {param isFocused: $isFocused /}
+        {param activityDate: $activityDate /}
+        {param summaryContent}
+            {call .activityActionString}
+                {param activityAction: $action /}
+                {param user: $user /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param user
+ * @param action
+ * @param activityDate
+ * @param activityRepository
+ * @param added
+ * @param removed
+ * @param pullRequest
+ * @param? isFocused
+ */
+{template .activityRescopeListItem private="true"}
+    {if $added.total or $removed.total}
+    {call .activityListItemContainer}
+        {param user: $user /}
+        {param isFocused: $isFocused /}
+        {param activityDate: $activityDate /}
+        {param extraClasses : 'rescope' /}
+        {param summaryContent}
+            {call .activityActionString}
+                {param activityAction: $action /}
+                {param user: $user /}
+                {param numCommitsAdded: $added.total /}
+                {param numCommitsRemoved: $removed.total /}
+            {/call}
+        {/param}
+        {param detailContent}
+            {if ($added.commits and length($added.commits)) or ($removed.commits and length($removed.commits))}
+                {call .rescopeCommitsTable}
+                    {param repository: $activityRepository /}
+                    {param added : $added /}
+                    {param removed : $removed /}
+                    {param pullRequest : $pullRequest /}
+                {/call}
+                {if 0 < ($added.total - ($added.commits ? length($added.commits) : 0)) + ($removed.total - ($removed.commits ?  length($removed.commits) : 0))}
+                    <p class="more-commits">
+                        {{getText('bitbucket.web.pullrequest.activity.commits.and-x-more',
+                        ($added.total - ($added.commits ? length($added.commits) : 0)) + ($removed.total - ($removed.commits ?  length($removed.commits) : 0)))|noAutoescape}}
+                    </p>
+                {/if}
+            {/if}
+        {/param}
+    {/call}
+    {/if}
+{/template}
+
+/**
+ * @param lozengeContent
+ * @param userDisplayNameContent
+ * @param numCommitsAdded
+ * @param numCommitsRemoved
+ */
+{template .rescopeActionStringImpl private="true"}
+    {if $numCommitsAdded and $numCommitsRemoved}
+        {{getText('bitbucket.web.pullrequest.activity.commits.addedandremoved', $userDisplayNameContent, $lozengeContent, $numCommitsAdded, $numCommitsRemoved)|noAutoescape}}
+    {elseif $numCommitsAdded}
+        {{getText('bitbucket.web.pullrequest.activity.commits.added', $userDisplayNameContent, $lozengeContent, $numCommitsAdded)|noAutoescape}}
+    {elseif $numCommitsRemoved}
+        {{getText('bitbucket.web.pullrequest.activity.commits.removed', $userDisplayNameContent, $lozengeContent, $numCommitsRemoved)|noAutoescape}}
+    {/if}
+{/template}
+
+/**
+ * @param pullRequest
+ * @param repository
+ * @param? added
+ * @param? removed
+ */
+{template .rescopeCommitsTable private="true"}
+    {call widget.aui.table}
+        {param dataAttributes: [ 'lastpage' : true ] /}
+        {param extraClasses: 'commits-table show-merges' /}
+        {param content}
+            {if $added.commits and length($added.commits)}
+                {foreach $commit in $added.commits}
+                    {call bitbucket.internal.feature.commits.commitsTableRow}
+                        {param commit: $commit /}
+                        {param cellsContent}
+                            {call bitbucket.internal.feature.commits.commitsTableCells}
+                                {param repository: $repository /}
+                                {param commit: $commit /}
+                                {param pullRequest: $pullRequest /}
+                            {/call}
+                            <td class="status">
+                                {call bitbucket.internal.widget.lozenge.lozenge}
+                                    {param htmlElement: 'span' /}
+                                    {param extraClasses: 'aui-lozenge-subtle aui-lozenge-success' /}
+                                    {param text: getText('bitbucket.web.pullrequest.commits.added') /}
+                                {/call}
+                            </td>
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/if}
+            {if $removed.commits and length($removed.commits)}
+                {foreach $commit in $removed.commits}
+                    {call bitbucket.internal.feature.commits.commitsTableRow}
+                        {param commit: $commit /}
+                        {param cellsContent}
+                            {call bitbucket.internal.feature.commits.commitsTableCells}
+                                {param repository: $repository /}
+                                {param commit: $commit /}
+                            {/call}
+                            <td class="status">
+                                {call bitbucket.internal.widget.lozenge.lozenge}
+                                    {param htmlElement: 'span' /}
+                                    {param extraClasses: 'aui-lozenge-subtle aui-lozenge-error' /}
+                                    {param text: getText('bitbucket.web.pullrequest.commits.removed') /}
+                                {/call}
+                            </td>
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param createdDate
+ * @param commentAction
+ * @param? commentAnchor
+ * @param? diff
+ * @param comment
+ * @param user
+ * @param currentUser
+ * @param pullRequest
+ * @param commitRange
+ * @param? commitId
+ * @param? commentLink
+ * @param? customMapping
+ * @param? isFocused
+ */
+{template .activityCommentListItem}
+{if $commentAction == 'ADDED'}
+    {if $commentAnchor}
+        {call .activityListItemContainer}
+            {param extraClasses: $diff ? 'diff-comment-activity' : 'file-comment-activity' /}
+            {param id: $id /}
+            {param user: $user /}
+            {param activityDate: $createdDate /}
+            {param isNew: false /} // isNew is currently handled in the diff comment
+            {param isFocused: $isFocused /}
+            {param commentLink: $commentLink /}
+            {param commitId: $commitId /}
+            {param diffType: $commentAnchor.diffType /}
+            {param summaryContent}
+                {call .activityCommentActionString}
+                    {param activityAction: $commentAction /}
+                    {param user: $user /}
+                {/call}
+            {/param}
+            {param detailContent}
+                {if $diff}
+                    // Inline comments are appended later in js
+                {else}
+                    // Is file comment
+                    <div class="file-comment-container">
+                        {call bitbucket.internal.feature.file.fileToolbar}
+                            {param fileIcon: true /}
+                            {param breadcrumbs: true /}
+                            {param secondaryToolbarContent}
+                                {if $commentAnchor.orphaned}
+                                    {if $commentAnchor.diffType == 'COMMIT'}
+                                        {call bitbucket.internal.widget.lozenge.lozenge}
+                                            {param text: getText('bitbucket.web.pullrequest.activity.status.commitremoved') /}
+                                            {param htmlElement: 'span' /}
+                                            {param extraClasses: 'aui-lozenge aui-lozenge-subtle aui-lozenge-error' /}
+                                            {param tooltip: getText('bitbucket.web.pullrequest.activity.status.commitremoved.tooltip') /}
+                                        {/call}
+                                     {else}
+                                        {call bitbucket.internal.widget.lozenge.lozenge}
+                                             {param text: getText('bitbucket.web.pullrequest.activity.status.outdated') /}
+                                             {param htmlElement: 'span' /}
+                                             {param extraClasses: 'aui-lozenge-current aui-lozenge-subtle pull-request-diff-outdated-lozenge' /}
+                                             {param tooltip: getText('bitbucket.web.pullrequest.activity.status.outdated.tooltip') /}
+                                         {/call}
+                                     {/if}
+                                {/if}
+                            {/param}
+                        {/call}
+                        {call bitbucket.internal.feature.fileComments}
+                            {param comments: [ $comment ] /}
+                            {param commitRange: $commitRange /}
+                            {param customMapping: $customMapping /}
+                        {/call}
+                    </div>
+                {/if}
+            {/param}
+            {param isCurrent: $commentAnchor ? (not $commentAnchor.orphaned) : false /}
+        {/call}
+    {else}
+        {call bitbucket.internal.feature.comment}
+            {param comment: $comment /}
+            {param pullRequest: $pullRequest /}
+            {param currentUser: $currentUser /}
+            {param numOfAncestors: 0 /}
+            {param extraClasses: 'general-comment-activity' /}
+        {/call}
+    {/if}
+//{else} ignore REPLIED, EDITED, DELETED for now
+{/if}
+{/template}
+
+/**
+ * @param activityAction
+ * @param user
+ */
+{template .activityCommentActionString}
+    {call .activityActionString data="all"}
+        {param activityAction: 'COMMENT_' + $activityAction /}
+    {/call}
+{/template}
+
+/**
+ * @param activityAction
+ * @param user
+ * @param? sourceBranchContent
+ * @param? targetBranchContent
+ * @param? mergeCommitContent
+ * @param? numCommitsAdded
+ * @param? numCommitsRemoved
+ * @param? isSimpleMerge
+ */
+{template .activityActionString}
+    {call .activityActionStringImpl data="all"}
+        {param userDisplayNameContent}
+            {call bitbucket.internal.widget.userLink}
+                {param user: $user /}
+                {param extraClasses: 'user-name' /}
+            {/call}
+        {/param}
+        {param lozengeContent}
+            {call bitbucket.internal.widget.lozenge.pullRequestState}
+                {param state: $activityAction /}
+                {param isActivityContext: true /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param activityAction
+ * @param lozengeContent
+ * @param userDisplayNameContent
+ * @param? sourceBranchContent
+ * @param? targetBranchContent
+ * @param? mergeCommitContent
+ * @param? numCommitsAdded
+ * @param? numCommitsRemoved
+ * @param? isSimpleMerge
+ */
+{template .activityActionStringImpl private="true"}
+{switch $activityAction}
+    {case 'COMMENT_ADDED'}
+        {{getText('bitbucket.web.pullrequest.activity.comment.added', $userDisplayNameContent)|noAutoescape}}
+    {case 'COMMENT_REPLIED'}
+        {{getText('bitbucket.web.pullrequest.activity.comment.replied', $userDisplayNameContent)|noAutoescape}}
+    {case 'OPENED'}
+        {{getText('bitbucket.web.pullrequest.activity.opened', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {case 'DECLINED'}
+        {{getText('bitbucket.web.pullrequest.activity.declined', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {case 'MERGED'}
+        {if $mergeCommitContent}
+            {{getText('bitbucket.web.pullrequest.activity.merged', $userDisplayNameContent, $lozengeContent, $sourceBranchContent, $targetBranchContent, $mergeCommitContent)|noAutoescape}}
+        {elseif $isSimpleMerge}
+            {{getText('bitbucket.web.pullrequest.activity.merged.simple', $userDisplayNameContent, $lozengeContent, $sourceBranchContent, $targetBranchContent)|noAutoescape}}
+        {else}
+            {{getText('bitbucket.web.pullrequest.activity.automerged', $userDisplayNameContent, $sourceBranchContent, $targetBranchContent)|noAutoescape}}
+        {/if}
+    {case 'REOPENED'}
+        {{getText('bitbucket.web.pullrequest.activity.reopened', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {case 'RESCOPED'}
+        {call .rescopeActionStringImpl}
+            {param numCommitsAdded: $numCommitsAdded /}
+            {param numCommitsRemoved: $numCommitsRemoved /}
+            {param lozengeContent: $lozengeContent /}
+            {param userDisplayNameContent: $userDisplayNameContent /}
+        {/call}
+    {case 'REVIEWERS_UPDATED'}
+            {{getText('bitbucket.web.pullrequest.activity.reviewers.updated', $userDisplayNameContent)|noAutoescape}}
+    {case 'REVIEWERS_UPDATED_ADDED_SELF'}
+            {{getText('bitbucket.web.pullrequest.activity.reviewers.added.self', $userDisplayNameContent)|noAutoescape}}
+    {case 'REVIEWERS_UPDATED_REMOVED_SELF'}
+            {{getText('bitbucket.web.pullrequest.activity.reviewers.removed.self', $userDisplayNameContent)|noAutoescape}}
+    {case 'UPDATED'}
+        {{getText('bitbucket.web.pullrequest.activity.updated', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {case 'APPROVED'}
+        {{getText('bitbucket.web.pullrequest.activity.approved', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {case 'REVIEWED'}
+        {{getText('bitbucket.web.pullrequest.activity.needs.work', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {case 'UNAPPROVED'}
+        {{getText('bitbucket.web.pullrequest.activity.unapproved', $userDisplayNameContent, $lozengeContent)|noAutoescape}}
+    {default}
+        {$activityAction}
+{/switch}
+{/template}
+
+/**
+  * @param user
+  * @param activityDate
+  * @param addedReviewers
+  * @param removedReviewers
+  * @param? isFocused
+  * @param? isNew
+ */
+{template .activityReviewersUpdatedListItem}
+    {let $isSingleUpdate: (length($addedReviewers) + length($removedReviewers)) == 1 /}
+    {let $isSelfAddedReviewer:  $isSingleUpdate and $addedReviewers[0] and $addedReviewers[0].id == $user.id /}
+    {let $isSelfRemovedReviewer: $isSingleUpdate and $removedReviewers[0] and $removedReviewers[0].id == $user.id /}
+
+    {call .activityListItemContainer}
+        {param extraClasses:'reviewers-updated-activity' /}
+        {param user: $user /}
+        {param activityDate: $activityDate /}
+        {param isFocused: $isFocused /}
+        {param isNew: $isNew /}
+        {param summaryContent}
+            {if $isSelfAddedReviewer}
+                {call .activityActionString}
+                    {param user: $user /}
+                    {param activityAction: 'REVIEWERS_UPDATED_ADDED_SELF' /}
+                {/call}
+            {elseif $isSelfRemovedReviewer}
+                {call .activityActionString}
+                    {param user: $user /}
+                    {param activityAction: 'REVIEWERS_UPDATED_REMOVED_SELF' /}
+                {/call}
+            {else}
+                {call .activityActionString}
+                    {param activityAction: 'REVIEWERS_UPDATED' /}
+                    {param user: $user /}
+                {/call}
+            {/if}
+        {/param}
+        {param detailContent}
+            {if not ($isSelfAddedReviewer or $isSelfRemovedReviewer)}
+                {call .updatedReviewers}
+                    {param addedReviewers: $addedReviewers /}
+                    {param removedReviewers: $removedReviewers /}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+  * @param addedReviewers
+  * @param removedReviewers
+ */
+{template .updatedReviewers}
+    {if length($addedReviewers)}
+        <div class="reviewers">
+            {call aui.icons.icon}
+                {param useIconFont: true /}
+                {param size: 'small' /}
+                {param icon: 'add-small' /}
+                {param accessibilityText: getText('bitbucket.web.pullrequest.activity.reviewers.added', length($addedReviewers)) /}
+            {/call}
+            {call .reviewerList}
+                {param reviewers: $addedReviewers /}
+            {/call}
+        </div>
+    {/if}
+    {if length($removedReviewers)}
+        <div class="reviewers">
+            <span class="removed-symbol">
+              {getText('bitbucket.web.pullrequest.activity.reviewers.removed', length($removedReviewers))}
+            </span>
+            {call .reviewerList}
+                {param reviewers: $removedReviewers /}
+            {/call}
+        </div>
+    {/if}
+{/template}
+
+/**
+ * @param reviewers
+ */
+{template .reviewerList}
+    {foreach $reviewer in $reviewers}
+        {call bitbucket.internal.widget.avatar}
+            {param size: 'small' /}
+            {param person: $reviewer /}
+            {param tooltip: personDisplayName($reviewer) /}
+            {param link: true /}
+        {/call}
+    {/foreach}
+{/template}
+
+/**
+ *
+ */
+{template .loadPreviousActivities}
+    <li class="activity-load-new">
+        <a href="#">{{getText('bitbucket.web.pullrequest.activity.loadnew')}}</a>
+    </li>
+{/template}
+
+/**
+ * @param commentLink
+ * @param? commitId
+ * @param? current
+ */
+{template .commentCommitOrDiffLink}
+    <span class="comment-commit-or-diff-link">
+        {sp}
+        {let $shortCommitId}{$commitId|truncate:11,false|escapeHtml}{/let}
+        {if $current}
+            {getTextAsHtml('bitbucket.web.pullrequest.activity.in.diff.commit.html', $commentLink, $shortCommitId)}
+        {else}
+            {getText('bitbucket.web.pullrequest.activity.in.diff.commit.removed', $shortCommitId)}
+        {/if}
+    </span>
+{/template}

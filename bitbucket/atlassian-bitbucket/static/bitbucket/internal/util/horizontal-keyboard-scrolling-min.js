@@ -1,0 +1,2 @@
+define("bitbucket/internal/util/horizontal-keyboard-scrolling",["jquery"],function(f){var a=!1,e=!1,g=/INPUT|SELECT|TEXTAREA/i,c=null;return{init:function(){a||(a=!0,f(document).on("keydown",function(d){if(!e&&(37===d.keyCode||39===d.keyCode)){var a=d.target;a&&g.test(a.tagName)||c&&c.length&&c.forEach(function(a){var b=a.getScrollInfo();if(b.width>b.clientWidth){var c=b.left+(37===d.keyCode?-50:50),b=b.width-b.clientWidth;a.scrollTo(c>b?b:c,null);d.preventDefault()}})}}))},setEditors:function(a){c=
+a},pause:function(){e=!0},resume:function(){e=!1}}});

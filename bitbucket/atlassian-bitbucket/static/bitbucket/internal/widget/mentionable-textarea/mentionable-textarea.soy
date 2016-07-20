@@ -1,0 +1,39 @@
+{namespace bitbucket.internal.widget.mentionableTextarea}
+
+/**
+ * @param? query
+ * @param? results
+ * @param? activeItemIndex
+ */
+{template .dialog}
+    {let $minimumInputLength: 2 /}
+    <ul>
+        {if $results and $results.length}
+            {foreach $result in $results}
+                {call .result}
+                    {param result: $result/}
+                    {param isActive: $activeItemIndex ? index($result) == $activeItemIndex : index($result) == 0/}
+                {/call}
+            {/foreach}
+        {else}
+            {if $query and length($query) >= $minimumInputLength}
+                <li class="no-results"><span>{getText('bitbucket.web.user.autocomplete.no.results')}</span></li>
+            {else}
+                <li class="mentions-help"><span>{getText('bitbucket.web.user.autocomplete.type.username')}</span></li>
+            {/if}
+        {/if}
+    </ul>
+{/template}
+
+/**
+ * @param result
+ * @param? isActive
+ */
+{template .result}
+    <li class="result {$isActive ? 'active' : ''}">
+        {call bitbucket.internal.widget.avatarWithNameAndEmail}
+            {param size: 'small'/}
+            {param person: $result/}
+        {/call}
+    </li>
+{/template}

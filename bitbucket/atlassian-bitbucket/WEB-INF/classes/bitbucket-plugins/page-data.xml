@@ -1,0 +1,31 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-page-data" name="Page Data Plugin">
+
+    <web-resource key="page-data-loader" name="Page Data Loader - private">
+
+        <resource type="download" name="page-data-loader.js" location="/static/lib/page-data-loader.js">
+            <param name="source" value="webContextStatic" />
+        </resource>
+
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+
+        <context>atl.general</context>
+        <context>atl.admin</context>
+    </web-resource>
+
+    <!-- Example Usage
+
+    <page-data-provider key="blam" class="com.atlassian.stash.internal.web.fragments.ConfigPropertyContextProvider">
+        <param name="key" value="page.max.source.lines" />
+        <param name="defaultValue" value="42" />
+        <param name="type" value="number" />
+        <context>bitbucket.layout.repository</context>
+    </page-data-provider>
+
+    <page-data-provider key="boom" class="com.atlassian.stash.internal.web.fragments.IsFeatureEnabledContextProvider">
+        <param name="key" value="auth.captcha" />
+        <context>bitbucket.layout.repository</context>
+    </page-data-provider>
+
+    -->
+
+</atlassian-plugin>

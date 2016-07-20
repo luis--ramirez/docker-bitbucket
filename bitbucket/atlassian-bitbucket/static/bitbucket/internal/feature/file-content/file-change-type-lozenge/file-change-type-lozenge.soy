@@ -1,0 +1,82 @@
+{namespace bitbucket.internal.feature.fileContent}
+
+/**
+ * @param changeType
+ * @param? previousPathContent
+ * @param? pathContent
+ */
+{template .fileChangeTypeLozenge}
+    {call bitbucket.internal.widget.lozenge.lozenge}
+        {param htmlElement: 'span' /}
+        {param extraClasses}
+            change-type-lozenge change-type-{$changeType}{sp}
+            {switch $changeType}
+                {case 'ADD'}
+                    aui-lozenge-success
+                {case 'COPY'}
+                    aui-lozenge-current
+                {case 'DELETE'}
+                    aui-lozenge-error
+                {case 'MOVE', 'RENAME'}
+                    aui-lozenge-moved
+                {default} //MODIFY, UNKNOWN, something invalid
+                    aui-lozenge-complete
+            {/switch}
+        {/param}
+        {param tooltip}
+            {if $previousPathContent}
+                {switch $changeType}
+                    // not autoescaping because already escaped by JS and contains HTML
+                    {case 'MOVE'}
+                        {{getText('bitbucket.web.file.moved.tooltip', $previousPathContent, $pathContent)|noAutoescape}}
+                    {case 'COPY'}
+                        {{getText('bitbucket.web.file.copied.tooltip', $previousPathContent, $pathContent)|noAutoescape}}
+                    {case 'RENAME'}
+                        {{getText('bitbucket.web.file.renamed.previous.path', $previousPathContent)|noAutoescape}}
+                {/switch}
+            {/if}
+        {/param}
+        {param text}
+            {switch $changeType}
+                {case 'ADD'}
+                    {getText('bitbucket.web.file.change.type.added')}
+                {case 'COPY'}
+                    {getText('bitbucket.web.file.change.type.copied')}
+                {case 'DELETE'}
+                    {getText('bitbucket.web.file.change.type.deleted')}
+                {case 'MOVE'}
+                    {getText('bitbucket.web.file.change.type.moved')}
+                {case 'RENAME'}
+                    {getText('bitbucket.web.file.change.type.renamed')}
+                {default} //MODIFY, UNKNOWN, something invalid
+                    {getText('bitbucket.web.file.change.type.modified')}
+            {/switch}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param added if true, exec bit has been added, otherwise it has been removed
+ */
+{template .fileChangeModeLozenge}
+    {call bitbucket.internal.widget.lozenge.lozenge}
+        {param htmlElement: 'span' /}
+        {param extraClasses}
+            change-mode-lozenge change-mode-{$added ? 'added aui-lozenge-success' : 'removed aui-lozenge-error'}
+        {/param}
+        {param tooltip}
+            {if $added}
+                {getText('bitbucket.web.file.change.mode.added.tooltip')}
+            {else}
+                {getText('bitbucket.web.file.change.mode.removed.tooltip')}
+            {/if}
+        {/param}
+        {param text}
+            {if $added}
+                {getText('bitbucket.web.file.change.mode.added')}
+            {else}
+                {getText('bitbucket.web.file.change.mode.removed')}
+            {/if}
+        {/param}
+    {/call}
+{/template}

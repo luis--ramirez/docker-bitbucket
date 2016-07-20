@@ -1,0 +1,105 @@
+@import "/static/global.less";
+
+.aui-sidebar {
+    .aui-page-header-main.entity-item {
+        .aui-nav-breadcrumbs li {
+            .text-overflow();
+            max-width: 100%;
+        }
+
+        h1 {
+            display: inline-block;
+            max-width: 100%;
+
+            + .aui-button {
+                margin-left: @baseSpacing;
+                vertical-align: bottom;
+            }
+        }
+    }
+
+    .aui-sidebar-group-tier-one {
+        margin-top: @baseSpacing;
+    }
+
+    &:focus {
+        // clicking on an element with tabindex="-1" still shows a focus outline, we set the tabindex so that input
+        // focus is shifted when uses the 'skip to content' accessibility links, so we hide the focus outline here
+        outline: none;
+    }
+}
+
+.icon-create-pull-request {
+    background-image: url('icons/icon-create-pull-request.svg');
+}
+
+.icon-fork {
+    background-image: url('icons/icon-fork.svg');
+}
+
+.icon-clone {
+    background-image: url('icons/icon-clone.svg');
+}
+
+.icon-source {
+    background-image: url('icons/icon-source.svg');
+}
+
+.icon-commits {
+    background-image: url('icons/icon-commits.svg');
+}
+
+.icon-branches {
+    background-image: url('icons/icon-branches.svg');
+}
+
+.icon-pull-requests {
+    background-image: url('icons/icon-pull-requests.svg');
+}
+
+.icon-settings {
+    background-image: url('icons/icon-settings.svg');
+}
+
+.icon-show-actions {
+    background-image: url('icons/icon-show-actions.svg');
+}
+
+.icon-create-branch {
+    background-image: url('icons/icon-create-branch.svg')
+}
+
+/**
+ * @aui-override for AUI-2468
+ */
+.aui-sidebar .aui-sidebar-group:first-child .aui-nav-heading:first-child,
+.aui-sidebar-submenu .aui-sidebar-group:first-child .aui-nav-heading:first-child {
+  border-top: none;
+}
+
+// @aui-override
+.aui-sidebar-fly-out {
+    z-index:10;
+}
+
+// @aui-override for AUI-2486
+.aui-sidebar.aui-sidebar-fly-out ~ .aui-page-panel {
+    padding-left:56px;
+}
+
+#content .aui-sidebar.aui-sidebar-fly-out + .aui-page-header {
+    padding-left:56px + @doubleSpacing; // in AUI this is +(@aui-grid * 2)
+}
+
+// @aui-override for AUI-2491
+.aui-sidebar[aria-expanded='false'] .aui-sidebar-body {
+    overflow-x: hidden;
+}
+
+// @aui-override AUI-2443 for 16x16 sidebar icon sizes
+.aui-sidebar .aui-nav > li > .aui-nav-item > .aui-icon.aui-icon-small {
+    &:before {
+        font-size: @auiIconSmall;
+        padding: 2px;
+    }
+}

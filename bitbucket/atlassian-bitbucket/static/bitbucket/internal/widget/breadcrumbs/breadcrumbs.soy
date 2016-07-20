@@ -1,0 +1,82 @@
+{namespace bitbucket.internal.widget.breadcrumbs}
+
+/**
+ * @param id
+ * @param href
+ * @param text
+ * @param? crumb
+ * @param? state
+ */
+{template .back}
+    <li>
+        <a id="{$id}" class="breadcrumbs" href="{$href}">
+            {call aui.icons.icon}
+                {param icon: 'back-page' /}
+                {param useIconFont: true /}
+            {/call}
+            {$text}
+        </a>
+    </li>
+    {if $crumb}
+        <li>{$crumb}
+            {if $state}
+                {call bitbucket.internal.widget.lozenge.pullRequestState}
+                    {param state: $state /}
+                {/call}
+            {/if}
+        </li>
+    {/if}
+{/template}
+
+/**
+ * Use this if updating breadcrumbs. Otherwise, use .breadcrumbs template
+ * @param pathComponents
+ * @param? primaryLink
+ * @param? trailingSlash
+ */
+{template .crumbs}
+    {foreach $pathComponent in $pathComponents}
+        {call .breadcrumbFragment}
+            {param isLast: isLast($pathComponent) /}
+            {param url: isLast($pathComponent) ? $primaryLink : $pathComponent.url /}
+            {param text: $pathComponent.text /}
+        {/call}
+        {if not isLast($pathComponent) or $trailingSlash}
+            {call .sep /}
+        {/if}
+    {/foreach}
+{/template}
+
+/**
+ * @param pathComponents
+ * @param? primaryLink
+ * @param? trailingSlash
+ */
+{template .breadcrumbs}
+    <div class="breadcrumbs">
+        {call .crumbs}
+            {param pathComponents: $pathComponents /}
+            {param primaryLink: $primaryLink /}
+            {param trailingSlash: $trailingSlash /}
+        {/call}
+    </div>
+{/template}
+
+/**
+ * @param? url
+ * @param text
+ * @param isLast
+ */
+{template .breadcrumbFragment private="true"}
+    {if $url}
+        <a{if $isLast} class="stub"{/if} href="{$url}">{$text}</a>
+    {else}
+        <span{if $isLast} class="stub"{/if}>{$text}</span>
+    {/if}
+{/template}
+
+/**
+ */
+{template .sep private="true"}
+    <span class="sep">/</span>
+{/template}

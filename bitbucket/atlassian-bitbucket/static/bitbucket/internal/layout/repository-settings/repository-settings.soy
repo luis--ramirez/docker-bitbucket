@@ -1,0 +1,37 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param repository
+ * @param content
+ * @param windowTitle
+ * @param activeSettingsTab
+ * @param? dataAttributes
+ * @param? pageBottomContent
+ */
+{template .repositorySettings}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.repositorySettings')}
+    {call bitbucket.internal.layout.repository}
+        {param windowTitle: $windowTitle /}
+        {param repository: $repository /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeNav: 'bitbucket.repository.nav.settings' /}
+        {param content: $content /}
+        {param pageHeaderContent}
+            {call aui.page.pageHeaderMain}
+                {param content}
+                    <h1>{getText('bitbucket.web.repository.nav.settings')}</h1>
+                {/param}
+            {/call}
+        {/param}
+
+        {param panelNavContent}
+            {call widget.aui.webFragmentNavigation}
+                {param webFragments: getWebFragments('bitbucket.repository.settings.panel', [ 'repository' : $repository, 'project' : $repository.project ]) /}
+                {param activeNavItem: $activeSettingsTab /}
+                {param context: [ 'repository' : $repository, 'project' : $repository.project ] /}
+                {param isVertical: true /}
+            {/call}
+        {/param}
+        {param pageBottomContent: $pageBottomContent /}
+    {/call}
+{/template}

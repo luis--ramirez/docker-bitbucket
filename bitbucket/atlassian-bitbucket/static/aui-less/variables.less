@@ -1,0 +1,719 @@
+@import 'colors';
+
+// Grid
+// ----
+
+@aui-grid: 10px;
+
+
+// Fonts and Line Heights
+// ----------------------
+
+@aui-font-size-xxxlarge: 32px;
+@aui-font-size-xxlarge: 24px;
+@aui-font-size-xlarge: 20px;
+@aui-font-size-large: 16px;
+@aui-font-size-medium: 14px;
+@aui-font-size-small: 12px;
+
+
+// Borders
+// -------
+
+@aui-border-color: #ccc;
+@aui-border-type: solid;
+@aui-border-style: solid;
+@aui-border-width: 1px;
+@aui-border-radius-small: 3px;
+@aui-border-radius-medium: 5px;
+
+
+// Layout
+// ------
+
+@aui-link-color: @adg-color-bright-blue-1;
+@aui-link-color-visited: @adg-color-violet;
+@aui-link-decoration: none;
+@aui-link-decoration-active: underline;
+@aui-link-inverted-text-color: @adg-color-white;
+@aui-link-inverted-bg-color: @aui-link-color;
+
+@aui-text-color: @adg-color-charcoal;
+@aui-font-family: Arial, sans-serif;
+@aui-font-family-ja: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana, Arial, sans-serif;
+
+@aui-background-color: @adg-color-light-gray;
+@aui-panel-bg-color: #fff;
+
+
+// ### Abbreviations
+
+@aui-abbr-border-color: @adg-color-medium-gray;
+
+
+// ### Blockquotes
+
+@aui-blockquote-text-color: @adg-color-medium-gray;
+
+
+// ### Quotes
+
+@aui-quote-text-color: @adg-color-medium-gray;
+
+
+// ### Less important text.
+
+@aui-small-text-color: @adg-color-medium-gray;
+
+
+// Headings
+// --------
+
+@aui-heading-xxlarge-text-color: @aui-text-color;
+@aui-heading-xxlarge-font-size: @aui-font-size-xxxlarge;
+@aui-heading-xxlarge-font-weight: normal;
+@aui-heading-xxlarge-line-height: 1.25;
+@aui-heading-xxlarge-text-transform: none;
+@aui-heading-xxlarge-margin-top: @aui-grid * 3;
+
+@aui-heading-xlarge-text-color: @aui-text-color;
+@aui-heading-xlarge-font-size: @aui-font-size-xxlarge;
+@aui-heading-xlarge-font-weight: normal;
+@aui-heading-xlarge-line-height: 1.25;
+@aui-heading-xlarge-text-transform: none;
+@aui-heading-xlarge-margin-top: @aui-grid * 3;
+
+@aui-heading-large-text-color: @aui-text-color;
+@aui-heading-large-font-size: @aui-font-size-xlarge;
+@aui-heading-large-font-weight: normal;
+@aui-heading-large-line-height: 1.5;
+@aui-heading-large-text-transform: none;
+@aui-heading-large-margin-top: @aui-grid * 3;
+
+@aui-heading-medium-text-color: @aui-text-color;
+@aui-heading-medium-font-size: @aui-font-size-large;
+@aui-heading-medium-font-weight: bold;
+@aui-heading-medium-line-height: 1.25;
+@aui-heading-medium-text-transform: none;
+@aui-heading-medium-margin-top: @aui-grid * 2;
+
+@aui-heading-small-text-color: @aui-text-color;
+@aui-heading-small-font-size: @aui-font-size-medium;
+@aui-heading-small-font-weight: bold;
+@aui-heading-small-line-height: 1.42857142857143;
+@aui-heading-small-text-transform: none;
+@aui-heading-small-margin-top: @aui-grid * 2;
+
+@aui-heading-xsmall-text-color: @adg-color-medium-gray;
+@aui-heading-xsmall-font-size: @aui-font-size-small;
+@aui-heading-xsmall-font-weight: bold;
+@aui-heading-xsmall-line-height: 1.66666666666667;
+@aui-heading-xsmall-text-transform: uppercase;
+@aui-heading-xsmall-margin-top: @aui-grid * 2;
+
+
+// Buttons
+// -------
+
+@aui-button-border-radius: 3.01px;
+@aui-button-border-style: solid;
+@aui-button-border-width: 1px;
+@aui-button-font-size: 14px;
+@aui-button-height: 2.1428571428571em;
+@aui-button-padding-x: 10px;
+@aui-button-padding-y: 4px;
+@aui-button-width: 1.42857142857143;
+@aui-button-disabled-border-color: @adg-color-ash-gray;
+
+@aui-button-active-inner-shadow-x: 0;
+@aui-button-active-inner-shadow-y: 3px;
+@aui-button-active-inner-shadow-blur: 6px;
+@aui-button-active-inner-shadow-spread: 0;
+@aui-button-active-inner-shadow-color: rgba(0, 0, 0, 0.1);
+
+@aui-button-default-bg-color: #f5f5f5;
+@aui-button-default-hover-bg-color: #e9e9e9;
+@aui-button-default-border-color: #ccc;
+@aui-button-default-text-color: @adg-color-charcoal;
+
+@aui-button-default-active-bg-color: @aui-button-default-bg-color;
+@aui-button-default-active-border-color: #999;
+@aui-button-default-active-text-color: #000;
+@aui-button-default-active-icon-color: #707070;
+
+@aui-button-default-disabled-bg-color: #f5f5f5;
+@aui-button-default-disabled-border-color: #ddd;
+@aui-button-default-disabled-text-color: #999;
+@aui-button-default-disabled-icon-color: #cccccc;
+
+@aui-button-light-bg-color: @adg-color-white;
+
+@aui-button-primary-bg-color: @adg-color-bright-blue-1;
+@aui-button-primary-border-color: transparent;
+@aui-button-primary-text-color: #fff;
+
+@aui-button-primary-hover-bg-color: #2a67a5;
+@aui-button-primary-active-bg-color: @aui-button-primary-bg-color;
+@aui-button-primary-active-border-color: transparent;
+@aui-button-primary-active-text-color: #fff;
+@aui-button-primary-active-icon-color: #fff;
+@aui-button-primary-dropdown2-split-color: rgba(0, 0, 0, 0.3);
+
+@aui-button-primary-disabled-bg-color: #9cbad9;
+@aui-button-primary-disabled-border-color: transparent;
+@aui-button-primary-disabled-text-color: #fff;
+@aui-button-primary-disabled-icon-color: #fff;
+
+@aui-button-grouped-primary-active-border-color: #999;
+@aui-button-grouped-primary-active-text-color: @adg-color-blue;
+
+@aui-button-grouped-primary-disabled-bg-color: #fff;
+@aui-button-grouped-primary-disabled-border-color: #ccc;
+@aui-button-grouped-primary-disabled-icon-color: #ccc;
+@aui-button-grouped-primary-disabled-text-color: #9dbbd9;
+
+@aui-button-grouped-selected-bg-color: #ccc;
+
+@aui-button-grouped-default-disabled-icon-color: #ccc;
+
+@aui-button-subtle-text-color: @adg-color-medium-gray;
+@aui-button-subtle-dropdown2-trigger-arrow-color: @adg-color-gray;
+@aui-button-primary-split-border-color: #1f4d7d;
+
+@aui-button-subtle-border-color: @adg-color-ash-gray;
+
+// ### Split buttons
+@aui-button-split-separator-default-color: @adg-color-ash-gray;
+@aui-button-split-separator-primary-color: rgba(0, 0, 0, 0.3);
+@aui-button-split-separator-edge: 4px;
+
+// Tables
+// ------
+
+@aui-table-header-bg-color: @adg-color-white;
+@aui-table-row-bg-color: @adg-color-white;
+@aui-table-text-align: left;
+@aui-table-vertical-align: top;
+@aui-table-padding-x: @aui-grid;
+@aui-table-padding-y: (@aui-grid * .7);
+
+@aui-table-caption-bg-color: @adg-color-light-gray;
+@aui-table-caption-text-color: @adg-color-medium-gray;
+@aui-table-heading-text-color: @aui-text-color;
+@aui-table-row-text-color: @aui-text-color;
+
+@aui-table-interactive-row-hover-bg-color: @adg-color-light-gray;
+
+// *DEPRECATED: Since 5.0.0.*
+@aui-table-zebra-even-bg-color: @adg-color-light-gray;
+@aui-table-zebra-even-text-color: @aui-text-color;
+@aui-table-zebra-heading-bg-color: @adg-color-light-gray;
+@aui-table-zebra-heading-text-color: @aui-text-color;
+
+
+// ### Sortable
+
+@aui-table-sortable-active-bg-color: @adg-color-light-gray;
+@aui-table-sortable-active-border-color: @adg-color-charcoal;
+
+
+// Header
+// ------
+
+@aui-header-bg-color: @adg-color-blue;
+@aui-header-text-color: @adg-color-white;
+@aui-header-border-color: #2e3D54;
+@aui-header-border-style: @aui-border-style;
+@aui-header-border-width: @aui-border-width;
+@aui-header-padding-x: @aui-grid;
+@aui-header-padding-y: 0;
+
+@aui-header-link-text-color: @aui-header-text-color;
+@aui-header-link-padding-x: @aui-grid;
+@aui-header-link-padding-y: 13px;
+@aui-header-link-active-bg-color: @adg-color-bright-blue-1;
+
+@aui-header-btn-primary-bg-color: @aui-button-primary-bg-color;
+@aui-header-btn-primary-active-bg-color: @aui-button-primary-active-bg-color;
+@aui-header-btn-primary-hover-bg-color: @aui-button-primary-hover-bg-color;
+
+@aui-header-nav-btn-primary-bg-color: @aui-button-primary-bg-color;
+@aui-header-nav-btn-primary-line-height: 1.57142857142857;
+@aui-header-nav-btn-primary-text-color: @adg-color-white;
+@aui-header-nav-btn-primary-hover-bg-color: @aui-button-primary-hover-bg-color;
+@aui-header-nav-btn-primary-hover-text-color: @aui-header-nav-btn-primary-text-color;
+@aui-header-nav-btn-primary-active-bg-color: @aui-button-primary-active-bg-color;
+
+@aui-header-logo-height: 40px;
+@aui-header-logo-padding-x: @aui-grid;
+@aui-header-logo-padding-y: 0;
+
+@aui-header-img-padding-x: 0;
+@aui-header-img-padding-y: (@aui-grid / 2);
+@aui-header-img-height: (@aui-header-logo-height - @aui-grid);
+
+@aui-header-logo-device-height: 24px;
+@aui-header-logo-device-padding-x: 0;
+@aui-header-logo-device-padding-y: 8px;
+
+@aui-header-logo-text-font-size: 14px;
+@aui-header-logo-text-line-height: 1.4286;
+@aui-header-logo-textonly-device-padding: 4px;
+
+@aui-header-quicksearch-bg-color: @adg-color-light-gray;
+@aui-header-quicksearch-color: @adg-color-charcoal;
+@aui-header-quicksearch-focus-color: @adg-color-white;
+@aui-header-quicksearch-width: 170px;
+@aui-header-quicksearch-placeholder-color: @adg-color-medium-gray;
+
+
+// Page
+// ----
+
+@aui-page-nav-width: 240px;
+@aui-page-sidebar-width: 35%;
+@aui-page-width-small: 400px;
+@aui-page-width-medium: 600px;
+@aui-page-width-large: 800px;
+@aui-page-width-xlarge: 980px;
+
+
+// Navigation
+// ----------
+
+@aui-nav-text-color: @aui-text-color;
+@aui-nav-heading-text-color: @adg-color-medium-gray;
+@aui-nav-link-selected-text-color: @aui-nav-text-color;
+@aui-nav-link-active-bg-color: #e6e6e6;
+@aui-nav-link-color: @adg-color-bright-blue-1;
+@aui-nav-link-spacing-horizontal: 10px;
+@aui-nav-link-spacing-vertical: 7px;
+@aui-nav-group-divider-color: @adg-color-ash-gray;
+@aui-nav-subtree-line-color: @adg-color-ash-gray;
+@aui-nav-subtree-toggle-icon-color: @adg-color-gray;
+@aui-nav-subtree-indicator-width: 1px;
+@aui-nav-item-actions-dropdown-trigger-hover-color: @adg-color-ash-gray;
+
+// Actions lists
+@aui-nav-actions-list-margin-top: 10px;
+@aui-nav-actions-list-item-font-size: @aui-font-size-medium;
+@aui-nav-actions-list-item-margin-bottom: 5px;
+@aui-nav-actions-list-item-margin-right: 10px;
+
+// ### Paginated
+
+@aui-nav-pagination-text-color: @aui-text-color;
+@aui-nav-pagination-active-text-color: @adg-color-gray;
+
+
+// ### Groups
+
+@aui-navgroup-horizontal-bg-color: @adg-color-light-gray;
+
+
+// Footer
+// ------
+
+@aui-footer-body-text-color: @adg-color-medium-gray;
+@aui-footer-body-link-text-color: @adg-color-medium-gray;
+
+
+// RESTfulTable
+// ------------
+
+@aui-restfultable-row-focused-bg-color: @adg-color-pale-blue;
+@aui-restfultable-row-create-border: @adg-color-ash-gray;
+@aui-restfultable-row-editable-hover-bg-color: @adg-color-pale-yellow;
+@aui-restfultable-error-text-color: @adg-color-red;
+@aui-restfultable-header-row-bg-color: @adg-color-white;
+@aui-restfultable-row-moving-bg-color: @adg-color-light-gray;
+@aui-restfultable-editable-em-text-color: @adg-color-gray;
+@aui-restfultable-row-active-bg-color: @adg-color-light-gray;
+@aui-restfultable-row-hover-bg-color: @adg-color-light-gray;
+
+
+// Datepicker
+// ----------
+
+@aui-datepicker-day-bg-color: @adg-color-white;
+@aui-datepicker-day-text-color: @aui-text-color;
+@aui-datepicker-today-bg-color: @aui-link-color;
+@aui-datepicker-today-text-color: @aui-datepicker-day-bg-color;
+@aui-datepicker-unselectable-text-color: @adg-color-medium-gray;
+@aui-datepicker-outline-color: @adg-color-medium-gray;
+@aui-datepicker-disabled-text-color: @adg-color-medium-gray;
+
+
+// Label
+// -----
+
+@aui-label-text-color: @adg-color-bright-blue-1;
+@aui-label-bg-color: @adg-color-light-gray;
+@aui-label-hover-border-color: @adg-color-medium-gray;
+@aui-label-border-color: @adg-color-ash-gray;
+
+
+// Progress Indicator
+// ------------------
+
+@aui-progress-indicator-color: @adg-color-bright-blue-1;
+@aui-progress-indicator-bar-color: @adg-color-ash-gray;
+@aui-progress-indicator-bg-color: @adg-color-silver;
+
+
+// Progress Tracker
+// ----------------
+
+@aui-progress-tracker-step-border-color: @adg-color-light-gray;
+@aui-progress-tracker-inverted-step-border-color: @adg-color-white;
+@aui-progress-tracker-container-color: @adg-color-light-gray;
+@aui-progress-tracker-complete-color: @aui-link-color;
+@aui-progress-tracker-incomplete-color: @adg-color-ash-gray;
+@aui-progress-tracker-incomplete-text-color: @adg-color-medium-gray;
+
+
+// ### Inverted
+
+@aui-progress-tracker-inverted-container-color: @adg-color-white;
+
+
+// Select2
+// -------
+
+@aui-select2-unselectable-label-text-color: @adg-color-medium-gray;
+@aui-select2-placeholder-text-color: @adg-color-medium-gray;
+@aui-select2-dropdown-focused-border-color: @adg-color-medium-gray;
+@aui-select2-choice-border-color: @adg-color-gray;
+@aui-select2-choice-bg-color: @adg-color-light-gray;
+@aui-select2-choice-text-color: @adg-color-charcoal;
+@aui-select2-choices-bg-color: @adg-color-white;
+@aui-select2-choice-active-text-color: @adg-color-black;
+@aui-select2-choice-active-bg-color: @adg-color-light-gray;
+
+
+// Forms
+// -----
+
+@aui-form-placeholder-text-color: @adg-color-gray;
+@aui-form-label-text-color: @adg-color-medium-gray;
+@aui-form-error-text-color: @adg-color-red;
+@aui-form-description-text-color: @adg-color-medium-gray;
+@aui-form-disabled-field-bg-color: @adg-color-light-gray;
+@aui-form-disabled-field-text-color: @adg-color-gray;
+@aui-form-disabled-field-label-color: @adg-color-gray;
+@aui-form-field-border-color: @adg-color-ash-gray;
+@aui-form-input-text-bg-color: @adg-color-white;
+@aui-form-optgroup-text-color: @adg-color-medium-gray;
+@aui-form-optgroup-bg-color: @adg-color-light-gray;
+@aui-form-option-bg-color: @adg-color-white;
+@aui-form-pre-bg-color: @adg-color-light-gray;
+
+@aui-form-field-width-short: 75px;
+@aui-form-field-width-medium: 165px;
+@aui-form-field-width-medium-long: 350px;
+@aui-form-field-width-long: 500px;
+@aui-form-field-width-full: none;
+@aui-form-field-height: unit(30px / @aui-font-size-medium, em); // 30px - using ems so the fields increase in line with user specified font-sizes
+
+// Dialog
+// ------
+
+@aui-dialog-button-hover-border-color: @adg-color-gray;
+@aui-dialog-border-color: @adg-color-ash-gray;
+
+// Toolbar
+// ------
+
+@aui-toolbar-dropdown-border-color: @adg-color-gray;
+@aui-toolbar-item-link-text-color: @adg-color-bright-blue-1;
+
+
+// Avatar
+// ------
+
+@aui-avatar-size-xxxlarge: 128px;
+@aui-avatar-size-xxlarge: 96px;
+@aui-avatar-size-xlarge: 64px;
+@aui-avatar-size-large: 48px;
+@aui-avatar-size-medium: 32px;
+@aui-avatar-size-small: 24px;
+@aui-avatar-size-xsmall: 16px;
+
+@aui-avatar-project-border-color: @adg-color-ash-gray;
+@aui-avatar-project-bg-color: @adg-color-white;
+
+
+// Badges
+// ------
+
+@aui-badge-bg-color: rgba(0, 0, 0, 0.2); // gives #ccc when on white, or a black tint when on other colors
+// @aui-badge-bg-color: fade(#000, 20%); // LESS131
+@aui-badge-text-color: @aui-text-color;
+@aui-badge-on-blue-bg-color: rgba(255, 255, 255, 0.25); // outputs RGBA colour
+// @aui-badge-on-blue-bg-color: fade(#fff, 25%); // LESS131
+@aui-badge-on-blue-text-color: #fff;
+
+// Lozenges
+// --------
+
+@aui-lozenge-bg-color: @adg-color-ash-gray;
+@aui-lozenge-border-color: @adg-color-ash-gray;
+@aui-lozenge-text-color: @aui-text-color;
+@aui-lozenge-subtle-bg-color: @adg-color-white;
+@aui-lozenge-subtle-border-color: @adg-color-ash-gray;
+@aui-lozenge-subtle-text-color: @aui-lozenge-text-color;
+
+@aui-lozenge-success-bg-color: @adg-color-green;
+@aui-lozenge-success-border-color: @adg-color-green;
+@aui-lozenge-success-subtle-text-color: @adg-color-green;
+@aui-lozenge-success-subtle-border-color: #60b070;
+// @aui-lozenge-success-subtle-border-color: darken(@adg-color-green-2, 12%); // LESS131
+
+@aui-lozenge-current-bg-color: @adg-color-yellow;
+@aui-lozenge-current-border-color: @adg-color-yellow;
+@aui-lozenge-current-text-color: @adg-color-dark-brown;
+@aui-lozenge-current-subtle-text-color: @adg-color-dark-brown;
+@aui-lozenge-current-subtle-border-color: #ffe9a8;
+// @aui-lozenge-current-subtle-border-color: tint(@adg-color-yellow, 50%); // LESS131
+
+@aui-lozenge-moved-bg-color: @adg-color-brown;
+@aui-lozenge-moved-border-color: @adg-color-brown;
+@aui-lozenge-moved-subtle-text-color: @adg-color-brown;
+@aui-lozenge-moved-subtle-border-color: #c0ad9d;
+// @aui-lozenge-moved-subtle-border-color: tint(@adg-color-brown, 50%); // LESS131
+
+@aui-lozenge-error-bg-color: @adg-color-red;
+@aui-lozenge-error-border-color: @adg-color-red;
+@aui-lozenge-error-subtle-text-color: @adg-color-red;
+@aui-lozenge-error-subtle-border-color: #e8a29b;
+// @aui-lozenge-error-subtle-border-color: tint(@adg-color-red, 50%); // LESS131
+
+@aui-lozenge-complete-bg-color: @adg-color-slate;
+@aui-lozenge-complete-border-color: @adg-color-slate;
+@aui-lozenge-complete-subtle-text-color: @adg-color-slate;
+@aui-lozenge-complete-subtle-border-color: #a5b3c2;
+// @aui-lozenge-complete-subtle-border-color: tint(@adg-color-blue-gray, 50%); // LESS131
+
+
+
+// Inline Dialog
+// -------------
+
+@aui-inline-dialog-border-color: @adg-color-ash-gray;
+
+
+// Messages
+// --------
+@aui-message-default-bg-color: @adg-color-white;
+@aui-message-default-border-color: @adg-color-bright-blue-1;
+@aui-message-text-color: @aui-text-color;
+@aui-message-link-color: @aui-link-color;
+@aui-message-border-radius: 3px;
+@aui-message-stacked-spacing: 20px;
+@aui-message-close-icon-padding: 20px;
+
+
+@aui-message-success-bg-color: @adg-color-white;
+@aui-message-success-border-color: @adg-color-lime-green;
+// @aui-message-success-border-color: tint(@adg-color-green, 50%); // LESS131
+
+@aui-message-warning-bg-color: @adg-color-white;
+@aui-message-warning-border-color: @adg-color-yellow;
+// @aui-message-warning-border-color: tint(@adg-color-yellow, 50%); // LESS131
+
+
+@aui-message-error-bg-color: @adg-color-white;
+@aui-message-error-border-color: @adg-color-red;
+@aui-message-error-text-color: @aui-message-text-color;
+
+@aui-message-info-bg-color: @adg-color-white;
+@aui-message-info-border-color: @adg-color-bright-blue-1;
+// @aui-message-info-border-color: tint(@adg-color-blue-gray, 50%); // LESS131
+
+
+// Tabs
+// ----
+
+@aui-tabs-tab-bg-color: @adg-color-silver;
+@aui-tabs-tab-border-color: @adg-color-ash-gray;
+@aui-tabs-tab-text-color: @aui-text-color;
+
+@aui-tabs-tab-hover-bg-color: @adg-color-white;
+@aui-tabs-tab-hover-text-color: @aui-text-color;
+
+@aui-tabs-tab-active-bg-color: @adg-color-white;
+@aui-tabs-tab-active-text-color: @aui-text-color;
+
+@aui-tabs-font-size: @aui-font-size-medium;
+
+
+// Tipsy
+// -----
+
+@aui-tooltip-bg-color: rgba(51, 51, 51, 0.9);
+@aui-tooltip-border-color: rgba(51, 51, 51, 0.9);
+@aui-tooltip-content-text-color: @adg-color-ash-gray;
+@aui-tooltip-title-text-color: @adg-color-white;
+
+
+// ### Success
+
+@aui-lozenge-success-text-color: @adg-color-white;
+
+
+// ### Error
+
+@aui-lozenge-error-text-color: @adg-color-white;
+
+
+// ### Complete
+
+@aui-lozenge-complete-text-color: @adg-color-white;
+
+
+// ### Moved
+
+@aui-lozenge-moved-text-color: @adg-color-white;
+
+
+// Form notification
+// -----------------
+@aui-notification-error-color: @adg-color-red;
+@aui-notification-error-text-color: @adg-color-white;
+
+@aui-notification-info-color: @adg-color-white;
+@aui-notification-info-border-color: @adg-color-ash-gray;
+@aui-notification-info-icon-color: @adg-color-gray;
+@aui-notification-info-text-color: @adg-color-charcoal;
+@aui-notification-info-link-color: @adg-color-bright-blue-1;
+
+@aui-notification-success-color: @adg-color-green;
+
+@aui-notification-arrow-border: 1px;
+
+@aui-notification-arrow-size: 6px;
+@aui-notification-arrow-and-border-size: @aui-notification-arrow-size + @aui-notification-arrow-border;
+@aui-notification-arrow-bottom-right-position: 10px;
+
+@aui-notification-tipsy-padding: 4px;
+@aui-notification-tipsy-inner-padding: 10px;
+
+@aui-notification-list-padding: 20px;
+
+@aui-notification-icon-outside-field-offset-top: 4px;
+@aui-notification-icon-outside-field-offset-right: 2px;
+
+@aui-notification-icon-outside-field-width: 16px;
+@aui-notification-icon-outside-field-padding-left: 6px;
+@aui-notification-icon-outside-field-padding-right: 6px;
+@aui-notification-icon-outside-field-padding-top: 7px;
+
+@aui-notification-line-height: unit(18px / @aui-font-size-medium);
+@aui-notification-error-color: @adg-color-red;
+@aui-notification-error-text-color: @adg-color-white;
+
+@aui-notification-info-color: @adg-color-white;
+@aui-notification-info-border-color: @adg-color-ash-gray;
+@aui-notification-info-icon-color: @adg-color-gray;
+@aui-notification-info-text-color: @adg-color-charcoal;
+@aui-notification-info-link-color: @adg-color-bright-blue-1;
+
+@aui-notification-success-color: @adg-color-green;
+
+@aui-notification-arrow-border: 1px;
+
+@aui-notification-arrow-size: 6px;
+@aui-notification-arrow-and-border-size: @aui-notification-arrow-size + @aui-notification-arrow-border;
+@aui-notification-arrow-bottom-right-position: 10px;
+
+@aui-notification-tipsy-padding: 4px;
+@aui-notification-tipsy-inner-padding: 10px;
+
+@aui-notification-list-padding: 20px;
+
+@aui-notification-icon-outside-field-offset-top: 4px;
+@aui-notification-icon-outside-field-offset-right: 2px;
+
+@aui-notification-icon-outside-field-width: 16px;
+@aui-notification-icon-outside-field-padding-left: 6px;
+@aui-notification-icon-outside-field-padding-right: 6px;
+@aui-notification-icon-outside-field-padding-top: 7px;
+
+// Dropdown2
+// ---------
+
+@aui-dropdown2-bg-color: @adg-color-white;
+@aui-dropdown2-border-color: @adg-color-ash-gray;
+@aui-dropdown2-trigger-color: @aui-text-color;
+@aui-dropdown2-trigger-active-color: @adg-color-white;
+@aui-dropdown2-disabled-text-color: @adg-color-gray;
+@aui-dropdown2-disabled-hover-text-color: @adg-color-medium-gray;
+@aui-dropdown2-disabled-hover-bg-color: @adg-color-light-gray;
+@aui-dropdown2-trigger-disabled-color: @aui-dropdown2-disabled-text-color;
+@aui-dropdown2-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+
+// Single Select
+// -------------
+@aui-single-select-box-shadow: @aui-dropdown2-box-shadow;
+@aui-single-select-bg-color: @adg-color-white;
+@aui-single-select-text-color: @adg-color-charcoal;
+@aui-single-select-active-bg-color: @adg-color-bright-blue-1;
+@aui-single-select-active-text-color: @adg-color-white;
+
+// Dialog
+// ------
+
+@aui-dialog-padding: 20px;
+
+
+// Dialog2
+// -------
+
+@aui-dialog2-footer-bg-color: @adg-color-light-gray;
+@aui-dialog2-footer-hint-text-color: @adg-color-medium-gray;
+@aui-dialog2-header-warning-bg-color: @adg-color-red;
+@aui-dialog2-header-warning-text-color: @adg-color-white;
+@aui-dialog-header-close-icon-color: @adg-color-medium-gray;
+@aui-dialog2-padding: 20px;
+
+
+// Icons
+// -------
+
+@aui-icon-size-small: 16px;
+@aui-icon-size-large: 32px;
+
+
+// Inline Dialog2
+// -----
+
+@aui-inline-dialog2-offset-default: 10px;
+@aui-inline-dialog2-arrow-edge-offset: 2px;
+@aui-inline-dialog2-arrow-side-length: 8px;
+@aui-inline-dialog2-arrow-border-width: 1px;
+
+
+// Sidebar
+// -------
+@aui-sidebar-icon-size: 20px; // used for sizing the nav icons
+@aui-sidebar-icon-color: @adg-color-medium-gray;
+@aui-sidebar-toggle-icon-color: @adg-color-gray;
+@aui-sidebar-width: (@aui-font-size-medium * 20); // 280px - expanded sidebar width
+@aui-sidebar-collapsed-width: (@aui-font-size-medium * 4); // 56px - collapsed sidebar width
+@aui-sidebar-border-width: @aui-border-width;
+@aui-sidebar-background-color: @adg-color-light-gray;
+@aui-sidebar-dropdown-arrow-color: @adg-color-gray;
+@aui-sidebar-default-transition-timing: 0.1s; // sidebar tooltip and flyout menu timing
+@aui-sidebar-tooltip-background-color: rgba(51,51,51,1); // the default tipsy background colour, which we use to generate gradients for the fading transition
+@aui-sidebar-badge-background-color: @adg-color-ash-gray; // we use the ADG colour instead of @aui-badge-bg-color because we want it to be opaque when overlaid on top of an icon
+@aui-sidebar-badge-border-color: @aui-sidebar-background-color; // to match sidebar background colour
+@aui-sidebar-layout-page-header-background-color: @adg-color-white;
+
+// Page layout
+//--------
+@aui-page-notification-panel-margin-top: 50px;
+@aui-page-notification-content-padding: 40px;
+@aui-page-notification-details-min-width: 90%;
+@aui-page-notification-details-header-top-margin: 2 * @aui-grid;
+@aui-page-notification-details-header-expander-trigger-padding: @aui-grid;
+@aui-page-notification-panel-content-form-text-margin-right: @aui-grid;

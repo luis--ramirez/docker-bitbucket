@@ -1,0 +1,55 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param form
+ * @param? fieldErrors
+ * @param? disabled
+ */
+{template .userFormFields}
+    {call widget.aui.form.text}
+        {param id: 'username' /}
+        {param labelContent}{getText('bitbucket.web.login.username.html')}{/param} // reuse the login page's i18n keys, so that both text is the same
+        {param initialValue: $form.username /}
+        {param maxLength: 255 /}
+        {param errors: $fieldErrors ? $fieldErrors.username : null /}
+        {param autofocus: true /}
+        {param required: true /}
+        {param disabled: $disabled /}
+    {/call}
+    {call widget.aui.form.text}
+        {param id: 'fullname' /}
+        {param labelContent}{getText('bitbucket.web.signup.fullname.html')}{/param}
+        {param initialValue: $form.fullname /}
+        {param maxLength: 255 /}
+        {param errors: $fieldErrors ? $fieldErrors.fullname : null /}
+        {param required: true /}
+        {param disabled: $disabled /}
+    {/call}
+    {call widget.aui.form.text}
+        {param id: 'email' /}
+        {param labelContent}{getText('bitbucket.web.signup.email.html')}{/param}
+        {param initialValue: $form.email /}
+        {param maxLength: 255 /}
+        {param errors: $fieldErrors ? $fieldErrors.email : null /}
+        {param required: true /}
+        {param disabled: $disabled /}
+    {/call}
+    {call widget.aui.form.password}
+        {param id: 'password' /}
+        {param labelContent}{getText('bitbucket.web.login.password.html')}{/param}
+        {param initialValue: '' /}
+        {param maxLength: 255 /}
+        {param errors: $fieldErrors ? $fieldErrors.password : null /}
+        {param required: true /}
+        {param disabled: $disabled /}
+    {/call}
+    {call widget.aui.form.password}
+        {param id: 'confirmPassword' /}
+        {param labelContent}{getText('bitbucket.web.signup.confirmpassword.html')}{/param}
+        {param initialValue: '' /}
+        {param maxLength: 255 /}
+        {param errors: $fieldErrors ? $fieldErrors.confirmPassword : null /}
+        {param required: true /}
+        {param disabled: $disabled /}
+    {/call}
+{/template}

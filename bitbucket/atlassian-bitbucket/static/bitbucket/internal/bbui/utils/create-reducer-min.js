@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/utils/create-reducer",["module","exports"],function(e,a){Object.defineProperty(a,"__esModule",{value:!0});a.default=function(a,c){return function(){var d=0>=arguments.length||void 0===arguments[0]?a:arguments[0],b=arguments[1];return c[b.type]?c[b.type](d,b):d}};e.exports=a["default"]});

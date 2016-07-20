@@ -1,0 +1,9 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+ */
+{template .bitbucketScmServiceResourceExhausted}
+    <div class="aui-banner aui-banner-error" role="banner" title="{getText('bitbucket.web.scm.resource.busy.tooltip', productName())}">
+        {getText('bitbucket.web.scm.resource.busy', productName())} {getText('bitbucket.web.scm.resource.busy.details')} {{getTextAsHtml('bitbucket.web.scm.resource.busy.help.html', bitbucket_help_url('bitbucket.help.scaling'), bitbucket_help_title('bitbucket.help.scaling'))}}
+    </div>
+{/template}

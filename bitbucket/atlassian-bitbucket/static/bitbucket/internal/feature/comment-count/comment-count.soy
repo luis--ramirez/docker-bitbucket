@@ -1,0 +1,27 @@
+{namespace bitbucket.internal.feature}
+
+/**
+ * NB: An extra to_int soy function has been added
+ * to allow the properties file choice pattern to work
+ * @param count
+ * @param? size large, small, or tiny
+ */
+{template .commentCount}
+    <span class="comment-count" title="{getText('bitbucket.web.comment.count', to_int($count))}">
+        {switch $size ? $size : 'small'}
+            {case 'small', 'large'}
+                {call aui.icons.icon}
+                    {param icon: 'comment' /}
+                    {param size: $size /}
+                    {param useIconFont: true /}
+                    {param accessibilityText: getText('bitbucket.web.comment.count', to_int($count)) /}
+                {/call}
+            {case 'tiny'}
+                <img width="10" height="12" src="{plugin_resource('com.atlassian.bitbucket.server.bitbucket-web:comment-count', 'icons/icon-comment-tiny.svg')}"
+                    alt="{getText('bitbucket.web.comment.count', to_int($count))}" />
+            {default}
+                INVALID SIZE PROVIDED TO commentCount: {$size}
+        {/switch}
+        <span class="count">{cap_int($count, 99)}</span>
+    </span>
+{/template}

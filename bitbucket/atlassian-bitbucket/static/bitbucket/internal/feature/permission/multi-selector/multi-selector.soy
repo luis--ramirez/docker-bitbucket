@@ -1,0 +1,60 @@
+{namespace bitbucket.internal.feature.permission}
+
+/**
+ * @param id
+ * @param colspan
+ * @param placeholderText
+ * @param permissionDataList
+ * @param? extraClasses
+ */
+{template .multiSelector}
+<tr class="permission-multi-selector-container">
+    <th colspan="{$colspan}">
+        {call aui.form.form}
+            {param action: '' /}
+            {param content}
+                {call aui.group.group}
+                    {param extraClasses: 'aui-group-split'/}
+                    {param content}
+                        {call aui.group.item}
+                            {param content}
+                                <label class="assistive" for="{$id}-search-input">{$placeholderText}</label>
+                                <input type="text" id="{$id}-search-input" class="permission-multi-selector{if $extraClasses}{sp}{$extraClasses}{/if}" placeholder="{$placeholderText}"/>
+                            {/param}
+                        {/call}
+                        {call aui.group.item}
+                            {param content}
+                                {call aui.dropdown2.trigger}
+                                    // This is shit. There should be an AUI template for a button
+                                    // which is a dropdown trigger considering they have it in their
+                                    // sandbox
+                                    {param tagName: 'button' /}
+                                    {param text: $permissionDataList[length($permissionDataList)-1].i18nName /}
+                                    {param extraClasses: 'aui-button permission-type-trigger' /}
+                                    {param menu: [ 'id' : $id + '-permission-type' ] /}
+                                {/call}
+                                {call aui.dropdown2.contents}
+                                    {param id : $id + '-permission-type' /}
+                                    // This is shit. We shouldn't have to add the aui-style-default class
+                                    {param extraClasses: 'aui-style-default permission-type-dropdown' /}
+                                    {param content}
+                                        <ul>
+                                            {foreach $permissionData in reverse($permissionDataList)}
+                                                <li data-value="{$permissionData.permission}"><a href="#">{$permissionData.i18nName}</a></li>
+                                            {/foreach}
+                                        </ul>
+                                    {/param}
+                                {/call}
+                                {call aui.buttons.button}
+                                    {param extraClasses: 'add-button' /}
+                                    {param text: getText('bitbucket.web.button.add') /}
+                                {/call}
+                            {/param}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+    </th>
+</tr>
+{/template}

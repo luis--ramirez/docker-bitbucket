@@ -1,0 +1,111 @@
+{namespace bitbucket.internal.component.avatarList}
+
+/**
+ * @param participants
+ * @param menuId
+ * @param? triggerClass
+ * @param? menuClass
+ * @param? maxOpen
+ * @param? avatarSize
+ */
+{template .participantList}
+    {let $sortedParticipants: sortParticipants($participants) /}
+    // `max - 1` instead of `max` because the "N more" item uses one slot for itself, and "1 more" would be pointless
+    {let $visibleCount: ((not $maxOpen) or length($participants) <= $maxOpen) ? length($participants) : $maxOpen - 1 /}
+
+    {foreach $participant in $sortedParticipants}
+        {if index($participant) < $visibleCount}
+            {call .participantAvatar}
+                {param participant: $participant /}
+                {param extraClasses : 'participant-item' /}
+                {param avatarSize: $avatarSize /}
+                {param withName: false /}
+            {/call}
+        {/if}
+    {/foreach}
+    {if length($participants) > $visibleCount}
+        {call aui.dropdown2.trigger}
+            {param menu: ['id': $menuId] /}
+            {param content}
+                +{length($participants) - $visibleCount}
+            {/param}
+            {param showIcon: false /}
+            {param tagName: 'button' /}
+            {param extraClasses: 'aui-button aui-button-subtle aui-dropdown2-trigger-arrowless ' + ($triggerClass ? $triggerClass : '') /}
+        {/call}
+        {call aui.dropdown2.contents}
+            {param id: $menuId /}
+            {param content}
+                <ul class="aui-list-truncate">
+                    {foreach $participant in $sortedParticipants}
+                        {if index($participant) >= $visibleCount}
+                            <li>
+                                {call .participantAvatar}
+                                    {param participant: $participant /}
+                                    {param extraClasses : 'participant-item' /}
+                                    {param avatarSize: $avatarSize /}
+                                    {param withName: true /}
+                                {/call}
+                            </li>
+                        {/if}
+                    {/foreach}
+                </ul>
+            {/param}
+            {param extraClasses: 'aui-dropdown2-tailed avatar-dropdown aui-style-default ' + ($menuClass ? $menuClass : '') /}
+            {param extraAttributes: ['data-aui-alignment': 'bottom right', 'data-aui-alignment-static': true] /}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param participant
+ * @param? avatarSize
+ * @param? extraClasses
+ * @param? imageClasses
+ * @param withName show with name?
+ */
+{template .participantAvatar}
+    {let $badgeClass}
+        {switch $participant.state}
+            {case 'UNAPPROVED'}
+
+            {case 'NEEDS_WORK'}
+                needs-work
+            {case 'APPROVED'}
+                approved
+        {/switch}
+    {/let}
+    {let $badgeText}
+        {switch $participant.state}
+            {case 'UNAPPROVED'}
+
+            {case 'NEEDS_WORK'}
+                {getText('bitbucket.web.pullrequest.state.needs.work')}
+            {case 'APPROVED'}
+                {getText('bitbucket.web.pullrequest.state.approved')}
+        {/switch}
+    {/let}
+    {if $withName}
+        {call bitbucket.internal.component.avatars.avatarWithNameAndBadge}
+            {param person: $participant.user /}
+            {param size: $avatarSize ? $avatarSize : 'small' /}
+            {param avatarClasses: 'avatar-dimmed'/}
+            {param extraClasses: $extraClasses /}
+            {param imageClasses : $imageClasses /}
+            {param badgeClasses: $badgeClass /}
+            {param badgeText: $badgeText /}
+            {param hideBadge: $participant.state == 'UNAPPROVED' /}
+        {/call}
+    {else}
+        {call bitbucket.internal.component.avatars.avatarWithBadge}
+            {param person: $participant.user /}
+            {param size: $avatarSize ? $avatarSize : 'small' /}
+            {param extraClasses: 'avatar-dimmed avatar-tooltip' + ($extraClasses ? ' ' + $extraClasses : '') /}
+            {param imageClasses : $imageClasses /}
+            {param badgeClasses: $badgeClass /}
+            {param badgeText: $badgeText /}
+            {param hideBadge: $participant.state == 'UNAPPROVED' /}
+            {param title: $participant.user.display_name /}
+        {/call}
+    {/if}
+{/template}

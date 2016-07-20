@@ -1,0 +1,73 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+ * @param? repositoryPage the page of repositories - if not supplied then it is expected that the rows will be totally
+ *                        filled in via AJAX in which case the table and its header are output and nothing more
+ * @param id
+ * @param? showProject
+ * @param? showPublicStatus
+ */
+{template .repositoryTable}
+    {call bitbucket.internal.widget.pagedTable}
+        {param id: $id /}
+        {param extraClasses: 'repository-table' /}
+        {param page: $repositoryPage /}
+        {param theadContent}
+            {if not $repositoryPage or $repositoryPage.size > 0 or $repositoryPage.start > 0}
+                <tr>
+                    <th scope="col">{getText('bitbucket.web.repository.col.name')}</th>
+                </tr>
+            {/if}
+        {/param}
+        {param content}
+            {if $repositoryPage and $repositoryPage.size > 0}
+                {foreach $repository in $repositoryPage.values}
+                    {call .repositoryRow}
+                        {param repository: $repository /}
+                        {param showProject: $showProject /}
+                        {param showPublicStatus: $showPublicStatus /}
+                    {/call}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param repository
+ * @param showProject
+ * @param showPublicStatus
+ */
+{template .repositoryRow private="true"}
+<tr>
+    <td>
+        {if $showProject}
+            <span class="project-name">
+                {call bitbucket.internal.feature.project.avatar}
+                    {param size: 'small' /}
+                    {param project: $repository.project /}
+                {/call}
+                <a href="{nav_project($repository.project.key)}" title="{$repository.project.name}" data-project-id="{$repository.project.id}">{$repository.project.name}</a>
+            </span>
+        {/if}
+        <span class="repository-name">
+            {if not $showProject}
+                {call aui.icons.icon}
+                    {param size: 'small' /}
+                    {param useIconFont: true /}
+                    {param iconFontSet: 'devtools' /}
+                    {param icon: $repository.origin ? 'repository-forked' : 'repository' /}
+                    {param accessibilityText: $repository.origin ? getText('bitbucket.web.repository.repository.forked') : getText('bitbucket.web.repository.repository')/}
+                    {{param extraAttributes: $repository.origin ? ['title': getText('bitbucket.web.repository.is.a.fork.of', $repository.origin.project.name, $repository.origin.name)] : null/}}
+                {/call}
+            {/if}
+            <a href="{nav_repo_browse($repository.project.key, $repository.slug)}" data-repository-id="{$repository.id}">{$repository.name}</a>
+        </span>
+        {if $showPublicStatus}
+            {call bitbucket.internal.feature.repository.publicLozenge}
+                {param repository: $repository /}
+            {/call}
+        {/if}
+    </td>
+</tr>
+{/template}

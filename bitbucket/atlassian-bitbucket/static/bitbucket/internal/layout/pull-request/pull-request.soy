@@ -1,0 +1,129 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param repository
+ * @param pullRequest
+ * @param activeTab
+ * @param content
+ * @param? dataAttributes
+ * @param? pageBottomContent
+ * @param? windowTitle
+ * @param maxChanges max changes to show in the diff tree
+ * @param mergeTimeout timeout to use for merges
+ * @param? relevantContextLines
+ */
+{template .pullRequest}
+    {webResourceManager_requireResourcesForContext('internal.layout.pullRequest')}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.pullRequest')}
+    // These calls to requirePageData allow us to give some better context to the server-side conditions and context-providers
+    // of client-web-fragments at these locations.
+    {requirePageData('bitbucket.layout.pullRequest', [ 'repository' : $repository, 'pullRequest' : $pullRequest])}
+    {requirePageData('bitbucket.pull-request.related-entities', [ 'repository' : $repository, 'pullRequest' : $pullRequest])}
+    {requirePageData('bitbucket.pull-request.links', [ 'repository' : $repository, 'pullRequest' : $pullRequest])}
+    {requirePageData('bitbucket.pull-request.overview.sections', [ 'repository' : $repository, 'pullRequest' : $pullRequest])}
+
+    {call bitbucket.internal.layout.repository}
+        {{param windowTitle: $windowTitle ? $windowTitle : getText('bitbucket.web.pullrequest.windowtitle', '' + $pullRequest.id, $pullRequest.title) /}}
+        {param dataAttributes: $dataAttributes /}
+        {param panelContentHeader: getText('bitbucket.web.repository.nav.pull-request') /}
+        {param panelContentHeaderExcludeBreadcrumbs: true /}
+        {param content}
+            <header class="pull-request-metadata">
+                <div class="pull-request-metadata-group">
+                    <div class="pull-request-metadata-primary">
+                        <div class="pull-request-id-and-state">
+                            <span class="pull-request-id">#{$pullRequest.id}</span>
+                            {call bitbucket.internal.widget.lozenge.pullRequestState}
+                                {param state: $pullRequest.state /}
+                            {/call}
+                        </div>
+                        {call bitbucket.internal.feature.pullRequest.branchToBranch}
+                            {param sourceRef: $pullRequest.fromRef /}
+                            {param targetRef: $pullRequest.toRef /}
+                        {/call}
+                        <h3 class="title">{$pullRequest.title}</h3>
+                    </div>
+                    <div class="pull-request-metadata-secondary">
+                        {call aui.toolbar2.toolbar2}
+                            {param extraClasses : 'pull-request-toolbar' /}
+                            {param content}
+                                {call aui.toolbar2.item}
+                                    {param item: 'secondary' /}
+                                    {param content}
+                                        {foreach $webSection in getWebSections('bitbucket.pull-request.toolbar',
+                                            [ 'repository' : $repository, 'pullRequest' : $pullRequest])}
+                                            {call bitbucket.internal.buttons.buttons}
+                                                {param extraClasses: $webSection.styleClass /}
+                                                {param content}
+                                                    {foreach $webItem in getWebItems($webSection.key,
+                                                        [ 'repository' : $repository, 'pullRequest' : $pullRequest])}
+                                                        {call bitbucket.internal.buttons.button}
+                                                            {param isPrimary: (not $webItem.params['stashButtonPrimary'] ? false : true) /}
+                                                            {param isPressed: (not $webItem.params['stashButtonActive'] ? false : true) /}
+                                                            {param iconType: $webItem.params['iconClass'] ? 'custom' : '' /}
+                                                            {param iconClass: $webItem.params['iconClass'] /}
+                                                            {param buttonText: $webItem.linkText /}
+                                                            {param title: $webItem.tooltip /}
+                                                            {param extraClasses: $webItem.styleClass /}
+                                                        {/call}
+                                                    {/foreach}
+                                                {/param}
+                                            {/call}
+                                        {/foreach}
+                                    {/param}
+                                {/call}
+                            {/param}
+                        {/call}
+                        {if length($pullRequest.reviewers) > 0}
+                            {call bitbucket.internal.layout.pullRequest.participantsSection}
+                                {param extraClasses: 'reviewers' /}
+                                {param participantRoles: $pullRequest.reviewers /}
+                                {param participantRoleHeading}
+                                    {getText('bitbucket.web.pullrequest.reviewers.label', length($pullRequest.reviewers))}
+                                {/param}
+                                {param participantMenuId: 'overflow-reviewers' /}
+                            {/call}
+                        {/if}
+                    </div>
+                </div>
+            </header>
+            {call bitbucket.internal.widget.webItemTabs}
+                {param webItems: getWebItems('bitbucket.pull-request.nav', [ 'repository' : $repository, 'pullRequest' : $pullRequest ]) /}
+                {param context: [ 'repository' : $repository, 'pullRequest' : $pullRequest ] /}
+                {param activeTab: $activeTab /}
+                {param isDisabled: true /}
+                {param tabPanesContent}
+                    {call widget.aui.tabPane}
+                        {param isActive: true /}
+                        {param extraClasses: 'pull-request-content' /}
+                        {param content}
+                            {$content|noAutoescape}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+        {param repository: $repository /}
+        {param activeNav: 'bitbucket.repository.nav.pull-requests' /}
+        {param pageBottomContent}
+            // Deprecated since 2.4 for removal in 3.0 - We still appear to be relying on this.
+            {requirePageData('bitbucket.internal.pull-request.view', [
+                'pullRequest' : $pullRequest,
+                'watchable' : $pullRequest
+            ])}
+            <script>require('bitbucket/internal/layout/pull-request').onReady(
+                {to_json($pullRequest, ['markup' : 'description'])|noAutoescape},
+                '{$activeTab|escapeJs}',
+                '.pull-request-content',
+                null,
+                {to_json(getWebSections('bitbucket.commits.extras', [ 'repository' : $repository ]))|noAutoescape},
+                {$maxChanges ? $maxChanges : 'null'},
+                {$mergeTimeout ? $mergeTimeout : 'null'},
+                {$relevantContextLines ? $relevantContextLines : 'null'}
+            );</script>
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {{/param}}
+    {/call}
+{/template}

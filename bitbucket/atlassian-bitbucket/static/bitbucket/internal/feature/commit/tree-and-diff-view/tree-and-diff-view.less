@@ -1,0 +1,372 @@
+@import "/static/global.less";
+@import "../../file-content/file-content-variables.less";
+
+@commit-selector-button-offset: 18px;
+@commit-selector-button-active-color: #ddd;
+@diff-tree-width: 400px;
+@diff-tree-collapsed-width: 80px;
+@diff-tree-border-width: 1px;
+@diff-tree-transition-timing: 0.2s;
+@diff-tree-toolbar-button-width: 30px;
+
+.commit-files {
+    width: 100%;
+    height: 100vh; // Height is also set manually after content loads
+    position: relative;
+    display: table;
+    table-layout: fixed;
+
+    .collapse-file-tree {
+        width: @diff-tree-toolbar-button-width;
+    }
+
+    .collapse-file-tree-icon {
+        .transition(all @diff-tree-transition-timing ease-in-out);
+        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOC40MTcgMTUuNSI+PHBhdGggZmlsbD0iIzk5OTk5OSIgZD0iTTE2LjkxNywxNS41Yy0wLjM4NCwwLTAuNzY4LTAuMTQ2LTEuMDYxLTAuNDM5bC02LjI1LTYuMjVjLTAuNTg2LTAuNTg1LTAuNTg2LTEuNTM2LDAtMi4xMjFsNi4yNS02LjI1YzAuNTg2LTAuNTg2LDEuNTM1LTAuNTg2LDIuMTIxLDBjMC41ODYsMC41ODUsMC41ODYsMS41MzYsMCwyLjEyMUwxMi43ODgsNy43NWw1LjE4OSw1LjE4OWMwLjU4NiwwLjU4NSwwLjU4NiwxLjUzNiwwLDIuMTIxQzE3LjY4NCwxNS4zNTQsMTcuMywxNS41LDE2LjkxNywxNS41eiIvPjxwYXRoIGZpbGw9IiM5OTk5OTkiIGQ9Ik03Ljc1LDE1LjVjLTAuMzg0LDAtMC43NjgtMC4xNDYtMS4wNjEtMC40MzlsLTYuMjUtNi4yNWMtMC41ODYtMC41ODUtMC41ODYtMS41MzYsMC0yLjEyMWw2LjI1LTYuMjVjMC41ODYtMC41ODYsMS41MzUtMC41ODYsMi4xMjEsMGMwLjU4NiwwLjU4NSwwLjU4NiwxLjUzNiwwLDIuMTIxTDMuNjIxLDcuNzVsNS4xODksNS4xODljMC41ODYsMC41ODUsMC41ODYsMS41MzYsMCwyLjEyMUM4LjUxOCwxNS4zNTQsOC4xMzQsMTUuNSw3Ljc1LDE1LjV6Ii8+PC9zdmc+") center center no-repeat;
+        background-size: @baseSpacing;
+    }
+
+    .search {
+        .transition(all @diff-tree-transition-timing ease-in-out);
+        opacity: 1;
+        position: absolute;
+        top: @baseSpacing;
+        left: @baseSpacing;
+
+        input {
+            .transition(width @diff-tree-transition-timing ease-in-out);
+            width: @diff-tree-width - @diff-tree-toolbar-button-width - (@baseSpacing * 2) - @baseSpacing;
+            max-width: none;
+        }
+    }
+
+    .search-button-when-collapsed {
+        .transition(opacity @diff-tree-transition-timing ease-in-out);
+        width: @diff-tree-toolbar-button-width;
+        opacity: 0;
+        position: absolute;
+        top: @baseSpacing;
+        left: @baseSpacing;
+    }
+
+    > .message {
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+        color: @labelTextColor;
+        font-size: @font-size-xxlarge;
+    }
+
+    .file-tree-header {
+        padding-left: @doubleSpacing;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    &.collapsed {
+
+        .file-tree-container {
+            width: @diff-tree-collapsed-width;
+        }
+
+        .search {
+            opacity: 0;
+            visibility: hidden;
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        .search-button-when-collapsed {
+            opacity: 1;
+        }
+
+        .file-tree-header,
+        .commit-selector-button {
+            opacity: 0.2;
+        }
+
+        .file-tree-wrapper {
+            overflow: hidden;
+
+            .file-tree {
+                opacity: 0.2;
+            }
+        }
+
+        #commit-file-content {
+            margin-left: @diff-tree-collapsed-width;
+        }
+
+        .collapse-file-tree-icon {
+            .rotate(-180deg);
+        }
+
+        &.fixed #commit-file-content .file-toolbar {
+            left: @diff-tree-collapsed-width;
+        }
+    }
+
+    &.quick-reveal-mode {
+        .collapse-file-tree-icon {
+            .rotate(-180deg);
+        }
+    }
+
+    &.fixed {
+        .border-radius(0);
+        display: block;
+        height: auto;
+        width: auto;
+
+        .file-tree-container {
+            .border-top-left-radius(0);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+        }
+
+        .file-tree-wrapper {
+            position: absolute;
+            top: @auiToolbarHeight + @fileContentToolbarBottomBorderWidth;
+            bottom: 0;
+            width: @diff-tree-width - @diff-tree-border-width; // less 1px because once out of the document flow, the 1px border on the left is no longer applied
+        }
+
+        #commit-file-content {
+            display: block;
+            z-index: 4;  // Hack for z-index in IE - http://brenelz.com/blog/squish-the-internet-explorer-z-index-bug/
+
+            > .file-toolbar {
+                .box-sizing();
+                .border-top-right-radius(0);
+                .transition(all @diff-tree-transition-timing ease-in-out);
+                position: fixed;
+                top: 0;
+                z-index: 6; // z-index here needs to be higher than the codemirror gutter elements
+                width: auto;
+                left: @diff-tree-width;
+                min-width: @baseLayoutMinWidth - @diff-tree-width - (2 * @diff-tree-border-width) - (2 * @doubleSpacing);
+                right: 0;
+
+                // Match the diff-toolbar line-height
+                > .primary,
+                > .secondary {
+                    line-height: @auiToolbarLineHeight;
+                }
+            }
+
+            > .content-view {
+                width: auto;
+            }
+        }
+    }
+
+    &.tabbed {
+        .border-top-left-radius();
+        .border-top-right-radius();
+        border: 1px solid @lightDividerColor;
+        margin-top: @baseSpacing;
+
+        .file-tree-container {
+            .border-top-left-radius(@baseBorderRadius - 1); // -1 so that the background 'fits' better inside of the 1px border on the parent container
+        }
+
+        .file-content > .file-toolbar {
+            .border-top-right-radius(@baseBorderRadius - 1); // -1 so that the background 'fits' better inside of the 1px border on the parent container
+        }
+    }
+
+    &.loading-diff-tree .file-tree-container {
+        display: block; // don't act like a table-cell and take 100% width during load.
+    }
+
+    // This is here to workaround CodeMirror bug #2765
+    // When that is resolved this code should go back to codemirror-overrides.less
+    .CodeMirror-lines {
+        padding: 0;
+    }
+}
+
+.pull-request-content .commit-files.fixed {
+
+    #commit-file-content > .file-toolbar {
+        left: @diff-tree-width + @doubleSpacing + @diff-tree-border-width;
+        right: @doubleSpacing;
+        border-right: @diff-tree-border-width solid #ccc;
+    }
+
+    &.collapsed #commit-file-content > .file-toolbar {
+        left: @diff-tree-collapsed-width + @doubleSpacing + @diff-tree-border-width;
+    }
+}
+
+.file-tree-container {
+    .transition(width @diff-tree-transition-timing ease-in-out);
+    .box-sizing();
+    display: table-cell;
+    width: @diff-tree-width;
+    height: 100%;
+    background: @contentBackgroundColor;
+    border-right: 1px solid @lightDividerColor;
+    z-index: 1;
+
+    .commit-selector-button {
+        @iconHeight: 20px;
+        background: @contentBackgroundColor;
+        height: 2 * @baseSpacing + 2 * @aui-button-border-width + @iconHeight;
+        margin: 0 @doubleSpacing @baseSpacing;
+        overflow: hidden;
+        padding: @baseSpacing @doubleSpacing @baseSpacing @baseSpacing;
+        position: relative;
+        text-align: left;
+        text-overflow: ellipsis;
+        width: @diff-tree-width - @quadSpacing;
+        white-space: nowrap;
+
+        .commit-icon {
+            margin-right: @halfSpacing;
+            vertical-align: middle;
+
+            + .aui-button-label {
+                margin-left: 4px; // match AUI style, and similar selector for it.
+                vertical-align: middle;
+            }
+        }
+
+        &.active {
+            background-color: @commit-selector-button-active-color;
+        }
+
+        &:after {
+            .dropdown-arrow();
+            content: "";
+            left: @diff-tree-width - @tripleSpacing * 2;
+            top: @commit-selector-button-offset;
+            position: absolute;
+        }
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    .diff-tree-toolbar {
+        .box-sizing();
+        position: relative;
+        padding: 0 @baseSpacing;
+        background-color: @feintGreyColor;
+        border-bottom: 1px solid @lightDividerColor;
+        top: 0;
+        width: 100%;
+        white-space: nowrap;
+        line-height: @auiToolbarLineHeight;
+        margin-top: 0;
+
+        .aui-toolbar2-primary, .aui-toolbar2-secondary {
+            margin: @baseSpacing 0;
+        }
+
+        .collapse-file-tree.aui-button,
+        .search-button-when-collapsed.aui-button {
+            color: @secondaryTextColor;
+            margin-top: 0;
+            padding-left: @halfSpacing; // @aui-override (override the default padding for AUI buttons)
+            padding-right: @halfSpacing;
+        }
+
+        h4 {
+            line-height: @auiToolbarLineHeight;
+            margin-left: @baseSpacing;
+        }
+    }
+
+} // .file-tree-container
+
+.file-tree-header {
+    margin: @baseSpacing 0 0;
+}
+
+.file-tree-wrapper {
+    .scrolling-shadow();
+    height: 100%;
+    overflow: auto;
+
+    > .aui-message {
+        margin: @doubleSpacing;
+        min-width: 240px;
+    }
+
+    .file-tree {
+        opacity: 1;
+        .transition(opacity @diff-tree-transition-timing ease-in-out);
+    }
+
+    > .spinner {
+        padding: 60px 0;
+    }
+}
+
+.file-tree ul a {
+    color: black;
+    cursor: pointer;
+}
+
+//TODO delete?
+.source-container pre.code {
+    position: static;
+    padding: 0;
+    overflow: hidden;
+}
+
+#commit-file-content {
+    .box-sizing(border-box);
+    .transition(margin-left @diff-tree-transition-timing ease-in-out);
+    width: auto;
+    position: relative;
+    display: table-cell;
+    vertical-align: top;
+    margin-left: @diff-tree-width;
+
+    > .diff-view {
+        padding-bottom: 0;
+    }
+
+    .content-view {
+        margin-bottom: 0;
+    }
+
+    .source-container {
+        .box-sizing();
+        width: 100%;
+    }
+
+    > .file-toolbar {
+
+        .aui-toolbar2-primary {
+            overflow: hidden;
+            margin-right: 64px;
+
+            .breadcrumbs {
+                white-space: normal;
+            }
+        }
+
+        .change-type-placeholder,
+        .change-mode-placeholder {
+            display: inline-block;
+            line-height: @auiToolbarLineHeight;
+            margin-left: @halfSpacing;
+        }
+    }
+}
+
+.file-content-spinner {
+    top: 0;
+}
+
+.scrolling-forwarded {
+    .commit-files {
+        border-bottom: 0;
+    }
+}

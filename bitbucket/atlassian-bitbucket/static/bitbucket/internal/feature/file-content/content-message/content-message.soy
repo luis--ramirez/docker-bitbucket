@@ -1,0 +1,108 @@
+{namespace bitbucket.internal.feature.fileContent.contentMessage}
+
+/**
+ */
+{template .emptyFile}
+    {call bitbucket.internal.widget.focusMessage.message}
+        {param extraClasses: 'content-view source-view empty-file' /}
+        {param iconClass: 'icon-empty-file' /}
+        {param accessibilityText: getText('bitbucket.web.source.empty.icon') /}
+        {param title: getText('bitbucket.web.source.empty') /}
+    {/call}
+{/template}
+
+/**
+ * @param message
+ */
+{template .error}
+    <div class="content-message-container">
+    {call aui.message.warning}
+        {param extraClasses : 'content-message' /}
+        {param content}{$message}{/param}
+    {/call}
+    </div>
+{/template}
+
+/**
+ * @param? filePath
+ * @param? revisionId
+ * @param? parentRevisionId
+ * @param? sideBySideDiffEnabled
+ */
+{template .tooLargeDiff}
+    <div class="content-message-container">
+    {call aui.message.warning}
+        {param extraClasses : 'content-message' /}
+        {param content}
+            {if $filePath and $revisionId}
+                {getText('bitbucket.web.repository.diff.toolarge.command.detail')}
+                <p class="scm-command">
+                    {if $parentRevisionId}
+                        git diff -C -M {$parentRevisionId} {$revisionId} -- "{$filePath}"
+                    {else}
+                        git log -p {$revisionId} -- "{$filePath}"
+                    {/if}
+                </p>
+            {else}
+                <p>{getText('bitbucket.web.repository.diff.toolarge.detail')}</p>
+                {if $sideBySideDiffEnabled}
+                    <p>
+                        {getText('bitbucket.web.repository.diff.toolarge.tryunifieddiff')}
+                    </p>
+                {/if}
+            {/if}
+        {/param}
+    {/call}
+    </div>
+{/template}
+
+
+/**
+ * @param? fileChangeType
+ * @param? whitespace
+ */
+{template .emptyDiff}
+    {call bitbucket.internal.widget.focusMessage.message}
+        {param extraClasses: 'content-view diff-view empty-file' /}
+        {param iconClass: 'icon-empty-file' /}
+        {param accessibilityText: getText('bitbucket.web.repository.diff.nochange.icon') /}
+        {param title}
+            {switch $fileChangeType}
+                {case 'ADD'}
+                    {getText('bitbucket.web.repository.diff.nochange.addedfile.detail')|noAutoescape}
+                {case 'DELETE'}
+                    {getText('bitbucket.web.repository.diff.nochange.removedfile.detail')|noAutoescape}
+                {default}
+                    {getText('bitbucket.web.repository.diff.nochange.detail')|noAutoescape}
+            {/switch}
+        {/param}
+        {param content}
+            {if $whitespace == 'IGNORE_ALL' and $fileChangeType == 'MODIFY'}
+                {getText('bitbucket.web.repository.diff.nochange.whitespace.detail')}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param nodeType
+ * @param? titleContent
+ * @param? messageContent
+ */
+{template .conflict}
+    <div class="diff-conflict-message-container">
+        {call aui.message.warning}
+            {param titleContent: $titleContent /}
+            {param content}
+                {if $messageContent}
+                    {$messageContent|noAutoescape}
+                {else}
+                    {switch $nodeType}
+                         {case 'SUBMODULE'}{getText('bitbucket.web.pullrequest.diff.conflict.submodule.detail')}
+                         {default}{getText('bitbucket.web.pullrequest.diff.conflict.detail')}
+                    {/switch}
+                {/if}
+            {/param}
+        {/call}
+    </div>
+{/template}

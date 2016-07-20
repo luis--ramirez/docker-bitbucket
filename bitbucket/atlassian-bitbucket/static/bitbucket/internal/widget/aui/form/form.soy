@@ -1,0 +1,526 @@
+{namespace widget.aui.form}
+
+/**
+ * @deprecated since 3.5 for removal in 4.0. Use stash.widget.form instead
+ * @param content
+ * @param action
+ * @param? method
+ * @param? unsectioned
+ * @param? longLabels
+ * @param? topLabels
+ * @param? extraClass
+ * @param? errors
+ * @param? detailedErrors
+ * @param? additionalErrorContent
+ * @param? xsrfTokenName
+ * @param? xsrfTokenValue
+ * @param? preventDoubleSubmit default is true
+ * @param? autocomplete disable auto-complete for all the fields in the form
+ */
+{template .form}
+    <form class="deprecated aui{if $unsectioned} unsectioned{/if}{if $longLabels} long-label{/if}{if not ($preventDoubleSubmit == false)} prevent-double-submit{/if}{if $topLabels} top-label{/if}{if $extraClass} {$extraClass}{/if}"
+          action="{$action}" method="{if $method}{$method}{else}post{/if}" {if $autocomplete} autocomplete="{$autocomplete}"{/if} accept-charset="UTF-8">
+        {if $xsrfTokenName and $xsrfTokenValue}
+            <input type="hidden" name="{$xsrfTokenName}" value="{$xsrfTokenValue}">
+        {/if}
+        {if $errors}
+            {foreach $message in $errors}
+                {call aui.message.error}
+                    {param content}
+                        {call bitbucket.internal.widget.errorContent}
+                            {param message: $message /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/foreach}
+        {/if}
+        {if $detailedErrors}
+            {foreach $error in $detailedErrors}
+                {call aui.message.error}
+                    {param content}
+                        {call bitbucket.internal.widget.errorContent data="$error" /}
+                    {/param}
+                {/call}
+            {/foreach}
+        {/if}
+        {if $additionalErrorContent}
+            {$additionalErrorContent|noAutoescape}
+        {/if}
+        {$content |noAutoescape}
+    </form>
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param labelContent
+ * @param? tooltip
+ * @param? accessKey
+ * @param? initialValue
+ * @param? maxLength
+ * @param? autocomplete
+ * @param? autofocus
+ * @param? required
+ * @param? errors
+ * @param? inlineErrors
+ * @param? description
+ * @param? descriptionContent
+ * @param? disabled
+ * @param? placeholderText
+ * @param? extraClasses
+ * @param? sizeClass 'short', 'medium' or 'long' or 'full-width'
+ * @param? readonly
+ * @param? extraContent
+ */
+{template .text}
+    {call .field data="all"}
+        {param input}
+            {call .input data="all"}
+                {param type: 'text'/}
+                {param extraClasses}{if $sizeClass}{$sizeClass}-field{/if}{if $extraClasses} {$extraClasses}{/if}{/param}
+                {param readonly: $readonly /}
+            {/call}
+            {if $extraContent}{$extraContent|noAutoescape}{/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param labelContent
+ * @param? tooltip
+ * @param? accessKey
+ * @param? rows
+ * @param? cols
+ * @param? initialValue
+ * @param? inlineErrors
+ * @param? errors
+ * @param? description
+ * @param? descriptionContent
+ * @param? extraClasses
+ * @param? sizeClass 'short', 'medium', 'long' or 'full-width'
+ * @param? isExpanding
+ * @param? monospace true or false, whether text content is in a monospace font.
+ * @param? required
+ */
+{template .largetext}
+    {call .field data="all"}
+        {param input}
+            {if $isExpanding}
+                {call .expandingTextarea data="all"}
+                    {param extraClasses}{if $sizeClass}{$sizeClass}-field{/if}{if $monospace} monospace{/if}{if $extraClasses} {$extraClasses}{/if}{/param}
+                {/call}
+            {else}
+                {call .textarea data="all"}
+                    {param extraClasses}{if $sizeClass}{$sizeClass}-field{/if}{if $monospace} monospace{/if}{if $extraClasses} {$extraClasses}{/if}{/param}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param labelContent
+ * @param? tooltip
+ * @param? accessKey
+ * @param? initialValue
+ * @param? autocomplete
+ * @param? autofocus
+ * @param? required
+ * @param? errors
+ * @param? description
+ * @param? descriptionContent
+ * @param? disabled
+ * @param? extraClasses
+ * @param? sizeClass 'short', 'medium' or 'long' or 'full-width'
+ */
+{template .password}
+    {call .field data="all"}
+        {param input}
+            {call .input data="all"}
+                {param type: 'password'/}
+                {param extraClasses}{if $sizeClass}{$sizeClass}-field{/if}{if $extraClasses} {$extraClasses}{/if}{/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? fieldsetId
+ * @param? legendContent
+ * @param? labelContent
+ * @param? description
+ * @param? descriptionContent
+ * @param? name defaults to $id
+ * @param? accessKey
+ * @param? checked
+ * @param? initialValue
+ * @param? autocomplete
+ * @param? autofocus
+ * @param? disabled
+ * @param? errors
+ * @param? required
+ * @param? isGroup
+ */
+{template .checkbox}
+    {call .fieldset data="all"}
+        {param isGroup: isNonnull($isGroup) and $isGroup ? false : true /}
+        {param extraClasses: 'checkbox' /}
+        {param legendContent: $legendContent /}
+        {param id: $fieldsetId /}
+        {param content}
+            <div class="checkbox">
+                {call .input data="all"}{param type: 'checkbox'/}{/call}
+                <label for="{$id}" {if $disabled}class="disabled"{/if}>
+                    {$labelContent |noAutoescape}
+                    {if $required}
+                        <span class="aui-icon icon-required"><span>(required)</span></span>
+                    {/if}
+                </label>
+                {if $description or $descriptionContent}
+                    <div class="description">
+                        {if $description}
+                            {$description}
+                        {/if}
+                        {if $descriptionContent}
+                            {$descriptionContent|noAutoescape}
+                        {/if}
+                    </div>
+                {/if}
+                {if $errors}
+                    {foreach $error in $errors}
+                        {call .fieldError}
+                            {param message: $error/}
+                        {/call}
+                    {/foreach}
+                {/if}
+            </div>
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param labelContent
+ * @param valueContent
+ * @param? errors
+ * @param? description
+ * @param? descriptionContent
+ */
+{template .fieldValue}
+    {call .field data="all"}
+        {param input}
+            {call .value data="all"}{/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param content
+ */
+{template .description}
+    <div class="field-group">{$content |noAutoescape}</div>
+{/template}
+
+/**
+ * @param content
+ * @param? id
+ * @param? notInContainer
+ */
+{template .buttons}
+    <div {if not $notInContainer}class="buttons-container"{/if}{if $id} id="{$id}"{/if}>
+        <div class="buttons">
+            {$content |noAutoescape}
+        </div>
+    </div>
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param? isPrimary
+ * @param label
+ * @param? tooltip
+ * @param? accessKey
+ * @param? disabled
+ */
+{template .submit}
+    {call .input data="all"}
+        {param type: 'submit'/}
+        {param initialValue: $label /}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param label
+ * @param? tooltip
+ * @param? accessKey
+ * @param? disabled
+ */
+{template .button}
+    {call .input data="all"}
+        {param type: 'button'/}
+        {param initialValue: $label /}
+    {/call}
+{/template}
+
+/**
+ * @param? id
+ * @param? name defaults to $id
+ * @param href
+ * @param text
+ * @param? tooltip
+ * @param? accessKey
+ * @param? extraClasses
+ */
+{template .linkButton}
+    {call bitbucket.internal.buttons.button}
+        {param id : $id /}
+        {param title : $tooltip /}
+        {param type: 'link' /}
+        {param href: $href /}
+        {param extraClasses: $extraClasses /}
+        {param extraAttributes}
+            name="{$name ? $name : $id}"
+            {if $accessKey} accesskey="{$accessKey}"{/if}
+        {/param}
+        {param buttonText: $text /}
+    {/call}
+{/template}
+
+/**
+ * @param? id
+ * @param? name defaults to $id
+ * @param href
+ * @param? extraClasses
+ */
+{template .cancelButton}
+    {call .linkButton data="all"}
+        {param name: $name ? $name : $id ? $id : 'cancel' /}
+        {param id: $id ? $id : 'cancel' /}
+        {param accessKey: 'c' /}
+        {param extraClasses : 'cancel' + ($extraClasses ? ' ' + $extraClasses : '') /}
+        {param text: getText('bitbucket.web.button.cancel') /}
+    {/call}
+{/template}
+
+/**
+ * @param message
+ * @param? extraClasses
+ */
+{template .fieldError}
+    <div class="error{if $extraClasses} {$extraClasses}{/if}">{$message}</div>
+{/template}
+
+/**
+Private templates
+**/
+
+/**
+ * @param input
+ * @param id id of the input
+ * @param labelContent
+ * @param? fieldGroupClass
+ * @param? required
+ * @param? description
+ * @param? descriptionContent
+ * @param? errors
+ * @param? inlineErrors
+ * @param? disabled
+ */
+{template .field private="true"}
+    <div class="field-group{if $fieldGroupClass} {$fieldGroupClass}{/if}">
+        <label for="{$id}" {if $disabled}class="disabled"{/if}>
+            {$labelContent |noAutoescape}
+            {if $required}
+                <span class="aui-icon icon-required"><span>(required)</span></span>
+            {/if}
+        </label>
+        {$input|noAutoescape}
+        {if $description or $descriptionContent}
+            <div class="description">
+                {if $description}
+                    {$description}
+                {/if}
+                {if $descriptionContent}
+                    {$descriptionContent|noAutoescape}
+                {/if}
+            </div>
+        {/if}
+        {if $errors and not $inlineErrors}
+            {foreach $error in $errors}
+                {call .fieldError}
+                    {param message: $error/}
+                {/call}
+            {/foreach}
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param? legendContent
+ * @param? isAssistive
+ * @param content
+ * @param? isInline Only one of isInline, isDateSelect, and isGroup can be specified.
+ * @param? isDateSelect Only one of isInline, isDateSelect, and isGroup can be specified.
+ * @param? isGroup Only one of isInline, isDateSelect, and isGroup can be specified.
+ * @param? id
+ * @param? extraClasses
+ */
+{template .fieldset}
+    {let $hasClass : $isInline or $isDateSelect or $isGroup or $extraClasses /}
+    <fieldset{if $id} id="{$id}"{/if}
+        {if $hasClass} class="
+            {$isInline ? 'inline' : $isDateSelect ? 'date-select' : $isGroup ? 'group' : ''}
+            {if $extraClasses} {$extraClasses}{/if}"
+        {/if}
+        >
+        {if $legendContent}<legend {if $isAssistive}class="assistive"{/if}><span>{$legendContent|noAutoescape}</span></legend>{/if}
+        {$content |noAutoescape}
+    </fieldset>
+{/template}
+
+/**
+ * @param? id
+ * @param? name defaults to $id
+ * @param? tooltip
+ * @param? accessKey
+ * @param type
+ * @param? initialValue
+ * @param? maxLength
+ * @param? checked (only valid for checkboxes or radio buttons)
+ * @param? autofocus
+ * @param? autocomplete
+ * @param? disabled
+ * @param? readonly
+ * @param? isPrimary
+ * @param? placeholderText
+ * @param? extraClasses
+ * @param? inlineErrors
+ * @param? errors
+ */
+{template .input private="true"}
+    <input class="{$type == 'password' ? 'text' : $type == 'submit' or $type == 'button' ? 'aui-button' : $type}{if $disabled} disabled{/if}{if $isPrimary} aui-button-primary{/if}{if $extraClasses} {$extraClasses}{/if}"
+           type="{$type}" {if $id}id="{$id}" {/if} name="{if $name}{$name}{else}{$id}{/if}" {if $tooltip}title="{$tooltip}"{/if}
+           {if $initialValue} value="{$initialValue}"{/if}{if $autofocus} autofocus{/if}{if $autocomplete} autocomplete="{$autocomplete}"{/if}
+           {if ($type == 'checkbox' or $type == 'radio') and $checked} checked="checked" {/if}
+           {if $accessKey} accesskey="{$accessKey}"{/if}{if $maxLength} maxLength="{$maxLength}"{/if}
+           {if $placeholderText} placeholder="{$placeholderText}"{/if}{if $disabled} disabled="{$disabled}"{/if}
+           {if $readonly} readonly{/if}
+           {if $inlineErrors and $errors} data-aui-notification-field="" data-aui-notification-error="{to_json($errors)}"{/if}/>
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param labelContent
+ * @param? tooltip
+ * @param? initialValue
+ * @param? autocomplete
+ * @param? autofocus
+ * @param? required
+ * @param? errors
+ * @param? description
+ * @param? descriptionContent
+ * @param? disabled
+ * @param? extraClasses
+ * @param? sizeClass 'short', 'medium' or 'long' or 'full-width'
+ */
+{template .selectField}
+    {call .field data="all"}
+        {param input}
+            {call .select data="all"}
+                {param extraClasses}{if $sizeClass}{$sizeClass}-field{/if}{if $extraClasses} {$extraClasses}{/if}{/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param? name defaults to $id
+ * @param? tooltip
+ * @param? initialValue
+ * @param? maxLength
+ * @param? autocomplete
+ * @param? autofocus
+ * @param? disabled
+ * @param? placeholderText
+ * @param? extraClasses
+ * @param? readonly
+ */
+{template .select private="true"}
+    <select {if $disabled} disabled{/if}
+            {if $extraClasses} {$extraClasses}{/if}
+            {if $id}id="{$id}" {/if}
+             name="{if $name}{$name}{else}{$id}{/if}"
+             {if $tooltip}title="{$tooltip}"{/if}
+             {if $initialValue} value="{$initialValue}"{/if}
+             {if $autofocus} autofocus{/if}{if $autocomplete} autocomplete="{$autocomplete}"{/if}
+             {if $maxLength} maxLength="{$maxLength}"{/if}
+             {if $placeholderText} placeholder="{$placeholderText}"{/if}
+             {if $disabled} disabled="{$disabled}"{/if}
+             {if $readonly} readonly{/if}>
+    </select>
+{/template}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? name defaults to $id
+ * @param? tooltip
+ * @param? accessKey
+ * @param? autofocus
+ * @param? disabled
+ * @param? rows
+ * @param? cols
+ * @param? initialValue
+ * @param? placeholderText
+ * @param? inlineErrors
+ * @param? errors
+ */
+{template .textarea private="true"}
+    <textarea class="textarea{if $extraClasses} {$extraClasses}{/if}" name="{if $name}{$name}{else}{$id}{/if}"
+        {if $id} id="{$id}"{/if}
+        {if $tooltip} title="{$tooltip}"{/if}
+        {if $rows} rows="{$rows}"{/if}
+        {if $cols} cols="{$cols}"{/if}
+        {if $placeholderText} placeholder="{$placeholderText}"{/if}
+        {if $accessKey} accesskey="{$accessKey}"{/if}
+        {if $disabled} disabled="true"{/if}
+        {if $autofocus} autofocus{/if}
+        {if $inlineErrors and $errors} data-aui-notification-field="" data-aui-notification-error="{to_json($errors)}"{/if}>
+        {if $initialValue}{$initialValue}{/if}
+    </textarea>
+{/template}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? name defaults to $id
+ * @param? tooltip
+ * @param? accessKey
+ * @param? rows
+ * @param? cols
+ * @param? initialValue
+ * @param? placeholderText
+ */
+{template .expandingTextarea private="true"}
+    {call .textarea data="all"}
+        {param extraClasses: ($extraClasses ? $extraClasses : '') + ' expanding' /}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param valueContent
+ */
+{template .value private="true"}
+    <span id="{$id}" class="field-value">{$valueContent |noAutoescape}</span>
+{/template}

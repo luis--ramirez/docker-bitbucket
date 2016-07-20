@@ -1,0 +1,13 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-http-scm-protocol" name="System HTTP SCM Protocol">
+
+    <form-fragment key="http-scm-access-form-fragment" location="bitbucket.admin.serversettings"
+                   class="com.atlassian.stash.internal.scm.protocol.http.HttpScmHostingFormFragment"
+                   weight="50">
+    </form-fragment>
+
+    <scm-protocol key="http-scm-protocol" class="bean:httpScmProtocol"/>
+
+    <scm-request-check key="http-scm-protocol-enabled-check" weight="0"
+                       class="com.atlassian.stash.internal.scm.protocol.http.HttpScmHostingCheck" />
+
+</atlassian-plugin>

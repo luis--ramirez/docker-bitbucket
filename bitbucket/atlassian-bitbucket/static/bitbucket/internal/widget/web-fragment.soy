@@ -1,0 +1,355 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param? url
+ * @param? linkText
+ * @param? styleClass
+ * @param? linkId
+ * @param? tooltip
+ * @param? content
+ * @param? params
+ * @param? pluginKey
+ * @param? moduleKey
+ * @param? forceLink sometimes we want to force the use of an anchor rather than a span
+ */
+{template .webItem}
+     <{$url or $forceLink ? 'a' : 'span'}
+        {if $url} href="{$url}"{/if}
+        {if $linkId} id="{$linkId}"{/if}
+        {if $styleClass} class="{$styleClass}"{/if}
+        {if $tooltip} title="{$tooltip}"{/if}
+        {if $pluginKey and $moduleKey} data-web-item-key="{$pluginKey}:{$moduleKey}"{/if}
+        >
+        {if $content}
+            {$content|noAutoescape}
+        {elseif $params and $params['iconClass']}
+            <span class="aui-icon {$params['iconClass']}">{$linkText}</span>
+        {else}
+            {$linkText}
+        {/if}
+    </{$url or $forceLink ? 'a' : 'span'}>
+{/template}
+
+/**
+ * @param linkText
+ * @param? linkId
+ * @param? tooltip
+ * @param? url
+ * @param? styleClass
+ * @param? extraClasses
+ * @param? params
+ */
+{template .webItemButton}
+    {call bitbucket.internal.buttons.button}
+        {param buttonText: $linkText ? $linkText : '' /}
+        {param id: $linkId /}
+        {param title: $tooltip /}
+        {param extraClasses: $styleClass and $extraClasses ?
+                                $styleClass + ' ' + $extraClasses :
+                             $styleClass ?
+                                $styleClass :
+                             $extraClasses /}
+        {param href: $url /}
+        {param iconType: $params['iconClass'] ? 'custom' : '' /}
+        {param iconClass: $params['iconClass'] /}
+        {param iconText: not $linkText ? $tooltip : '' /} // Just an icon button, so put the tooltip as iconText for accessibility
+    {/call}
+{/template}
+
+/**
+ * @param linkText
+  * @param? linkId
+  * @param? tooltip
+  * @param? url
+  * @param? styleClass
+  * @param? isActive
+ */
+{template .webItemtabMenuItem private="true"}
+    {call widget.aui.tabMenuItem}
+        {param id: $linkId /}
+        {param tooltip: $tooltip /}
+        {param text: $linkText /}
+        {param url: $url /}
+        {param extraClasses: $styleClass /}
+        {param isActive: $isActive /}
+    {/call}
+{/template}
+
+/**
+ * Sometimes we need to use the webItem with slightly different options for
+ * AUI Dropdown 2 checkbox links. Since these are links without a href the
+ * webItem turns them in to a span, here we'll call the webItem with a
+ * forceLink parameter to force it to use an anchor.
+ *
+ * @param? url
+ * @param? linkText
+ * @param? styleClass
+ * @param? linkId
+ * @param? tooltip
+ * @param? content
+ * @param? params
+ */
+{template .webItemDropdownItem}
+    {call .webItem data="all"}
+        {param forceLink: true /}
+    {/call}
+{/template}
+
+/**
+ * @param pluginKey
+ * @param moduleKey
+ * @param linkId
+ * @param linkText
+ * @param styleClass
+ * @param tooltip
+ * @param isActive
+ * @param params
+ * @param dropdownWebSections
+ * @param? hideDropdownArrow
+ */
+{template .headerDropdownWebItems private="true"}
+    <li class="{if $isActive}selected{/if}{if $styleClass}{sp}{$styleClass}{/if}"
+        {if $tooltip}title="{$tooltip}"{/if}>
+        {if length($dropdownWebSections) > 0}
+            {call aui.dropdown2.trigger}
+                {param menu: ['id': $pluginKey + '-' + $moduleKey ] /}
+                {param id: $linkId ? $linkId : '' /}
+                {param text: $params['iconClass'] ? null : $linkText /}
+                {param extraClasses: $hideDropdownArrow ? 'aui-dropdown2-trigger-arrowless' : null /}
+                {param content}
+                    {if $params['iconClass']}
+                        <span class="aui-icon {$params['iconClass']}">{$linkText}</span>
+                    {/if}
+                {/param}
+            {/call}
+            {call aui.dropdown2.contents}
+                {param id: $pluginKey + '-' + $moduleKey /}
+                {param extraClasses: 'aui-style-default' /}
+                {param content}
+                    {call .headerDropdownWebSections}
+                        {param dropdownWebSections: $dropdownWebSections /}
+                        {param locationPrefix: $moduleKey + '/' /}
+                    {/call}
+                {/param}
+            {/call}
+        {else}
+            {call .webItem data="all"/}
+        {/if}
+    </li>
+{/template}
+
+/**
+ * @param dropdownWebSections
+ * @param? locationPrefix
+ * @param? context
+ */
+{template .headerDropdownWebSections private="true"}
+    {foreach $dropdownWebSection in $dropdownWebSections}
+        {call aui.dropdown2.section}
+            {param extraClasses: $dropdownWebSection.key /}
+            {param label: $dropdownWebSection.labelText /}
+            {param content}
+                <ul class="aui-list-truncate" role="presentation">
+                    {foreach $sectionItem in getWebItems(($locationPrefix ? $locationPrefix : '') + $dropdownWebSection.key, ($context ? $context : [:]))}
+                        <li role="presentation">{call bitbucket.internal.widget.webItem data="$sectionItem" /}</li>
+                    {/foreach}
+                </ul>
+            {/param}
+        {/call}
+    {/foreach}
+{/template}
+
+
+/**
+ * Given a location and context, generate singular buttons and button sections.
+ *
+ * @param location The location string to get web fragments for
+ * @param context The data to pass to the web fragments
+ * @param? isReverse Whether the fragments should be reverse-ordered
+ */
+{template .webFragmentButtons}
+    {foreach $webFragment in ($isReverse ?
+            reverse(getWebFragments($location, $context)) :
+            getWebFragments($location, $context))}
+        {switch $webFragment.type}
+            {case 'ITEM'}
+                {call bitbucket.internal.buttons.buttons}
+                    {param content}
+                        {call .webItemButton data="$webFragment" /}
+                    {/param}
+                {/call}
+            {case 'SECTION'}
+                {call bitbucket.internal.buttons.buttons}
+                    {param extraClasses: $webFragment.styleClass /}
+                    {param content}
+                        {foreach $webItem in ($isReverse ?
+                            reverse(getWebItems($location + '/' + $webFragment.key, $context)) :
+                            getWebItems($location + '/' + $webFragment.key, $context))}
+                            {call .webItemButton data="$webItem" /}
+                        {/foreach}
+                    {/param}
+                {/call}
+        {/switch}
+    {/foreach}
+{/template}
+
+/**
+ * @param? isVertical
+ * @param? isDisabled tab links will function as normal links, rather than modifying the active tab.
+ * @param? extraClasses
+ * @param? webItems either webItems or location must be provided
+ * @param? location either webItems or location must be provided
+ * @param? context
+ * @param? activeTab
+ * @param? showFirstTab
+ * @param tabPanesContent
+ * @param? tabItemsContent
+ */
+{template .webItemTabs}
+    {call widget.aui.tabChrome data="all"}
+        {param tabItemsContent}
+            {if $tabItemsContent}
+                {$tabItemsContent|noAutoescape}
+            {/if}
+            {foreach $item in $webItems ? $webItems : getWebItems($location, $context ? $context : null)}
+                {call widget.aui.tabMenuItem}
+                    {param url: $item.url /}
+                    {param text: $item.linkText /}
+                    {param id: $item.linkId /}
+                    {param extraLinkClasses: $item.styleClass /}
+                    {param tooltip: $item.tooltip /}
+                    {param isActive: $showFirstTab ? isFirst($item) : $activeTab ? $item.moduleKey == $activeTab : false /}
+                    {param extraAttributes: ['data-module-key' : $item.moduleKey ] /}
+                    {param extraLinkContent}
+                        {foreach $subPanel in getWebPanels($item.moduleKey + '.meta', $context ? $context : null)}
+                            {$subPanel}
+                        {/foreach}
+                    {/param}
+                {/call}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param webFragments
+ * @param? activeNavItem
+ * @param? context
+ * @param? extraClasses
+ * @param? isTierOne
+ * @param? isActions
+ * @param? primaryNavContent
+ * @param? secondaryNavContent
+ * @param? title
+ */
+{template .sidebarWebFragmentNavigation}
+    {if $primaryNavContent or $secondaryNavContent or length($webFragments) > 0}
+        {call widget.aui.sidebarNavGroup}
+            {param extraClasses: $extraClasses /}
+            {param isTierOne: $isTierOne /}
+            {param isActions: $isActions /}
+            {param title: $title /}
+            {param navContent}
+                <ul class="aui-nav">
+                    {if $primaryNavContent}
+                        {$primaryNavContent|noAutoescape}
+                    {/if}
+                    {foreach $fragment in $webFragments}
+                        {if $fragment.type == 'ITEM'}
+                                {call .sidebarNavItemWebItem}
+                                    {param context: $context /}
+                                    {param isActive: $fragment.moduleKey == $activeNavItem /}
+                                    {param isTierOne: $isTierOne /}
+                                    {param webItem: $fragment /}
+                                {/call}
+                        {elseif $fragment.type == 'SECTION'}
+                            {call .sidebarNavWebSection}
+                                {param activeNavItem: $activeNavItem /}
+                                {param context: $context /}
+                                {param fragment: $fragment /}
+                                {param isTierOne: $isTierOne /}
+                            {/call}
+                        {/if}
+                    {/foreach}
+                </ul>
+            {/param}
+            {param secondaryNavContent}
+                {if $secondaryNavContent}
+                    <ul class="aui-nav">
+                        {$secondaryNavContent|noAutoescape}
+                    </ul>
+                {/if}
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param fragment
+ * @param activeNavItem
+ * @param? context
+ * @param? isTierOne
+ */
+{template .sidebarNavWebSection private="true"}
+    {call .sidebarNavSectionWithItems}
+        {param activeNavItem: $activeNavItem /}
+        {param context: $context /}
+        {param heading: $fragment.labelText /}
+        {param isTierOne: $isTierOne /}
+        {param webItems: getWebItems($fragment.location + '/' + $fragment.key, $context ? $context : null) /}
+    {/call}
+{/template}
+
+/**
+ * @param activeNavItem
+ * @param heading
+ * @param webItems
+ * @param isTierOne
+ * @param? context
+ */
+{template .sidebarNavSectionWithItems private="true"}
+    {if length($webItems)}
+        {call widget.aui.navHeading}
+            {param text: $heading /}
+        {/call}
+        <ul class="aui-nav">
+            {foreach $webItem in $webItems}
+                {call .sidebarNavItemWebItem}
+                    {param context: $context /}
+                    {param isActive: $webItem.moduleKey == $activeNavItem or $webItem.linkId == $activeNavItem /}
+                    {param isTierOne: $isTierOne /}
+                    {param webItem: $webItem /}
+                {/call}
+            {/foreach}
+        </ul>
+    {/if}
+{/template}
+
+/**
+ * @param webItem
+ * @param? context
+ * @param? isActive
+ * @param? isTierOne
+ */
+{template .sidebarNavItemWebItem}
+    {call widget.aui.sidebarNavItem}
+        {param extraClasses: $webItem.styleClass /}
+        {param iconClass: $webItem.params['iconClass'] /}
+        {param id: $webItem.linkId /}
+        {param webItemKey: $webItem.completeKey /}
+        {param isActive: $isActive /}
+        {param isTierOne: $isTierOne /}
+        {param text: $webItem.linkText /}
+        {param tooltip: $webItem.tooltip /}
+        {param url: $webItem.url /}
+        {param badgeContent}
+            {if $webItem.moduleKey}
+                {foreach $badgeContent in getWebPanels($webItem.moduleKey + '.badge', $context ? $context : null)}
+                    // The {sp} is needed for separating the webItem label and the badge, not using CSS margins or
+                    // pseudo-elements here because screen readers would combine the label and badge text.
+                    {sp}{$badgeContent}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,29 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.skipped-container {
+    font-size: 12px;
+    color: @secondaryTextColor;
+    cursor: pointer;
+    line-height: 6px;
+
+    .showmore {
+        text-align: center;
+        background-color: @textContentBackgroundColor;
+    }
+
+    .content-above,
+    .content-below {
+        background-image : url(torn-edge.png);
+        height: @codeLineHeight;
+    }
+
+    .content-above {
+        background-position: left 10%;
+        margin-bottom: 0;
+    }
+
+    .content-below {
+        background-position: left 90%;
+    }
+}

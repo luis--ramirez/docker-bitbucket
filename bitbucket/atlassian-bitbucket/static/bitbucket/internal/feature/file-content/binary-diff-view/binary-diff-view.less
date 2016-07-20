@@ -1,0 +1,208 @@
+@import "/static/global.less";
+
+@imageDiffSliderWidth: 200px;
+
+.binary-container {
+    .since-revision.binary {
+        > h5 {
+            color: @bitbucket-text-status-removed-color;
+        }
+
+        img {
+            border: 1px solid @bitbucket-text-status-removed-color;
+        }
+    }
+
+    .until-revision.binary {
+        > h5 {
+            color: @bitbucket-text-status-added-color;
+        }
+
+        img {
+            border: 1px solid @bitbucket-text-status-added-color;
+        }
+    }
+
+    .binary + .binary {
+        margin-left: @doubleSpacing;
+    }
+}
+
+
+/* Image diff styles */
+
+.binary-container.split,
+.binary-container.blend,
+.binary-container.pixeldiff {
+    white-space: nowrap;
+    margin: @doubleSpacing;
+    overflow: hidden;
+}
+
+.binary-container.two-up {
+    > .binary {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.binary-container.blend {
+    > .opacity-slider-container {
+        margin-bottom: 36px;
+    }
+
+    > .binary {
+        .box-sizing();
+        display: block;
+        padding: 0;
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: 100%;
+
+        + .binary {
+            margin-left: 0;
+        }
+    }
+
+    /* allow the new version to move over top of this one. */
+    > .binary.since-revision {
+        height: 0;
+        overflow: visible;
+    }
+
+    > .until-revision.binary {
+        background: transparent;
+    }
+
+    > .binary img {
+        .box-sizing();
+        display: block;
+        position: relative; /* FF and IE9 will allow the transparency from the image below to show through otherwise.
+                           I don't fully understand why. Another solution is always set an opacity < 1 (like 0.999) but
+                           this is cleaner. */
+        margin: 0 auto;
+    }
+
+    > .since-revision,
+    > .until-revision {
+        h5 {
+            padding-bottom: 2px;
+            margin-top: -2px;
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+
+    > .since-revision h5 {
+        margin-right: @imageDiffSliderWidth + 40px;
+    }
+
+    > .until-revision h5 {
+        margin-left: @imageDiffSliderWidth + 40px;
+    }
+
+    > .opacity-slider-container {
+        .box-sizing();
+        position: relative;
+        margin: @doubleSpacing auto -20px;
+
+    }
+
+    > .opacity-slider-container > input[type=range] {
+        .box-sizing();
+        margin-top: 2px;
+        padding: 0;
+        width: @imageDiffSliderWidth;
+    }
+} //.binary-container.blend
+
+.binary-container.split {
+    .binary {
+        .box-sizing();
+        overflow: visible;
+        margin: 0 auto;
+
+        + .binary {
+            margin-left: 0;
+        }
+    }
+
+    .split-container {
+        .box-sizing();
+        margin: 0 auto;
+        overflow: hidden;
+        padding-top: @doubleSpacing;
+    }
+
+    .split-container .binary {
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .until-revision.binary > .image-container,
+    .since-revision.binary {
+        cursor: ew-resize;
+    }
+
+    .until-revision.binary {
+        background: transparent;
+    }
+
+    .until-revision.binary > .image-container {
+        overflow: hidden;
+        background: #fff;
+        width: 50%;
+        border-right: 1px solid #666;
+    }
+
+    .binary img {
+        display: block;
+        max-width: none;
+    }
+
+    .since-revision h5 {
+        text-align: right;
+    }
+
+    .until-revision h5 {
+        text-align: left;
+    }
+} //.binary-container.split
+
+.binary-container.pixeldiff {
+
+  .binary {
+    .box-sizing();
+    display: block;
+    padding: 0;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 100%;
+
+    + .binary {
+      margin-left: 0;
+    }
+  }
+
+  .binary img {
+    .box-sizing();
+    display: block;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  > .pixeldiff-container {
+    .box-sizing();
+    position: relative;
+    margin: @doubleSpacing auto -20px;
+
+    .spinner {
+      height: 200px;
+    }
+  }
+
+  .since-revision,
+  .until-revision {
+    display: none;
+  }
+} //.binary-container.pixeldiff

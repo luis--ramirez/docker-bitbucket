@@ -1,0 +1,317 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+@import "diff-view-animations.less";
+
+.diff-view.text-view {
+    // Fall back diffview for IE9/10
+    .no-cssanimations & .line-focused {
+        &.added:not(.conflict-marker) {
+            background-color: @addedLineColorEdiff;
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                background-color: @addedLineColorEdiff;
+            }
+        }
+
+        &.removed {
+            background-color: @deletedLineColorEdiff;
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                background-color: @deletedLineColorEdiff;
+            }
+        }
+
+        &.conflict-ours.conflict-ours, // doubled for specificity
+        &.conflict-theirs.conflict-theirs, // doubled for specificity
+        &.segment-connector.conflict {
+            background-color: @conflictLineColorHighlight;
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                background-color: @conflictLineColorHighlight;
+            }
+        }
+    }
+
+    .added + .line-focused.added:not(.conflict-marker) {
+        // animate the top border for non-first-child lines
+        border-top-color: @addedLineColorEdiff;
+
+        .comment-box,
+        .bitbucket-gutter-marker{
+            border-top-color: @addedLineColorEdiff;
+        }
+    }
+
+    .removed + .line-focused.removed:not(.conflict-marker) {
+        // animate the top border for non-first-child lines
+        border-top-color: @deletedLineColorEdiff;
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            border-top-color: @deletedLineColorEdiff;
+        }
+    }
+
+    .conflict + .line-focused.conflict-ours.conflict-ours,
+    .conflict + .line-focused.conflict-theirs.conflict-theirs {
+        // animate the top border for non-first-child lines
+        border-top-color: @conflictLineColorHighlight;
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            border-top-color: @conflictLineColorHighlight;
+        }
+    }
+    // End fallback IE9/10 diff view
+
+    .expanded {
+        pre,
+        .line-number,
+        .line-number-marker {
+            color: @secondaryTextColor;
+        }
+    }
+
+    .line-number,
+    .line-number-marker {
+        .user-select(none);
+        height: 100%;
+        font-family: monospace;
+        font-size: @font-size-small;
+        z-index: 1;
+        color: @bodyTextColor;
+    }
+
+    .line-number-from,
+    .line-number-to {
+        width: @lineNumberWidth;
+        display: inline-block;
+        text-align: right;
+        vertical-align: top;
+    }
+
+    .line-number-marker {
+        width: @doubleSpacing;
+        text-align: center;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .line-number-from {
+        z-index: 2;
+    }
+
+    .line-number-to {
+        z-index: 1;
+    }
+
+    .source {
+        padding-left: @columnPadding;
+        white-space: pre;
+        color: #000;
+        line-height: @codeLineHeight;
+    }
+
+    .commented.line,
+    .commented.line .comment-box,
+    .commented.line .bitbucket-gutter-marker {
+        border-top-color: @feintGreyColor;
+        background-color: @feintGreyColor;
+    }
+
+    &.hide-comments {
+        .commented.line.context {
+            background-color: @contentBackgroundColor;
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                background-color: @contentBackgroundColor;
+            }
+
+            &:hover {
+                background-color: @commentLineBackgroundColor;
+
+                .comment-box,
+                .bitbucket-gutter-marker {
+                    background-color: @commentLineBackgroundColor;
+                }
+            }
+        }
+    }
+
+    .added.line,
+    .added.segment-connector,
+    .added.line .comment-box,
+    .added.line .bitbucket-gutter-marker {
+        border-top-color: @addedLineBackgroundColor;
+        background-color: @addedLineBackgroundColor;
+    }
+
+    .removed.line,
+    .removed.segment-connector,
+    .removed.line .comment-box,
+    .removed.line .bitbucket-gutter-marker {
+        border-top-color: @deletedLineBackgroundColor;
+        background-color: @deletedLineBackgroundColor;
+    }
+    .truncated .ellipsis {
+        color: #666;
+    }
+
+    // text colour is the same for all three conflicted line types
+    .conflict {
+        color: @conflictLineTextColor;
+
+        .bitbucket-gutter-marker,
+        .comment-box,
+        > code.source > span {
+            color: @conflictLineTextColor;
+        }
+    }
+
+    .line,
+    .segment-connector {
+        // the conflict markers have a darker yellow background
+        &.conflict-marker {
+            border-top-color: @conflictMarkerColor;
+            background-color: @conflictMarkerColor;
+
+            .bitbucket-gutter-marker,
+            .comment-box,
+            > code.source > span {
+                border-top-color: @conflictMarkerColor;
+                background-color: @conflictMarkerColor;
+            }
+        }
+
+        // the conflicted code lines are a lighter yellow
+        &.conflict-ours,
+        &.conflict-theirs {
+            border-top-color: @conflictLineBackgroundColor;
+            background-color: @conflictLineBackgroundColor;
+
+            .bitbucket-gutter-marker,
+            .comment-box,
+            > code.source > span {
+                border-top-color: @conflictLineBackgroundColor;
+                background-color: @conflictLineBackgroundColor;
+            }
+        }
+    }
+
+    .line-comment-focused {
+        .panel {
+            .comment-widget-fade-bg-animation();
+        }
+    }
+
+} //.diff-view
+
+.diff-view.animated {
+    .line-focused {
+        &.added:not(.conflict-marker) {
+            .segment-added-target-fade-bg-animation();
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                .segment-added-target-fade-bg-animation();
+            }
+        }
+
+        &.removed {
+            .segment-removed-target-fade-bg-animation();
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                .segment-removed-target-fade-bg-animation();
+            }
+        }
+
+        &.context {
+            .segment-context-target-fade-bg-animation();
+
+            .comment-box,
+            .bitbucket-gutter-marker {
+                .segment-context-target-fade-bg-animation();
+            }
+        }
+    }
+
+    .context + .line-focused.conflict-ours.conflict-ours, // doubled for specificity
+    .line-focused.conflict-ours.conflict-ours,            // doubled for specificity
+    .line-focused.conflict-theirs.conflict-theirs,        // doubled for specificity
+    .line-focused.segment-connector.conflict {
+        .segment-conflicted-target-fade-bg-animation();
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            .segment-conflicted-target-fade-bg-animation();
+        }
+    }
+    .added + .line-focused.added:not(.conflict-marker) { // animate the top border for non-first-child lines
+        .segment-added-target-fade-border-animation();
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            .segment-added-target-fade-border-animation();
+        }
+    }
+
+    .removed + .line-focused.removed:not(.conflict-marker) { // animate the top border for non-first-child lines
+        .segment-removed-target-fade-border-animation();
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            .segment-removed-target-fade-border-animation();
+        }
+    }
+
+    .context + .line-focused.context:not(.conflict-marker, .context.conflict-ours) { // animate the top border for non-first-child lines
+        .segment-context-target-fade-border-animation();
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            .segment-context-target-fade-border-animation();
+        }
+    }
+
+    .conflict + .line-focused.conflict-ours.conflict-ours,
+    .conflict + .line-focused.conflict-theirs.conflict-theirs { // animate the top border for non-first-child lines
+        .segment-conflicted-target-fade-border-animation();
+
+        .comment-box,
+        .bitbucket-gutter-marker {
+            .segment-conflicted-target-fade-border-animation();
+        }
+    }
+}
+
+.diff-view-message,
+.diff-view-no-change-message {
+    margin: 30px auto;
+}
+
+.diff-view-message {
+    max-width: 600px;
+}
+
+.diff-view-no-change-message {
+    max-width: 300px;
+}
+
+.binary-container {
+    .since-revision.binary img {
+        border: 1px solid #d04437;
+    }
+
+    .until-revision.binary img {
+        border: 1px solid #14972b;
+    }
+
+    .binary h5 {
+        margin-top: 0;
+    }
+}

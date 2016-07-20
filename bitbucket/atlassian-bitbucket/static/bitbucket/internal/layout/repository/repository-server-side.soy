@@ -1,0 +1,304 @@
+{namespace bitbucket.internal.layout}
+
+/**
+ * @param? atRevisionRef
+ * @param repository
+ *
+ * data passed through to stash.layout.entity
+ * @param? activeNav
+ * @param? actionWebItems
+ * @param? bannerContent
+ * @param? bodyClass String. Additional classes to be added to the BODY
+ * @param content Main page content inserted inside the #content section
+ * @param? dataAttributes Data attributes for main content section
+ * @param? entityNotificationsContent
+ * @param? entitySecondaryActionsContent
+ * @param? entityUrl
+ * @param? extraAttributes String or Object. Additional Extra attributes to apply to BODY
+ * @param? focusedPageSize Default: xlarge. Options: small, medium, large, xlarge.
+ * @param? headContent Content inserted inside HEAD after TITLE.
+ * @param? hideLoginLink Boolean. Hides the "Login" link in global app header. Primarily used on the login page itself
+ * @param? hideProfile Boolean. Hides the user profile information, including login link in global app header.
+ * @param? isVerticalNav
+ * @param? pageBottomContent Additional content at the bottom of the page, below the page footer.
+ * @param? navClass
+ * @param? pageHeaderContent Content to put inside a aui.page.pageHeader at the top of the page
+ * @param? panelClass
+ * @param? panelContentHeader Heading to put inside a aui.page.pageHeader at the top of the page panel content area
+ * @param? panelContentHeaderActions Actions to put inside a aui.page.pageHeader at the top of the page panel content area
+ * @param? panelContentHeaderExcludeBreadcrumbs Exclude breadcrumbs from the aui.page.pageHeader at the top of the page panel content area
+ * @param? panelNavContent
+ * @param? panelSidebarContent
+ * @param? secondaryActionWebItems
+ * @param? theme String. Theme class name added to the BODY. Default is 'bitbucket-theme'
+ * @param? useAdminContext Boolean. Loads resources for Admin page context (atl.admin instead of atl.general). Default false.
+ * @param? windowTitle Text for the TITLE element
+ */
+{template .repository}
+    {webResourceManager_requireResourcesForContext('bitbucket.layout.repository')}
+    {requirePageData('bitbucket.layout.repository', [ 'repository': $repository ])}
+    {requirePageData('bitbucket.web.repository.clone.dialog.options', [ 'repository': $repository ])}
+    {call bitbucket.internal.layout.entity}
+        {param actionWebFragmentsLocation: 'bitbucket.web.repository.header.buttons' /}
+        {param actionWebFragmentsContext: $atRevisionRef ?
+            [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ] :
+            [ 'repository' : $repository ] /}
+        {param activeHeaderNav: 'repositories-menu' /}
+        {param activeNav: $activeNav /}
+        {param actionWebItems: $actionWebItems /}
+        {param bannerContent}
+            {foreach $webPanel in getWebPanels('bitbucket.web.repository.banner', ['repository' : $repository])}
+                {$webPanel}
+            {/foreach}
+            {if $bannerContent}
+                {$bannerContent|noAutoescape}
+            {/if}
+        {/param}
+        {param bodyClass: $bodyClass /}
+        {param content: $content /}
+        {param dataAttributes: $dataAttributes /}
+        {param entityContext: [ 'repository' : $repository ] /}
+        {param entityName: $repository.name /}
+        {param entityNav: getWebItems('bitbucket.repository.nav', [ 'repository' : $repository ]) /}
+        {param entityNotificationsContent: $entityNotificationsContent /}
+        {param entityParentName: $repository.project.name /}
+        {param entityParentUrl: $repository.project.owner ? nav_user($repository.project.owner) : nav_project($repository.project) /}
+        {param entitySecondaryActionsContent: $entitySecondaryActionsContent /}
+        {param entityUrl: $entityUrl /}
+        {param extraAttributes: $extraAttributes /}
+        {param focusedPageSize: $focusedPageSize /}
+        {param headContent: $headContent /}
+        {param hideLoginLink: $hideLoginLink /}
+        {param hideProfile: $hideProfile /}
+        {param isVerticalNav: $isVerticalNav /}
+        {param navClass: $navClass /}
+        {param pageHeaderContent: $pageHeaderContent /}
+        {param pageType: 'sidebar' /}
+        {param panelClass: $panelClass /}
+        {param panelContentHeader: $panelContentHeader /}
+        {param panelContentHeaderActions: $panelContentHeaderActions /}
+        {param panelContentHeaderBreadcrumbs}
+            {if not $panelContentHeaderExcludeBreadcrumbs}
+                {call .repositoryBreadcrumbs}
+                    {param repository: $repository /}
+                {/call}
+            {/if}
+        {/param}
+        {param panelContentHeaderBreadcrumbsClasses: 'repository-breadcrumbs' /}
+        {param panelNavContent: $panelNavContent /}
+        {param panelSidebarContent: $panelSidebarContent /}
+        {param secondaryActionWebItems: $secondaryActionWebItems /}
+        {param sidebarSettingsWebItems: getWebItems('internal.repository.sidebar.footer', [ 'repository' : $repository ]) /}
+        {param theme: $theme /}
+        {param useAdminContext: $useAdminContext /}
+        {param windowTitle: $windowTitle /}
+        {param headerImageContent}
+            <a href="{$repository.project.owner ? nav_user($repository.project.owner) : nav_project($repository.project)}">
+                {call bitbucket.internal.feature.project.avatar}
+                    {param size: 'large' /}
+                    {param project: $repository.project /}
+                    {param extraAttributes}
+                        {call .tooltipData}
+                            {param content}
+                                {$repository.project.name}
+                                {if $repository.origin}
+                                    {call bitbucket.internal.sidebar.tooltip.fork}
+                                        {param projectName}
+                                            {if $repository.project.key != $repository.origin.project.key}
+                                                {$repository.origin.project.name}
+                                            {/if}
+                                        {/param}
+                                        {param repoName}
+                                            {$repository.origin.name}
+                                        {/param}
+                                    {/call}
+                                {/if}
+                            {/param}
+                        {/call}
+                    {/param}
+                {/call}
+            </a>
+        {/param}
+        {param entityNameExtraContent}
+            {if $repository.origin}
+                <div class="fork-origin">
+                    {call .forkOrigin}
+                        {param projectName: $repository.origin.project.name /}
+                        {param projectLink}
+                            {if $repository.project.key != $repository.origin.project.key}
+                                <a title="{$repository.origin.project.name}"
+                                    href="{nav_project($repository.origin.project)}">{$repository.origin.project.name}</a>
+                            {/if}
+                        {/param}
+                        {param repoName: $repository.origin.name /}
+                        {param repoLink}
+                            <a title="{$repository.origin.name}"
+                                href="{nav_repo_browse($repository.origin.project.key, $repository.origin.slug)}">{$repository.origin.name}</a>
+                        {/param}
+                    {/call}
+                </div>
+            {/if}
+            <div>
+                {call bitbucket.internal.feature.repository.publicLozenge}
+                    {param repository: $repository /}
+                {/call}
+            </div>
+        {/param}
+        {param entityHeaderRightItemsContent}
+            {call .repositoryWebPanelSection}
+                {param repository: $repository /}
+                {param location: 'bitbucket.web.repository.header' /}
+                {param atRevisionRef: $atRevisionRef /}
+            {/call}
+        {/param}
+        {param pageBottomContent}
+            <script>require('bitbucket/internal/layout/repository').onReady({to_json($repository)|noAutoescape}, '#clone-repo-button');</script>
+            {if $pageBottomContent}
+                {$pageBottomContent|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+
+/**
+ * @param? projectName
+ * @param? projectLink
+ * @param repoName
+ * @param repoLink
+ */
+{template .forkOrigin}
+    {call aui.icons.icon}
+        {param icon: 'devtools-fork' /}
+        {param useIconFont: true /}
+        {param size: 'small' /}
+        {param extraAttributes: [
+            'title' : $projectName ?
+                getText('bitbucket.web.repository.fork.origin.different.project', $projectName, $repoName) :
+                getText('bitbucket.web.repository.fork.origin.same.project', $repoName)
+        ]/}
+    {/call}
+    {if $projectLink}
+        <span>{$projectLink|noAutoescape}</span>
+    {/if}
+    <div>{$repoLink|noAutoescape}</div>
+{/template}
+
+/**
+ * @param repository
+ * @param location
+ * @param? atRevisionRef
+ */
+{template .repositoryWebPanelSection private="true"}
+    {if $atRevisionRef}
+        {foreach $webPanel in reverse(getWebPanels($location, [ 'repository' : $repository, 'atRevisionRef' : $atRevisionRef ]))}
+            {$webPanel}
+        {/foreach}
+    {else}
+        {foreach $webPanel in reverse(getWebPanels($location, [ 'repository' : $repository ]))}
+            {$webPanel}
+        {/foreach}
+    {/if}
+{/template}
+
+/**
+ * @param repository
+ */
+{template .repositoryBreadcrumbs private="true"}
+    <li><a href="{nav_project($repository.project)}" title="{$repository.project.name}">{$repository.project.name}</a></li>
+    <li class="aui-nav-selected"><a href="{nav_repo_browse($repository.project.key, $repository.slug)}" title="{$repository.name}">{$repository.name}</a></li>
+{/template}
+
+/**
+ * @param webItems
+ */
+{template .repositoryCloneWebItems private="true"}
+    {if length($webItems) == 1}
+        {foreach $webItem in $webItems}
+            {call bitbucket.internal.buttons.button}
+                {param id: $webItem.linkId /}
+                {param buttonText: $webItem.linkText /}
+                {param isDisabled: true /}
+                {param extraClasses: 'repository-protocol' /}
+                {param extraAttributes: [ 'data-clone-url' : $webItem.url, 'data-module-key' : $webItem.moduleKey ]/}
+            {/call}
+        {/foreach}
+    {else}
+        {call aui.dropdown2.trigger}
+            {param menu: ['id': 'repository-protocol-selector'] /}
+            {param extraClasses: 'repository-protocol aui-button' /}
+        {/call}
+        {call aui.dropdown2.contents}
+            {param id: 'repository-protocol-selector' /}
+            {param extraClasses: 'aui-style-default' /}
+            {param content}
+                <ul>
+                    {foreach $webItem in $webItems}
+                        <li id="{$webItem.linkId}" data-clone-url="{$webItem.url}" data-module-key="{$webItem.moduleKey}" >
+                            <a href="#">{$webItem.linkText}</a>
+                        </li>
+                    {/foreach}
+                </ul>
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param repository
+ */
+{template .repositoryCloneDialog private="true"}
+    <aui-inline-dialog id="repo-clone-dialog" alignment="left top">
+        <div id="clone-repo-dialog-content">
+            {let $cloneWebItems: getWebItems('bitbucket.web.repository.clone', [ 'repository' : $repository ]) /}
+            {let $clonePrompts: getWebPanels('bitbucket.web.repository.clone.prompt', [ 'repository' : $repository ]) /}
+            {if length($cloneWebItems) == 0}
+                <div class="clone-prompts">
+                {if length($clonePrompts) > 0}
+                    {foreach $clonePrompt in $clonePrompts}
+                        {$clonePrompt}
+                    {/foreach}
+                {else}
+                    <p>{{getText('bitbucket.web.repository.clone.protocols.disabled')}}</p>
+                {/if}
+                </div>
+            {else}
+                <div class="clone-url">
+                    {call .repositoryCloneUrl}
+                        {param cloneWebItems: $cloneWebItems /}
+                        {param contentAfter}
+                        {/param}
+                    {/call}
+                    <div id="clone-dialog-options"><!-- This is a client-web-panel --></div>
+                    {foreach $webPanel in getWebPanels('bitbucket.web.repository.clone.dialog.help.info', [ 'repository' : $repository ])}
+                        <p>{$webPanel}</p>
+                    {/foreach}
+                </div>
+            {/if}
+            {foreach $webPanel in getWebPanels('bitbucket.web.repository.clone.dialog.content', [ 'repository' : $repository ])}
+                {$webPanel}
+            {/foreach}
+        </div>
+    </aui-inline-dialog>
+{/template}
+
+/**
+ * @param cloneWebItems
+ */
+{template .repositoryCloneUrl private="true"}
+    {if length($cloneWebItems) > 0}
+        <div class="aui-buttons">
+            {call .repositoryCloneWebItems}
+                {param webItems: $cloneWebItems /}
+            {/call}
+            <input type="text" class="text quick-copy-text stash-text clone-url-input" readonly="readonly" spellcheck="false" value=""/>
+        </div>
+    {/if}
+{/template}
+
+/**
+ * @param content
+ */
+{template .tooltipData private="true"}
+    data-tooltip="{$content}"
+{/template}

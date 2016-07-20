@@ -1,0 +1,175 @@
+@import "/static/global.less";
+
+.project-banners,
+.project-banners > .aui-item {
+    display: block;
+}
+
+.project-banners > .aui-item {
+    text-align: center;
+    padding: 15px 0;
+
+    &:first-child a {
+        margin-top: 40px;
+    }
+
+    + .aui-item {
+        padding-left: 0;
+    }
+}
+
+.project-banners .aui-item > a {
+    .border-radius(5px);
+    .box-shadow(inset 1px 1px 1px #FCFCFC);
+    text-align: left;
+    display: inline-block;
+    width: 270px;
+    position: relative;
+    background: #F3F3F3;
+    border: 1px solid @dividerColor;
+    padding: 15px 15px 15px 95px;
+    margin: 0 auto;
+    text-decoration: none;
+
+    > .icon {
+        .square(65px);
+        display: block;
+        position: absolute;
+        left: 15px;
+        background: transparent url('../com.atlassian.bitbucket.server.bitbucket-web:images-icons-banners/icons/icons-banners.png') no-repeat 0 0;
+    }
+}
+
+.project-banners .aui-item .create-repository-link {
+    .icon {
+        background-position: 0 -170px;
+    }
+
+    &:hover .icon {
+        background-position: -85px -170px;
+    }
+}
+
+.project-banners .aui-item .create-project-link{
+    .icon {
+        background-position: 0 -90px;
+    }
+
+    &:hover .icon {
+        background-position: -85px -90px;
+    }
+}
+
+.project-banners .aui-item .administration-link {
+    .icon {
+        background-position: 0 -5px;
+    }
+
+    &:hover .icon {
+        background-position: -85px -5px;
+    }
+}
+
+.project-banners .entity-empty-desc {
+    white-space: pre-line;
+}
+
+
+.bitbucket-theme {
+    .project-banners {
+        .aui-item > a {
+            color: #555;
+
+            &:hover,
+            &:active,
+            &:focus {
+                .box-shadow(inset 1px 1px 2px #C9C9C9);
+                background: #DDD;
+                border-color: @activeDividerColor;
+                text-decoration: none;
+            }
+
+        }
+
+        h3 {
+            font-size: @font-size-default;
+            color: @bodyTextColor;
+            margin: 0 0 0.5em 0;
+        }
+
+        p {
+            color: #555;
+            margin: 0;
+        }
+    }
+}
+
+.welcome-mat {
+    .box-sizing();
+    border: 1px solid @dividerColor;
+    background-color: @contentBackgroundColor;
+    background-repeat: no-repeat;
+    margin: @doubleSpacing 0;
+
+    h3 {
+        text-align: left;
+        padding: 0;
+        color: @bodyTextColor;
+        font-weight: normal;
+    }
+
+    h3,
+    p {
+        + .aui-button {
+            margin-top: @doubleSpacing;
+        }
+    }
+
+    p {
+        padding: 0;
+        color: @bodyTextColor;
+    }
+
+    &.stash-logo {
+        background-image: url(bitbucket-logo-grey.svg);
+        background-position: 97% 50%;
+        background-size: 256px 256px;
+    }
+
+    &.private-repository {
+        background-image: url(bitbucket-account-private.svg);
+        background-position: 93% 10px;
+        background-size: 180px 220px;
+    }
+}
+
+.welcome-mat-large {
+    .border-radius(5px);
+    padding: @quadSpacing;
+    width: @hybridLayoutWidth;
+    min-height: 200px;
+
+    h3 {
+        font-size: @font-size-xxlarge;
+    }
+
+    p {
+        margin-top: @doubleSpacing;
+    }
+}
+
+.welcome-mat-small {
+    .border-radius(3px);
+    padding: @doubleSpacing;
+    width: 300px;
+    min-height: 120px;
+
+    h3 {
+        font-size: @font-size-large;
+    }
+}
+
+// default large welcome mat is too wide when used on an AUI hybrid page layout (eg User profile personal repos page)
+.aui-page-hybrid .welcome-mat-large {
+    width: auto;
+}

@@ -1,0 +1,156 @@
+@import "/static/global.less";
+
+@taskSaveButtonColor: #3572b0; // aka @adg-color-bright-blue-1
+
+.task {
+    display: block;
+    height: 100%;
+    margin-left: @doubleSpacing;
+
+    .task-content {
+        position: relative;
+        line-height: @auiBaseLineHeight;
+    }
+
+    .task-list-row &.task-pending-sync[data-task-id=""] .actions a {
+        color: @disabledSecondaryTextColor;
+        cursor: text;
+    }
+
+    textarea {
+        .box-sizing();
+        .input-placeholder({
+            color: @placeholderTextColor;
+        });
+
+        background-color: transparent;
+        border: 0;
+        width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+        // match the textarea styles with AUI typography defaults
+        font-family: Arial, sans-serif;
+        font-size: @font-size-default;
+        line-height: @auiBaseLineHeight;
+        color: @bodyTextColor;
+
+        &:focus {
+            outline: none;
+        }
+
+        &.task-error {
+            .input-placeholder({
+                color: @errorTextColor;
+            });
+        }
+    }
+
+    .task-tip {
+        color: @secondaryTextColor;
+        display: none;
+        font-size: @font-size-small;
+        font-style: italic;
+        float: right;
+        margin-top: @halfSpacing;
+
+        .task-blank& {
+            display: inline-block;
+        }
+    }
+
+    .task-footer {
+        .clearfix();
+    }
+
+    textarea.expanding,
+    .textareaClone {
+        border-width: 0;
+        font-size: @font-size-default;
+        line-height: @auiBaseLineHeight;
+        margin-top: 0;
+        min-height: 0;
+        padding: 0;
+    }
+
+    .textareaClone {
+        .border-radius(0);
+        z-index: auto;
+
+        // Stronger selector needed to override codemirror's 'pre' font
+        .content-view & {
+            font-family: Arial, sans-serif;
+        }
+    }
+
+
+    .comment-diff-anchor {
+        color: @labelTextColor;
+        font-size: @font-size-small;
+        line-height: @auiIconSmall;
+        margin: @halfSpacing 0 0 0;
+        position: relative;
+
+        .aui-icon {
+            color: @labelTextColor;
+        }
+
+        .aui-button {
+            .text-overflow();
+            font-size: inherit; // @aui-override
+            font-weight: bold;
+            height: 100%; // @aui-override
+            left: @auiIconSmall + @halfSpacing;
+            padding: 0; // @aui-override
+            position: absolute;
+            text-align: left;
+            width: 100%;
+        }
+    }
+
+    &.task-status-resolved .task-content {
+        color: #999;
+        text-decoration: line-through;
+    }
+
+    .task-action {
+        line-height: inherit;
+        position: absolute;
+        top: @baseSpacing;
+
+        &.task-checkbox-container {
+            left: @baseSpacing;
+            // this line height and top value gets us consistent cross-browser
+            line-height: @font-size-default;
+            top: @baseSpacing + 2px;
+
+            .task-checkbox {
+                margin: 0;
+                padding: 0;
+                cursor: default; //overide codemirror styles when inside diff in IE11
+            }
+        }
+
+        &.task-link-button {
+            border: 0;
+            display: none;
+            padding: 0;
+            line-height: 1;
+            right: @baseSpacing;
+            height: @icon-size-xxsmall;
+            width: @icon-size-xxsmall;
+
+            .aui-icon {
+                color: @secondaryTextColor;
+            }
+        }
+    }
+
+    .task-save {
+        // prefix it with additional classes to increase selector strength for overriding comment action styles
+        .comment-container .comment & {
+            font-weight: bold;
+            color: @taskSaveButtonColor;
+        }
+    }
+}

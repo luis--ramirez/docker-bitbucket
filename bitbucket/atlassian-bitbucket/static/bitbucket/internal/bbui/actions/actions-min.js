@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/actions/actions",["exports"],function(a){Object.defineProperty(a,"__esModule",{value:!0});a.SET_CURRENT_USER="SET_CURRENT_USER"});

@@ -1,0 +1,70 @@
+@import "/static/global.less";
+
+.file-toolbar {
+    .box-sizing();
+    vertical-align: bottom; /* The toolbar is display: inline-block; which is required to make it fit its floated contents.
+                However, this causes a bit of spacing below the toolbar (Michael McGlynn says for the descenders - makes sense).
+                Vertical-align bottom removes that extra space. */
+    padding: @baseSpacing @doubleSpacing;
+    position: relative;
+    background-color: @feintGreyColor;
+    border-bottom: 1px solid @lightDividerColor; // width is @fileContentToolbarBottomBorderWidth
+    width: 100%;
+    z-index: 1;
+
+    > .primary,
+    > .secondary {
+        > * {
+            margin-left: @baseSpacing;
+        }
+        > *:first-child {
+            margin-left: 0;
+        }
+
+        > .aui-button-subtle {
+            margin-left: 0;  // https://ecosystem.atlassian.net/browse/AUI-2013
+        }
+    }
+
+    /**
+     * @aui-override - There is a war between AUI and Designers over OSX font.
+     * The casualties are the users. Helvetica uses different rendering on Webkit and FF on OSX
+     * such that it is given different vertical-alignment in each browser.
+     * We're overriding with the Windows default font here, which works just fine everywhere.
+     */
+    .aui-button {
+        margin-top: 0;
+        font-family: @atlassianFontStack;
+    }
+
+    > .secondary {
+        float: right;
+        // We only want the right side to avoid wrapping. Breadcrumbs should wrap.
+        white-space: nowrap;
+        text-align: right;
+        line-height: @auiToolbarLineHeight;
+    }
+
+    // For breadcumbs in file-comments in activity
+    > .primary .aui-iconfont-devtools-file {
+        left: -@baseSpacing;
+        position: relative;
+        vertical-align: middle;
+
+        + .breadcrumbs {
+            margin: 0;
+            vertical-align: middle;
+        }
+    }
+
+    .breadcrumbs {
+        line-height: @auiToolbarLineHeight;
+        display: inline;
+        color: @secondaryTextColor;
+
+        strong {
+            color: @bodyTextColor;
+            margin-right: @halfSpacing;
+        }
+    }
+}

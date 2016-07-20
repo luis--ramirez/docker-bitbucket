@@ -1,0 +1,26 @@
+{namespace bitbucket.internal.widget.fauxUploadField}
+
+/**
+ * @param? id
+ * @param? extraClasses
+ * @param? accept
+ * @param? allowMultiple
+ */
+{template .uploadField}
+    <input type="file" {if $id} id="{$id}"{/if}
+         class="faux-upload-field {if $extraClasses}{$extraClasses}{/if}"
+        {if $accept} accept="{$accept}"{/if}
+        {if $allowMultiple} multiple{/if}/>
+{/template}
+
+/**
+ * @param text
+ * @param? extraClasses
+*/
+{template .labelButton}
+    {call aui.buttons.button}
+        {param tagName: 'label' /}
+        {param extraClasses: 'faux-upload-label-button ' + $extraClasses /}
+        {param text: $text /}
+    {/call}
+{/template}

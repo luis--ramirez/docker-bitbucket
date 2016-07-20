@@ -1,0 +1,275 @@
+{namespace widget.aui}
+
+/**
+ * @param navItems
+ * @param? isVertical
+ * @param? extraClasses
+ */
+{template .navigation}
+    {call .navGroup data="all"}
+        {param primaryNavContent}
+            <ul class="aui-nav">
+                {foreach $item in $navItems}
+                    {call .navItem data="$item" /}
+                {/foreach}
+            </ul>
+        {/param}
+    {/call}
+{/template}
+
+/** Navigation Group
+ * @param primaryNavContent
+ * @param? secondaryNavContent
+ * @param? isVertical
+ * @param? extraClasses
+ */
+{template .navGroup private="true"}
+    <nav class="aui-navgroup aui-navgroup-{$isVertical ? 'vertical' : 'horizontal'}{if $extraClasses} {$extraClasses}{/if}" role="navigation">
+        <div class="aui-navgroup-inner">
+            // only add the .aui-navgroup-primary div if it's a horizontal nav AND secondaryNavContent is passed in
+            {if (not $isVertical) and $secondaryNavContent}
+                <div class="aui-navgroup-primary">
+            {/if}
+                    {$primaryNavContent|noAutoescape}
+            {if (not $isVertical) and $secondaryNavContent}
+                </div>
+            {/if}
+            {if $secondaryNavContent}
+                <div class="aui-navgroup-secondary">
+                    {$secondaryNavContent|noAutoescape}
+                </div>
+            {/if}
+        </div>
+    </nav>
+{/template}
+
+/**
+ * @param webFragments
+ * @param? isVertical
+ * @param? extraClasses
+ * @param? activeNavItem
+ * @param? primaryNavContent
+ * @param? secondaryNavContent
+ * @param? context
+ */
+{template .webFragmentNavigation}
+    {call .navGroup data="all"}
+        {param primaryNavContent}
+            {if $primaryNavContent}
+                {$primaryNavContent|noAutoescape}
+            {/if}
+            {foreach $fragment in $webFragments}
+                {if $fragment.type == 'ITEM'}
+                    <ul class="aui-nav">
+                        {call .navWebItem}
+                            {param webItem: $fragment /}
+                            {param isActive: $fragment.moduleKey == $activeNavItem /}
+                            {param context: $context /}
+                        {/call}
+                    </ul>
+                {elseif $fragment.type == 'SECTION'}
+                    {call .navWebSection}
+                        {param fragment: $fragment /}
+                        {param activeNavItem: $activeNavItem /}
+                        {param context: $context /}
+                    {/call}
+                {/if}
+            {/foreach}
+        {/param}
+        {param secondaryNavContent}
+            {if $secondaryNavContent}
+                <ul class="aui-nav">
+                    {$secondaryNavContent|noAutoescape}
+                </ul>
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param webItems
+ * @param? isVertical
+ * @param? extraClasses
+ * @param? activeNavItem
+ * @param? primaryNavContent
+ * @param? secondaryNavContent
+ * @param? context
+ */
+{template .webItemNavigation}
+    {call .navGroup data="all"}
+        {param primaryNavContent}
+            {if $primaryNavContent}
+                {$primaryNavContent|noAutoescape}
+            {/if}
+            {if length($webItems) > 0}
+            <ul class="aui-nav">
+                {foreach $webItem in $webItems}
+                    {call .navWebItem}
+                        {param webItem: $webItem /}
+                        {param isActive: $webItem.moduleKey == $activeNavItem /}
+                        {param context: $context /}
+                    {/call}
+                {/foreach}
+            </ul>
+            {/if}
+        {/param}
+        {param secondaryNavContent}
+            {if $secondaryNavContent}
+                <ul class="aui-nav">
+                    {$secondaryNavContent|noAutoescape}
+                </ul>
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+
+/**
+ * @param fragment
+ * @param activeNavItem
+ * @param? context
+ */
+{template .navWebSection private="true"}
+    {call .navSectionWithItems}
+        {param heading: $fragment.labelText /}
+        {param activeNavItem: $activeNavItem /}
+        {param webItems: getWebItems($fragment.location + '/' + $fragment.key, $context ? $context : null) /}
+        {param context: $context /}
+    {/call}
+{/template}
+
+/**
+ * @param heading
+ * @param activeNavItem
+ * @param webItems
+ * @param? context
+ */
+{template .navSectionWithItems private="true"}
+    {if length($webItems)}
+        {call .navHeading}
+            {param text: $heading /}
+        {/call}
+        <ul class="aui-nav">
+            {foreach $webItem in $webItems}
+                {call .navWebItem}
+                    {param webItem: $webItem /}
+                    {param isActive: $webItem.moduleKey == $activeNavItem or $webItem.linkId == $activeNavItem /}
+                    {param context: $context /}
+                {/call}
+            {/foreach}
+        </ul>
+    {/if}
+{/template}
+
+/**
+ * @param webItem
+ * @param isActive
+ * @param? context
+ */
+{template .navWebItem private="true"}
+    {call .navItem}
+        {param url: $webItem.url /}
+        {param text: $webItem.linkText /}
+        {param id: $webItem.linkId /}
+        {param extraLinkClasses: $webItem.styleClass /}
+        {param tooltip: $webItem.tooltip /}
+        {param webItemKey: $webItem.completeModuleKey /}
+        {param isActive: $isActive /}
+        {param badgeContent}
+            {foreach $badgeContent in getWebPanels($webItem.moduleKey + '.badge', $context ? $context : null)}
+                // The {sp} is needed for separating the webItem label and the badge, not using CSS margins or
+                // pseudo-elements here because screen readers would combine the label and badge text.
+                {sp}{$badgeContent}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param url
+ * @param text
+ * @param? id
+ * @param? tooltip
+ * @param? isActive
+ * @param? extraClasses
+ * @param? extraLinkClasses
+ * @param? badgeContent
+ * @param? webItemKey
+ */
+{template .navItem private="true"}
+    <li{if $isActive or $extraClasses} class="{if $isActive}aui-nav-selected{/if}{if $extraClasses} {$extraClasses}{/if}"{/if}>
+        <a
+            href="{$url}"
+            {if $id}id="{$id}"{/if}
+            {if $extraLinkClasses} class="{$extraLinkClasses}"{/if}
+            {if $tooltip} title="{$tooltip}"{/if}
+            {if $webItemKey} data-web-item-key="{$webItemKey}{/if}"
+        >
+            {$text}
+            {if $badgeContent}{$badgeContent|noAutoescape}{/if}
+        </a>
+    </li>
+{/template}
+
+/**
+ * @param text
+ * @param? id
+ * @param? tooltip
+ * @param? extraClasses
+ */
+{template .navHeading private="true"}
+    {if $text}<div class="aui-nav-heading{if $extraClasses} {$extraClasses}{/if}"{if $id} id="{$id}"{/if}{if $tooltip} title="{$tooltip}"{/if}><strong>{$text}</strong></div>{/if}
+{/template}
+
+/**
+ * @param? extraClasses
+ * @param? isTierOne
+ * @param? isActions
+ * @param? navContent
+ * @param? title
+ */
+{template .sidebarNavGroup}
+    <div class="aui-sidebar-group
+        {if $isTierOne}{sp}aui-sidebar-group-tier-one{/if}
+        {if $isActions}{sp}aui-sidebar-group-actions{/if}
+        {if $extraClasses}{sp}{$extraClasses}{/if}
+    ">
+        {call .navHeading}
+            {param text: $title/}
+        {/call}
+        {$navContent|noAutoescape}
+    </div>
+{/template}
+
+/**
+ * @param text
+ * @param url
+ * @param? badgeContent
+ * @param? extraClasses
+ * @param? extraLinkClasses
+ * @param? iconClass
+ * @param? id
+ * @param? isActive
+ * @param? isTierOne
+ * @param? tooltip
+ * @param? webItemKey
+ */
+{template .sidebarNavItem private="true"}
+    <li{if $isActive or $extraClasses} class="{if $isActive}aui-nav-selected{/if}{if $extraClasses} {$extraClasses}{/if}"{/if}>
+        <a
+            href="{$url}"
+            {if $id} id="{$id}"{/if}
+            {if $webItemKey} data-web-item-key="{$webItemKey}"{/if}
+            class="aui-nav-item{if $extraLinkClasses} {$extraLinkClasses}{/if}"
+            {if $tooltip} title="{$tooltip}"{/if}
+        >
+            {if $iconClass}
+                <span class="aui-icon {$iconClass}"></span>
+            {elseif $isTierOne}
+                <span class="aui-icon aui-icon-small aui-iconfont-close-dialog"></span>
+            {/if}
+            {if $badgeContent}{$badgeContent|noAutoescape}{/if}
+            <span class="aui-nav-item-label">{$text}</span>
+        </a>
+    </li>
+{/template}

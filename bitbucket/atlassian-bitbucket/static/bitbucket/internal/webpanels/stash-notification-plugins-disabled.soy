@@ -1,0 +1,18 @@
+{namespace bitbucket.notification.banner.header}
+
+/**
+*
+*/
+{template .bitbucketNotificationPluginsDisabled}
+    <div class="plugins-disabled-banner aui-banner aui-banner-error" role="banner">
+        {{getTextAsHtml('bitbucket.web.notification.pluginsdisabled.html', nav_addons())}}
+        {call bitbucket.internal.buttons.button}
+            {param extraClasses: 'close-banner'/}
+            {param type: 'link' /}
+            {param iconType: 'aui' /}
+            {param iconClass: 'aui-icon-small aui-iconfont-remove-label' /}
+            {param buttonText: '' /}
+            {param iconText: getText('bitbucket.web.notification.pluginsdisabled.tooltip') /}
+        {/call}
+    </div>
+{/template}

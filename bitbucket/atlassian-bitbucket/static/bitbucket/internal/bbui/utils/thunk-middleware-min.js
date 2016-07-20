@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/utils/thunk-middleware",["module","exports"],function(b,a){Object.defineProperty(a,"__esModule",{value:!0});a.default=function(a){var b=a.dispatch,d=a.getState;return function(a){return function(c){return"function"===typeof c?c(b,d):a(c)}}};b.exports=a["default"]});

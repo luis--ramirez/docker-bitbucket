@@ -1,0 +1,109 @@
+@import "/static/global.less";
+
+@diff-tree-transition-timing: 0.2s;
+@diff-tree-width: 400px;
+@diff-tree-collapsed-width: 60px;
+@file-tree-header-height: 20px;
+@diff-tree-toolbar-button-width: 30px;
+@fade-out-width: 32px; // same as commit-table and BB Cloud
+
+.pull-request-content > .commit-files {
+    .diff-tree-search-wrapper {
+        position: relative;
+        .search {
+            top: -@auiTextFieldHeight + ((@auiTextFieldHeight - @file-tree-header-height) / 2);
+            right: @doubleSpacing;
+            left: auto;
+            white-space: nowrap;
+
+            // Add a fade out on the file header as the search expands
+            &::before {
+                .linear-gradient-horizontal(#fff, fade(#fff, 0));
+                width: @fade-out-width;
+                content: ' ';
+                position: absolute;
+                left: -@fade-out-width;
+                top: 0;
+                height: 100%
+            }
+        }
+
+        .search input {
+            width: @diff-tree-collapsed-width;
+            padding-right: @baseSpacing; // no padding for the delete button while collapsed
+            .input-placeholder({
+                visibility: hidden;
+            });
+        }
+
+        &.searching .search input,
+        .search input:focus {
+            width: @diff-tree-width - (2 * @doubleSpacing);
+            padding-right: @icon-size-xxsmall + @baseSpacing;
+            .input-placeholder({
+                visibility: visible;
+            });
+        }
+    }
+
+    .diff-tree-toolbar {
+        background-color: @contentBackgroundColor;
+        border-bottom: none;
+
+        h4 {
+            .transition(all @diff-tree-transition-timing ease-in-out);
+            width: @diff-tree-width - (2 * @doubleSpacing) - @diff-tree-toolbar-button-width;
+            overflow: hidden;
+            opacity: 1;
+        }
+        .aui-toolbar2-secondary {
+            .transition(all @diff-tree-transition-timing ease-in-out);
+            padding-right: 0;
+        }
+    }
+
+    &.collapsed {
+        .diff-tree-toolbar {
+            h4 {
+                width: 0;
+                opacity: 0;
+            }
+            .aui-toolbar2-secondary {
+                // full width, minus left and right margins, minus width of the button, divided by 2 to horizontally center
+                padding-right: (@diff-tree-collapsed-width - @diff-tree-toolbar-button-width) / 2 - @baseSpacing;
+            }
+        }
+    }
+
+    .file-tree-wrapper {
+        > .aui-message {
+            margin: @baseSpacing @doubleSpacing;
+        }
+
+        > .file-tree > ul {
+            margin-top: @halfSpacing; // Reduce margin between tree and header
+        }
+    }
+}
+
+.feature-discovery-commit-level-review {
+    @groupSpacing: @doubleSpacing + @halfSpacing;
+    @detailSpacing: @halfSpacing;
+    margin-bottom: @groupSpacing;
+    h4 {
+        margin-top: @groupSpacing;
+
+        svg {
+            margin-right: @baseSpacing;
+            width: @doubleSpacing;
+            vertical-align: middle;
+        }
+
+        & + p {
+            margin-left: @tripleSpacing;
+            margin-top: @detailSpacing;
+        }
+
+    }
+
+}

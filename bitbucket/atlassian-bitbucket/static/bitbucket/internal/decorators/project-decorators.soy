@@ -1,0 +1,39 @@
+{namespace bitbucket.decorators.project}
+
+/**
+ * @param title The window title
+ * @param project project
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param? dataAttributes
+ */
+{template .general}
+    {call bitbucket.internal.layout.project}
+        {param windowTitle: $title /}
+        {param project: $project /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeNav: $properties['meta.activeTab'] /}
+        {param content: $body /}
+        {param pageType: 'sidebar' /}
+    {/call}
+{/template}
+
+
+
+/**
+ * @param title The window title
+ * @param project project
+ * @param body The plugin html content body
+ * @param properties meta properties
+ * @param? dataAttributes
+ */
+{template .settings}
+    {call bitbucket.internal.layout.projectSettings}
+        {param windowTitle: $title /}
+        {param project: $project /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeNav: $properties['meta.activeTab'] /}
+        {param content: $body /}
+    {/call}
+{/template}
+

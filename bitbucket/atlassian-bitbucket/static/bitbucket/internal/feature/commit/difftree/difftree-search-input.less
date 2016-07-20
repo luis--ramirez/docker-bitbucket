@@ -1,0 +1,29 @@
+@import "/static/global.less";
+
+.aui.search {
+    input {
+        padding-left: @icon-size-xxsmall + @baseSpacing;
+        padding-right: @icon-size-xxsmall + @baseSpacing;
+
+        // we already add our own "clear text" button, hide IE's
+        &::-ms-clear {
+            display: none;
+        }
+    }
+
+    @border-width: 1px;
+    @icon-margin: @halfSpacing + @border-width;
+    .search-icon {
+        margin-left: @icon-margin;
+        margin-right: -(@icon-size-xxsmall + @icon-margin);
+        color: @aui-iconfont-secondary-color;
+    }
+
+    .delete-button {
+        // display is toggled in JS depending on input text
+        display: none;
+        // Move icon inwards
+        margin-left: -(@icon-size-xxsmall + @halfSpacing);
+        margin-right: @halfSpacing;
+    }
+}

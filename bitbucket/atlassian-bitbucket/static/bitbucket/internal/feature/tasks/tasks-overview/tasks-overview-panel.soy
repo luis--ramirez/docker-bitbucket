@@ -1,0 +1,42 @@
+{namespace bitbucket.internal.feature.tasks.tasksOverview}
+
+/**
+ * Client Web Panel content for task count on the PR Overview
+ *
+ * @param openTaskCount number of open tasks in PR
+ * @param resolvedTaskCount number of resolved tasks in PR
+ */
+{template .overviewPanel}
+    <div class="plugin-section-separator"></div>
+    <div class="plugin-item plugin-item-task-count{if $openTaskCount == 0 and $resolvedTaskCount == 0} hidden{/if}">
+        <a href="#" class="task-list-dialog-link">
+            {call aui.icons.icon}
+                {param useIconFont: true /}
+                {param icon: 'editor-task' /}
+            {/call}
+            <span class="replacement-placeholder" title="{getText('bitbucket.web.tasks.overview.viewAllTasks')}">
+            {call .taskCount}
+                {param openTaskCount: $openTaskCount /}
+                {param resolvedTaskCount: $resolvedTaskCount /}
+            {/call}
+            </span>
+        </a>
+    </div>
+{/template}
+
+/**
+ * Returns an appropriate representation depending on which combination and count of
+ * tasks states exist. This template is refreshed when the values change.
+ *
+ * @param openTaskCount number of open tasks in PR
+ * @param resolvedTaskCount number of resolved tasks in PR
+ */
+{template .taskCount}
+<span class="task-count" data-open="{$openTaskCount}" data-resolved="{$resolvedTaskCount}">
+{if $openTaskCount > 0}
+    {{getTextAsHtml('bitbucket.web.tasks.overview.openTaskCount.html', $openTaskCount)}}
+{elseif $resolvedTaskCount > 0}
+    {{getTextAsHtml('bitbucket.web.tasks.overview.allTasksResolved.html')}}
+{/if}
+</span>
+{/template}

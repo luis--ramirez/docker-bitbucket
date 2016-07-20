@@ -1,0 +1,1240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress DeprecatedClassUsageInspection, SpringPlaceholdersInspection, UnparsedCustomBeanInspection, SpringSecurityFiltersConfiguredInspection -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://atlassian.com/schema/spring/plugin
+                           http://atlassian.com/schema/spring/plugin.xsd
+                           http://www.hazelcast.com/schema/spring
+                           http://www.hazelcast.com/schema/spring/hazelcast-spring-3.2.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/cache
+                           http://www.springframework.org/schema/cache/spring-cache.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Warning: This must _always_ be the first import. Do not add bean definitions above this line, and do not
+                  import other configuration files before it. -->
+    <import resource="critical-context.xml"/>
+    <import resource="crowd-spi-context.xml"/>
+    <import resource="security-context.xml"/>
+
+    <!--
+    This is the current set of advisors ordered from outer most advise to the inner. The numbers here should reflect
+    the number specified in the order attribute
+    0 - Exception rewrite
+    1 - Transaction
+    2 - Authorization
+    3 - Caching
+    4 - Throttling
+    5 - Profiling
+    -->
+
+    <aop:config>
+        <aop:pointcut id="pluginStateStorePointcut" expression="execution(* com.atlassian.stash.internal.plugin.DefaultPluginPersistentStateStore.*(..))"/>
+        <aop:advisor advice-ref="defaultTxAdvice" pointcut-ref="pluginStateStorePointcut" order="1"/>
+    </aop:config>
+    <aop:config>
+        <aop:pointcut id="exceptionMappingPointcut" expression="@within(org.springframework.stereotype.Service) or @within(com.atlassian.stash.internal.annotation.RewriteExceptions)"/>
+        <aop:advisor advice-ref="exceptionRewriteAdvice" pointcut-ref="exceptionMappingPointcut" order="0"/>
+    </aop:config>
+    <aop:config>
+        <aop:aspect ref="throttledAspect" order="4">
+            <aop:around method="throttle" arg-names="annotation" pointcut="@annotation(annotation) or @within(annotation)"/>
+        </aop:aspect>
+    </aop:config>
+    <!--
+     This method is a stepping stone to removal of deprecated methods and should be
+     removed in 1.3+. It allows us to have deprecated methods delegating to
+     their replacement methods while preserving Spring AOP behaviour and avoiding
+     duplication of AOP-related annotations on the deprecated methods.
+     -->
+    <aop:aspectj-autoproxy expose-proxy="true"/>
+
+    <context:annotation-config/>
+    <!--
+     Exclude controllers as they will be conditionally included through MasterMvcConfiguration / MirrorMvcConfiguration
+     which do their own component scans.
+    -->
+    <context:component-scan base-package="com.atlassian.stash">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <tx:advice id="defaultTxAdvice">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="search*" read-only="true"/>
+            <tx:method name="load*" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+    <tx:annotation-driven order="1"/>
+
+    <!-- WebappClassLoader, used to ensure all thread pool threads have a consistent ClassLoader -->
+    <bean id="webappClassLoader" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetMethod" value="getClassLoader"/>
+        <property name="targetObject" ref="servletContext"/>
+    </bean>
+
+    <!-- Cache manager -->
+    <bean id="cacheManager" class="com.atlassian.stash.internal.spring.DefaultCacheManager">
+        <constructor-arg index="0" ref="atlCacheManager"/>
+    </bean>
+    <cache:annotation-driven order="3"/>
+
+    <bean id="atlCacheManager" class="com.atlassian.cache.hazelcast.HazelcastCacheManager" plugin:available="true">
+        <plugin:interface>com.atlassian.cache.CacheFactory</plugin:interface>
+        <plugin:interface>com.atlassian.cache.CacheManager</plugin:interface>
+        <constructor-arg index="0" ref="hazelcast"/>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.cache.memory.MemoryCacheManager"/>
+        </constructor-arg>
+        <constructor-arg index="2"><null/></constructor-arg>
+    </bean>
+
+    <!-- Hazelcast -->
+
+    <!-- Note: The HazelcastInstance should not be shutdown using destroy-method. Doing so stops Hazelcast too
+               soon, resulting in streams of HazelcastInstanceNotActiveExceptions from other components still
+               trying to shutdown -->
+    <bean id="hazelcast" class="com.atlassian.stash.internal.hazelcast.HazelcastFactoryBean" depends-on="sharedHomeLockAcquirer">
+        <property name="config">
+            <bean class="com.atlassian.stash.internal.hazelcast.HazelcastConfigFactoryBean"/>
+        </property>
+        <property name="osgiSafeStreamSerializer" ref="osgiSafeStreamSerializer"/>
+        <property name="outOfMemoryHandler">
+            <bean class="com.atlassian.stash.internal.hazelcast.OptimisticOutOfMemoryHandler"/>
+        </property>
+        <property name="servletContext" ref="servletContext"/>
+    </bean>
+
+    <bean id="clusterInfo" factory-bean="hazelcast" factory-method="getCluster"/>
+
+    <bean id="clusterExecutor" factory-bean="hazelcast" factory-method="getExecutorService" primary="false">
+        <constructor-arg index="0" value="bitbucket.core"/>
+    </bean>
+
+    <bean id="hazelcastSessionMode" class="com.atlassian.stash.internal.hazelcast.HazelcastSessionMode" factory-method="forProperty">
+        <constructor-arg index="0" value="${hazelcast.http.sessions}"/>
+    </bean>
+    <bean id="hazelcastFilter" class="com.atlassian.stash.internal.hazelcast.ConfigurableWebFilter">
+        <constructor-arg index="0" ref="hazelcastSessionMode"/>
+        <constructor-arg index="1" >
+            <bean class="com.atlassian.stash.internal.hazelcast.ExtendedWebFilter">
+                <constructor-arg index="0">
+                    <util:properties>
+                        <prop key="cookie-http-only">true</prop>
+                        <prop key="deferred-write">true</prop>
+                        <prop key="instance-name">hazelcast</prop>
+                        <prop key="shutdown-on-destroy">false</prop>
+                        <prop key="sticky-session">#{hazelcastSessionMode.stickySessionProperty}</prop>
+                    </util:properties>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="osgiClassLoaderRegistry" class="com.atlassian.hazelcast.serialization.OsgiClassLoaderRegistry"/>
+    <bean id="osgiClassLoaderRegistrySynchronizer" class="com.atlassian.hazelcast.serialization.OsgiClassLoaderRegistrySynchronizer">
+        <constructor-arg index="0" ref="hazelcast"/>
+        <constructor-arg index="1" ref="osgiClassLoaderRegistry"/>
+    </bean>
+    <bean id="osgiSafeStreamSerializer" class="com.atlassian.hazelcast.serialization.OsgiSafeStreamSerializer">
+        <constructor-arg index="0" ref="osgiClassLoaderRegistry"/>
+    </bean>
+
+    <!-- SAL services provided by core -->
+    <bean id="threadLocalDelegateExecutorFactory"
+          class="com.atlassian.sal.core.executor.DefaultThreadLocalDelegateExecutorFactory" plugin:available="true">
+        <plugin:interface>com.atlassian.sal.api.executor.ThreadLocalDelegateExecutorFactory</plugin:interface>
+        <constructor-arg ref="threadLocalContextManager"/>
+    </bean>
+
+    <bean id="darkFeatureManager" class="com.atlassian.sal.core.features.DefaultDarkFeatureManager" plugin:available="true">
+        <plugin:interface>com.atlassian.sal.api.features.DarkFeatureManager</plugin:interface>
+        <constructor-arg index="0" ref="userManager"/>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.sal.core.features.DefaultSiteDarkFeaturesStorage">
+                <constructor-arg index="0" ref="pluginSettingsFactory"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!-- Beehive ClusterLockService provided by core, wrapped for monitoring -->
+    <bean id="clusterLockService" class="com.atlassian.stash.internal.concurrent.DefaultMonitoredClusterLockService" plugin:available="true">
+        <plugin:interface>com.atlassian.beehive.ClusterLockService</plugin:interface>
+        <constructor-arg index="0">
+            <bean class="com.atlassian.beehive.hazelcast.HazelcastClusterLockService">
+                <constructor-arg index="0" ref="hazelcast"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" value="${jmx.enabled}"/>
+    </bean>
+
+    <!-- Event framework -->
+    <bean id="eventDispatcher" class="com.atlassian.event.internal.AsynchronousAbleEventDispatcher">
+        <constructor-arg ref="eventExecutorFactory"/>
+    </bean>
+
+    <bean id="eventExecutorFactory" class="com.atlassian.stash.internal.event.SingletonEventExecutorFactory"
+          destroy-method="shutdown">
+        <constructor-arg index="0">
+            <bean factory-bean="threadLocalDelegateExecutorFactory" factory-method="createExecutorService">
+                <constructor-arg index="0" ref="eventThreadPoolExecutor"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="eventThreadPoolExecutor" class="com.atlassian.stash.internal.event.EventThreadPoolExecutor">
+        <constructor-arg index="0" ref="eventThreadPoolConfiguration"/>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.event.internal.EventThreadFactory">
+                <constructor-arg index="0">
+                    <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                        <property name="classLoader" ref="webappClassLoader"/>
+                        <property name="daemon" value="true"/>
+                        <property name="threadGroup" ref="defaultThreadGroup"/>
+                        <!-- Prefix doesn't matter for this factory; EventThreadFactory applies its own -->
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" value="${event.dispatcher.queue.size}"/>
+        <constructor-arg index="3" value="${event.dispatcher.queue.rejectioncooldown}"/>
+    </bean>
+
+    <bean id="eventListenerHandlersConfiguration"
+          class="com.atlassian.stash.internal.plugin.ListenerHandlerConfigurationFactoryBean"
+          plugin:available="true">
+        <constructor-arg>
+            <list value-type="com.atlassian.event.spi.ListenerHandler">
+                <!-- Listens based on the default "EventListener" annotation -->
+                <bean class="com.atlassian.event.internal.AnnotatedMethodsListenerHandler"/>
+                <!-- Listens based on the "PluginEventListener" annotation. This is required in order for the plugin
+                     framework to function correctly when using the EventPublisher created from this configuration. -->
+                <bean class="com.atlassian.event.internal.AnnotatedMethodsListenerHandler">
+                    <constructor-arg value="com.atlassian.plugin.event.PluginEventListener"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="eventInvokerTransformer" class="com.atlassian.stash.internal.event.AsyncBatchingInvokersTransformer"/>
+
+    <bean id="eventPublisher" class="com.atlassian.stash.internal.event.TransactionAwareEventPublisher" plugin:available="true">
+        <constructor-arg index="0" ref="authenticationContext"/>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.event.internal.LockFreeEventPublisher">
+                <constructor-arg index="0" ref="eventDispatcher"/>
+                <constructor-arg index="1" ref="eventListenerHandlersConfiguration"/>
+                <constructor-arg index="2" ref="eventInvokerTransformer"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" ref="transactionSynchronizer"/>
+    </bean>
+    <bean id="eventListenerRegistrar" class="com.atlassian.stash.internal.event.EventListenerRegistrar">
+        <constructor-arg index="0"><idref bean="eventPublisher"/></constructor-arg>
+        <constructor-arg index="1" ref="eventListenerHandlersConfiguration"/>
+    </bean>
+
+    <bean id="johnsonEventListener" class="com.atlassian.johnson.event.JohnsonEventListener">
+        <constructor-arg ref="servletContext"/>
+    </bean>
+
+    <!-- Licensing -->
+    <bean id="licenseDecoder" class="com.atlassian.extras.decoder.v2.Version2LicenseDecoder"/>
+    <bean id="licenseFactory" class="com.atlassian.extras.core.DefaultAtlassianLicenseFactory">
+        <constructor-arg>
+            <map key-type="com.atlassian.extras.api.Product"
+                 value-type="com.atlassian.extras.core.ProductLicenseFactory">
+                <entry key="#{T(com.atlassian.extras.api.Product).BITBUCKET_SERVER}">
+                    <bean class="com.atlassian.extras.core.bitbucket.BitbucketServerProductLicenseFactory"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean id="licenseManager" class="com.atlassian.extras.core.DefaultLicenseManager">
+        <constructor-arg index="0" ref="licenseDecoder"/>
+        <constructor-arg index="1" ref="licenseFactory"/>
+    </bean>
+    <bean id="sidManager" class="com.atlassian.license.DefaultSIDManager"/>
+
+    <!-- Atlassian Tenancy -->
+    <bean id="tenantAccessor" class="com.atlassian.tenancy.compatibility.CompatibilityTenantAccessor" plugin:available="true">
+        <plugin:interface>com.atlassian.tenancy.api.TenantAccessor</plugin:interface>
+        <plugin:interface>com.atlassian.tenancy.api.TenantContext</plugin:interface>
+    </bean>
+
+    <!-- Plugin Framework -->
+    <bean id="osgiBundleFactory" class="com.atlassian.plugin.osgi.factory.OsgiBundleFactory">
+        <constructor-arg index="0" ref="osgiContainerManager"/>
+    </bean>
+    <bean id="osgiContainerManager" class="com.atlassian.plugin.osgi.container.felix.FelixOsgiContainerManager">
+        <constructor-arg index="0" value="#{pluginConfiguration.frameworkBundleDirectory}"/>
+        <constructor-arg index="1" value="#{pluginConfiguration.osgiPersistentCache}"/>
+        <constructor-arg index="2" value="#{pluginConfiguration.packageScannerConfiguration}"/>
+        <constructor-arg index="3" value="#{pluginConfiguration.hostComponentProvider}"/>
+        <constructor-arg index="4" ref="pluginEventManager"/>
+    </bean>
+    <bean id="osgiPluginFactory" class="com.atlassian.plugin.osgi.factory.OsgiPluginFactory">
+        <constructor-arg index="0" value="#{pluginConfiguration.pluginDescriptorFilename}"/>
+        <constructor-arg index="1">
+            <util:set>
+                <value>#{pluginConfiguration.application}</value>
+            </util:set>
+        </constructor-arg>
+        <constructor-arg index="2" value="#{pluginConfiguration.osgiPersistentCache}"/>
+        <constructor-arg index="3" ref="osgiContainerManager"/>
+        <constructor-arg index="4" ref="pluginEventManager"/>
+    </bean>
+    <bean id="pluginAccessor" class="com.atlassian.plugin.manager.EnabledModuleCachingPluginAccessor" primary="true">
+        <constructor-arg index="0" ref="pluginManager"/>
+        <constructor-arg index="1" ref="pluginEventManager"/>
+        <constructor-arg index="2" ref="pluginController"/>
+    </bean>
+    <bean id="pluginConfiguration" class="com.atlassian.stash.internal.plugin.PluginConfigurationFactory"
+          factory-method="create">
+        <constructor-arg index="0" ref="applicationSettings"/>
+        <constructor-arg index="1" ref="application"/>
+        <constructor-arg index="2" ref="hostComponentProvider"/>
+        <constructor-arg index="3" ref="moduleDescriptorFactory"/>
+        <constructor-arg index="4" ref="stashPackageScannerConfiguration"/>
+        <constructor-arg index="5" ref="pluginPersistentStateStore"/>
+        <constructor-arg index="6" ref="servletContext"/>
+    </bean>
+    <bean id="pluginController" class="com.atlassian.stash.internal.plugin.ClusteredPluginController" primary="true" plugin:available="true">
+        <constructor-arg index="0" ref="clusterService"/>
+        <constructor-arg index="1" ref="pluginManager"/>
+        <constructor-arg index="2">
+            <hz:executorService instance-ref="hazelcast" name="bitbucket.core"/>
+        </constructor-arg>
+        <plugin:interface>com.atlassian.plugin.PluginController</plugin:interface>
+    </bean>
+    <bean id="pluginStateSplitBrainHandler" class="com.atlassian.stash.internal.plugin.PluginStateSplitBrainHandler">
+        <constructor-arg index="0" ref="scheduledExecutorService"/>
+        <constructor-arg index="1" ref="pluginPersistentStateStore"/>
+        <!-- inject the node-local plugin controller; the handler needs to update the _local_ state with the cluster
+             state. It should not trigger a cascade of cluster updates -->
+        <constructor-arg index="2" ref="pluginManager"/>
+    </bean>
+    <util:list id="pluginFactories" value-type="com.atlassian.plugin.factories.PluginFactory">
+        <ref bean="osgiPluginFactory"/>
+        <ref bean="osgiBundleFactory"/>
+        <ref bean="remotablePluginFactory"/>
+        <bean class="com.atlassian.plugin.factories.LegacyDynamicPluginFactory">
+            <constructor-arg value="#{pluginConfiguration.pluginDescriptorFilename}"/>
+        </bean>
+    </util:list>
+    <util:list id="pluginLoaders" value-type="com.atlassian.plugin.loaders.PluginLoader">
+        <bean class="com.atlassian.plugin.loaders.ClassPathPluginLoader">
+            <constructor-arg value="bitbucket-plugin.xml"/>
+        </bean>
+        <bean class="com.atlassian.stash.internal.plugin.ScanningClassPathPluginLoader">
+            <constructor-arg value="bitbucket-plugins"/>
+        </bean>
+        <bean class="com.atlassian.plugin.loaders.BundledPluginLoader">
+            <constructor-arg index="0" value="#{pluginConfiguration.bundledPluginUrl}"/>
+            <constructor-arg index="1" value="#{pluginConfiguration.bundledPluginCacheDirectory}"/>
+            <constructor-arg index="2" ref="pluginFactories"/>
+            <constructor-arg index="3" ref="pluginEventManager"/>
+        </bean>
+        <bean class="com.atlassian.plugin.loaders.DirectoryPluginLoader">
+            <constructor-arg index="0" value="#{pluginConfiguration.pluginDirectory}"/>
+            <constructor-arg index="1" ref="pluginFactories"/>
+            <constructor-arg index="2" ref="pluginEventManager"/>
+        </bean>
+    </util:list>
+    <bean id="pluginEventManager" class="com.atlassian.plugin.event.impl.DefaultPluginEventManager">
+        <constructor-arg ref="eventPublisher"/>
+    </bean>
+    <!-- This should never be autowired into another component as wrapping implementations of both PluginAccessor and
+         PluginController are in the Spring context. If this was also an autowire-candidate it would cause the context
+         to fail due to duplicate beans of the same type. If a reference to the underlying manager is needed it should
+         be wired explicitly. -->
+    <bean id="pluginManager" class="com.atlassian.stash.internal.plugin.StashPluginManager">
+        <constructor-arg index="0" value="#{pluginConfiguration.pluginStateStore}"/>
+        <constructor-arg index="1" ref="pluginLoaders"/>
+        <constructor-arg index="2" value="#{pluginConfiguration.moduleDescriptorFactory}"/>
+        <constructor-arg index="3" ref="pluginEventManager"/>
+        <constructor-arg index="4" ref="pluginUpgradeHelper"/>
+        <constructor-arg index="5" value="#{applicationPropertiesService.mode}"/>
+        <property name="pluginInstaller">
+            <bean class="com.atlassian.plugin.repositories.FilePluginInstaller">
+                <constructor-arg value="#{pluginConfiguration.pluginDirectory}"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="pluginModuleFactory" class="com.atlassian.plugin.module.PrefixDelegatingModuleFactory" plugin:available="true">
+        <constructor-arg>
+            <set value-type="com.atlassian.plugin.module.PrefixModuleFactory">
+                <bean class="com.atlassian.stash.internal.plugin.StashBeanPrefixModuleFactory"/>
+                <bean class="com.atlassian.plugin.module.ClassPrefixModuleFactory">
+                    <constructor-arg ref="hostContainer"/>
+                </bean>
+            </set>
+        </constructor-arg>
+        <plugin:interface>com.atlassian.plugin.module.ModuleFactory</plugin:interface>
+    </bean>
+    <bean id="pluginPersistentStateStore" class="com.atlassian.stash.internal.plugin.ClusteredPluginPersistentStateStore">
+        <constructor-arg>
+            <bean class="com.atlassian.stash.internal.plugin.DefaultPluginPersistentStateStore">
+                <constructor-arg type="com.atlassian.stash.internal.plugin.PluginStateDao" ref="pluginStateDao"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="pluginResourceDownload" class="com.atlassian.plugin.webresource.servlet.PluginResourceDownload">
+        <constructor-arg index="0" ref="pluginResourceLocator"/>
+        <constructor-arg index="1" ref="contentTypeResolver"/>
+        <constructor-arg index="2" value="UTF-8"/>
+    </bean>
+    <bean id="pluginResourceLocator" class="com.atlassian.plugin.webresource.PluginResourceLocatorImpl" plugin:available="true">
+        <constructor-arg index="0" ref="webResourceIntegration"/>
+        <constructor-arg index="1" ref="servletContextFactory"/>
+        <constructor-arg index="2" ref="webResourceUrlProvider"/>
+        <constructor-arg index="3" ref="resourceBatchingConfiguration"/>
+        <constructor-arg index="4" ref="pluginEventManager"/>
+        <plugin:interface>com.atlassian.plugin.webresource.PluginResourceLocator</plugin:interface>
+    </bean>
+    <bean id="pluginSystemLifecycle" class="com.atlassian.stash.internal.plugin.SpringPluginSystemLifecycle">
+        <constructor-arg index="0" ref="pluginManager"/>
+    </bean>
+    <bean id="remotablePluginFactory" class="com.atlassian.plugin.osgi.factory.RemotablePluginFactory">
+        <constructor-arg index="0" value="#{pluginConfiguration.pluginDescriptorFilename}"/>
+        <constructor-arg index="1" ref="application"/>
+        <constructor-arg index="2" ref="osgiContainerManager"/>
+        <constructor-arg index="3" ref="pluginEventManager"/>
+    </bean>
+
+    <bean id="resourceResolver" class="com.atlassian.plugin.webresource.DefaultResourceDependencyResolver" plugin:available="true">
+        <constructor-arg index="0" ref="webResourceIntegration"/>
+        <constructor-arg index="1" ref="resourceBatchingConfiguration"/>
+        <plugin:interface>com.atlassian.plugin.webresource.ResourceDependencyResolver</plugin:interface>
+    </bean>
+
+    <!-- sharedHomeLockAcquirer depends on homeLockAcquirer to guarantee that the shared home lock is acquired after
+         the local home lock -->
+    <bean id="sharedHomeLockAcquirer" class="com.atlassian.stash.internal.home.SharedHomeLockAcquirer"
+          init-method="lock" destroy-method="unlock" depends-on="homeLockAcquirer">
+        <constructor-arg index="0" value="#{homeDirectoryDetails.sharedHome}"/>
+        <constructor-arg index="1" ref="licenseHelper"/>
+        <constructor-arg index="2" ref="servletContext"/>
+    </bean>
+
+    <bean id="schedulerService" class="com.atlassian.scheduler.caesium.impl.CaesiumSchedulerService" plugin:available="true">
+        <constructor-arg index="0">
+            <bean class="com.atlassian.stash.internal.scheduling.ApplicationCaesiumSchedulerConfiguration">
+                <constructor-arg index="0" ref="timezoneService"/>
+                <constructor-arg index="1" value="${scheduler.refresh.interval.minutes}"/>
+                <constructor-arg index="2" value="${scheduler.worker.threads}"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.scheduler.core.impl.MemoryRunDetailsDao">
+                <constructor-arg index="0" value="${scheduler.history.expiry.days}"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" type="com.atlassian.scheduler.caesium.spi.ClusteredJobDao" ref="clusteredJobDao"/>
+        <plugin:interface>com.atlassian.scheduler.SchedulerService</plugin:interface>
+    </bean>
+
+    <bean id="servletModuleManager" class="com.atlassian.plugin.servlet.DefaultServletModuleManager" plugin:available="true">
+        <constructor-arg index="0" ref="servletContext"/>
+        <constructor-arg index="1" ref="pluginEventManager"/>
+        <plugin:interface>com.atlassian.plugin.servlet.ServletModuleManager</plugin:interface>
+    </bean>
+
+    <bean id="webInterfaceManager" class="com.atlassian.plugin.web.DefaultWebInterfaceManager" plugin:available="true">
+        <constructor-arg index="0" ref="pluginAccessor"/>
+        <constructor-arg index="1" ref="webFragmentHelper"/>
+        <plugin:interface>com.atlassian.plugin.web.api.DynamicWebInterfaceManager</plugin:interface>
+        <plugin:interface>com.atlassian.plugin.web.WebInterfaceManager</plugin:interface>
+    </bean>
+
+    <bean id="webResourceBatchingStateCounter" class="com.atlassian.plugin.webresource.WebResourceBatchingStateCounterImpl" plugin:available="true">
+        <constructor-arg ref="pluginEventManager"/>
+        <plugin:interface>com.atlassian.plugin.webresource.WebResourceBatchingStateCounter</plugin:interface>
+    </bean>
+    <bean id="webResourceConfig" class="com.atlassian.plugin.webresource.impl.config.Config" plugin:available="true">
+        <constructor-arg index="0" ref="resourceBatchingConfiguration"/>
+        <constructor-arg index="1" ref="webResourceIntegration"/>
+        <constructor-arg index="2" ref="webResourceUrlProvider"/>
+        <constructor-arg index="3" ref="servletContextFactory"/>
+        <constructor-arg index="4">
+            <bean class="com.atlassian.plugin.webresource.transformer.TransformerCache">
+                <constructor-arg index="0" ref="pluginEventManager"/>
+                <constructor-arg index="1" ref="pluginAccessor"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="5" name="resourceCompiler">
+            <null/>
+        </constructor-arg>
+        <property name="staticTransformers" ref="staticTransformers"/>
+    </bean>
+    <bean id="webResourceGlboals" class="com.atlassian.plugin.webresource.impl.Globals" plugin:available="true">
+        <constructor-arg ref="webResourceConfig"/>
+    </bean>
+    <bean id="webResourceAssemblerFactory"
+          class="com.atlassian.plugin.webresource.assembler.DefaultWebResourceAssemblerFactory" plugin:available="true">
+        <constructor-arg index="0" ref="webResourceGlboals"/>
+        <plugin:interface>com.atlassian.webresource.api.assembler.WebResourceAssemblerFactory</plugin:interface>
+        <plugin:interface>com.atlassian.plugin.webresource.prebake.PrebakeWebResourceAssemblerFactory</plugin:interface>
+    </bean>
+
+    <!-- Legacy WRM component used by CachingBotocssStyleResolver -->
+    <bean id="resourceDependencyResolver" class="com.atlassian.plugin.webresource.legacy.DefaultResourceDependencyResolver" plugin:available="true">
+        <constructor-arg index="0" ref="webResourceGlboals"/>
+        <constructor-arg index="1" ref="webResourceIntegration"/>
+        <!-- Note: disabling the superbatch here avoids complexity of trying to setup this bean with the superbatch module keys, and
+         as this bean is only ever used for CSS email style resolution we don't need it to know about the superbatch. -->
+        <constructor-arg index="2" name="isSuperBatchingEnabled" type="boolean" value="false"/>
+        <constructor-arg index="3" name="superBatchModuleCompleteKeys">
+            <null/>
+        </constructor-arg>
+        <plugin:interface>com.atlassian.plugin.webresource.legacy.ResourceDependencyResolver</plugin:interface>
+    </bean>
+
+    <bean id="pageBuilderService" class="com.atlassian.plugin.webresource.assembler.DefaultPageBuilderService" plugin:available="true">
+        <constructor-arg index="0" ref="webResourceIntegration"/>
+        <constructor-arg index="1" ref="webResourceAssemblerFactory"/>
+        <plugin:interface>com.atlassian.webresource.api.assembler.PageBuilderService</plugin:interface>
+    </bean>
+
+    <bean id="webResourceManager" class="com.atlassian.stash.internal.plugin.ProfiledWebResourceManager" plugin:available="true">
+        <constructor-arg index="0" ref="webResourceAssemblerFactory"/>
+        <constructor-arg index="1" ref="pageBuilderService"/>
+        <constructor-arg index="2" ref="pluginResourceLocator"/>
+        <constructor-arg index="3" ref="webResourceIntegration"/>
+        <constructor-arg index="4" ref="webResourceUrlProvider"/>
+        <constructor-arg index="5" ref="resourceBatchingConfiguration"/>
+        <constructor-arg index="6" ref="resourceResolver"/>
+        <plugin:interface>com.atlassian.plugin.webresource.WebResourceManager</plugin:interface>
+    </bean>
+    <bean id="webResourceUrlProvider" class="com.atlassian.plugin.webresource.WebResourceUrlProviderImpl" plugin:available="true">
+        <constructor-arg ref="webResourceIntegration"/>
+        <plugin:interface>com.atlassian.plugin.webresource.WebResourceUrlProvider</plugin:interface>
+    </bean>
+    <bean id="staticTransformers" class="com.atlassian.plugin.webresource.transformer.DefaultStaticTransformers" plugin:available="true">
+        <constructor-arg>
+            <bean class="com.atlassian.plugin.webresource.transformer.DefaultStaticTransformersSupplier">
+                <constructor-arg index="0" ref="webResourceIntegration"/>
+                <constructor-arg index="1" ref="webResourceUrlProvider"/>
+                <constructor-arg index="2">
+                    <bean class="com.atlassian.plugin.webresource.cdn.CdnResourceUrlTransformerImpl">
+                        <constructor-arg ref="webResourceConfig"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <plugin:interface>com.atlassian.plugin.webresource.transformer.StaticTransformers</plugin:interface>
+    </bean>
+
+    <bean id="connectionTracker" class="com.atlassian.stash.internal.jdbc.ProxyingConnectionTracker">
+        <constructor-arg index="0" value="${db.pool.size.max}"/>
+    </bean>
+
+    <bean id="dataSourceConfigurationFactory" class="com.atlassian.stash.internal.jdbc.DefaultDataSourceConfigurationFactory">
+        <constructor-arg index="0" ref="homeDirectoryDetails"/>
+    </bean>
+
+    <!-- The system DataSourceConfiguration, initialized to connect to the database configured in
+         application-defaults.properties, for the internal database, or bitbucket.properties, for
+         an external database. -->
+    <bean id="dataSourceConfiguration" class="com.atlassian.stash.internal.jdbc.SystemDataSourceConfiguration">
+        <constructor-arg index="0">
+            <bean factory-bean="dataSourceConfigurationFactory" factory-method="create">
+                <constructor-arg index="0" value="${jdbc.driver}"/>
+                <constructor-arg index="1" value="${jdbc.url}"/>
+                <constructor-arg index="2" value="${jdbc.user}"/>
+                <constructor-arg index="3" value="${jdbc.password}"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" value="${db.pool.timeout.connect}"/>
+    </bean>
+
+    <!-- This prototype is used to create DataSources from a DataSourceConfiguration provided to their constructor.
+
+         When used with BeanFactory.getBean(String, Object...), the <constructor-arg/> provided here in the Spring
+         wiring is _overridden_ and the DataSourceConfiguration provided is used _instead_. That allows database
+         migration to get a DataSource using all of the normal pool configuration but with different data source
+         configuration, connecting the pool to a new target database.
+
+         To facilitate this, this bean is marked as a prototype, and is explicitly marked as not being a candidate
+         for autowiring. If it were autowire-capable, @Autowired DataSource dataSource would fail with multiple
+         candidates. It must be prototype scope so that different instances can be created using getBean(...).
+
+         This prototype should be referenced _exactly once_ in the XML configuration, to initialise the "dataSource"
+         bean with the system database. Referencing it anywhere else will result in multiple pools pointed at the
+         same database. -->
+    <bean id="dataSourcePrototype" class="com.atlassian.stash.internal.hikari.ExtendedHikariDataSource"
+          autowire-candidate="false" scope="prototype">
+        <!-- The "default" configuration is an instance which is initialised from stash-defaults.properties and
+             bitbucket.properties, meaning it will use the database which has been configured by the user (or
+             the in-memory HSQL database if one has not been configured). -->
+        <constructor-arg ref="dataSourceConfiguration"/>
+        <property name="allowPoolSuspension" value="false"/>
+        <!-- Convert value from seconds (for administrators) to milliseconds (for Hikari) -->
+        <property name="connectionTimeout" value="#{${db.pool.timeout.connect} * 1000}"/>
+        <property name="connectionTracker" ref="connectionTracker"/>
+        <!-- Convert value from minutes (for administrators) to milliseconds (for Hikari) -->
+        <property name="leakDetectionThreshold" value="#{${db.pool.timeout.leak} * 60 * 1000}"/>
+        <property name="maximumPoolSize" value="${db.pool.size.max}"/>
+        <!-- Convert value from minutes (for administrators) to milliseconds (for Hikari) -->
+        <property name="maxLifetime" value="#{${db.pool.timeout.lifetime} * 60 * 1000}"/>
+        <property name="minimumIdle" value="#{T(java.lang.Math).max(${db.pool.size.idle}, 0)}"/>
+        <!-- Convert value from seconds (for administrators) to milliseconds (for Hikari) -->
+        <property name="idleTimeout" value="#{${db.pool.timeout.idle} * 1000}"/>
+        <property name="poolName" value="#{T(com.atlassian.stash.internal.ApplicationConstants).APPLICATION_KEY}"/>
+        <property name="registerMbeans" value="${jmx.enabled}"/>
+        <!-- Set the ThreadFactory, which is used when creating and closing connections. This is important because,
+             without this, opening new connections on threads which have OSGi bundles as their context ClassLoaders
+             can fail with unexpected errors, usually due to com.sun packages not being visible. -->
+        <property name="threadFactory">
+            <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                <property name="classLoader" ref="webappClassLoader"/>
+                <property name="daemon" value="true"/>
+                <property name="threadGroup">
+                    <bean class="java.lang.ThreadGroup">
+                        <constructor-arg index="0" ref="defaultThreadGroup"/>
+                        <constructor-arg index="1" value="bitbucket.hikaricp"/>
+                        <property name="daemon" value="true"/>
+                    </bean>
+                </property>
+                <property name="threadNamePrefix" value="hikaricp"/>
+            </bean>
+        </property>
+        <!-- We must set the isolation level on the data source as well as on the Hibernate session factory. Spring
+             transactions allow us to specify an isolation level, which by default matches the DataSource's isolation
+             level. When a Spring transaction is started its isolation level clobbers the session's transaction level.
+             For most DBs the default is 2/READ-COMMITTED but for MySQL 5.5 it is 4/REPEATABLE_READ.
+
+             Note: The value used here must be a constant from the Connection interface. -->
+        <property name="transactionIsolation" value="TRANSACTION_READ_COMMITTED"/>
+    </bean>
+
+    <!-- Depends on "homeLockAcquirer" to ensure the home directory has been locked before constructing the DataSource
+         and potentially connecting to the database. -->
+    <bean id="dataSource" class="com.atlassian.stash.internal.jdbc.DelegatingSwappableDataSource"
+          depends-on="homeLockAcquirer">
+        <!-- Instantiates the dataSourcePrototype using the configured database. This provides an initial pool which
+             is pointed to the "normal" database. Except in cases of migration, this should be the only pool that is
+             ever created, and will be used for the duration of execution.
+
+             Warning: This must be the _only_ place in the Spring configuration which uses the prototype. Everywhere
+             else a DataSource is needed should be using this "dataSource" bean. -->
+        <constructor-arg index="0" ref="dataSourcePrototype"/>
+    </bean>
+    <bean id="transactionAwareDataSource" class="com.atlassian.stash.internal.spring.TransactionAwareDataSource"
+          autowire-candidate="false">
+        <!-- Note: Do _not_ wire in the dataSourcePrototype here. It must only be used once. -->
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+
+    <!-- Defines common configuration that should be applied to all Liquibase beans. This allows them to be configured
+         in a single location. -->
+    <bean id="liquibaseParent" abstract="true" class="liquibase.database.DefaultingSchemaLiquibase">
+        <property name="changeLog" value="classpath:liquibase/master.xml"/>
+        <property name="lockMaxWait" value="${db.schema.lock.maxWait}"/>
+        <property name="lockPollInterval" value="${db.schema.lock.pollInterval}"/>
+    </bean>
+
+    <!-- A prototype for Liquibase bean creation. This is used during database migration and setup. The intention here
+         is to reduce fragility by ensuring the wiring for the Liquibase instance used during migration and setup will
+         always be the same as the wiring for the one that manages the schema during application startup. -->
+    <bean id="liquibasePrototype" autowire-candidate="false" parent="liquibaseParent" scope="prototype"/>
+    <!-- Depends on "databaseSupplier" to ensure the system does not attempt to create/migrate the schema when it is
+         connected to an unsupported database. This bean manages the schema during application startup. -->
+    <bean id="liquibase" depends-on="databaseSupplier,hazelcast" parent="liquibaseParent">
+        <!-- Note: Do _not_ wire in the dataSourcePrototype here. It must only be used once. -->
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <!-- Depends on "databaseSupplier" to ensure the system does not attempt to create/migrate the schema when it is
+         connected to an unsupported database. This bean manages the bootstrap schema during application startup. -->
+    <bean id="bootstrapLiquibase" depends-on="databaseSupplier" parent="liquibaseParent">
+        <!-- Note: Do _not_ wire in the dataSourcePrototype here. It must only be used once. -->
+        <constructor-arg ref="dataSource"/>
+        <!-- Override the default changelog. We only want to run the bootstrap changelog -->
+        <property name="changeLog" value="classpath:liquibase/bootstrap.xml"/>
+    </bean>
+
+    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <!-- Inject the NamedParameterJdbcTemplate with a TransactionAware DataSource. This means that, when
+             the template requests a connection from its data source, if there is a transaction going on, it will
+             get the connection allocated to the transaction, rather than a new connection. Otherwise, if there is
+             no transaction, it will get a connection from the underlying data source. -->
+        <constructor-arg index="0">
+            <bean class="org.springframework.jdbc.core.JdbcTemplate">
+                <property name="dataSource" ref="transactionAwareDataSource"/>
+                <property name="exceptionTranslator" ref="sqlExceptionTranslator"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="sqlExceptionTranslator" class="com.atlassian.stash.internal.spring.DelegatingSqlExceptionTranslator">
+        <constructor-arg index="0" ref="transactionAwareDataSource"/>
+    </bean>
+
+    <bean id="crowdAwareLoadListener" class="com.atlassian.stash.internal.hibernate.CrowdAwareLoadListener">
+        <constructor-arg>
+            <idref bean="crowdService"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="regionFactory" class="com.atlassian.stash.internal.hibernate.HazelcastRegionFactoryBean">
+        <constructor-arg name="cacheMode" value="${hibernate.cache.mode}"/>
+        <property name="hazelcast" ref="hazelcast"/>
+    </bean>
+
+    <!-- This prototype is used to create SessionFactoryBeans from a DataSource provided to their constructor. Spring
+         SessionFactoryBeans are all singleton beans, meaning each one will create exactly one SessionFactory and will
+         return that same instance on all subsequent uses. The entire SessionFactoryBean is treated as a prototype to
+         allow, by extension, creating multiple SessionFactory instances.
+
+         When used with BeanFactory.getBean(String, Object...), the <constructor-arg/> provided here in the Spring
+         wiring is _overridden_ and the provided DataSource and corresponding DataSourceConfiguration are used
+         _instead_. That allows database migration to get a SessionFactory using all of the normal Hibernate
+         configuration but with a different data source, connecting Hibernate to a new target database.
+
+         To facilitate this, this bean is marked as a prototype, and is explicitly marked as not being a candidate
+         for autowiring. If it were autowire-capable, @Autowired SessionFactory sessionFactory would fail with multiple
+         candidates. It must be prototype scope so that different instances can be created using getBean(...).
+
+         This prototype should be referenced _exactly once_ in the XML configuration, to initialise the "sessionFactory"
+         bean with a Hibernate SessionFactory connected to the system database. Referencing it anywhere else will result
+         in multiple session factories pointed at the same database. -->
+    <bean id="sessionFactoryPrototype" class="com.atlassian.stash.internal.hibernate.ExtendedLocalSessionFactoryBean"
+          autowire-candidate="false" scope="prototype">
+        <!-- Note: Do _not_ wire in the dataSourcePrototype here. It must only be used once. -->
+        <constructor-arg ref="dataSource"/>
+        <constructor-arg ref="dataSourceConfiguration"/>
+        <property name="cacheRegionFactory" ref="regionFactory"/>
+        <property name="configLocation" value="classpath:com/atlassian/crowd/hibernate-crowd.xml"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.atlassian.stash.internal</value>
+            </list>
+        </property>
+        <property name="eventListeners">
+            <map key-type="org.hibernate.event.spi.EventType">
+                <entry key="#{T(org.hibernate.event.spi.EventType).LOAD}" value-ref="crowdAwareLoadListener"/>
+                <entry key="#{T(org.hibernate.event.spi.EventType).MERGE}">
+                    <bean class="com.atlassian.hibernate.extras.event.IdTransferringMergeEventListener"/>
+                </entry>
+                <entry key="#{T(org.hibernate.event.spi.EventType).POST_LOAD}" value-ref="crowdAwareLoadListener"/>
+            </map>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="com.atlassian.stash.internal.hibernate.NoEmptyStringsInterceptor"/>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+                <prop key="hibernate.cache.use_minimal_puts">true</prop>
+                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.query}</prop>
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.entity}</prop>
+                <prop key="hibernate.connection.autocommit">false</prop>
+                <prop key="hibernate.connection.isolation">2</prop>
+                <!-- restore the legacy behaviour for now, to allow the upgrade to Hibernate 4.3.1+,
+                     see https://hibernate.atlassian.net/browse/HHH-6911 for more information;
+                     if this property is removed, please _remove it also_ in the context for the DAO tests (dao-test-context.xml) -->
+                <prop key="hibernate.discriminator.ignore_explicit_for_joined">true</prop>
+                <prop key="hibernate.id.new_generator_mappings">true</prop>
+                <prop key="hibernate.current_session_context_class">
+                    org.springframework.orm.hibernate4.SpringSessionContext
+                </prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.generate_statistics">${jmx.enabled}</prop>
+                <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+                <!-- The SessionFactory must be named to allow deserialisation across different JVMs (aka clustering) -->
+                <prop key="hibernate.session_factory_name">bitbucket.core</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+            </props>
+        </property>
+        <property name="validatorFactory" ref="validator"/>
+    </bean>
+
+    <!-- Depends on "hazelcast" to ensure init and destroy methods are called in the correct order. SessionFactory
+         tries to remove the caches one by one when it's shutting down. If Hazelcast has shutdown before that, many
+         (DEBUG) messages will be generated.
+         Depends on "liquibase" to ensure the database schema has been created/updated before Hibernate attempts to
+         validate it (as a normal part of starting the SessionFactory). -->
+    <bean id="sessionFactory" class="com.atlassian.stash.internal.hibernate.DelegatingSwappableSessionFactory"
+          depends-on="hazelcast,liquibase">
+        <!-- Instantiates the sessionFactoryPrototype using the configured database. This provides an initial session
+             factory which is pointed to the "normal" database. Except in cases of migration, this should be the only
+             session factory that is ever created, and will be used for the duration of execution.
+
+             Warning: This must be the _only_ place in the Spring configuration which uses the prototype. Everywhere
+             else a SessionFactory is needed should be using this "sessionFactory" bean. -->
+        <constructor-arg index="0" ref="sessionFactoryPrototype"/>
+    </bean>
+
+    <bean id="dataSourceProvider" class="com.atlassian.stash.internal.ao.ApplicationDataSourceProvider"
+          plugin:available="true">
+        <plugin:interface>com.atlassian.activeobjects.spi.TenantAwareDataSourceProvider</plugin:interface>
+        <!-- Inject the ActiveObjects DataSourceProvider with a TransactionAware DataSource. This means that, when
+             ActiveObjects requests a connection from its data source, if there is a transaction going on, it will
+             get the connection allocated to the transaction, rather than a new connection. Otherwise, if there is
+             no transaction, it will get a connection from the underlying data source. -->
+        <constructor-arg index="0" ref="transactionAwareDataSource"/>
+        <constructor-arg index="1" ref="dataSourceConfiguration"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <!-- Note: Do _not_ wire in the dataSourcePrototype here. It must only be used once. -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- Note: Do _not_ wire in the sessionFactoryPrototype here. It must only be used once. -->
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="scheduledExecutorService"
+          class="com.atlassian.stash.internal.concurrent.StateTransferringScheduledExecutorService"
+          destroy-method="shutdownNow" plugin:available="true" primary="true">
+        <plugin:interface>java.util.concurrent.ScheduledExecutorService</plugin:interface>
+        <plugin:interface>java.util.concurrent.ExecutorService</plugin:interface>
+        <plugin:interface>java.util.concurrent.Executor</plugin:interface>
+        <constructor-arg ref="configurableScheduledExecutorService"/>
+    </bean>
+
+    <bean id="configurableScheduledExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
+        <constructor-arg index="0" value="#{executorServiceConfiguration.corePoolSize}"/>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                <property name="classLoader" ref="webappClassLoader"/>
+                <property name="daemon" value="true"/>
+                <property name="threadGroup" ref="defaultThreadGroup"/>
+                <property name="threadNamePrefix" value="threadpool"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="activityLock" class="com.atlassian.stash.internal.activity.ActivityLockFactoryBean">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="bucketedExecutorFactory" class="com.atlassian.stash.internal.concurrent.HazelcastBucketedExecutorFactory">
+        <constructor-arg index="0" ref="webappClassLoader"/>
+        <constructor-arg index="1" ref="hazelcast"/>
+        <constructor-arg index="2" ref="defaultThreadGroup"/>
+    </bean>
+
+    <bean id="commitGraphSource" class="com.atlassian.stash.internal.commit.graph.cache.DefaultCachedCommitGraphSource">
+        <constructor-arg index="0" ref="applicationSettings"/>
+        <constructor-arg index="1">
+            <hz:executorService instance-ref="hazelcast" name="bitbucket.core"/>
+        </constructor-arg>
+        <constructor-arg index="2" ref="concurrencyService"/>
+        <constructor-arg index="3">
+            <bean class="java.util.concurrent.ThreadPoolExecutor">
+                <constructor-arg index="0" value="0"/>
+                <constructor-arg index="1" value="${commit.graph.cache.max.threads}"/>
+                <constructor-arg index="2" value="5"/>
+                <constructor-arg index="3" value="SECONDS"/>
+                <constructor-arg index="4">
+                    <bean class="com.atlassian.stash.internal.commit.graph.cache.SetPriorityBlockingQueue">
+                        <constructor-arg index="0" value="${commit.graph.cache.max.job.queue}"/>
+                        <constructor-arg index="1">
+                            <bean class="com.atlassian.stash.internal.commit.graph.cache.CacheTraversalJobComparator"/>
+                        </constructor-arg>
+                    </bean>
+                </constructor-arg>
+                <constructor-arg index="5">
+                    <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                        <property name="classLoader" ref="webappClassLoader"/>
+                        <property name="daemon" value="true"/>
+                        <property name="threadGroup" ref="defaultThreadGroup"/>
+                        <property name="threadNamePrefix" value="commit-graph"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="4" ref="i18nService"/>
+        <constructor-arg index="5" value="${commit.graph.cache.traverse.timeout}"/>
+        <constructor-arg index="6" value="#{applicationPropertiesService.mode}"/>
+        <constructor-arg index="7" value="${commit.graph.cache.min.free.space}"/>
+        <constructor-arg index="8" ref="scmService"/>
+    </bean>
+
+    <bean id="defaultThreadGroup" class="java.lang.ThreadGroup">
+        <constructor-arg index="0" value="bitbucket.core"/>
+        <property name="daemon" value="true"/>
+    </bean>
+
+    <bean id="externalProcessFactory" class="com.atlassian.stash.internal.process.ExtendedExternalProcessFactory">
+        <constructor-arg index="0">
+            <bean class="com.atlassian.stash.internal.concurrent.StateTransferringExecutorService"
+                  destroy-method="shutdownNow">
+                <constructor-arg ref="ioPumpThreadPoolExecutor"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="applicationSettings"/>
+    </bean>
+
+    <bean id="ioPumpThreadPoolExecutor" class="java.util.concurrent.ThreadPoolExecutor">
+        <constructor-arg index="0" value="9"/>
+        <constructor-arg index="1" value="1500"/>
+        <constructor-arg index="2" value="2"/>
+        <constructor-arg index="3" value="MINUTES"/>
+        <constructor-arg index="4">
+            <bean class="java.util.concurrent.SynchronousQueue"/>
+        </constructor-arg>
+        <constructor-arg index="5">
+            <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                <property name="classLoader" ref="webappClassLoader"/>
+                <property name="daemon" value="true"/>
+                <property name="threadGroup" ref="defaultThreadGroup"/>
+                <property name="threadNamePrefix" value="io-pump"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="mailLogger" class="com.atlassian.stash.internal.mail.DefaultMailLogger">
+        <constructor-arg index="0" value="${mail.error.pause.log}"/>
+    </bean>
+
+    <bean id="mailService" class="com.atlassian.stash.internal.mail.MailServiceImpl" plugin:available="true" init-method="initMailSender" destroy-method="shutdown">
+        <plugin:interface>com.atlassian.bitbucket.mail.MailService</plugin:interface>
+        <constructor-arg index="0" ref="applicationPropertiesService"/>
+        <constructor-arg index="1" ref="i18nService"/>
+        <constructor-arg index="2" ref="javaMailSenderFactory"/>
+        <constructor-arg index="3">
+            <bean class="com.atlassian.stash.internal.concurrent.PauseableStateTransferringExecutorService">
+                <constructor-arg>
+                    <bean class="com.atlassian.stash.internal.concurrent.PauseableThreadPoolExecutor">
+                        <constructor-arg index="0" value="1"/>
+                        <constructor-arg index="1" value="${mail.threads}"/>
+                        <constructor-arg index="2" value="2"/>
+                        <constructor-arg index="3" value="MINUTES"/>
+                        <constructor-arg index="4">
+                            <bean class="java.util.concurrent.LinkedBlockingDeque"/>
+                        </constructor-arg>
+                        <constructor-arg index="5">
+                            <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                                <property name="classLoader" ref="webappClassLoader"/>
+                                <property name="daemon" value="true"/>
+                                <property name="threadGroup" ref="defaultThreadGroup"/>
+                                <property name="threadNamePrefix" value="mail-sender"/>
+                            </bean>
+                        </constructor-arg>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="4" ref="mailQueueGuard"/>
+        <constructor-arg index="5" ref="mailLogger"/>
+        <constructor-arg index="6" ref="atlCacheManager"/>
+        <constructor-arg index="7" value="${mail.error.pause.retry}"/>
+        <constructor-arg index="8" value="${mail.max.message.size}"/>
+    </bean>
+
+    <bean id="mailQueueGuard" class="com.atlassian.stash.internal.mail.DefaultMailQueueSizeGuard">
+        <constructor-arg index="0" value="${mail.max.queue.size}"/>
+        <constructor-arg index="1" ref="mailLogger"/>
+    </bean>
+
+    <bean id="localMaintenanceModeHelper" class="com.atlassian.stash.internal.maintenance.DefaultMaintenanceModeHelper"
+          autowire-candidate="false">
+        <constructor-arg index="0" ref="eventPublisher"/>
+        <constructor-arg index="1" ref="schedulerService"/>
+    </bean>
+
+    <bean id="maintenanceModeHelper" class="com.atlassian.stash.internal.maintenance.HazelcastMaintenanceModeHelper">
+        <constructor-arg index="0">
+            <hz:set instance-ref="hazelcast" name="stash.maintenance.events"/>
+        </constructor-arg>
+        <constructor-arg index="1" ref="localMaintenanceModeHelper"/>
+    </bean>
+
+    <bean id="maintenanceService" class="com.atlassian.stash.internal.maintenance.DefaultMaintenanceService"
+          destroy-method="destroy">
+        <constructor-arg index="0" ref="authenticationContext"/>
+        <constructor-arg index="1">
+            <hz:executorService instance-ref="hazelcast" name="bitbucket.core"/>
+        </constructor-arg>
+        <constructor-arg index="2" ref="clusterService"/>
+        <constructor-arg index="3" ref="databaseManager"/>
+        <constructor-arg index="4" ref="eventPublisher"/>
+        <constructor-arg index="5" ref="scheduledExecutorService"/>
+        <constructor-arg index="6" ref="i18nService"/>
+        <constructor-arg index="7" ref="requestManager"/>
+        <constructor-arg index="8" ref="scmService"/>
+        <constructor-arg index="9" ref="tokenGenerator"/>
+        <constructor-arg index="10" ref="maintenanceTaskStatusSupplier"/>
+        <constructor-arg index="11">
+            <hz:atomicLong instance-ref="hazelcast" name="stash.maintenance.isActive"/>
+        </constructor-arg>
+        <constructor-arg index="12">
+            <hz:atomicReference instance-ref="hazelcast" name="stash.maintenance.clusterLock"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="maintenanceTaskStatusSupplier" class="com.atlassian.stash.internal.maintenance.ClusteredMaintenanceTaskStatusSupplier"
+          primary="true" init-method="addListener" destroy-method="removeListener">
+        <constructor-arg index="0" ref="localMaintenanceTaskStatusSupplier"/>
+        <constructor-arg index="1">
+            <hz:topic instance-ref="hazelcast" name="stash.maintenance.latestTask"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="localMaintenanceTaskStatusSupplier" class="com.atlassian.stash.internal.maintenance.LocalMaintenanceTaskStatusSupplier"/>
+
+    <bean id="permissionGraphFactory" class="com.atlassian.stash.internal.user.UserOriginAwarePermissionGraphFactory">
+        <constructor-arg ref="internalUserPermissionGraphFactory"/>
+        <constructor-arg>
+            <bean class="com.atlassian.stash.internal.user.ExternalUserPermissionGraphFactory"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="pullRequestRescopeService" class="com.atlassian.stash.internal.pull.rescope.DefaultPullRequestRescopeService">
+        <constructor-arg index="0" ref="authenticationContext"/>
+        <constructor-arg index="1" ref="rescopeRequestDao"/>
+        <constructor-arg index="2" ref="pullRequestService"/>
+        <constructor-arg index="3" ref="scmService"/>
+        <constructor-arg index="4" ref="securityService"/>
+    </bean>
+
+    <bean id="commentPostProcessor" class="com.atlassian.stash.internal.pull.comment.CompositeCommentPostProcessor">
+        <constructor-arg index="0">
+            <list>
+                <bean class="com.atlassian.stash.internal.pull.comment.OperationCommentPostProcessor">
+                    <constructor-arg index="0" ref="authenticationContext"/>
+                    <constructor-arg index="1" ref="permissionService"/>
+                </bean>
+                <bean class="com.atlassian.stash.internal.comment.TaskCommentPostProcessor">
+                    <constructor-arg index="0" ref="taskService"/>
+                    <constructor-arg index="1" value="${task.max.tasks.per.request}"/>
+                </bean>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.stash.internal.comment.PluginCommentPostProcessor">
+                <constructor-arg index="0" ref="pluginAccessor"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="commentUpdateProcessor" class="com.atlassian.stash.internal.pull.comment.drift.DriftCommentUpdateProcessor">
+        <constructor-arg index="0" ref="pullRequestCommentHelper" />
+        <constructor-arg index="1" ref="driftRequestDao"/>
+        <constructor-arg index="2">
+            <bean class="com.atlassian.stash.internal.concurrent.StateTransferringExecutorService"
+                  destroy-method="shutdownNow">
+                <constructor-arg>
+                    <bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+                        <constructor-arg value="${pullrequest.rescope.drift.threads}"/>
+                        <constructor-arg>
+                            <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                                <property name="classLoader" ref="webappClassLoader"/>
+                                <property name="daemon" value="true"/>
+                                <property name="threadGroup" ref="defaultThreadGroup"/>
+                                <property name="threadNamePrefix" value="drift"/>
+                            </bean>
+                        </constructor-arg>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="3" ref="lockService"/>
+        <constructor-arg index="4" ref="scmService"/>
+        <constructor-arg index="5" ref="securityService"/>
+        <constructor-arg index="6">
+            <bean class="com.atlassian.stash.internal.pull.comment.drift.CommentDriftStrategyChain">
+                <constructor-arg index="0">
+                    <list value-type="com.atlassian.stash.internal.pull.comment.drift.CommentDriftStrategy">
+                        <ref bean="fileCommentDriftStrategy"/>
+                        <ref bean="fastForwardCommentDriftStrategy"/>
+                        <ref bean="diffCommentDriftStrategy"/>
+                    </list>
+                </constructor-arg>
+                <constructor-arg index="1" ref="orphanAllCommentDriftStrategy"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="7" ref="transactionManager"/>
+        <property name="maxAttempts" value="${pullrequest.rescope.drift.maxattempts}"/>
+    </bean>
+
+    <bean id="taskEnricher" class="com.atlassian.stash.internal.task.enrich.PropertyTaskEnricher">
+        <constructor-arg index="0">
+            <list>
+                <bean class="com.atlassian.stash.internal.task.property.DiffAnchorTaskPropertyProvider">
+                    <constructor-arg index="0" ref="pullRequestCommentAnchorDao"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="taskPostProcessor" class="com.atlassian.stash.internal.task.CompositeTaskPostProcessor">
+        <constructor-arg index="0">
+            <list>
+                <bean class="com.atlassian.stash.internal.task.OperationTaskPostProcessor">
+                    <constructor-arg index="0" ref="taskPermissionsHelper"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="rescopeProcessor" class="com.atlassian.stash.internal.pull.rescope.DefaultRescopeProcessor">
+        <constructor-arg index="0" ref="pullRequestActivityDao"/>
+        <constructor-arg index="1" ref="pullRequestRescopeActivityDetailsProvider"/>
+        <constructor-arg index="2">
+            <bean class="com.atlassian.stash.internal.concurrent.StateTransferringExecutorService"
+                  destroy-method="shutdownNow">
+                <constructor-arg>
+                    <bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+                        <constructor-arg value="${pullrequest.rescope.detail.threads}"/>
+                        <constructor-arg>
+                            <bean class="com.atlassian.stash.internal.concurrent.ConfigurableThreadFactory">
+                                <property name="classLoader" ref="webappClassLoader"/>
+                                <property name="daemon" value="true"/>
+                                <property name="threadGroup" ref="defaultThreadGroup"/>
+                                <property name="threadNamePrefix" value="rescope-details"/>
+                            </bean>
+                        </constructor-arg>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="3" ref="transactionSynchronizer"/>
+        <constructor-arg index="4">
+            <bean class="org.springframework.transaction.support.TransactionTemplate">
+                <constructor-arg index="0" ref="transactionManager"/>
+                <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_NEW"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="5" ref="securityService"/>
+    </bean>
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" plugin:available="true">
+        <property name="validationMessageSource" ref="messageSource"/>
+        <property name="constraintValidatorFactory" ref="constraintValidatorFactory"/>
+        <plugin:interface>javax.validation.Validator</plugin:interface>
+    </bean>
+
+    <bean id="stashDownloadPolicyProvider" class="com.atlassian.stash.internal.web.http.download.StashDownloadPolicyProvider">
+        <constructor-arg index="0" value="${http.download.raw.policy}"/>
+    </bean>
+    <bean id="hostileExtensionDetector" class="com.atlassian.http.mime.HostileExtensionDetector"/>
+    <bean id="contentDispositionHeaderGuesser" class="com.atlassian.http.mime.ContentDispositionHeaderGuesser">
+        <constructor-arg ref="stashDownloadPolicyProvider"/>
+        <constructor-arg ref="hostileExtensionDetector"/>
+    </bean>
+
+    <bean id="helpPathProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:help-paths.properties</value>
+                <!-- This will only get picked up if it exists and ignored if it doesn't -->
+                <!--suppress SpringModelInspection -->
+                <value>classpath:help-paths-hosted.properties</value>
+                <value>file:${bitbucket.shared.home}/help-paths.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dateFormatProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:date-formats.properties</value>
+                <value>file:${bitbucket.shared.home}/date-formats.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="md5Encoder" class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder">
+        <constructor-arg value="MD5"/>
+    </bean>
+    <bean id="shaEncoder" class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder">
+        <constructor-arg value="SHA-1"/>
+    </bean>
+
+    <bean id="tokenGenerator" class="com.atlassian.security.random.DefaultSecureTokenGenerator" factory-method="getInstance"/>
+
+    <!--
+    DefaultManageableImageCaptchaService is expensive to initialize.
+    Delay initialization until first invocation of the service
+    -->
+    <bean id="imageCaptchaService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="targetSource">
+            <bean class="org.springframework.aop.target.LazyInitTargetSource">
+                <property name="targetBeanName">
+                    <idref bean="imageCaptchaServicePrototype"/>
+                </property>
+                <property name="targetClass" value="com.octo.captcha.service.image.ImageCaptchaService"/>
+            </bean>
+        </property>
+        <property name="proxyInterfaces">
+            <array>
+                <value>com.octo.captcha.service.image.ImageCaptchaService</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="imageCaptchaServicePrototype" class="com.atlassian.stash.internal.web.util.captcha.ClusteredManageableImageCaptchaService"
+          scope="prototype" autowire-candidate="false">
+        <constructor-arg index="0">
+            <bean class="com.atlassian.stash.internal.web.util.captcha.HazelcastCaptchaStore">
+                <constructor-arg index="0">
+                    <hz:map instance-ref="hazelcast" name="CaptchaStore"/>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="com.atlassian.stash.internal.web.util.captcha.StashCaptchaEngine"/>
+        </constructor-arg>
+        <constructor-arg index="2" value="180"/>    <!--min guaranteed storage delay in seconds-->
+        <constructor-arg index="3" value="100000"/> <!-- max captcha store size -->
+        <constructor-arg index="4" value="75000"/>  <!-- captcha store load before garbage collection -->
+    </bean>
+
+    <bean id="pullRequestCommentHelper" class="com.atlassian.stash.internal.pull.comment.DefaultPullRequestCommentHelper">
+        <constructor-arg index="0" ref="pullRequestActivityDao"/>
+        <constructor-arg index="1" ref="pullRequestCommentAnchorDao"/>
+        <constructor-arg index="2" ref="authenticationContext"/>
+        <constructor-arg index="3" ref="commentDao"/>
+        <constructor-arg index="4" ref="eventPublisher"/>
+        <constructor-arg index="5" ref="i18nService"/>
+        <constructor-arg index="6" ref="permissionService"/>
+        <constructor-arg index="7" ref="commentPostProcessor"/>
+        <constructor-arg index="8" ref="scmService"/>
+        <constructor-arg index="9" ref="transactionSynchronizer"/>
+        <constructor-arg index="10" ref="taskService"/>
+        <constructor-arg index="11" ref="validator"/>
+        <constructor-arg index="12">
+            <bean class="com.atlassian.stash.internal.pull.HazelcastPullRequestStateGuard">
+                <constructor-arg index="0">
+                    <bean factory-bean="lockService" factory-method="getPullRequestLock">
+                        <constructor-arg index="0" value="commentDrift"/>
+                    </bean>
+                </constructor-arg>
+                <constructor-arg index="1">
+                    <hz:map instance-ref="hazelcast" name="com.atlassian.stash.internal.pull.PendingUpdatesCount"/>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!-- Client resource components -->
+    <bean id="clientResourceWebResourceGenerationHelper" class="com.atlassian.plugins.client.resource.WebResourceGenerationHelper">
+        <constructor-arg index="0" ref="clientResourcePluginPathScannerFactory"/>
+    </bean>
+
+    <bean id="clientResourcePluginPathScannerFactory" class="com.atlassian.plugins.client.resource.PluginPathScannerFactory">
+        <constructor-arg index="0" ref="servletContextFactory"/>
+    </bean>
+</beans>

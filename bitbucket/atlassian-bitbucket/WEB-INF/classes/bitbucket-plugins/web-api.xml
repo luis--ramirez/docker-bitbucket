@@ -1,0 +1,100 @@
+<atlassian-plugin key="com.atlassian.bitbucket.server.bitbucket-web-api" name="Bitbucket Public Web Components">
+
+    <!-- API shims for core libraries -->
+
+    <web-resource key="amd" name="AMD support">
+        <depdenency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</depdenency>
+    </web-resource>
+
+    <web-resource key="aui" name="Atlassian UI">
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:amd</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:jquery</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:ajs-AMD</dependency>
+    </web-resource>
+
+    <web-resource key="jquery" name="jQuery 2.1.4">
+        <depdendency>com.atlassian.bitbucket.server.bitbucket-web:jquery-AMD</depdendency>
+    </web-resource>
+
+    <web-resource key="client-soy" name="Dependencies required by client-side Soy templates">
+        <dependency>com.atlassian.soy.soy-template-plugin:soy-deps</dependency>
+    </web-resource>
+
+    <!-- JS API -->
+
+    <client-resource key="events" name="JS Events API">
+        <resource type="download" name="events.js" location="/static/bitbucket/util/events.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:eve-AMD</dependency>
+    </client-resource>
+
+    <client-resource key="file-handlers" name="File handlers">
+        <!-- Only required by file handlers _at the moment_ -->
+        <resource type="download" name="handler-registry.js" location="/static/bitbucket/internal/util/handler-registry.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+        <resource type="download" name="file-handlers.js" location="/static/bitbucket/feature/files/file-handlers.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:jquery-AMD</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:object-util</dependency>
+    </client-resource>
+
+    <client-resource key="state" name="JS State API">
+        <resource type="download" name="state.js" location="/static/bitbucket/util/state.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:lodash</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:page-state</dependency>
+    </client-resource>
+
+    <client-resource key="navbuilder" name="JS URL Builder (navbuilder) API">
+        <resource type="download" name="navbuilder.js" location="/static/bitbucket/util/navbuilder.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:deprecation-util</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:jsuri</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:page-state</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:path</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:lodash</dependency>
+    </client-resource>
+
+    <client-resource key="server" name="JS Server API">
+        <resource type="download" name="server.js" location="/static/bitbucket/util/server.js">
+            <param name="source" value="webContextStatic"/>
+        </resource>
+
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:navbuilder</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:error-dialog</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:error-util</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:exception</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:function-util</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:page-state</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:require-lite</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:lodash</dependency>
+    </client-resource>
+
+    <!-- Soy API -->
+
+    <client-resource key="branch-selector-field" name="Branch selector widget">
+        <directory location="/static/bitbucket/component/branch-selector-field/" source="webContextStatic"/>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:branch-selector-field-internals</dependency>
+    </client-resource>
+
+    <client-resource key="pull-request-web-panels" name="Templates for use in Pull Request web panels">
+        <resource type="download" name="pull-request-web-panels.js" location="/static/bitbucket/feature/pull-request/pull-request-web-panels.soy">
+            <param name="source" value="webContextStatic" />
+        </resource>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:summary-panel-widget</dependency>
+    </client-resource>
+</atlassian-plugin>

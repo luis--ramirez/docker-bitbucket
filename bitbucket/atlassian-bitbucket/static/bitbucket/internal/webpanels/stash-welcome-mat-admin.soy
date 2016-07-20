@@ -1,0 +1,11 @@
+{namespace bitbucket.web.project.list.banner}
+
+/**
+ */
+{template .bitbucketWelcomeMatAdmin}
+<a href="{nav_admin()}" class="administration-link">
+    <span class="icon"></span>
+    <h3>{getText('bitbucket.web.welcomemat.add.users')}</h3>
+    <p>{getText('bitbucket.web.welcomemat.admin.text', productName())}</p>
+</a>
+{/template}

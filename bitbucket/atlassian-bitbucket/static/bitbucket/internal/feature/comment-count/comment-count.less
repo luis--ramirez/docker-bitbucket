@@ -1,0 +1,31 @@
+@import "/static/global.less";
+
+span.comment-count {
+    color: @secondaryTextColor;
+
+    .aui-icon,
+    > img,
+    .count {
+        vertical-align: middle;
+    }
+
+    .aui-icon {
+        margin-right: @halfSpacing;
+    }
+
+    @quarterSpacing: 2px; // ish
+
+    > img {
+        margin-right: @quarterSpacing; // the img is only 10px wide, so a 5px margin is too damn high.
+    }
+}
+
+.pull-request-list-comment-count-column {
+    .shrinkwrap();
+    white-space: nowrap;
+}
+
+.pull-request-list-comment-count-column-value {
+    white-space: nowrap;
+    color: @secondaryTextColor;
+}

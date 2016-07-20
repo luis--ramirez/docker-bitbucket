@@ -1,0 +1,25 @@
+@import "/static/global.less";
+
+@accountSettingsFormWidth: 400px;
+
+.aui-iconfont-user.view-profile-icon {
+    margin-right: @baseSpacing;
+    color: @secondaryTextColor;
+}
+
+#content .aui-group.account-settings {
+    width: auto;
+
+    form {
+        width: @accountSettingsFormWidth;
+    }
+
+    .aui-item:first-child {
+        padding-right: @doubleSpacing;
+    }
+
+    .aui-item.avatar-item {
+        border-left: 1px solid @dividerColor;
+    }
+
+}

@@ -1,0 +1,15 @@
+{namespace bitbucket.internal.feature.compare}
+
+/**
+ * @param sourceRepository
+ * @param commitsTableWebSections
+ * @param? commitPage
+ */
+{template .commits}
+    {call bitbucket.internal.feature.commits.commitsTableImpl}
+        {param repository: $sourceRepository /}
+        {param commitPage : $commitPage /}
+        {param tableId : 'compare-commits-table'/}
+        {param webSections : $commitsTableWebSections /}
+    {/call}
+{/template}

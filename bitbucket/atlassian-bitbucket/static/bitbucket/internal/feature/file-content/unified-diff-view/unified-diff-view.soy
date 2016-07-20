@@ -1,0 +1,23 @@
+{namespace bitbucket.internal.feature.fileContent.unifiedDiffView}
+
+/**
+ */
+{template .layout}
+    {call bitbucket.internal.feature.fileContent.diffView.editor}{/call}
+{/template}
+
+/**
+ * Get the markup for line numbers in a unified diff.
+ * @param fromLine
+ * @param toLine
+ * @param lineType
+ * @param lineNum
+ * @param? marker
+ */
+{template .lineNumbers}
+    <div class="diff-line-numbers" data-line-type="{$lineType}" data-line-number="{$lineNum}">
+        <span class="from">{$fromLine}</span>
+        <span class="to">{$toLine}</span>
+        {if $marker}<span class="diff-change-marker">{$marker}</span>{/if}
+    </div>
+{/template}

@@ -1,0 +1,60 @@
+{namespace bitbucket.internal.component.mirroringAdmin.requestView}
+
+/**
+ * @param item
+ */
+{template .main}
+   <div class="mirror-request-details">
+       <h2>{getText('bitbucket.component.mirroring.admin.request.view.details.header')}</h2>
+       <div>
+           <p class="request-description">
+               {getTextAsHtml('bitbucket.component.mirroring.admin.request.view.details.request.description.html', $item.mirrorName, $item.mirrorBaseUrl, $item.mirrorBaseUrl)}
+           </p>
+           <p class="request-description">
+               {getText('bitbucket.component.mirroring.admin.request.view.details.request.description.permissions')}
+           </p>
+           <div class="mirror-image"></div>
+           <p class="label">{getText('bitbucket.component.mirroring.admin.request.view.details.request.description.server.id')}</p>
+           <p class="server-id">{$item.mirrorId}</p>
+           <form class="aui">
+               <div class="action-buttons">
+                   {call aui.buttons.button}
+                      {param id: 'approve-mirror-button' /}
+                      {param text: getText('bitbucket.component.mirroring.admin.request.view.details.request.buttons.approve')  /}
+                      {param type: 'primary'/}
+                   {/call}
+                   {call aui.buttons.button}
+                      {param id: 'decline-mirror-button' /}
+                      {param text: getText('bitbucket.component.mirroring.admin.request.view.details.request.buttons.decline')/}
+                      {param type: 'button'/}
+                   {/call}
+                   <div id="mirror-action-button-spinner" class="button-spinner"></div>
+               </div>
+           </form>
+       </div>
+   </div>
+{/template}
+
+/**
+ * @param mirrorName
+ */
+{template .declineDialog}
+    <section role="dialog" id="decline-mirror-request-dialog" class="aui-layer aui-dialog2 aui-dialog2-small aui-dialog2-warning" aria-hidden="true">
+        <header class="aui-dialog2-header">
+            <h2 class="aui-dialog2-header-main">{getText('bitbucket.component.mirroring.admin.request.view.decline.dialog.title')}</h2>
+            <a class="aui-dialog2-header-close">
+                <span class="aui-icon aui-icon-small aui-iconfont-close-dialog">{getText('bitbucket.component.mirroring.admin.request.view.decline.dialog.cancel')}</span>
+            </a>
+        </header>
+        <div class="aui-dialog2-content">
+            <p>{getTextAsHtml('bitbucket.component.mirroring.admin.request.view.decline.dialog.content.one.html', $mirrorName)}</p>
+            <p>{getText('bitbucket.component.mirroring.admin.request.view.decline.dialog.content.two')}</p>
+        </div>
+        <footer class="aui-dialog2-footer">
+            <div class="aui-dialog2-footer-actions">
+                <button id="dialog-decline-button" class="aui-button">{getText('bitbucket.component.mirroring.admin.request.view.details.request.buttons.decline')}</button>
+                <button id="dialog-cancel-button" class="aui-button aui-button-link">{getText('bitbucket.component.mirroring.admin.request.view.decline.dialog.cancel')}</button>
+            </div>
+        </footer>
+    </section>
+{/template}

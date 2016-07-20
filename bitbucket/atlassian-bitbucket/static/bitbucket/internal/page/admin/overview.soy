@@ -1,0 +1,86 @@
+{namespace bitbucket.internal.admin}
+
+/**
+*
+*/
+{template .overview}
+{call bitbucket.internal.layout.admin}
+    {param activeTab: 'atl.admin.nav.overview' /}
+    {param content}
+        {call widget.aui.group.group}
+            {param extraClasses: 'admin-banners' /}
+            {param content}
+                {foreach $webPanel in getWebPanels('bitbucket.web.admin.banner')}
+                    {call widget.aui.group.item}
+                        {param content}
+                            {$webPanel}
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/param}
+        {/call}
+        {call widget.aui.group.group}
+            {param content}
+                {call .columns}
+                    {param webSections: getWebSections('atl.admin') /}
+                {/call}
+            {/param}
+        {/call}
+    {/param}
+{/call}
+{/template}
+
+/**
+* @param webSections
+*/
+{template .columns private="true"}
+    {call widget.aui.group.item}
+        {param content}
+            {foreach $webSection in $webSections}
+                {if index($webSection) % 2 == 0}
+                    {call .section}
+                        {param webSection: $webSection /}
+                    {/call}
+                {/if}
+            {/foreach}
+        {/param}
+    {/call}
+    {call widget.aui.group.item}
+        {param content}
+            {foreach $webSection in $webSections}
+                {if index($webSection) % 2 == 1}
+                    {call .section}
+                        {param webSection: $webSection /}
+                    {/call}
+                {/if}
+            {/foreach}
+        {/param}
+    {/call}
+{/template}
+
+/**
+* @param webSection
+*/
+{template .section private="true"}
+    {call .sectionWithItems}
+        {param webSection: $webSection /}
+        {param webItems: getWebItems('atl.admin/' + $webSection.key) /}
+    {/call}
+{/template}
+
+/**
+* @param webSection
+* @param webItems
+*/
+{template .sectionWithItems private="true"}
+    {if length($webItems) > 0}
+        <section class="admin-section">
+            <h3>{$webSection.labelText}</h3>
+            <ul class="overview-links">
+            {foreach $webItem in getWebItems('atl.admin/' + $webSection.key)}
+                <li>{call bitbucket.internal.widget.adminWebItem data="$webItem" /}</li>
+            {/foreach}
+            </ul>
+        </section>
+    {/if}
+{/template}

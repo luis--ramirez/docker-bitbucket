@@ -1,0 +1,61 @@
+@import "../../../../global.less";
+@remove-self-dialog-max-width: 280px;
+@selfReviewerAnimationTime: 0.3s;
+
+.add-self,
+.remove-self {
+	position: absolute;
+	left: 0;
+	top: 0;
+
+	button {
+		background-color: @contentBackgroundColor;
+		border-style: dashed;
+		padding: 0;
+		height: @aui-avatar-size-small;
+		width: @aui-avatar-size-small;
+		cursor: pointer;
+		vertical-align: middle;
+
+		&:hover {
+			background-color: @contentBackgroundColor;
+		}
+	}
+}
+
+.add-self,
+.self-avatar:hover .remove-self {
+	display: inline-block;
+}
+
+.self-avatar {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+    margin-left: @baseSpacing;
+    width: @aui-avatar-size-small;
+    height: @aui-avatar-size-small;
+    vertical-align: middle;
+
+    &.reviewing.jsHover {
+    	.user-avatar {
+	    	display: none;
+		}
+    }
+
+    .user-avatar {
+		position: absolute;
+	    animation: fadeIn @selfReviewerAnimationTime;
+	    animation-fill-mode: forwards;
+	    margin-left: 0 !important;
+	}
+}
+
+.remove-self-dialog {
+	max-width: @remove-self-dialog-max-width;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; visibility: hidden; }
+    to { opacity: 1; visibility: visible; }
+}

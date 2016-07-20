@@ -1,0 +1,28 @@
+{namespace bitbucket.internal.layout.menu}
+
+/**
+ */
+{template .loadingRecentReposMenuItem}
+    <li>
+        <span class="loading-recent-repos">{{getText('bitbucket.web.menu.repositories.recentlyviewed.loading')}}</span>
+    </li>
+{/template}
+
+/**
+ */
+{template .noRecentReposMenuItem}
+    <li>
+        <span class="no-recent-repos">{{getText('bitbucket.web.menu.repositories.recentlyviewed.none')}}</span>
+    </li>
+{/template}
+
+/**
+ */
+{template .errorLoadingRecentReposMenuItem}
+    <li>
+        <span>{{getText('bitbucket.web.menu.repositories.recentlyviewed.error')}}</span>
+    </li>
+{/template}
+
+
+

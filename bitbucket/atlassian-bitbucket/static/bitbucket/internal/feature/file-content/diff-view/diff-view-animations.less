@@ -1,0 +1,83 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+// diff-view.js removes the `.line-focused` class from a line after @segmentNavAnimationDuration. Make sure to update that time
+// if you change the time here.
+@segmentNavAnimationDuration: 1s;
+@commentNavAnimationDuration: 1s;
+
+.segment-nav-bg-border-animation-all(@name, @fromColor, @toColor) {
+    .keyframes(~'segment-@{name}-target-fade-bg', {
+        background-color: @fromColor;
+    }, {
+        background-color: @toColor;
+    });
+
+    .keyframes(~'segment-@{name}-target-fade-border', {
+        background-color: @fromColor;
+        border-top-color: @fromColor;
+    }, {
+        background-color: @toColor;
+        border-top-color: @toColor;
+    });
+}
+
+// Added
+
+.segment-nav-bg-border-animation-all(~"added", @addedLineColorEdiff, @addedLineBackgroundColor);
+
+.segment-added-target-fade-bg-animation() {
+    .animation(segment-added-target-fade-bg @segmentNavAnimationDuration 1);
+}
+
+.segment-added-target-fade-border-animation() {
+    .animation(segment-added-target-fade-border @segmentNavAnimationDuration 1);
+}
+
+//
+// Removed
+
+.segment-nav-bg-border-animation-all(~"removed", @deletedLineColorEdiff, @deletedLineBackgroundColor);
+
+.segment-removed-target-fade-bg-animation() {
+    .animation(segment-removed-target-fade-bg @segmentNavAnimationDuration 1);
+}
+
+.segment-removed-target-fade-border-animation() {
+    .animation(segment-removed-target-fade-border @segmentNavAnimationDuration 1);
+}
+
+// Conflicted
+
+.segment-nav-bg-border-animation-all(~"conflicted", @conflictLineColorHighlight, @conflictLineBackgroundColor);
+
+.segment-conflicted-target-fade-bg-animation() {
+    .animation(segment-conflicted-target-fade-bg @segmentNavAnimationDuration 1);
+}
+
+.segment-conflicted-target-fade-border-animation() {
+    .animation(segment-conflicted-target-fade-border @segmentNavAnimationDuration 1);
+}
+
+// Context
+
+.segment-context-target-fade-border-animation() {
+    .animation(segment-context-target-fade-border @segmentNavAnimationDuration 1);
+}
+
+.segment-nav-bg-border-animation-all(~"context", @commentLineBackgroundColor, @contentBackgroundColor);
+
+.segment-context-target-fade-bg-animation() {
+    .animation(segment-context-target-fade-bg @segmentNavAnimationDuration 1);
+}
+
+
+.keyframes(comment-widget-fade-bg, {
+    background-color: @newCommentColorFadeIn;
+}, {
+    background-color: @contentBackgroundColor;
+});
+
+.comment-widget-fade-bg-animation() {
+    .animation(comment-widget-fade-bg @commentNavAnimationDuration 1);
+}

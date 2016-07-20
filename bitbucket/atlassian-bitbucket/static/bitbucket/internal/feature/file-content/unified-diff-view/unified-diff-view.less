@@ -1,0 +1,69 @@
+@import "/static/global.less";
+@import "/static/bitbucket/internal/feature/file-content/file-content-variables.less";
+
+.first-line-of-hunk {
+    .CodeMirror-gutter-elt {
+        margin-top:(@codeLineHeight * 2) + @contextExpanderHeight;
+    }
+
+}
+
+.first-line-of-hunk:first-child {
+    .CodeMirror-gutter-elt {
+        margin-top:@codeLineHeight;
+    }
+}
+
+.unified-diff {
+    .gutter-border {
+        border-right:1px solid @textContentBackgroundColor;
+    }
+
+    .CodeMirror-scroll {
+        background-color: @textContentBackgroundColor;
+    }
+}
+
+.context.line.new,
+.context.line.new .CodeMirror-gutter-elt > * {
+    .diff-target-fade-animation();
+}
+
+.diff-type-ADD .line-number-from,
+.diff-type-DELETE .line-number-to {
+    display: none;
+}
+
+.diff-target-fade-animation() {
+    // diff-view-context.js removes the `.new` class from a comment after 1.5s. Make sure to update that time if you change the time here.
+    .animation(diff-target-fade 1.5s 1);
+}
+@-webkit-keyframes diff-target-fade {
+    0% {
+        background-color: @newCommentColorFadeIn;
+    }
+    100% {
+        background-color: @contentBackgroundColor;
+    }
+}
+@-moz-keyframes diff-target-fade {
+    0% {
+        background-color: @newCommentColorFadeIn;
+    }
+    100% {
+        background-color: @contentBackgroundColor;
+    }
+}
+@-ms-keyframes diff-target-fade {
+    0% {
+        background-color: @newCommentColorFadeIn;
+    }
+    100% {
+        background-color: @contentBackgroundColor;
+    }
+}
+
+.full-window-scrolling .skipped-container[data-below=false] {
+    padding-bottom: 18px;
+    background-color: @textContentBackgroundColor;
+}

@@ -1,0 +1,41 @@
+{namespace bitbucket.internal.feature.repository}
+    
+/**
+ * @param ref
+ * @param? repository the repository the branch is in - only specify this if you want the repository to be shown.
+ * @param? extraClasses
+ * @param? tooltip override the default tooltips with your own
+ * @param? refAccessibilityText override the default accessibility text of the ref
+ */
+{template .refLozenge}
+    {call bitbucket.internal.widget.lozenge.htmlLozenge}
+        {param extraClasses: ($extraClasses ? $extraClasses + ' ' : '') + 'ref-lozenge' /}
+        {param monospace: true /}
+        {param htmlElement: 'span' /}
+        {param content}
+            {if $repository}
+                <span class="repository">
+                    {call bitbucket.internal.feature.project.avatar}
+                         {param size: 'xsmall' /}
+                         {param project: $repository.project /}
+                         {param tagName: 'span' /}
+                    {/call}
+                    <span class="name">{$repository.name}</span>
+                </span>
+            {/if}
+            <span class="ref {$ref.type and $ref.type.id ? lower_case($ref.type.id) : 'branch'}">
+                {call aui.icons.icon}
+                    {param size: 'small' /}
+                    {param useIconFont: true /}
+                    {param iconFontSet: 'devtools' /}
+                    /* Use tag-small when it has been added to iconfont */
+                    {param icon: ($ref.type and $ref.type.id and lower_case($ref.type.id) == 'tag') ? 'tag' : 'branch-small' /}
+                {/call}
+                <span class="name" aria-label="{if $refAccessibilityText}{$refAccessibilityText}{else}{getText('bitbucket.web.revisionref.branch.arialabel', $ref.displayId)}{/if}">
+                    {$ref.displayId}
+                </span>
+            </span>
+        {/param}
+        {param extraAttributes: [ 'data-ref-tooltip' : $tooltip ? $tooltip : ($repository ? $repository.project.name + ' / ' + $repository.name + ' : ' : '') + $ref.displayId ] /}
+    {/call}
+{/template}

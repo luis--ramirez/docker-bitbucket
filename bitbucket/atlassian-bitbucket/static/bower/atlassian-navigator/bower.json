@@ -1,0 +1,17 @@
+{
+  "name": "atlassian-navigator",
+  "main": ["lib/internal/util/navigator.js"],
+  "dependencies" : {
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "doc",
+    "test",
+    "package.json",
+    "README.md",
+    "karma.conf.js",
+    ".gitignore"
+  ]
+}

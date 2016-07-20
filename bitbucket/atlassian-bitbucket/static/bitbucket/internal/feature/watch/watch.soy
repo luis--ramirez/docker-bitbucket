@@ -1,0 +1,35 @@
+{namespace bitbucket.internal.feature.watch}
+
+/**
+ * @param isWatching
+ */
+{template .summaryPanel}
+    {call bitbucket.internal.widget.summaryPanel.linkWebPanel}
+        {param extraClasses: 'watch' /}
+        {param iconClass : 'aui-iconfont-unwatch' /}
+        {param linkContent}
+            {call .commitLabel}
+                {param isWatching: $isWatching /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param isWatching
+ */
+{template .commitLabel}
+    {if $isWatching}
+        {call aui.icons.icon}
+            {param useIconFont: true /}
+            {param icon: 'watch' /}
+        {/call}
+        {{getText('bitbucket.web.commit.unwatch', '<strong>', '</strong>')|noAutoescape}}</a>
+    {else}
+        {call aui.icons.icon}
+            {param useIconFont: true /}
+            {param icon: 'unwatch' /}
+        {/call}
+        {{getText('bitbucket.web.commit.watch', '<strong>', '</strong>')|noAutoescape}}</a>
+    {/if}
+{/template}

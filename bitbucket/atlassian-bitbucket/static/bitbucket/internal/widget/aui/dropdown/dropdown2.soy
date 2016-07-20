@@ -1,0 +1,35 @@
+{namespace widget.aui}
+
+/**
+ * @deprecated since 3.7 for removal in 4.0. Use either aui.dropdown2.dropdown2 or
+ *             aui.dropdown2.trigger + aui.dropdown2.contents instead
+ *
+ * @param menuId
+ * @param? menuClass
+ * @param menuContent
+ * @param? triggerId
+ * @param? triggerTitle
+ * @param? triggerClass
+ * @param? triggerText
+ * @param? triggerContent
+ * @param? showIcon
+ * @param? dataContainer
+ * @param? hasCustomStyle
+ **/
+{template .dropdown2}
+    {call aui.dropdown2.trigger}
+        {param menu: ['id': $menuId] /}
+        {param id: $triggerId /}
+        {param title: $triggerTitle /}
+        {param extraClasses: $triggerClass /}
+        {param text: $triggerText /}
+        {param content: $triggerContent /}
+        {param showIcon: $showIcon /}
+        {param container: $dataContainer /}
+    {/call}
+    {call aui.dropdown2.contents}
+        {param id: $menuId /}
+        {param content: $menuContent /}
+        {param extraClasses: (not $hasCustomStyle ? 'aui-style-default ' : '' ) + ($menuClass ? $menuClass : '') /}
+    {/call}
+{/template}

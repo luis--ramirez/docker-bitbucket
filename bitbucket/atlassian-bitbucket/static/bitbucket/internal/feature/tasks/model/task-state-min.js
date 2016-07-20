@@ -1,0 +1,1 @@
+define("bitbucket/internal/feature/tasks/model/task-state",function(){var a={DEFAULT:"NONE",OPEN:"OPEN",RESOLVED:"RESOLVED",DELETED:"DELETED",Transitions:{}};a.Transitions[a.DEFAULT]=a.OPEN;a.Transitions[a.OPEN]=a.RESOLVED;a.Transitions[a.RESOLVED]=a.OPEN;return a});

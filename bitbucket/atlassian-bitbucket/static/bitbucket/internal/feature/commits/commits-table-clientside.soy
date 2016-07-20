@@ -1,0 +1,130 @@
+{namespace bitbucket.internal.feature.commits}
+
+/**
+ * @param repository
+ * @param? webSections
+ * @param? commitPage
+ * @param? tableId
+ * @param? extraClasses
+ * @param? pullRequest
+ */
+{template .commitsTableImpl private="true"}
+    {call bitbucket.internal.widget.pagedTable}
+        {param id: $tableId /}
+        {param page: $commitPage /}
+        {param extraClasses: 'commits-table' + (($extraClasses) ? ' ' + $extraClasses : '') /}
+        {param theadContent}
+            {if ($commitPage and ($commitPage.size > 0 or $commitPage.start > 0)) or not $commitPage}
+                <tr>
+                    {call .commitsTableHeaderCells}
+                        {param webSections: $webSections /}
+                    {/call}
+                </tr>
+            {/if}
+        {/param}
+        {param content}
+            {if $commitPage}
+                {foreach $commit in $commitPage.values}
+                    {call .commitsTableRow}
+                        {param commit: $commit /}
+                        {param cellsContent}
+                            {call .commitsTableCells}
+                                {param repository: $repository /}
+                                {param commit: $commit /}
+                                {param webSections: $webSections /}
+                                {param pullRequest: $pullRequest /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param webSections
+ */
+{template .commitsTableHeaderCells private="true"}
+    <th class="author" title="{getText('bitbucket.web.repository.commits.col.author')}" scope="col">{getText('bitbucket.web.repository.commits.col.author')}</th>
+    <th class="commit" title="{getText('bitbucket.web.repository.commits.col.commit')}" scope="col">{getText('bitbucket.web.repository.commits.col.commit')}</th>
+    <th class="message" title="{getText('bitbucket.web.repository.commits.col.message')}" scope="col">{getText('bitbucket.web.repository.commits.col.message')}</th>
+    <th class="comment-count" scope="col"></th>
+    <th class="timestamp" title="{getText('bitbucket.web.repository.commits.col.date')}" scope="col">{getText('bitbucket.web.repository.commits.col.date')}</th>
+    {if $webSections}
+        {foreach $webSection in $webSections}
+            <th class="{$webSection.key}" title="{$webSection.labelText}" scope="col">{$webSection.labelText}</th>
+        {/foreach}
+    {/if}
+{/template}
+
+/**
+ * @param commit
+ * @param cellsContent
+ */
+{template .commitsTableRow private="true"}
+    <tr data-commitid="{$commit.id}" class="commit-row {if length($commit.parents) >= 2}merge{/if}" data-commit-json="{to_json($commit)}">
+        {$cellsContent |noAutoescape}
+    </tr>
+{/template}
+
+/**
+ * @param repository
+ * @param? commit
+ * @param? webSections
+ * @param? pullRequest
+ */
+{template .commitsTableCells private="true"}
+    <td class="author">
+        {call bitbucket.internal.widget.avatarWithName}
+            {param size: 'small' /}
+            {param person: $commit.author /}
+            {param link: true /}
+            {param linkExtraClasses: 'secondary-link' /}
+        {/call}
+    </td>
+    <td class="commit">
+        {call bitbucket.internal.feature.commit.link}
+            {param repository: $repository /}
+            {param commit: $commit /}
+            {param pullRequest: $pullRequest /}
+        {/call}
+
+        <!-- show merge lozenge/icon if is a merge commit, eg has 2+ parents -->
+        {if length($commit.parents) >= 2}
+            {call bitbucket.internal.widget.lozenge.merge}
+                {param abbreviated: true /}
+            {/call}
+        {/if}
+
+    </td>
+    <td class="message">
+        // commit message is put into both subject and body title attributes so that the tooltip appears on hover of
+        // either part since we don't know how long the subject might be. Also this is to prevent double tooltips when
+        // there is a tag lozenge in the commit row inserted by the scm-tags plugin. The tag lozenge shows
+        // a tipsy tooltip on hover, and if we put the full commit message in the parent .message TD's title, the native
+        // tooltip will overlap the tag tooltip.
+        {let $parsedCommitMessage: parseCommitMessage($commit.message) /}
+        <span class="message-subject" title="{$commit.message|truncate:800|escapeHtml}">{$parsedCommitMessage.subject|truncate:400|escapeHtml}</span>
+        <span class="message-body" title="{$commit.message|truncate:800|escapeHtml}">{$parsedCommitMessage.body|truncate:400|escapeHtml}</span>
+    </td>
+    <td class="comment-count">
+        {if $commit.properties and $commit.properties.commentCount}
+            {call bitbucket.internal.feature.commentCount}
+                {param count: $commit.properties.commentCount /}
+            {/call}
+        {/if}
+    </td>
+    <td class="timestamp">
+        {call bitbucket.internal.widget.date.shortAge}
+            {param date: $commit.authorTimestamp /}
+        {/call}
+    </td>
+    {if $webSections}
+        {call bitbucket.internal.feature.commits.commitsRowExtras}
+            {param webSections: $webSections /}
+            {param repository: $repository /}
+            {param commit: $commit /}
+        {/call}
+    {/if}
+{/template}

@@ -1,0 +1,114 @@
+@import "/static/global.less";
+
+@font-size-xsmall: 9px; // bower version of styles is missing this. Need to update BBS to rely on BBUI version of LESS.
+
+.group-avatar {
+    &.aui-avatar-xxxlarge {
+        .square(@aui-avatar-size-xxxlarge);
+        background: transparent url(avatar/group-avatar-256.png) no-repeat 0 0;
+        background-size: @aui-avatar-size-xxxlarge;
+    }
+
+    &.aui-avatar-large {
+        .square(@aui-avatar-size-large);
+        background: transparent url(avatar/group-avatar-96.png) no-repeat 0 0;
+        background-size: @aui-avatar-size-large;
+    }
+
+    &.aui-avatar-medium {
+        .square(@aui-avatar-size-medium);
+        background: transparent url(avatar/group-avatar-64.png) no-repeat 0 0;
+        background-size: @aui-avatar-size-medium;
+    }
+
+    &.aui-avatar-small {
+        .square(@aui-avatar-size-small);
+        .border-radius(3px);
+        background: transparent url(avatar/group-avatar-48.png) no-repeat 0 0;
+        background-size: @aui-avatar-size-small;
+    }
+
+    &.aui-avatar-xsmall {
+        .square(@aui-avatar-size-xsmall);
+        .border-radius(2px);
+        background: transparent url(avatar/group-avatar-32.png) no-repeat 0 0;
+        background-size: @aui-avatar-size-xsmall;
+    }
+}
+
+.aui-avatar-badged {
+    position: relative;
+    vertical-align: middle;
+
+    &.avatar-dimmed > .aui-avatar-inner > img {
+        opacity: 0.5;
+        .transition(opacity 0.3s ease-in-out);
+    }
+
+    @badgeSize: 16px;
+
+    .approved, .needs-work {
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(.14,.01,.65,1.61);
+        transition-property: opacity, transform;
+        transform: scale(1);
+        .square(@badgeSize);
+        color: @invertedBodyTextColor;
+        background-size: @badgeSize;
+        position: absolute;
+        right: -@badgeSize/2;
+        top: -@badgeSize/2;
+        text-align: center;
+        display: block;
+        font-size: @font-size-xsmall;
+        line-height: @font-size-large;
+        text-indent: -999em;
+    }
+
+    .approved {
+        background: transparent url(icons/icon-approved.svg) no-repeat 0 0;
+    }
+
+    .needs-work {
+        background: transparent url(icons/icon-needs-work.svg) no-repeat 0 0;
+    }
+
+    &.badge-hidden {
+        &.avatar-dimmed > .aui-avatar-inner > img {
+            opacity: 1;
+        }
+
+        .badge {
+            opacity: 0;
+            .scale(0);
+        }
+    }
+}
+
+.avatar-with-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+
+    .aui-avatar {
+        vertical-align: middle;
+    }
+
+    &.deleted-user {
+        text-decoration: line-through;
+    }
+}
+
+.gravatar-notice {
+    margin-top: @halfSpacing;
+    font-size: @font-size-small;
+    color: @secondaryTextColor;
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.bitbucket-theme .aui-avatar img {
+    //Prevent overflowing alt text on first load of avatars in firefox - https://jira.atlassian.com/browse/STASHDEV-3898
+    -moz-force-broken-image-icon: 1;
+}

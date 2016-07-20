@@ -1,0 +1,51 @@
+{namespace bitbucket.internal.page}
+
+/**
+ * @param repository
+ * @param dataAttributes
+ * @param pluginFieldsContent
+ * @param? isEditSuccess
+ */
+{template .repositoryPullRequestSettings}
+    {webResourceManager_requireResourcesForContext('bitbucket.page.repository.settings.pullRequests')}
+    {call bitbucket.internal.layout.repositorySettings}
+        {{param windowTitle: getText('bitbucket.web.repository.settings.pullRequests', $repository.project.name, $repository.name) /}}
+        {param repository: $repository /}
+        {param dataAttributes: $dataAttributes /}
+        {param activeSettingsTab: 'repository-settings-pull-requests' /}
+        {param content}
+            {call widget.aui.pageHeader}
+                {param content}
+                    <h2>{getText('bitbucket.web.repository.settings.pullRequests.title')}</h2>
+                {/param}
+            {/call}
+            {if $isEditSuccess}
+                {call aui.message.success}
+                    {param content}
+                        {getText('bitbucket.web.changes.saved')}
+                    {/param}
+                {/call}
+            {/if}
+            {call bitbucket.internal.widget.xsrfProtectedForm}
+                {param action: '' /}
+                {param extraClasses: 'pull-request-settings' /}
+                {param content}
+                    {$pluginFieldsContent |noAutoescape}
+                    {call widget.aui.form.buttons}
+                        {param content}
+                            {call widget.aui.form.submit}
+                                {param id: 'submit' /}
+                                {param isPrimary: true /}
+                                {param accessKey: 's' /}
+                                {param label: getText('bitbucket.web.button.save') /}
+                            {/call}
+                            {call widget.aui.form.cancelButton}
+                                {param href: nav_repo_settings($repository.project, $repository) /}
+                            {/call}
+                        {/param}
+                    {/call}
+                {/param}
+            {/call}
+        {/param}
+    {/call}
+{/template}

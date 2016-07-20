@@ -1,0 +1,1 @@
+define("bitbucket/internal/bbui/pull-request-list/dom-event",["module","exports","internal/util/navigator"],function(c,b,d){Object.defineProperty(b,"__esModule",{value:!0});b.default=function(a){return(!a.which||1===a.which)&&!(a.metaKey||a.ctrlKey||a.shiftKey||a.altKey&&!e.default.isIE())};var e=babelHelpers.interopRequireDefault(d);c.exports=b["default"]});

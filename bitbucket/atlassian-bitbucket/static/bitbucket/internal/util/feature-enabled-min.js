@@ -1,0 +1,1 @@
+define("bitbucket/internal/util/feature-enabled",["jquery","exports"],function(d,b){var c={},e=Object.prototype.hasOwnProperty;b.getFromProviderSync=function(a){return e.call(c,a)?c[a]:c[a]=WRM.data.claim("com.atlassian.bitbucket.server.feature-wrm-data:"+a+".data")};b.getFromProvider=function(a){return d.Deferred().resolve(b.getFromProviderSync(a))}});

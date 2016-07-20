@@ -1,0 +1,52 @@
+{namespace widget.date}
+
+/**
+ * @deprecated in 3.0 for removal in 4.0. Use stash.widget.date.shortAge
+ * @param date
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .shortAge}
+    {call .time}
+        {param date: $date /}
+        {param title: $title /}
+        {param extraClasses : $extraClasses /}
+        {param type: 'shortAge' /}
+    {/call}
+{/template}
+
+/**
+ * @deprecated in 3.0 for removal in 4.0. Use stash.widget.date.short
+ * @param date
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .short}
+    {call .time}
+        {param date: $date /}
+        {param title: $title /}
+        {param extraClasses : $extraClasses /}
+        {param type: 'short' /}
+    {/call}
+{/template}
+
+/**
+ * @deprecated in 3.0 for removal in 4.0. Use stash.widget.date.time
+ * @param date
+ * @param type
+ * @param? title
+ * @param? extraClasses
+ **/
+{template .time}
+    {if $date}
+        <time title="{$title ? $title : format_date($date, 'full')}" datetime="{format_date($date, 'timestamp')}"
+            class="deprecated{if $extraClasses} {$extraClasses}{/if}">
+
+            {format_date($date, $type)}
+        </time>
+    {else}
+        <time class="deprecated{if $extraClasses} {$extraClasses}{/if}">
+            {getText('bitbucket.web.date.unknown')}
+        </time>
+    {/if}
+{/template}

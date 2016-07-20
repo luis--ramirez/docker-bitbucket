@@ -1,0 +1,15 @@
+<configuration>
+    <define name="log.format" class="com.atlassian.stash.internal.logback.LogFormatPropertyDefiner"
+            scope="context"/>
+
+    <appender name="stash.installer" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${log.format}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="stash.installer" />
+    </root>
+</configuration>

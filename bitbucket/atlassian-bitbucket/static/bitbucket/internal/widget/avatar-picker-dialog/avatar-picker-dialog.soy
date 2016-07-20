@@ -1,0 +1,39 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * @param id
+ * @param title
+ * @param doneButtonText
+ * @param? imageSrc
+ * @param? maskShape
+ * @param? fallbackDescription
+ * @param? enableWebcam
+ */
+{template .avatarPickerDialog}
+    {call aui.dialog.dialog2}
+        {param id: $id /}
+        {param size: 'small' /}
+        {param titleText: $title /}
+        {param modal: true /}
+        {param content}
+            {call bitbucket.internal.widget.imageUploadAndCrop}
+                {param imageSrc: $imageSrc /}
+                {param maskShape: $maskShape /}
+                {param fallbackDescription: $fallbackDescription /}
+                {param enableWebcam: $enableWebcam /}
+            {/call}
+        {/param}
+        {param footerActionContent}
+            {call aui.buttons.button}
+                {param text: $doneButtonText /}
+                {param type: 'primary' /}
+                {param extraClasses: 'avatar-picker-save' /}
+            {/call}
+            {call aui.buttons.button}
+                {param text: getText('bitbucket.web.button.cancel') /}
+                {param type: 'link' /}
+                {param extraClasses: 'avatar-picker-cancel' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}

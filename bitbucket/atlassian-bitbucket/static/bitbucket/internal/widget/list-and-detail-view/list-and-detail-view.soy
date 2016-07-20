@@ -1,0 +1,17 @@
+{namespace bitbucket.internal.widget}
+
+/**
+ * AKA Kick-ass view
+ * @param listContent this should be a <ul> with <li> items
+ * @param detailContent initial item to load. corresponding item should have selectedItem class
+ */
+{template .listAndDetailView}
+    <div class="list-and-detail-view">
+        <div class="list-view">
+            {$listContent|noAutoescape}
+        </div>
+        <div class="detail-view">
+            {$detailContent|noAutoescape}
+        </div>
+    </div>
+{/template}

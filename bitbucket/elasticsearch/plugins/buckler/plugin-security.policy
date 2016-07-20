@@ -1,0 +1,6 @@
+grant {
+  permission java.io.FilePermission "${es.path.conf}${/}buckler${/}*", "write";
+  permission java.io.FilePermission "${es.default.path.conf}${/}buckler${/}*", "write";
+  permission java.io.FilePermission "${es.path.home}${/}config${/}buckler${/}*", "write";
+  permission java.io.FilePermission "${es.default.path.home}${/}config${/}buckler${/}*", "write";
+};

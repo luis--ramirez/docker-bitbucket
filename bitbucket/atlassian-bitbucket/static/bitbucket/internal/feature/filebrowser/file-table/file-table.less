@@ -1,0 +1,70 @@
+@import "/static/global.less";
+
+.bitbucket-theme {
+    #browse-table {
+        margin-top: 0;
+        min-width: 0;
+
+        tr:hover {
+            background-color: #F5F5F5;
+        }
+
+        .folder,
+        .remote,
+        .file {
+            background: transparent;
+        }
+
+        .aui-icon {
+            margin-right: @baseSpacing;
+        }
+
+        .aui-iconfont-devtools-folder-closed {
+            color: @primaryLinkColor;
+        }
+
+        .aui-iconfont-devtools-file,
+        .aui-iconfont-devtools-browse-up,
+        .aui-iconfont-devtools-submodule {
+            color: @secondaryTextColor;
+        }
+
+        .submodule-sep {
+            color: @labelTextColor;
+        }
+
+        .message-row {
+            border-bottom: none;
+
+            &:hover {
+                background-color: transparent;
+            }
+
+            td {
+                padding: 0;
+            }
+
+            .aui-message {
+                margin: 16px 48px 0;
+            }
+        }
+
+        tr.focused-file {
+            background-color: @primaryHighlight; /* hover style for now */
+
+            td:first-of-type {
+                border-left: 2px solid @primaryLinkColor;
+            }
+        }
+
+        tr.file-row:focus,
+        tr.file-row a:focus {
+            text-decoration: none;
+        }
+    }// #browse-table
+
+    .filebrowser-banner .aui-message {
+        margin-bottom: @doubleSpacing;
+    }
+
+}

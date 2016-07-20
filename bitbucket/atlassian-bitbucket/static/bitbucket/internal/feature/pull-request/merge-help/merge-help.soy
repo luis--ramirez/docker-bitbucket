@@ -1,0 +1,212 @@
+{namespace bitbucket.internal.feature.pullRequest}
+
+/**
+ * @param sourceBranch
+ * @param targetBranch
+ * @param? sourceRemote
+ * @param? targetRemote
+ * @param conflicted
+ * @param vetoes
+ */
+{template .mergeHelp}
+    {if $conflicted}
+        <div class="merge-help merge-conflicted">
+            // be paranoid and show merge instructions that tell the user to manually merge the pull request
+            {call .mergeInstructionsForStableSourceBranch}
+                {param sourceBranch: $sourceBranch /}
+                {param targetBranch: $targetBranch /}
+                {param sourceRemote: $sourceRemote /}
+                {param targetRemote: $targetRemote /}
+             {/call}
+        </div>
+    {/if}
+    {if $vetoes}
+        {foreach $veto in $vetoes}
+            <div class="merge-help">
+                <h3>
+                    {call aui.icons.icon}
+                        {param icon: 'warning' /}
+                        {param useIconFont: true /}
+                    {/call}
+                    {$veto.summaryMessage}
+                </h3>
+                <p>{$veto.detailedMessage|noAutoescape}</p>
+            </div>
+        {/foreach}
+    {/if}
+{/template}
+
+/**
+ */
+{template .mergeHelpDialog}
+    {call aui.dialog.dialog2}
+        {param id: 'merge-help-dialog' /}
+        {param size: 'large' /}
+        {param titleText: getText('bitbucket.web.pullrequest.merge.help.header') /}
+        {param extraClasses: 'merge-help-dialog' /}
+        {param content: '' /}
+        {param footerActionContent}
+            {call aui.buttons.button}
+                {param text: getText('bitbucket.web.button.close') /}
+                {param extraClasses: 'aui-button-link dialog-close-button' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param sourceBranch
+ * @param targetBranch
+ * @param? sourceRemote
+ * @param? targetRemote
+ */
+{template .mergeInstructionsForStableSourceBranch}
+    <h3>
+        {call aui.icons.icon}
+            {param icon: 'warning' /}
+            {param useIconFont: true /}
+        {/call}
+        {getText('bitbucket.web.pullrequest.merge.conflict.title')}
+    </h3>
+    <p>
+        {getText('bitbucket.web.pullrequest.merge.help.introduction')}
+    </p>
+
+    {call .mergeStepsForStableSourceBranch}
+        {param sourceBranch: $sourceBranch /}
+        {param targetBranch: $targetBranch /}
+        {param sourceRemote: $sourceRemote /}
+        {param targetRemote: $targetRemote /}
+     {/call}
+{/template}
+
+/**
+ * @param sourceBranch
+ * @param targetBranch
+ * @param? sourceRemote
+ * @param? targetRemote
+ */
+{template .mergeInstructionsForUnstableSourceBranch}
+    <h3>
+        {call aui.icons.icon}
+            {param icon: 'warning' /}
+            {param useIconFont: true /}
+        {/call}
+        {getText('bitbucket.web.pullrequest.merge.conflict.title')}
+    </h3>
+    <p>
+        {getText('bitbucket.web.pullrequest.merge.help.introduction')}
+    </p>
+
+    {call .mergeStepsForUnstableSourceBranch}
+        {param sourceBranch: $sourceBranch /}
+        {param targetBranch: $targetBranch /}
+        {param sourceRemote: $sourceRemote /}
+        {param targetRemote: $targetRemote /}
+     {/call}
+{/template}
+
+/**
+ * Provides merge instructions for feature/x --> master scenarios where the target branch can be merged into the source
+ * branch to resolve the conflicts.
+ *
+ * @param sourceBranch
+ * @param targetBranch
+ * @param? sourceRemote
+ * @param? targetRemote
+ */
+{template .mergeStepsForUnstableSourceBranch}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step1')}</strong>{sp}
+        {if $targetRemote}
+            {getText('bitbucket.web.pullrequest.merge.help.step1.crossrepo.text')}
+        {else}
+            {getText('bitbucket.web.pullrequest.merge.help.step1.samerepo.text')}
+        {/if}
+    </p>
+    {call bitbucket.internal.widget.codeBlock}
+        {param content}
+            git fetch {$targetRemote ? $targetRemote : 'origin'} {$targetBranch}{\n}
+        {/param}
+        {param instructionBlock: true /}
+    {/call}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step2')}</strong>{sp}
+        {getText('bitbucket.web.pullrequest.merge.help.step2.text')}
+    </p>
+    {call bitbucket.internal.widget.codeBlock}
+        {param content}
+            git checkout {$sourceBranch} {\n}
+            git merge FETCH_HEAD
+        {/param}
+        {param instructionBlock: true /}
+    {/call}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step3')}</strong>{sp}
+        {getText('bitbucket.web.pullrequest.merge.help.step3.text')}
+    </p>
+    {call bitbucket.internal.widget.codeBlock}
+        {param content}
+            git commit{\n}
+            git push {$sourceRemote ? $sourceRemote : 'origin'} HEAD
+        {/param}
+        {param instructionBlock: true /}
+    {/call}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step4')}</strong>{sp}
+        {getText('bitbucket.web.pullrequest.merge.help.step4.text')}
+    </p>
+{/template}
+
+/**
+ * Provides merge instructions for release/x --> master scenarios where the target branch cannot be merged into the
+ * source branch to resolve the conflicts.
+ *
+ * @param sourceBranch
+ * @param targetBranch
+ * @param? sourceRemote
+ * @param? targetRemote
+ */
+{template .mergeStepsForStableSourceBranch}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step1')}</strong>{sp}
+
+        {if $targetRemote}
+            {getText('bitbucket.web.pullrequest.merge.fetch.source.branch.crossrepo')}
+        {else}
+            {getText('bitbucket.web.pullrequest.merge.fetch.source.branch.samerepo')}
+        {/if}
+    </p>
+    {call bitbucket.internal.widget.codeBlock}
+        {param content}
+            git fetch {$sourceRemote ? $sourceRemote : 'origin'} {$sourceBranch}{\n}
+        {/param}
+        {param instructionBlock: true /}
+    {/call}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step2')}</strong>{sp}
+        {getText('bitbucket.web.pullrequest.merge.source.into.target.resolve.conflicts')}
+    </p>
+    {call bitbucket.internal.widget.codeBlock}
+        {param content}
+            git checkout {$targetBranch} {\n}
+            git merge FETCH_HEAD
+        {/param}
+        {param instructionBlock: true /}
+    {/call}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step3')}</strong>{sp}
+        {getText('bitbucket.web.pullrequest.merge.help.step3.text')}
+    </p>
+    {call bitbucket.internal.widget.codeBlock}
+        {param content}
+            git commit{\n}
+            git push {$targetRemote ? $targetRemote : 'origin'} HEAD
+        {/param}
+        {param instructionBlock: true /}
+    {/call}
+    <p>
+        <strong>{getText('bitbucket.web.pullrequest.merge.help.step4')}</strong>{sp}
+        {getText('bitbucket.web.pullrequest.merge.merged.remotely')}
+    </p>
+{/template}

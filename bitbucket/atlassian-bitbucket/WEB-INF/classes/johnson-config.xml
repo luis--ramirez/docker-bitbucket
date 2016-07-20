@@ -1,0 +1,176 @@
+<johnson>
+    <container-factory class="com.atlassian.johnson.setup.DefaultContainerFactory"/>
+    <setup-config class="com.atlassian.johnson.setup.DefaultSetupConfig"/>
+
+    <event-checks>
+        <event-check class="com.atlassian.stash.internal.johnson.HomeApplicationEventCheck"/>
+        <event-check class="com.atlassian.stash.internal.johnson.LocaleApplicationEventCheck"/>
+    </event-checks>
+    <event-levels>
+        <!-- Note: These levels are ordered here by their severity, from most severe to least. That has
+                   no meaning to Johnson, but it does match JohnsonServlet. -->
+        <event-level key="fatal">
+            <!--
+                'fatal' means the Spring application context failed to start due to an unexpected error.
+                The following technologies are available for this level:
+                  * Java Servlet API
+                This level will almost certainly require a code level fix.
+            -->
+            <description>Fatal</description>
+        </event-level>
+        <event-level key="error">
+            <!--
+                'error' means the Spring application context failed to start due to an expected error.
+                Examples of this are:
+                  * Errors accessing the configured database
+                The following technologies are available for this level:
+                  * Java Servlet API
+                This level will require a restart to resolve and most likely some level of configuration changed.
+            -->
+            <description>Error</description>
+        </event-level>
+        <event-level key="warning">
+            <!--
+                'warning' means the Spring application context has started but some part of the system is not
+                as expected.
+                Examples of this are:
+                  * Git binary not being available on the path
+                  * Home directory updated (and not yet processed)
+                The following technologies are available for this level:
+                  * Java Servlet API
+                  * Spring
+                  * I18n
+                  * Spring MVC
+                This level may be able to be resolved at runtime and will most likely some level of configuration changed.
+            -->
+            <description>Warning</description>
+        </event-level>
+        <event-level key="maintenance">
+            <!--
+                'maintenance' means the Spring application context has started but some part of the system is not
+                available due to a scheduled task.
+                Examples of this are:
+                  * Database migration
+                  * Backup / Restore
+                  * Reindexing of some form
+                The following technologies are available for this level:
+                  * Java Servlet API
+                  * Spring
+                  * I18n
+                  * Spring MVC
+                This level should be resolved at runtime automatically and requires no action from the user.
+            -->
+            <description>Maintenance</description>
+        </event-level>
+        <event-level key="system-maintenance">
+            <!--
+                'system-maintenance' means the Spring application context has started but a system administrator
+                has locked the system to perform maintenance. Multiple 'maintenance' level events may _also_ be
+                generated before the 'system-maintenance' event is removed.
+                Examples of this are:
+                  * Full system backups, including all repository data, created by an out-of-process helper
+                  * Arbitrary site maintenance scripted by customers for their specific installations
+                The following technologies are available for this level:
+                  * Java Servlet API
+                  * Spring
+                  * I18n
+                  * Spring MVC
+                  * Spring Security
+                  * Hibernate
+                  * ActiveObjects
+                This level should be resolved at runtime automatically and requires no action from the user.
+            -->
+            <description>System Maintenance</description>
+        </event-level>
+    </event-levels>
+    <event-types>
+        <event-type key="bad-schema">
+            <description>The database contains an invalid schema.</description>
+        </event-type>
+        <event-type key="config-migration">
+            <description>Configuration migration has failed.</description>
+        </event-type>
+        <event-type key="database-mysql-binary-log">
+            <description>The binary log format used by MySQL is unsupported.</description>
+        </event-type>
+        <event-type key="database-unavailable">
+            <description>The database as configured is unavailable.</description>
+        </event-type>
+        <event-type key="git-failed">
+            <description>GitScmClient is unavailable.</description>
+        </event-type>
+        <event-type key="home">
+            <description>Invalid Home Directory.</description>
+        </event-type>
+        <event-type key="home-lock-failed">
+            <description>The Home Directory could not be locked.</description>
+        </event-type>
+        <event-type key="home-locked">
+            <description>The Home Directory is already locked.</description>
+        </event-type>
+        <event-type key="home-migration">
+            <description>The Home Directory migration has failed.</description>
+        </event-type>
+        <event-type key="home-updated">
+            <description>The Home Directory has been updated.</description>
+        </event-type>
+        <event-type key="node-passivated">
+            <description>The current node is unable to safely connect to the cluster and will not service requests</description>
+        </event-type>
+        <event-type key="performing-maintenance">
+            <description>The system is unavailable while maintenance is being performed.</description>
+        </event-type>
+        <event-type key="plugin-failed">
+            <description>Required Plugin failed.</description>
+        </event-type>
+        <event-type key="schema-locked">
+            <description>The schema could not be locked for update.</description>
+        </event-type>
+        <event-type key="schema-update-failed">
+            <description>The schema could not be upgraded.</description>
+        </event-type>
+        <event-type key="spring">
+            <description>Spring ApplicationContext not started.</description>
+        </event-type>
+        <event-type key="spring-mvc">
+            <description>SpringMVC DispatcherServlet not started.</description>
+        </event-type>
+        <event-type key="unlatch-failed">
+            <description>The current node failed to return to normal operations after a maintenance task and will not service requests</description>
+        </event-type>
+        <event-type key="unsupported-database">
+            <description>The configured database is not supported and cannot be used.</description>
+        </event-type>
+        <event-type key="unsupported-directory-override">
+            <description>The Home sub-directory overrides are no longer supported.</description>
+        </event-type>
+        <event-type key="unsupported-jdbc-url">
+            <description>
+                The configured JDBC URL is not supported by the system and must be manually updated.
+            </description>
+        </event-type>
+        <event-type key="unsupported-locale">
+            <description>
+                The current locale is not supported by the system and must be manually changed.
+            </description>
+        </event-type>
+    </event-types>
+    <ignore>
+        <!-- Don't use Johnson to prevent access to static resources. This means that our web resource implementation
+             cannot access the database -->
+        <path>/s/**</path>
+        <path>/mvc/maintenance</path>
+        <path>/mvc/maintenance/lock</path>
+        <path>/mvc/admin/backups/progress/client</path>
+        <path>/system/**</path>
+        <path>/status</path>
+    </ignore>
+    <error>
+        <path>/unavailable</path>
+    </error>
+    <setup>
+        <!-- Redirecting to /setup is handled by SetupRedirectInterceptor instead of Johnson. As far as Johnson is
+             concerned, Stash is always setup -->
+        <path>/setup</path>
+    </setup>
+</johnson>

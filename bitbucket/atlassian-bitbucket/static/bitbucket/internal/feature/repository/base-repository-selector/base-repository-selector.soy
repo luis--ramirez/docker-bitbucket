@@ -1,0 +1,110 @@
+{namespace bitbucket.internal.feature.repository}
+
+/**
+  * @param values
+  * @param isLastPage
+  * @param? isPreload
+  * @param? noMoreResultsText
+ */
+{template .baseRepositorySelectorResults}
+    {foreach $repository in $values}
+        <li class="result {if $isPreload}preload{/if}">
+            <a href="{nav_repo_browse($repository.project.key, $repository.slug)}" data-id="{$repository.id}" tabindex="-1">
+                {call .baseRepositorySelectorRepository}
+                    {param repository: $repository/}
+                {/call}
+            </a>
+        </li>
+    {/foreach}
+    {if $isLastPage}
+        // TODO: FIX THIS.
+        // RelatedRepositorySelector takes a repository in it's config, so we will always have at least one result preloaded.
+        // We should therefore always show "no more repositories", even when the rest response is empty.
+        <li class="no-results">
+            {$noMoreResultsText ? $noMoreResultsText : getText('bitbucket.web.repository.selector.no.more.results')}
+        </li>
+    {/if}
+{/template}
+
+/**
+ * @param? id
+ * @param? repository  // Either $repository (object) or plain $text must be provided
+ * @param? text
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .baseRepositorySelectorTrigger}
+    {call bitbucket.internal.widget.searchableSelectorTriggerGeneric}
+        {param id: $id/}
+        {param content}
+            {call .baseRepositorySelectorTriggerContent}
+                {param repository: $repository/}
+                {param text: $text/}
+            {/call}
+        {/param}
+        {param autofocus: $autofocus /}
+        {param titleContent}{if $repository}{$repository.project.name} / {$repository.name}{/if}{/param}
+        {param extraClasses: 'base-repository-selector-trigger' + ($extraClasses ? ' ' + $extraClasses : '')/}
+        {param extraAttributes: $extraAttributes/}
+    {/call}
+{/template}
+
+/**
+ * @param fieldName     // Name for form field
+ * @param? id
+ * @param? repository    // Either $repository (object) or plain $text must be provided
+ * @param? text
+ * @param? fieldId     // Id for form field
+ * @param? autofocus
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .baseRepositorySelectorTriggerWithField}
+    {call .baseRepositorySelectorTrigger}
+        {param id: $id/}
+        {param repository: $repository/}
+        {param text: $text/}
+        {param autofocus: $autofocus /}
+        {param extraClasses: $extraClasses/}
+        {param extraAttributes: $extraAttributes /}
+    {/call}
+    {call widget.aui.form.input}
+        {param id: $fieldId ? $fieldId : ($id ? $id + '-field' : $id) /}
+        {param name: $fieldName /}
+        {param initialValue: $repository ? $repository.id : null /}
+        {param type: 'hidden'/}
+    {/call}
+{/template}
+
+/**
+ * @param? repository      //This takes either a repository object or a plain text placeholder
+ * @param? text
+ */
+{template .baseRepositorySelectorTriggerContent}
+    {if $repository}
+        {call .baseRepositorySelectorRepository}
+            {param repository: $repository/}
+        {/call}
+    {else}
+         <span class="placeholder">{$text ? $text : getText('bitbucket.web.repository.selector.default')}</span>
+    {/if}
+{/template}
+
+/**
+ * @param repository
+ */
+{template .baseRepositorySelectorRepository}
+    <span class="repository" title="{$repository.project.name} / {$repository.name}" data-id="{$repository.id}" data-repository="{to_json($repository)}">
+        {call bitbucket.internal.feature.project.avatar}
+             {param size: 'xsmall' /}
+             {param project: $repository.project /}
+             {param tagName: 'span' /}
+        {/call}
+        <span class="project-and-repo-wrapper">
+            <span class="project-name">{$repository.project.name}</span>
+            <span class="separator">/</span>
+            <span class="name">{$repository.name}</span>
+        </span>
+    </span>
+{/template}

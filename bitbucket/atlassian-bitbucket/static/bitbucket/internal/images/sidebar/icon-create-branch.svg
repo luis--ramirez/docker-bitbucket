@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 20 20" style="enable-background:new 0 0 20 20;" xml:space="preserve">
+<g>
+	<defs>
+		<path id="SVGID_1_" d="M36-20v2h-4v6h14v-6h-4v-2h-2v6h-2v-6h-6.005C30.893-20,30-19.113,30-18V-12c0,1.104,0.893,2,1.995,2h14.01
+			C47.107-10,48-10.887,48-12V-18c0-1.104-0.893-2-1.995-2H40v-2h4.657L39-27.657L33.343-22H38v2H36z M46-30h2v2h2v2h-2v2h-2v-2h-2
+			v-2h2V-30z"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<g style="clip-path:url(#SVGID_2_);">
+		<defs>
+			<rect id="SVGID_3_" width="20" height="20"/>
+		</defs>
+		<clipPath id="SVGID_4_">
+			<use xlink:href="#SVGID_3_"  style="overflow:visible;"/>
+		</clipPath>
+		<rect x="25" y="-35" style="clip-path:url(#SVGID_4_);fill-rule:evenodd;clip-rule:evenodd;fill:#707070;" width="30" height="30"/>
+	</g>
+</g>
+<g>
+	<defs>
+		<path id="SVGID_5_" d="M14,11c2.209,0,4-1.791,4-4s-1.791-4-4-4s-4,1.791-4,4S11.791,11,14,11z M13.378,11.962
+			c-0.118,0.135-0.241,0.271-0.369,0.406c-0.912,0.962-1.886,1.781-2.92,2.458c-1.034,0.677-2.051,1.203-3.05,1.578
+			c-0.019,0.073-0.047,0.102-0.08,0.096C6.721,17.919,5.487,19,4,19c-1.657,0-3-1.343-3-3c0-1.306,0.835-2.417,2-2.829V5.829
+			C1.835,5.417,1,4.306,1,3c0-1.657,1.343-3,3-3s3,1.343,3,3c0,1.306-0.835,2.417-2,2.829v7.341c0.493,0.174,0.927,0.474,1.263,0.86
+			c1.239-0.517,2.808-1.366,3.836-2.169c0.344-0.269,0.659-0.545,0.946-0.828C9.805,10.124,9,8.656,9,7c0-2.761,2.239-5,5-5
+			s5,2.239,5,5s-2.239,5-5,5C13.789,12,13.582,11.987,13.378,11.962z M13,6V4h2v2h2v2h-2v2h-2V8h-2V6H13z"/>
+	</defs>
+	<clipPath id="SVGID_6_">
+		<use xlink:href="#SVGID_5_"  style="overflow:visible;"/>
+	</clipPath>
+	<g style="clip-path:url(#SVGID_6_);">
+		<defs>
+			<rect id="SVGID_7_" width="20" height="20"/>
+		</defs>
+		<clipPath id="SVGID_8_">
+			<use xlink:href="#SVGID_7_"  style="overflow:visible;"/>
+		</clipPath>
+		<rect x="-4" y="-5" style="clip-path:url(#SVGID_8_);fill-rule:evenodd;clip-rule:evenodd;fill:#707070;" width="28" height="29"/>
+	</g>
+</g>
+<g>
+	<defs>
+		<path id="SVGID_9_" d="M2.7-18.039C1.17-18.277,0-19.594,0-21.182c0-1.757,1.433-3.182,3.2-3.182c0.171,0,0.339,0.013,0.503,0.039
+			c0.077-1.688,1.456-3.032,3.147-3.032c0.743,0,1.426,0.26,1.965,0.694c0.788-1.367,2.255-2.285,3.935-2.285
+			c2.511,0,4.546,2.052,4.55,4.584c1.491,0,2.7,1.425,2.7,3.182c0,1.385-0.751,2.564-1.8,3.001V-18H13v2h3.218L11.5-12.345L6.782-16
+			H10v-2H2.7V-18.039z M7.547-20c-0.057,0.004-0.114,0.006-0.172,0.006S7.26-19.996,7.203-20H4v-0.051
+			C3.862-20.018,3.717-20,3.567-20C2.701-20,2-20.594,2-21.326c0-0.732,0.701-1.326,1.567-1.326c0.499,0,0.943,0.197,1.23,0.504
+			c-0.03-0.161-0.046-0.328-0.046-0.499c0-1.464,1.175-2.652,2.625-2.652c0.962,0,1.802,0.522,2.26,1.301
+			c0.048-1.648,1.387-2.969,3.032-2.969c1.675,0,3.033,1.37,3.033,3.061c0,0.33-0.052,0.648-0.148,0.946
+			c0.242-0.142,0.525-0.223,0.828-0.223c0.895,0,1.62,0.712,1.62,1.591C18-20.712,17.275-20,16.38-20
+			c-0.131,0-0.258-0.015-0.38-0.044V-20H7.547z"/>
+	</defs>
+	<clipPath id="SVGID_10_">
+		<use xlink:href="#SVGID_9_"  style="overflow:visible;"/>
+	</clipPath>
+	<g style="clip-path:url(#SVGID_10_);">
+		<defs>
+			<rect id="SVGID_11_" width="20" height="20"/>
+		</defs>
+		<clipPath id="SVGID_12_">
+			<use xlink:href="#SVGID_11_"  style="overflow:visible;"/>
+		</clipPath>
+		<rect x="-5" y="-33.948" style="clip-path:url(#SVGID_12_);fill-rule:evenodd;clip-rule:evenodd;fill:#707070;" width="30" height="26.603"/>
+	</g>
+</g>
+<g>
+	<defs>
+		<path id="SVGID_13_" d="M46.062,11.877c1.105,0,2-0.895,2-2s-0.895-2-2-2s-2,0.895-2,2S44.958,11.877,46.062,11.877z
+			 M40.062,11.877c1.105,0,2-0.895,2-2s-0.895-2-2-2s-2,0.895-2,2S38.958,11.877,40.062,11.877z M34.062,11.877c1.105,0,2-0.895,2-2
+			s-0.895-2-2-2s-2,0.895-2,2S32.958,11.877,34.062,11.877z"/>
+	</defs>
+	<clipPath id="SVGID_14_">
+		<use xlink:href="#SVGID_13_"  style="overflow:visible;"/>
+	</clipPath>
+	<g style="clip-path:url(#SVGID_14_);">
+		<defs>
+			<rect id="SVGID_15_" width="20" height="20"/>
+		</defs>
+		<clipPath id="SVGID_16_">
+			<use xlink:href="#SVGID_15_"  style="overflow:visible;"/>
+		</clipPath>
+		<rect x="27.062" y="2.877" style="clip-path:url(#SVGID_16_);fill-rule:evenodd;clip-rule:evenodd;fill:#707070;" width="26" height="14"/>
+	</g>
+</g>
+</svg>

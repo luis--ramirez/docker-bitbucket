@@ -1,0 +1,2 @@
+define("bitbucket/internal/model/file-change-types",function(){return{ADD:"ADD",DELETE:"DELETE",MODIFY:"MODIFY",COPY:"COPY",MOVE:"MOVE",RENAME:"RENAME",UNKNOWN:"UNKNOWN",changeTypeFromId:function(a){if(Object.prototype.hasOwnProperty.call(this,a)&&"string"===typeof this[a])return this[a]},guessChangeTypeFromDiff:function(a){return a?a.binary?null===a.source?this.ADD:null===a.destination?this.DELETE:this.MODIFY:(a=a.hunks[0])?0===a.sourceLine?this.ADD:0===a.destinationLine?this.DELETE:this.MODIFY:
+this.UNKNOWN:this.UNKNOWN}}});
