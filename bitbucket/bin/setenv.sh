@@ -85,7 +85,7 @@ JVM_REQUIRED_ARGS="-Djava.awt.headless=true -Dfile.encoding=${JVM_FILE_ENCODING}
 # Uncommenting the following will set the umask for the Atlassian Bitbucket application. If can be used to override
 # the default settings of the Bitbucket user is they are not sufficiently secure.
 #
-# umask 0027
+umask 0027
 
 #-----------------------------------------------------------------------------------
 # JMX
